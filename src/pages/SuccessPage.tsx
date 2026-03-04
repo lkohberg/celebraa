@@ -6,10 +6,12 @@ import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useEventByLink } from "@/hooks/useEvents";
 import { SUPPORTED_LANGUAGES } from "@/i18n/eventLabels";
+import { useTranslation } from "@/i18n";
 
 const SuccessPage = () => {
   const { eventLink } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [copied, setCopied] = useState<string | null>(null);
   const qrRef = useRef<HTMLDivElement>(null);
   const { data: event } = useEventByLink(eventLink || "");
@@ -58,10 +60,10 @@ const SuccessPage = () => {
         </div>
 
         <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
-          Deine Event-Seite ist live!
+          {t("success.title")}
         </h1>
         <p className="font-body text-muted-foreground text-lg mb-10">
-          Teile deinen Link oder lade den QR-Code herunter
+          {t("success.subtitle")}
         </p>
 
         {/* QR Code */}
@@ -78,7 +80,7 @@ const SuccessPage = () => {
         {/* Language Links */}
         {hasMultipleLangs ? (
           <div className="space-y-3 mb-8">
-            <p className="font-body text-sm text-muted-foreground font-semibold mb-2">Deine Sprach-Links:</p>
+            <p className="font-body text-sm text-muted-foreground font-semibold mb-2">{t("success.languageLinks")}</p>
             {languages.map((code) => {
               const lang = SUPPORTED_LANGUAGES.find((l) => l.code === code);
               const url = `${baseUrl}/${code}`;
@@ -102,23 +104,23 @@ const SuccessPage = () => {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button onClick={() => handleCopy(primaryUrl, "main")} className="font-body">
             {copied === "main" ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
-            {copied === "main" ? "Kopiert!" : "Link kopieren"}
+            {copied === "main" ? t("success.copied") : t("success.copyLink")}
           </Button>
           <Button variant="outline" onClick={handleDownloadQR} className="font-body">
             <Download className="w-4 h-4 mr-2" />
-            QR-Code herunterladen
+            {t("success.downloadQr")}
           </Button>
           <Button variant="outline" asChild className="font-body">
             <a href={primaryUrl} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="w-4 h-4 mr-2" />
-              Zur Event-Seite
+              {t("success.openEvent")}
             </a>
           </Button>
         </div>
 
         <div className="mt-12">
           <Button variant="ghost" onClick={() => navigate("/")} className="font-body text-muted-foreground">
-            Zurück zur Startseite
+            {t("success.backHome")}
           </Button>
         </div>
       </motion.div>

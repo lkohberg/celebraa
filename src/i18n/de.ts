@@ -165,6 +165,21 @@ const de = {
   "dashboard.rsvp.declined": "Abgesagt",
   "dashboard.rsvp.pending": "Offen",
 
+  // Success Page
+  "success.title": "Deine Event-Seite ist live!",
+  "success.subtitle": "Teile deinen Link oder lade den QR-Code herunter",
+  "success.languageLinks": "Deine Sprach-Links:",
+  "success.copyLink": "Link kopieren",
+  "success.copied": "Kopiert!",
+  "success.downloadQr": "QR-Code herunterladen",
+  "success.openEvent": "Zur Event-Seite",
+  "success.backHome": "Zurück zur Startseite",
+
+  // Dashboard extras
+  "dashboard.archive": "Archivieren",
+  "dashboard.goLive": "Live schalten",
+  "dashboard.languageLinks": "Sprach-Links:",
+
   // Footer
   "footer.tagline": "Digitale Event-Einladungen",
   "footer.imprint": "Impressum",
