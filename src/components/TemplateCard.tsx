@@ -25,6 +25,7 @@ export interface Template {
   previewGradient: string;
   tier: "basis" | "premium";
   premiumFeatures?: string[];
+  defaultHeroImage?: string;
 }
 
 export const templates: Template[] = [
