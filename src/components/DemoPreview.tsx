@@ -36,6 +36,11 @@ const getDemoEvent = (template: Template) => {
       ceremony_address: "St. Peter Bezirk 1, 5020 Salzburg",
       reception_location: "Schloss Mirabell",
       reception_address: "Mirabellplatz 4, 5020 Salzburg",
+      dress_code: "Festlich / Semi-formal",
+      children_welcome: true,
+      hotel_recommendations: [
+        { name: "Hotel Sacher Salzburg", address: "Schwarzstraße 5-7, 5020 Salzburg", url: "https://www.sacher.com" },
+      ],
       schedule: [
         { time: "15:00", label: "Trauung" },
         { time: "16:30", label: "Empfang & Sektempfang" },
@@ -53,6 +58,7 @@ const getDemoEvent = (template: Template) => {
       location_name: "Rooftop Bar Vienna",
       address: "Herrengasse 10, 1010 Wien",
       story_text: "30 Jahre voller Abenteuer, Freundschaft und unvergesslicher Momente. Lasst uns gemeinsam auf die nächsten 30 anstoßen!",
+      dress_code: "Schick & Bunt",
       schedule: [
         { time: "18:00", label: "Ankommen & Begrüßung" },
         { time: "19:00", label: "Buffet" },
@@ -70,6 +76,7 @@ const getDemoEvent = (template: Template) => {
     location_name: "Austria Center Vienna",
     address: "Bruno-Kreisky-Platz 1, 1220 Wien",
     story_text: "Treffen Sie Branchenführer, entdecken Sie neue Trends und vernetzen Sie sich mit Gleichgesinnten auf unserer exklusiven Jahreskonferenz.",
+    dress_code: "Business Attire",
     schedule: [
       { time: "09:00", label: "Registrierung & Kaffee" },
       { time: "10:00", label: "Keynote" },
@@ -179,6 +186,13 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
                     <Users className="w-4 h-4" />
                     <span className="text-sm font-body">80 Gäste</span>
                   </div>
+                  <div className="flex items-center gap-2 opacity-70 col-span-2"
+                    style={{ color: template.colors.accent }}>
+                    <span className="w-4 h-4 text-center">👔</span>
+                    <span className="text-sm font-body">
+                      {template.eventType === "wedding" ? "Festlich / Semi-formal" : template.eventType === "birthday" ? "Schick & Bunt" : "Business Attire"}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Fake RSVP */}
@@ -193,6 +207,17 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
                     <Button size="sm" variant="outline" className="font-body">
                       Leider nicht
                     </Button>
+                  </div>
+                  <div className="mt-3 space-y-2">
+                    <input
+                      type="text"
+                      placeholder="Dein Name"
+                      disabled
+                      className="w-full px-3 py-2 text-sm font-body rounded-md border border-input bg-background/50 text-muted-foreground"
+                    />
+                    <p className="text-xs font-body text-muted-foreground opacity-70">
+                      inkl. Essenspräferenzen (Vegetarisch, Vegan, …)
+                    </p>
                   </div>
                 </div>
               </div>
