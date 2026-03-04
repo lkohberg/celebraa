@@ -26,7 +26,7 @@ const HeroSection = () => {
             </span>
           </div>
 
-          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-foreground">
+          <h1 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-foreground">
             {t("hero.title1")}
             <br />
             <span className="text-primary">{t("hero.title2")}</span>

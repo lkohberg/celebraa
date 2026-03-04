@@ -49,15 +49,15 @@ const ComparisonTable = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-3xl mx-auto overflow-x-auto"
+          className="max-w-3xl mx-auto -mx-6 px-6 overflow-x-auto"
         >
-          <table className="w-full border-collapse">
+          <table className="w-full border-collapse min-w-[480px]">
             <thead>
               <tr>
-                <th className="text-left font-body text-sm text-muted-foreground py-3 px-4">{t("comparison.feature")}</th>
-                <th className="text-center font-body text-sm text-muted-foreground py-3 px-4 w-24">{t("comparison.paper")}</th>
-                <th className="text-center font-body text-sm text-muted-foreground py-3 px-4 w-24">WhatsApp</th>
-                <th className="text-center font-body text-sm font-semibold text-primary py-3 px-4 w-28">celebra.at</th>
+                <th className="text-left font-body text-xs sm:text-sm text-muted-foreground py-3 px-2 sm:px-4">{t("comparison.feature")}</th>
+                <th className="text-center font-body text-xs sm:text-sm text-muted-foreground py-3 px-2 sm:px-4 w-16 sm:w-24">{t("comparison.paper")}</th>
+                <th className="text-center font-body text-xs sm:text-sm text-muted-foreground py-3 px-2 sm:px-4 w-16 sm:w-24">WhatsApp</th>
+                <th className="text-center font-body text-xs sm:text-sm font-semibold text-primary py-3 px-2 sm:px-4 w-20 sm:w-28">celebra.at</th>
               </tr>
             </thead>
             <tbody>
@@ -70,10 +70,10 @@ const ComparisonTable = () => {
                   transition={{ duration: 0.3, delay: 0.05 * i }}
                   className="border-t border-border"
                 >
-                  <td className="font-body text-sm text-foreground py-3 px-4">{t(`comparison.row.${row.key}`)}</td>
-                  <td className="py-3 px-4"><CellIcon value={row.paper} /></td>
-                  <td className="py-3 px-4"><CellIcon value={row.whatsapp} /></td>
-                  <td className="py-3 px-4 bg-primary/5"><CellIcon value={row.celebra} /></td>
+                  <td className="font-body text-xs sm:text-sm text-foreground py-3 px-2 sm:px-4">{t(`comparison.row.${row.key}`)}</td>
+                  <td className="py-3 px-2 sm:px-4"><CellIcon value={row.paper} /></td>
+                  <td className="py-3 px-2 sm:px-4"><CellIcon value={row.whatsapp} /></td>
+                  <td className="py-3 px-2 sm:px-4 bg-primary/5"><CellIcon value={row.celebra} /></td>
                 </motion.tr>
               ))}
             </tbody>
