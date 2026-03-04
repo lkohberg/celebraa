@@ -132,13 +132,22 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding" }:
               </label>
 
               {menuSelection && (
-                <input
-                  type="text"
-                  placeholder="Menüwahl"
-                  value={menuChoice}
-                  onChange={(e) => setMenuChoice(e.target.value)}
-                  className={inputClass}
-                />
+                <div>
+                  <label className="block font-body text-sm text-foreground mb-2">
+                    {t("event.menuChoice")}
+                  </label>
+                  <select
+                    value={menuChoice}
+                    onChange={(e) => setMenuChoice(e.target.value)}
+                    className={inputClass}
+                  >
+                    <option value="">{t("event.dietary.standard")}</option>
+                    <option value="vegetarian">{t("event.dietary.vegetarian")}</option>
+                    <option value="vegan">{t("event.dietary.vegan")}</option>
+                    <option value="glutenfree">{t("event.dietary.glutenfree")}</option>
+                    <option value="lactosefree">{t("event.dietary.lactosefree")}</option>
+                  </select>
+                </div>
               )}
             </>
           )}

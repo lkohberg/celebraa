@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink } from "lucide-react";
+import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download } from "lucide-react";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -154,25 +154,53 @@ const EventDetail = ({ event }: { event: { id: string; title: string; event_link
         {!guests?.length ? (
           <p className="font-body text-muted-foreground">{t("dashboard.noGuests")}</p>
         ) : (
-          <div className="space-y-3">
-            {guests.map((guest) => (
-              <Card key={guest.id}>
-                <CardContent className="p-3 sm:p-4 flex items-center justify-between">
-                  <div className="min-w-0">
-                    <p className="font-body font-medium text-foreground truncate">{guest.name}</p>
-                    {guest.email && <p className="font-body text-sm text-muted-foreground truncate">{guest.email}</p>}
-                    {guest.message && <p className="font-body text-sm text-muted-foreground italic mt-1 truncate">"{guest.message}"</p>}
-                  </div>
-                  <Badge
-                    className="ml-2 shrink-0"
-                    variant={guest.rsvp_status === "accepted" ? "default" : guest.rsvp_status === "declined" ? "destructive" : "secondary"}
-                  >
-                    {t(`dashboard.rsvp.${guest.rsvp_status}`)}
-                  </Badge>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <>
+            <div className="flex justify-end mb-4">
+              <Button variant="outline" size="sm" className="font-body" onClick={() => {
+                if (!guests) return;
+                const headers = ["Name", "Email", "RSVP", "Plus One", "Menu Choice", "Message", "Date"];
+                const csvRows = guests.map(g => [
+                  g.name,
+                  g.email || "",
+                  g.rsvp_status,
+                  g.plus_one ? "Yes" : "No",
+                  g.menu_choice || "",
+                  (g.message || "").replace(/"/g, '""'),
+                  g.responded_at ? new Date(g.responded_at).toLocaleDateString("de-AT") : "",
+                ].map(v => `"${v}"`).join(","));
+                const csv = [headers.join(","), ...csvRows].join("\n");
+                const blob = new Blob([csv], { type: "text/csv" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url; a.download = `guests-${event.event_link}.csv`; a.click();
+                URL.revokeObjectURL(url);
+              }}>
+                <Download className="w-4 h-4 mr-2" /> {t("dashboard.exportCsv")}
+              </Button>
+            </div>
+            <div className="space-y-3">
+              {guests.map((guest) => (
+                <Card key={guest.id}>
+                  <CardContent className="p-3 sm:p-4 flex items-center justify-between">
+                    <div className="min-w-0">
+                      <p className="font-body font-medium text-foreground truncate">{guest.name}</p>
+                      {guest.email && <p className="font-body text-sm text-muted-foreground truncate">{guest.email}</p>}
+                      {guest.menu_choice && (
+                        <Badge variant="outline" className="mt-1 text-xs">{t(`event.dietary.${guest.menu_choice}`) || guest.menu_choice}</Badge>
+                      )}
+                      {guest.message && <p className="font-body text-sm text-muted-foreground italic mt-1 truncate">"{guest.message}"</p>}
+                    </div>
+                    <Badge
+                      className="ml-2 shrink-0"
+                      variant={guest.rsvp_status === "accepted" ? "default" : guest.rsvp_status === "declined" ? "destructive" : "secondary"}
+                    >
+                      {t(`dashboard.rsvp.${guest.rsvp_status}`)}
+                    </Badge>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
         )}
       </TabsContent>
 

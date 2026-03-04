@@ -422,9 +422,14 @@ const ConfigurePage = () => {
                       <Label className="font-body text-sm">{t("configure.maxGuests")}</Label>
                       <Input type="number" placeholder={t("configure.maxGuestsPlaceholder")} value={form.maxGuests} onChange={(e) => updateField("maxGuests", e.target.value)} className="font-body mt-1" />
                     </div>
-                    <div className="flex items-center justify-between">
-                      <Label className="font-body text-sm">{t("configure.menu")}</Label>
-                      <Switch checked={form.menuSelection} onCheckedChange={(v) => updateField("menuSelection", v)} />
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <Label className="font-body text-sm">{t("configure.menuDietary")}</Label>
+                        <Switch checked={form.menuSelection} onCheckedChange={(v) => updateField("menuSelection", v)} />
+                      </div>
+                      {form.menuSelection && (
+                        <p className="font-body text-xs text-muted-foreground mt-1">{t("configure.menuDietaryHint")}</p>
+                      )}
                     </div>
                   </>
                 )}
