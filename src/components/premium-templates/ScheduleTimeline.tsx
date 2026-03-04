@@ -17,8 +17,8 @@ const ScheduleTimeline = ({ schedule, accentColor = "hsl(150, 18%, 38%)" }: Sche
     <div className="relative max-w-lg mx-auto py-4">
       {/* Vertical line */}
       <div
-        className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-[2px]"
-        style={{ background: `linear-gradient(to bottom, transparent, ${accentColor}40, ${accentColor}40, transparent)` }}
+        className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-[2px] opacity-30"
+        style={{ backgroundColor: accentColor }}
       />
 
       <div className="space-y-0">

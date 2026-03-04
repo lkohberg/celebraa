@@ -172,7 +172,7 @@ const PremiumWeddingPage = ({ event, theme, lang }: { event: PremiumEventData; t
                 <div className="w-16 h-px mx-auto" style={{ backgroundColor: "hsl(10, 50%, 82%)" }} />
               </div>
 
-              <div className="grid md:grid-cols-3 gap-12">
+              <div className={`grid gap-12 ${event.dress_code ? "md:grid-cols-3" : "md:grid-cols-2"} max-w-${event.dress_code ? "5xl" : "3xl"} mx-auto`}>
                 {/* Ceremony */}
                 <div className="text-center">
                   <MapPin className="w-8 h-8 mx-auto mb-4" style={{ color: "hsl(150, 18%, 38%)" }} />
