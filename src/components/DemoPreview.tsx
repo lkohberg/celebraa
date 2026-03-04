@@ -94,15 +94,22 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
     corporate: "Firmen Event",
   };
 
+  const theme = {
+    primary: template.colors.primary,
+    secondary: template.colors.secondary,
+    accent: template.colors.accent,
+    font: template.font,
+  };
+
   const renderPremiumPreview = () => {
     if (!demoEvent) return null;
     switch (template.eventType) {
       case "wedding":
-        return <PremiumWeddingPage event={demoEvent} />;
+        return <PremiumWeddingPage event={demoEvent} theme={theme} />;
       case "birthday":
-        return <PremiumBirthdayPage event={demoEvent} />;
+        return <PremiumBirthdayPage event={demoEvent} theme={theme} />;
       case "corporate":
-        return <PremiumCorporatePage event={demoEvent} />;
+        return <PremiumCorporatePage event={demoEvent} theme={theme} />;
     }
   };
 
