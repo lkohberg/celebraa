@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
         await supabase
           .from("events")
           .update({
-            status: "paid",
+            status: "live",
             stripe_payment_id: session.payment_intent as string,
           })
           .eq("id", eventId);
