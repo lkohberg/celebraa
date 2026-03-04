@@ -95,7 +95,9 @@ const ConfigurePage = () => {
   const isValid = form.title && form.date && form.time && form.eventLink && linkValid && linkAvailable !== false;
 
   const menuPrice = form.menuSelection ? 10 : 0;
-  const totalPrice = basePrice + menuPrice;
+  const extraLangs = Math.max(0, form.languages.length - 1);
+  const langPrice = extraLangs * 3;
+  const totalPrice = basePrice + menuPrice + langPrice;
 
   const handleSubmit = async () => {
     if (!user) {
@@ -533,6 +535,8 @@ const ConfigurePage = () => {
                 basePrice={basePrice}
                 menuSelection={form.menuSelection}
                 menuPrice={menuPrice}
+                extraLangs={extraLangs}
+                langPrice={langPrice}
                 totalPrice={totalPrice}
                 isValid={!!isValid}
                 loading={createEvent.isPending}

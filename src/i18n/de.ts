@@ -129,6 +129,7 @@ const de = {
   "price.summary": "Zusammenfassung",
   "price.template": "Template",
   "price.menu": "Menüauswahl",
+  "price.languages": "Zusätzliche Sprachen",
   "price.total": "Gesamt",
   "price.pay": "Jetzt sicher bezahlen",
   "price.processing": "Wird verarbeitet...",
