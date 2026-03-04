@@ -105,6 +105,7 @@ const en = {
   "configure.linkPlaceholder": "my-event",
   "configure.linkError": "Only lowercase letters, numbers and hyphens allowed.",
   "configure.linkTaken": "This link is already taken.",
+  "configure.linkReserved": "This name is reserved and cannot be used.",
   "configure.linkAvailable": "✓ Link available!",
   "configure.invitation": "Invitation",
   "configure.yourTitle": "Your event title",

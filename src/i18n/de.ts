@@ -105,6 +105,7 @@ const de = {
   "configure.linkPlaceholder": "mein-event",
   "configure.linkError": "Nur Kleinbuchstaben, Zahlen und Bindestriche erlaubt.",
   "configure.linkTaken": "Dieser Link ist bereits vergeben.",
+  "configure.linkReserved": "Dieser Name ist reserviert und kann nicht verwendet werden.",
   "configure.linkAvailable": "✓ Link verfügbar!",
   "configure.invitation": "Einladung",
   "configure.yourTitle": "Dein Event-Titel",

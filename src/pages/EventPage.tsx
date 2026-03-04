@@ -21,11 +21,17 @@ const loadGoogleFont = (fontName: string) => {
   document.head.appendChild(link);
 };
 
+// Reserved routes that cannot be used as event links
+const RESERVED_ROUTES = ["templates", "configure", "success", "dashboard", "admin", "login", "signup", "settings", "api", "auth"];
+
 const EventPage = () => {
   const { eventLink, lang: langParam } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data: event, isLoading, error } = useEventByLink(eventLink || "");
+  
+  // If the eventLink matches a reserved route, don't try to load it as an event
+  const isReserved = RESERVED_ROUTES.includes(eventLink?.toLowerCase() || "");
+  const { data: event, isLoading, error } = useEventByLink(isReserved ? "" : (eventLink || ""));
   
   // Determine event language from URL param, fallback to first language of event, then 'de'
   const eventLang: EventLang = (langParam as EventLang) || "de";
