@@ -191,7 +191,7 @@ const PremiumWeddingPage = ({ event, theme, lang }: { event: PremiumEventData; t
                     <Shirt className="w-8 h-8 mx-auto mb-4" style={{ color: "hsl(150, 18%, 38%)" }} />
                     <h3 className="font-display text-xl text-foreground mb-3">{t("event.dressCode")}</h3>
                     <p className="font-body text-sm text-muted-foreground">
-                      {t(`event.dressCode.${event.dress_code}`)}
+                      {event.dress_code}
                     </p>
                   </div>
                 )}
