@@ -149,6 +149,17 @@ const ConfigurePage = () => {
 
       if (createError) throw createError;
 
+      // DEV BYPASS: Skip Stripe payment and mark as paid directly
+      const DEV_BYPASS_PAYMENT = true;
+      if (DEV_BYPASS_PAYMENT) {
+        await supabase
+          .from("events")
+          .update({ status: "paid", stripe_payment_id: "dev_bypass" })
+          .eq("id", created.id);
+        window.location.href = `${window.location.origin}/success/${form.eventLink}`;
+        return;
+      }
+
       const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke("create-checkout", {
         body: {
           eventId: created.id,
