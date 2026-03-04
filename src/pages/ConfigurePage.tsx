@@ -328,6 +328,11 @@ const ConfigurePage = () => {
                           <Users className="w-4 h-4" /><span>max. {form.maxGuests} {t("dashboard.guests")}</span>
                         </div>
                       )}
+                      {form.dressCode && (
+                        <div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}>
+                          <span className="w-4 h-4 text-center">👔</span><span>{form.dressCode}</span>
+                        </div>
+                      )}
                     </div>
                     {form.rsvpEnabled && (
                       <div className="mt-8 bg-background/80 backdrop-blur rounded-lg p-5">
