@@ -13,7 +13,7 @@ const de = {
   "hero.title1": "Deine digitale Event-Einladung",
   "hero.title2": "in Minuten erstellt",
   "hero.subtitle": "Modern · Persönlich · Mit RSVP",
-  "hero.description": "QR-Code und eigenem Link – alles was du brauchst.",
+  "hero.description": "Gemacht mit ♥️ in Österreich",
   "hero.cta": "Jetzt Design auswählen",
   "hero.secondary": "So funktioniert es",
   "hero.trust1": "✓ Keine App nötig",
@@ -64,7 +64,8 @@ const de = {
 
   // Eco Section
   "eco.title": "Nachhaltig feiern",
-  "eco.description": "Jede digitale Einladung spart Papier und reduziert deinen CO₂-Fußabdruck. Feiere mit gutem Gewissen.",
+  "eco.description":
+    "Jede digitale Einladung spart Papier und reduziert deinen CO₂-Fußabdruck. Feiere mit gutem Gewissen.",
   "eco.badge1": "0 Papier",
   "eco.badge2": "0 CO₂",
   "eco.badge3": "100% Digital",
