@@ -21,8 +21,10 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    // Map "admin" shortcut to full email
+    const loginEmail = email.includes("@") ? email : `${email}@celebra.at`;
     const fn = mode === "login" ? signIn : signUp;
-    const { error } = await fn(email, password);
+    const { error } = await fn(loginEmail, password);
     setLoading(false);
     if (error) {
       toast.error(error.message);

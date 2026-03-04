@@ -150,7 +150,7 @@ const ConfigurePage = () => {
       if (createError) throw createError;
 
       // Admin bypass: skip payment for admin user
-      const isAdmin = user.email === "admin";
+      const isAdmin = user.email === "admin@celebra.at";
       if (isAdmin) {
         await supabase
           .from("events")
