@@ -72,6 +72,7 @@ export const templates: Template[] = [
     tier: "premium",
     premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Programm-Sektion"],
     defaultHeroImage: heroBirthdayNeon,
+  },
   {
     id: "birthday-premium-glamour",
     name: "Glamour Night",
@@ -83,6 +84,7 @@ export const templates: Template[] = [
     tier: "premium",
     premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Party-Details"],
     defaultHeroImage: heroBirthdayGlamour,
+  },
   {
     id: "birthday-premium-garden",
     name: "Garden Party",
@@ -94,6 +96,7 @@ export const templates: Template[] = [
     tier: "premium",
     premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Location-Details"],
     defaultHeroImage: heroBirthdayGarden,
+  },
   // Wedding - Basis
   {
     id: "wedding-elegant-gold",
@@ -137,6 +140,9 @@ export const templates: Template[] = [
     tier: "premium",
     premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
     defaultHeroImage: heroWeddingFloral,
+  },
+  {
+    id: "wedding-premium-classic",
     name: "Classic Elegance",
     description: "Zeitlos elegant mit allen Premium-Features",
     eventType: "wedding",
@@ -146,6 +152,9 @@ export const templates: Template[] = [
     tier: "premium",
     premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
     defaultHeroImage: heroWeddingClassic,
+  },
+  {
+    id: "wedding-premium-modern",
     name: "Modern Love",
     description: "Modern und minimalistisch mit Premium-Features",
     eventType: "wedding",
@@ -155,6 +164,8 @@ export const templates: Template[] = [
     tier: "premium",
     premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
     defaultHeroImage: heroWeddingModern,
+  },
+  // Corporate - Basis
   {
     id: "corporate-professional",
     name: "Professional Blue",
@@ -197,6 +208,9 @@ export const templates: Template[] = [
     tier: "premium",
     premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
     defaultHeroImage: heroCorporateExecutive,
+  },
+  {
+    id: "corporate-premium-tech",
     name: "Tech Conference",
     description: "Modern und technisch für IT-Events",
     eventType: "corporate",
@@ -206,6 +220,9 @@ export const templates: Template[] = [
     tier: "premium",
     premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
     defaultHeroImage: heroCorporateTech,
+  },
+  {
+    id: "corporate-premium-gala",
     name: "Gala Evening",
     description: "Luxuriös und exklusiv für Gala-Abende",
     eventType: "corporate",
@@ -215,6 +232,8 @@ export const templates: Template[] = [
     tier: "premium",
     premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
     defaultHeroImage: heroCorporateGala,
+  },
+];
 
 interface TemplateCardProps {
   template: Template;
@@ -236,15 +255,25 @@ const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
         className="h-48 relative overflow-hidden"
         style={{ background: template.previewGradient }}
       >
+        {template.defaultHeroImage && (
+          <img
+            src={template.defaultHeroImage}
+            alt={template.name}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center px-6">
             <p
               className="text-2xl font-bold opacity-80"
               style={{
                 fontFamily: template.font,
-                color: template.colors.primary === "#FFFFFF" || template.colors.secondary === "#FFFFFF"
-                  ? template.colors.accent
-                  : template.colors.primary,
+                color: template.defaultHeroImage
+                  ? "#FFFFFF"
+                  : template.colors.primary === "#FFFFFF" || template.colors.secondary === "#FFFFFF"
+                    ? template.colors.accent
+                    : template.colors.primary,
+                textShadow: template.defaultHeroImage ? "0 2px 8px rgba(0,0,0,0.5)" : undefined,
               }}
             >
               {template.name}
