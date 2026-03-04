@@ -47,7 +47,8 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
   }, []);
 
   return (
-    <div className="min-h-screen overflow-hidden" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="min-h-screen overflow-hidden" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
+      <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
       {/* Confetti overlay */}
       <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
         {confetti.map((i) => (
