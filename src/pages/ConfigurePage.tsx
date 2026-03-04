@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Clock, MapPin, Users, ArrowLeft } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, ArrowLeft, Upload, X } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useCreateEvent, useCheckEventLink } from "@/hooks/useEvents";
 import { supabase } from "@/integrations/supabase/client";
@@ -60,8 +60,25 @@ const ConfigurePage = () => {
     ceremonyAddress: "",
     receptionLocation: "",
     receptionAddress: "",
-    heroImageUrl: "",
+    heroImageUrl: template?.defaultHeroImage || "",
   });
+
+  const [dragActive, setDragActive] = useState(false);
+
+  const handleHeroFile = (file: File) => {
+    if (!file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      updateField("heroImageUrl", e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragActive(false);
+    if (e.dataTransfer.files?.[0]) handleHeroFile(e.dataTransfer.files[0]);
+  };
 
   const updateField = (field: string, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -194,7 +211,7 @@ const ConfigurePage = () => {
                       ceremony_address: form.ceremonyAddress || null,
                       reception_location: form.receptionLocation || null,
                       reception_address: form.receptionAddress || null,
-                      hero_image_url: form.heroImageUrl || null,
+                      hero_image_url: form.heroImageUrl || template.defaultHeroImage || null,
                       rsvp_enabled: form.rsvpEnabled,
                       rsvp_deadline: form.rsvpDeadline || null,
                       menu_selection: form.menuSelection,
@@ -345,7 +362,47 @@ const ConfigurePage = () => {
 
                   <div>
                     <Label className="font-body text-sm">{t("configure.heroImage")}</Label>
-                    <Input placeholder={t("configure.heroImagePlaceholder")} value={form.heroImageUrl} onChange={(e) => updateField("heroImageUrl", e.target.value)} className="font-body mt-1" />
+                    <div
+                      className={`mt-1 relative rounded-lg border-2 border-dashed transition-colors cursor-pointer overflow-hidden ${
+                        dragActive ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"
+                      }`}
+                      onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+                      onDragLeave={() => setDragActive(false)}
+                      onDrop={handleDrop}
+                      onClick={() => {
+                        const input = document.createElement("input");
+                        input.type = "file";
+                        input.accept = "image/*";
+                        input.onchange = (e) => {
+                          const file = (e.target as HTMLInputElement).files?.[0];
+                          if (file) handleHeroFile(file);
+                        };
+                        input.click();
+                      }}
+                    >
+                      {form.heroImageUrl ? (
+                        <div className="relative">
+                          <img src={form.heroImageUrl} alt="Hero" className="w-full h-32 object-cover rounded-md" />
+                          <button
+                            type="button"
+                            className="absolute top-2 right-2 bg-background/80 backdrop-blur rounded-full p-1 hover:bg-background"
+                            onClick={(e) => { e.stopPropagation(); updateField("heroImageUrl", ""); }}
+                          >
+                            <X className="w-4 h-4 text-foreground" />
+                          </button>
+                          <div className="absolute bottom-0 inset-x-0 bg-background/70 backdrop-blur text-center py-1">
+                            <p className="text-xs font-body text-muted-foreground">Klicken oder ziehen zum Ersetzen</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center py-8 px-4">
+                          <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+                          <p className="text-sm font-body text-muted-foreground text-center">
+                            Bild hierher ziehen oder klicken
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}

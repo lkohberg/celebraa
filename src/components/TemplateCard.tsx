@@ -4,6 +4,17 @@ import { Badge } from "@/components/ui/badge";
 import { Eye, Crown } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
+// Default hero images for premium templates
+import heroBirthdayNeon from "@/assets/hero-birthday-neon.jpg";
+import heroBirthdayGlamour from "@/assets/hero-birthday-glamour.jpg";
+import heroBirthdayGarden from "@/assets/hero-birthday-garden.jpg";
+import heroWeddingFloral from "@/assets/hero-wedding-floral.jpg";
+import heroWeddingClassic from "@/assets/hero-wedding-classic.jpg";
+import heroWeddingModern from "@/assets/hero-wedding-modern.jpg";
+import heroCorporateExecutive from "@/assets/hero-corporate-executive.jpg";
+import heroCorporateTech from "@/assets/hero-corporate-tech.jpg";
+import heroCorporateGala from "@/assets/hero-corporate-gala.jpg";
+
 export interface Template {
   id: string;
   name: string;
@@ -14,6 +25,7 @@ export interface Template {
   previewGradient: string;
   tier: "basis" | "premium";
   premiumFeatures?: string[];
+  defaultHeroImage?: string;
 }
 
 export const templates: Template[] = [
@@ -59,6 +71,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #FF6B9D 0%, #C44DFF 50%, #4D96FF 100%)",
     tier: "premium",
     premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Programm-Sektion"],
+    defaultHeroImage: heroBirthdayNeon,
   },
   {
     id: "birthday-premium-glamour",
@@ -70,6 +83,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #1A1A2E 0%, #D4AF37 100%)",
     tier: "premium",
     premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Party-Details"],
+    defaultHeroImage: heroBirthdayGlamour,
   },
   {
     id: "birthday-premium-garden",
@@ -81,6 +95,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #F0F7F4 0%, #6BCB77 100%)",
     tier: "premium",
     premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Location-Details"],
+    defaultHeroImage: heroBirthdayGarden,
   },
   // Wedding - Basis
   {
@@ -124,6 +139,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #FFF0F0 0%, #E8D5C4 50%, #D5E8D4 100%)",
     tier: "premium",
     premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
+    defaultHeroImage: heroWeddingFloral,
   },
   {
     id: "wedding-premium-classic",
@@ -135,6 +151,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #FAF5EF 0%, #D4C5A9 100%)",
     tier: "premium",
     premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
+    defaultHeroImage: heroWeddingClassic,
   },
   {
     id: "wedding-premium-modern",
@@ -146,6 +163,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #FAFAFA 0%, #E0E0E0 100%)",
     tier: "premium",
     premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
+    defaultHeroImage: heroWeddingModern,
   },
   // Corporate - Basis
   {
@@ -189,6 +207,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #1E3A5F 0%, #2C5282 100%)",
     tier: "premium",
     premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
+    defaultHeroImage: heroCorporateExecutive,
   },
   {
     id: "corporate-premium-tech",
@@ -200,6 +219,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #0F0E17 0%, #6C63FF 100%)",
     tier: "premium",
     premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
+    defaultHeroImage: heroCorporateTech,
   },
   {
     id: "corporate-premium-gala",
@@ -211,6 +231,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #0D0D0D 0%, #C8A951 100%)",
     tier: "premium",
     premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
+    defaultHeroImage: heroCorporateGala,
   },
 ];
 
@@ -234,15 +255,25 @@ const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
         className="h-48 relative overflow-hidden"
         style={{ background: template.previewGradient }}
       >
+        {template.defaultHeroImage && (
+          <img
+            src={template.defaultHeroImage}
+            alt={template.name}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center px-6">
             <p
               className="text-2xl font-bold opacity-80"
               style={{
                 fontFamily: template.font,
-                color: template.colors.primary === "#FFFFFF" || template.colors.secondary === "#FFFFFF"
-                  ? template.colors.accent
-                  : template.colors.primary,
+                color: template.defaultHeroImage
+                  ? "#FFFFFF"
+                  : template.colors.primary === "#FFFFFF" || template.colors.secondary === "#FFFFFF"
+                    ? template.colors.accent
+                    : template.colors.primary,
+                textShadow: template.defaultHeroImage ? "0 2px 8px rgba(0,0,0,0.5)" : undefined,
               }}
             >
               {template.name}
