@@ -60,8 +60,25 @@ const ConfigurePage = () => {
     ceremonyAddress: "",
     receptionLocation: "",
     receptionAddress: "",
-    heroImageUrl: "",
+    heroImageUrl: template?.defaultHeroImage || "",
   });
+
+  const [dragActive, setDragActive] = useState(false);
+
+  const handleHeroFile = (file: File) => {
+    if (!file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      updateField("heroImageUrl", e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragActive(false);
+    if (e.dataTransfer.files?.[0]) handleHeroFile(e.dataTransfer.files[0]);
+  };
 
   const updateField = (field: string, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
