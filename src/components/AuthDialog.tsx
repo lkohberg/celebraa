@@ -43,7 +43,7 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label className="font-body">E-Mail</Label>
-            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="font-body mt-1" />
+            <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} required className="font-body mt-1" placeholder="E-Mail oder Benutzername" />
           </div>
           <div>
             <Label className="font-body">Passwort</Label>
