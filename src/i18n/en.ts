@@ -230,6 +230,39 @@ const en = {
   "event.agenda": "Agenda",
   "event.location": "Location",
   "event.register": "Register now",
+
+  // New features
+  "event.timeline": "Schedule",
+  "event.dressCode": "Dress Code",
+  "event.dressCode.casual": "Casual",
+  "event.dressCode.smart_casual": "Smart Casual",
+  "event.dressCode.elegant": "Elegant",
+  "event.dressCode.black_tie": "Black Tie",
+  "event.childrenWelcome": "Children are welcome 🧒",
+  "event.adultsOnly": "We kindly ask for understanding that this celebration is planned for adults only.",
+  "event.hotels": "Hotel Recommendations",
+  "event.hotelWebsite": "Visit website",
+  "event.map": "Directions",
+
+  // Configure new fields
+  "configure.schedule": "Schedule",
+  "configure.scheduleHint": "Add schedule items with times",
+  "configure.scheduleTime": "Time",
+  "configure.scheduleLabel": "Description",
+  "configure.scheduleLabelPlaceholder": "e.g. Reception, Cake cutting",
+  "configure.addScheduleItem": "Add schedule item",
+  "configure.dressCode": "Dress Code",
+  "configure.dressCodeNone": "Not specified",
+  "configure.childrenWelcome": "Children",
+  "configure.childrenNone": "Not specified",
+  "configure.childrenYes": "Children welcome",
+  "configure.childrenNo": "Adults only",
+  "configure.hotels": "Hotel Recommendations",
+  "configure.hotelsHint": "Recommend hotels for guests traveling from afar",
+  "configure.hotelName": "Hotel name",
+  "configure.hotelAddress": "Address",
+  "configure.hotelUrl": "Website (optional)",
+  "configure.addHotel": "Add hotel",
 };
 
 export default en;

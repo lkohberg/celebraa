@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Clock, MapPin, Users, ArrowLeft, Upload, X, Globe } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, ArrowLeft, Upload, X, Globe, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { SUPPORTED_LANGUAGES, type EventLang } from "@/i18n/eventLabels";
 import { useCreateEvent, useCheckEventLink } from "@/hooks/useEvents";
@@ -63,6 +63,11 @@ const ConfigurePage = () => {
     receptionAddress: "",
     heroImageUrl: template?.defaultHeroImage || "",
     languages: ["de"] as EventLang[],
+    // New fields
+    schedule: [] as { time: string; label: string }[],
+    dressCode: "",
+    childrenWelcome: "" as "" | "yes" | "no",
+    hotels: [] as { name: string; address: string; url: string }[],
   });
 
   const [dragActive, setDragActive] = useState(false);
@@ -148,6 +153,12 @@ const ConfigurePage = () => {
         eventInsert.reception_address = form.receptionAddress || null;
         eventInsert.hero_image_url = form.heroImageUrl || null;
       }
+
+      // New fields (available for all tiers)
+      eventInsert.schedule = form.schedule.length > 0 ? form.schedule : null;
+      eventInsert.dress_code = form.dressCode || null;
+      eventInsert.children_welcome = form.childrenWelcome === "yes" ? true : form.childrenWelcome === "no" ? false : null;
+      eventInsert.hotel_recommendations = form.hotels.length > 0 ? form.hotels : null;
 
       // Languages
       eventInsert.languages = form.languages;
@@ -254,7 +265,10 @@ const ConfigurePage = () => {
                       rsvp_enabled: form.rsvpEnabled,
                       rsvp_deadline: form.rsvpDeadline || null,
                       menu_selection: form.menuSelection,
-                      schedule: null,
+                      schedule: form.schedule.length > 0 ? form.schedule : null,
+                      dress_code: form.dressCode || null,
+                      children_welcome: form.childrenWelcome === "yes" ? true : form.childrenWelcome === "no" ? false : null,
+                      hotel_recommendations: form.hotels.length > 0 ? form.hotels : null,
                     };
                     const previewTheme = {
                       primary: form.primaryColor || template.colors.primary,
@@ -440,8 +454,144 @@ const ConfigurePage = () => {
                           <p className="text-sm font-body text-muted-foreground text-center">
                             Bild hierher ziehen oder klicken
                           </p>
-                        </div>
-                      )}
+                </div>
+              )}
+
+              {/* Schedule Editor */}
+              <div className="border border-border rounded-lg p-5 space-y-4">
+                <Label className="font-body font-semibold">{t("configure.schedule")}</Label>
+                <p className="font-body text-xs text-muted-foreground">{t("configure.scheduleHint")}</p>
+                {form.schedule.map((item, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Input
+                      type="time"
+                      value={item.time}
+                      onChange={(e) => {
+                        const updated = [...form.schedule];
+                        updated[i] = { ...updated[i], time: e.target.value };
+                        setForm((prev) => ({ ...prev, schedule: updated }));
+                      }}
+                      className="font-body w-28"
+                    />
+                    <Input
+                      placeholder={t("configure.scheduleLabelPlaceholder")}
+                      value={item.label}
+                      onChange={(e) => {
+                        const updated = [...form.schedule];
+                        updated[i] = { ...updated[i], label: e.target.value };
+                        setForm((prev) => ({ ...prev, schedule: updated }));
+                      }}
+                      className="font-body flex-1"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setForm((prev) => ({ ...prev, schedule: prev.schedule.filter((_, idx) => idx !== i) }))}
+                    >
+                      <Trash2 className="w-4 h-4 text-muted-foreground" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="font-body"
+                  onClick={() => setForm((prev) => ({ ...prev, schedule: [...prev.schedule, { time: "", label: "" }] }))}
+                >
+                  <Plus className="w-4 h-4 mr-1" /> {t("configure.addScheduleItem")}
+                </Button>
+              </div>
+
+              {/* Dress Code */}
+              <div>
+                <Label className="font-body">{t("configure.dressCode")}</Label>
+                <Select value={form.dressCode} onValueChange={(v) => setForm((prev) => ({ ...prev, dressCode: v === "none" ? "" : v }))}>
+                  <SelectTrigger className="font-body mt-1"><SelectValue placeholder={t("configure.dressCodeNone")} /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none" className="font-body">{t("configure.dressCodeNone")}</SelectItem>
+                    <SelectItem value="casual" className="font-body">Casual</SelectItem>
+                    <SelectItem value="smart_casual" className="font-body">Smart Casual</SelectItem>
+                    <SelectItem value="elegant" className="font-body">Elegant</SelectItem>
+                    <SelectItem value="black_tie" className="font-body">Black Tie</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Children Welcome (wedding only) */}
+              {template?.eventType === "wedding" && (
+                <div>
+                  <Label className="font-body">{t("configure.childrenWelcome")}</Label>
+                  <Select value={form.childrenWelcome || "none"} onValueChange={(v) => setForm((prev) => ({ ...prev, childrenWelcome: v === "none" ? "" : v as "yes" | "no" }))}>
+                    <SelectTrigger className="font-body mt-1"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none" className="font-body">{t("configure.childrenNone")}</SelectItem>
+                      <SelectItem value="yes" className="font-body">{t("configure.childrenYes")}</SelectItem>
+                      <SelectItem value="no" className="font-body">{t("configure.childrenNo")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              {/* Hotel Recommendations */}
+              <div className="border border-border rounded-lg p-5 space-y-4">
+                <Label className="font-body font-semibold">{t("configure.hotels")}</Label>
+                <p className="font-body text-xs text-muted-foreground">{t("configure.hotelsHint")}</p>
+                {form.hotels.map((hotel, i) => (
+                  <div key={i} className="space-y-2 border-b border-border pb-3 last:border-0">
+                    <div className="flex items-center gap-2">
+                      <Input
+                        placeholder={t("configure.hotelName")}
+                        value={hotel.name}
+                        onChange={(e) => {
+                          const updated = [...form.hotels];
+                          updated[i] = { ...updated[i], name: e.target.value };
+                          setForm((prev) => ({ ...prev, hotels: updated }));
+                        }}
+                        className="font-body flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setForm((prev) => ({ ...prev, hotels: prev.hotels.filter((_, idx) => idx !== i) }))}
+                      >
+                        <Trash2 className="w-4 h-4 text-muted-foreground" />
+                      </Button>
+                    </div>
+                    <Input
+                      placeholder={t("configure.hotelAddress")}
+                      value={hotel.address}
+                      onChange={(e) => {
+                        const updated = [...form.hotels];
+                        updated[i] = { ...updated[i], address: e.target.value };
+                        setForm((prev) => ({ ...prev, hotels: updated }));
+                      }}
+                      className="font-body"
+                    />
+                    <Input
+                      placeholder={t("configure.hotelUrl")}
+                      value={hotel.url}
+                      onChange={(e) => {
+                        const updated = [...form.hotels];
+                        updated[i] = { ...updated[i], url: e.target.value };
+                        setForm((prev) => ({ ...prev, hotels: updated }));
+                      }}
+                      className="font-body"
+                    />
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="font-body"
+                  onClick={() => setForm((prev) => ({ ...prev, hotels: [...prev.hotels, { name: "", address: "", url: "" }] }))}
+                >
+                  <Plus className="w-4 h-4 mr-1" /> {t("configure.addHotel")}
+                </Button>
+              </div>
                     </div>
                   </div>
                 </div>

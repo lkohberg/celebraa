@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Heart, MapPin, Clock, ChevronDown } from "lucide-react";
+import { Heart, MapPin, Clock, ChevronDown, Shirt, Baby } from "lucide-react";
 import { useTranslation } from "@/i18n";
 import EnvelopeIntro from "./EnvelopeIntro";
 import CountdownTimer from "./CountdownTimer";
 import RsvpForm from "./RsvpForm";
+import ScheduleTimeline from "./ScheduleTimeline";
+import GoogleMapsEmbed from "./GoogleMapsEmbed";
+import HotelRecommendations from "./HotelRecommendations";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 export interface PremiumEventData {
@@ -25,6 +28,9 @@ export interface PremiumEventData {
   rsvp_enabled?: boolean | null;
   rsvp_deadline?: string | null;
   menu_selection?: boolean | null;
+  dress_code?: string | null;
+  children_welcome?: boolean | null;
+  hotel_recommendations?: any;
 }
 
 export interface PremiumTheme {
@@ -143,6 +149,19 @@ const PremiumWeddingPage = ({ event, theme, lang }: { event: PremiumEventData; t
             </section>
           )}
 
+          {/* Schedule Timeline */}
+          {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
+            <section className="py-20" style={{ backgroundColor: "hsl(30, 33%, 96%)" }}>
+              <div className="max-w-3xl mx-auto px-4">
+                <div className="text-center mb-12">
+                  <Clock className="w-6 h-6 mx-auto mb-3" style={{ color: "hsl(150, 18%, 38%)" }} />
+                  <h2 className="font-display text-2xl md:text-3xl text-foreground">{t("event.timeline")}</h2>
+                </div>
+                <ScheduleTimeline schedule={event.schedule} accentColor="hsl(150, 18%, 38%)" />
+              </div>
+            </section>
+          )}
+
           {/* Details */}
           <section className="py-24" style={{ backgroundColor: "hsl(30, 30%, 98%)" }}>
             <div className="max-w-5xl mx-auto px-4">
@@ -166,22 +185,16 @@ const PremiumWeddingPage = ({ event, theme, lang }: { event: PremiumEventData; t
                   </p>
                 </div>
 
-                {/* Schedule */}
-                <div className="text-center">
-                  <Clock className="w-8 h-8 mx-auto mb-4" style={{ color: "hsl(150, 18%, 38%)" }} />
-                  <h3 className="font-display text-xl text-foreground mb-3">{el?.schedule || t("event.schedule")}</h3>
-                  {event.schedule && Array.isArray(event.schedule) ? (
-                    event.schedule.map((item: { time: string; label: string }, i: number) => (
-                      <p key={i} className="font-body text-sm text-muted-foreground">
-                        {item.label}: {item.time}
-                      </p>
-                    ))
-                  ) : (
+                {/* Dress Code */}
+                {event.dress_code && (
+                  <div className="text-center">
+                    <Shirt className="w-8 h-8 mx-auto mb-4" style={{ color: "hsl(150, 18%, 38%)" }} />
+                    <h3 className="font-display text-xl text-foreground mb-3">{t("event.dressCode")}</h3>
                     <p className="font-body text-sm text-muted-foreground">
-                      {event.event_time} Uhr
+                      {t(`event.dressCode.${event.dress_code}`)}
                     </p>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 {/* Reception */}
                 <div className="text-center">
@@ -195,8 +208,29 @@ const PremiumWeddingPage = ({ event, theme, lang }: { event: PremiumEventData; t
                   </p>
                 </div>
               </div>
+
+              {/* Children info */}
+              {event.children_welcome !== null && event.children_welcome !== undefined && (
+                <div className="text-center mt-10">
+                  <p className="font-body text-sm text-muted-foreground italic">
+                    {event.children_welcome ? t("event.childrenWelcome") : t("event.adultsOnly")}
+                  </p>
+                </div>
+              )}
+
+              {/* Google Maps */}
+              {(event.address || event.ceremony_address) && (
+                <div className="mt-12 max-w-xl mx-auto">
+                  <GoogleMapsEmbed address={event.ceremony_address || event.address || ""} />
+                </div>
+              )}
             </div>
           </section>
+
+          {/* Hotel Recommendations */}
+          {event.hotel_recommendations && Array.isArray(event.hotel_recommendations) && event.hotel_recommendations.length > 0 && (
+            <HotelRecommendations hotels={event.hotel_recommendations} accentColor="hsl(150, 18%, 38%)" />
+          )}
 
           {/* RSVP */}
           {event.rsvp_enabled && (
