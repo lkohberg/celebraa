@@ -20,7 +20,7 @@ const getDemoEvent = (template: Template) => {
     event_time: "18:00",
     rsvp_enabled: true,
     rsvp_deadline: "2026-05-01",
-    menu_selection: false,
+    menu_selection: true,
     hero_image_url: template.defaultHeroImage || null,
   };
 
