@@ -13,7 +13,7 @@ const en = {
   "hero.title1": "Your digital event invitation",
   "hero.title2": "created in minutes",
   "hero.subtitle": "Modern · Personal · With RSVP",
-  "hero.description": "QR code and custom link – everything you need.",
+  "hero.description": "Made with ♥️ in Austria",
   "hero.cta": "Choose your design",
   "hero.secondary": "How it works",
   "hero.trust1": "✓ No app needed",
@@ -64,7 +64,8 @@ const en = {
 
   // Eco Section
   "eco.title": "Celebrate sustainably",
-  "eco.description": "Every digital invitation saves paper and reduces your carbon footprint. Celebrate with a clear conscience.",
+  "eco.description":
+    "Every digital invitation saves paper and reduces your carbon footprint. Celebrate with a clear conscience.",
   "eco.badge1": "0 Paper",
   "eco.badge2": "0 CO₂",
   "eco.badge3": "100% Digital",
