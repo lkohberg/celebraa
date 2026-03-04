@@ -10,7 +10,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 type LegalType = "imprint" | "privacy" | "terms" | null;
 
-const LegalDialogs = () => {
+interface LegalDialogsProps {
+  inline?: boolean;
+  renderTrigger?: (openDialog: (type: LegalType) => void) => React.ReactNode;
+}
+
+const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
   const { t, locale } = useTranslation();
   const [open, setOpen] = useState<LegalType>(null);
 
@@ -18,26 +23,30 @@ const LegalDialogs = () => {
 
   return (
     <>
-      <div className="flex justify-center gap-6 mt-4">
-        <button
-          onClick={() => setOpen("imprint")}
-          className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors"
-        >
-          {t("footer.imprint")}
-        </button>
-        <button
-          onClick={() => setOpen("privacy")}
-          className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors"
-        >
-          {t("footer.privacy")}
-        </button>
-        <button
-          onClick={() => setOpen("terms")}
-          className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors"
-        >
-          {t("footer.terms")}
-        </button>
-      </div>
+      {inline && renderTrigger ? (
+        renderTrigger(setOpen)
+      ) : (
+        <div className="flex justify-center gap-6 mt-4">
+          <button
+            onClick={() => setOpen("imprint")}
+            className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {t("footer.imprint")}
+          </button>
+          <button
+            onClick={() => setOpen("privacy")}
+            className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {t("footer.privacy")}
+          </button>
+          <button
+            onClick={() => setOpen("terms")}
+            className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {t("footer.terms")}
+          </button>
+        </div>
+      )}
 
       {/* Impressum */}
       <Dialog open={open === "imprint"} onOpenChange={(v) => !v && close()}>

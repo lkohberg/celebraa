@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Crown } from "lucide-react";
 import { useTranslation } from "@/i18n";
+import LegalDialogs from "@/components/LegalDialogs";
 
 interface PriceSummaryProps {
   templateName: string;
@@ -19,6 +22,7 @@ interface PriceSummaryProps {
 
 const PriceSummary = ({ templateName, basePrice, menuSelection, menuPrice, extraLangs = 0, langPrice = 0, totalPrice, isValid, loading, onSubmit, tier = "basis" }: PriceSummaryProps) => {
   const { t } = useTranslation();
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   return (
     <div className="bg-secondary rounded-xl p-6 space-y-3">
@@ -51,9 +55,32 @@ const PriceSummary = ({ templateName, basePrice, menuSelection, menuPrice, extra
         <span className="text-foreground">{t("price.total")}</span>
         <span className="text-primary text-lg">€{totalPrice}</span>
       </div>
+
+      <div className="flex items-start gap-2 pt-2">
+        <Checkbox
+          id="terms"
+          checked={termsAccepted}
+          onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+          className="mt-0.5"
+        />
+        <label htmlFor="terms" className="text-xs text-muted-foreground font-body leading-relaxed cursor-pointer">
+          <LegalDialogs
+            inline
+            renderTrigger={(openDialog) => (
+              <>
+                {t("price.termsAccept")}{" "}
+                <button type="button" onClick={() => openDialog("terms")} className="underline hover:text-foreground transition-colors">{t("footer.terms")}</button>
+                {" "}&{" "}
+                <button type="button" onClick={() => openDialog("privacy")} className="underline hover:text-foreground transition-colors">{t("footer.privacy")}</button>
+              </>
+            )}
+          />
+        </label>
+      </div>
+
       <Button
         className="w-full mt-2 font-body font-semibold text-base py-5"
-        disabled={!isValid || loading}
+        disabled={!isValid || loading || !termsAccepted}
         onClick={onSubmit}
       >
         {loading ? t("price.processing") : t("price.pay")}

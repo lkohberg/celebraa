@@ -135,6 +135,7 @@ const en = {
   "price.pay": "Pay securely now",
   "price.processing": "Processing...",
   "price.stripe": "Payment via Stripe · Credit card, Apple Pay, Google Pay",
+  "price.termsAccept": "I accept the",
   "price.tier.basis": "Basic Package",
   "price.tier.premium": "Premium Package",
 
