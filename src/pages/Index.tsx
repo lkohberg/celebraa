@@ -7,6 +7,9 @@ import TemplateCard, { templates, Template } from "@/components/TemplateCard";
 import DemoPreview from "@/components/DemoPreview";
 import HeroSection from "@/components/HeroSection";
 import FeatureGrid from "@/components/FeatureGrid";
+import ComparisonTable from "@/components/ComparisonTable";
+import USPSection from "@/components/USPSection";
+import EcoSection from "@/components/EcoSection";
 import Footer from "@/components/Footer";
 import AuthDialog from "@/components/AuthDialog";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -94,6 +97,9 @@ const Index = () => {
 
       <HeroSection />
       <FeatureGrid />
+      <ComparisonTable />
+      <USPSection />
+      <EcoSection />
 
       {/* Template Selection */}
       <section id="templates" className="py-24">
