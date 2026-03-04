@@ -149,12 +149,12 @@ const ConfigurePage = () => {
 
       if (createError) throw createError;
 
-      // DEV BYPASS: Skip Stripe payment and mark as paid directly
-      const DEV_BYPASS_PAYMENT = true;
-      if (DEV_BYPASS_PAYMENT) {
+      // Admin bypass: skip payment for admin user
+      const isAdmin = user.email === "admin";
+      if (isAdmin) {
         await supabase
           .from("events")
-          .update({ status: "paid", stripe_payment_id: "dev_bypass" })
+          .update({ status: "paid", stripe_payment_id: "admin_bypass" })
           .eq("id", created.id);
         window.location.href = `${window.location.origin}/success/${form.eventLink}`;
         return;
