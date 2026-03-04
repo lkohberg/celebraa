@@ -2,16 +2,19 @@ import { useState } from "react";
 import { useSubmitRsvp } from "@/hooks/useEvents";
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
+import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 interface RsvpFormProps {
   eventId: string;
   rsvpDeadline?: string | null;
   menuSelection?: boolean;
   variant?: "wedding" | "birthday" | "corporate";
+  lang?: EventLang;
 }
 
-const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding" }: RsvpFormProps) => {
+const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", lang }: RsvpFormProps) => {
   const { t } = useTranslation();
+  const labels = lang ? getEventLabels(lang) : null;
   const submitRsvp = useSubmitRsvp();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -64,12 +67,12 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding" }:
       <div className="max-w-lg mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">
-            {variant === "corporate" ? t("event.register") : t("event.rsvp")}
+            {variant === "corporate" ? (labels?.register || t("event.register")) : (labels?.rsvp || t("event.rsvp"))}
           </h2>
           <div className="w-16 h-px mx-auto mb-4" style={{ backgroundColor: primaryColor }} />
           {rsvpDeadline && (
             <p className="font-body text-muted-foreground">
-              {t("event.rsvpDeadline")} {new Date(rsvpDeadline).toLocaleDateString("de-AT")}
+              {labels?.rsvpDeadline || t("event.rsvpDeadline")} {new Date(rsvpDeadline).toLocaleDateString(lang === "en" ? "en-US" : "de-AT")}
             </p>
           )}
         </div>
@@ -77,7 +80,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding" }:
         <form onSubmit={handleSubmit} className="space-y-6">
           <input
             type="text"
-            placeholder={t("event.name")}
+            placeholder={labels?.name || t("event.name")}
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -85,7 +88,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding" }:
           />
           <input
             type="email"
-            placeholder={t("event.email")}
+            placeholder={labels?.email || t("event.email")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className={inputClass}
@@ -103,7 +106,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding" }:
                   : { backgroundColor: "hsl(30, 30%, 98%)", borderColor: "hsl(30, 20%, 88%)" }
               }
             >
-              {t("event.attending")}
+              {labels?.attending || t("event.attending")}
             </button>
             <button
               type="button"
@@ -115,7 +118,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding" }:
                   : { backgroundColor: "hsl(30, 30%, 98%)", borderColor: "hsl(30, 20%, 88%)" }
               }
             >
-              {t("event.notAttending")}
+              {labels?.notAttending || t("event.notAttending")}
             </button>
           </div>
 
@@ -128,24 +131,24 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding" }:
                   onChange={(e) => setPlusOne(e.target.checked)}
                   className="w-4 h-4"
                 />
-                {t("event.plusOne")}
+                {labels?.plusOne || t("event.plusOne")}
               </label>
 
               {menuSelection && (
                 <div>
                   <label className="block font-body text-sm text-foreground mb-2">
-                    {t("event.menuChoice")}
+                    {labels?.menuChoice || t("event.menuChoice")}
                   </label>
                   <select
                     value={menuChoice}
                     onChange={(e) => setMenuChoice(e.target.value)}
                     className={inputClass}
                   >
-                    <option value="">{t("event.dietary.standard")}</option>
-                    <option value="vegetarian">{t("event.dietary.vegetarian")}</option>
-                    <option value="vegan">{t("event.dietary.vegan")}</option>
-                    <option value="glutenfree">{t("event.dietary.glutenfree")}</option>
-                    <option value="lactosefree">{t("event.dietary.lactosefree")}</option>
+                    <option value="">{labels?.standard || t("event.dietary.standard")}</option>
+                    <option value="vegetarian">{labels?.vegetarian || t("event.dietary.vegetarian")}</option>
+                    <option value="vegan">{labels?.vegan || t("event.dietary.vegan")}</option>
+                    <option value="glutenfree">{labels?.glutenfree || t("event.dietary.glutenfree")}</option>
+                    <option value="lactosefree">{labels?.lactosefree || t("event.dietary.lactosefree")}</option>
                   </select>
                 </div>
               )}
@@ -153,7 +156,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding" }:
           )}
 
           <textarea
-            placeholder={t("event.message")}
+            placeholder={labels?.message || t("event.message")}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={3}
@@ -166,7 +169,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding" }:
             className="w-full py-4 font-body text-sm tracking-[0.15em] uppercase text-white rounded-md transition-opacity hover:opacity-90 disabled:opacity-50"
             style={{ backgroundColor: primaryColor }}
           >
-            {submitRsvp.isPending ? "..." : t("event.submit")}
+            {submitRsvp.isPending ? "..." : (labels?.submit || t("event.submit"))}
           </button>
         </form>
       </div>

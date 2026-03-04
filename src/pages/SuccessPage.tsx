@@ -4,19 +4,26 @@ import { QRCodeSVG } from "qrcode.react";
 import { Copy, Download, ExternalLink, Check } from "lucide-react";
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
+import { useEventByLink } from "@/hooks/useEvents";
+import { SUPPORTED_LANGUAGES } from "@/i18n/eventLabels";
 
 const SuccessPage = () => {
   const { eventLink } = useParams();
   const navigate = useNavigate();
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
   const qrRef = useRef<HTMLDivElement>(null);
+  const { data: event } = useEventByLink(eventLink || "");
 
-  const eventUrl = `https://${eventLink}.celebra.at`;
+  const languages = (event as any)?.languages as string[] | undefined;
+  const hasMultipleLangs = languages && languages.length > 1;
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(eventUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const baseUrl = `${window.location.origin}/e/${eventLink}`;
+  const primaryUrl = hasMultipleLangs ? `${baseUrl}/${languages[0]}` : baseUrl;
+
+  const handleCopy = async (url: string, key: string) => {
+    await navigator.clipboard.writeText(url);
+    setCopied(key);
+    setTimeout(() => setCopied(null), 2000);
   };
 
   const handleDownloadQR = () => {
@@ -60,7 +67,7 @@ const SuccessPage = () => {
         {/* QR Code */}
         <div ref={qrRef} className="inline-block p-6 bg-card rounded-xl shadow-card mb-8">
           <QRCodeSVG
-            value={eventUrl}
+            value={primaryUrl}
             size={180}
             bgColor="transparent"
             fgColor="hsl(220, 20%, 14%)"
@@ -68,21 +75,41 @@ const SuccessPage = () => {
           />
         </div>
 
-        <p className="font-body text-sm text-muted-foreground mb-6 break-all">
-          {eventUrl}
-        </p>
+        {/* Language Links */}
+        {hasMultipleLangs ? (
+          <div className="space-y-3 mb-8">
+            <p className="font-body text-sm text-muted-foreground font-semibold mb-2">Deine Sprach-Links:</p>
+            {languages.map((code) => {
+              const lang = SUPPORTED_LANGUAGES.find((l) => l.code === code);
+              const url = `${baseUrl}/${code}`;
+              return (
+                <div key={code} className="flex items-center gap-2 justify-center">
+                  <span className="text-sm">{lang?.flag}</span>
+                  <span className="font-body text-xs text-muted-foreground break-all">{url}</span>
+                  <Button size="sm" variant="ghost" className="h-7 px-2" onClick={() => handleCopy(url, code)}>
+                    {copied === code ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="font-body text-sm text-muted-foreground mb-6 break-all">
+            {primaryUrl}
+          </p>
+        )}
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button onClick={handleCopy} className="font-body">
-            {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
-            {copied ? "Kopiert!" : "Link kopieren"}
+          <Button onClick={() => handleCopy(primaryUrl, "main")} className="font-body">
+            {copied === "main" ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+            {copied === "main" ? "Kopiert!" : "Link kopieren"}
           </Button>
           <Button variant="outline" onClick={handleDownloadQR} className="font-body">
             <Download className="w-4 h-4 mr-2" />
             QR-Code herunterladen
           </Button>
           <Button variant="outline" asChild className="font-body">
-            <a href={eventUrl} target="_blank" rel="noopener noreferrer">
+            <a href={primaryUrl} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="w-4 h-4 mr-2" />
               Zur Event-Seite
             </a>

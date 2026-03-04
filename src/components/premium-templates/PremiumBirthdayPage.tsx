@@ -4,6 +4,7 @@ import { PartyPopper, MapPin, Clock, Music } from "lucide-react";
 import { useTranslation } from "@/i18n";
 import CountdownTimer from "./CountdownTimer";
 import RsvpForm from "./RsvpForm";
+import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 import { PremiumEventData, PremiumTheme } from "./PremiumWeddingPage";
 
@@ -25,8 +26,9 @@ const ConfettiParticle = ({ delay }: { delay: number }) => {
   );
 };
 
-const PremiumBirthdayPage = ({ event, theme }: { event: PremiumEventData; theme?: PremiumTheme }) => {
+const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang }) => {
   const { t } = useTranslation();
+  const el = lang ? getEventLabels(lang) : null;
   const [showContent, setShowContent] = useState(false);
   const [confetti, setConfetti] = useState<number[]>([]);
 
@@ -89,7 +91,7 @@ const PremiumBirthdayPage = ({ event, theme }: { event: PremiumEventData; theme?
                   <PartyPopper className="w-16 h-16 mx-auto mb-6 text-white/80" />
                 </motion.div>
                 <p className="font-body text-sm tracking-[0.3em] uppercase mb-4 text-white/70">
-                  {t("event.letsCelebrate")}
+                  {el?.letsCelebrate || t("event.letsCelebrate")}
                 </p>
                 <h1 className="font-display text-5xl md:text-7xl font-bold text-white mb-4">
                   {event.title}
@@ -110,12 +112,12 @@ const PremiumBirthdayPage = ({ event, theme }: { event: PremiumEventData; theme?
             <section className="py-20 bg-card">
               <div className="max-w-3xl mx-auto px-4 text-center">
                 <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">
-                  {t("event.countdown")}
+                  {el?.countdown || t("event.countdown")}
                 </p>
                 <h2 className="font-display text-2xl md:text-3xl text-foreground mb-12">
-                  {t("event.countdownSub")}
+                  {el?.countdownSub || t("event.countdownSub")}
                 </h2>
-                <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} />
+                <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} />
               </div>
             </section>
 
@@ -125,7 +127,7 @@ const PremiumBirthdayPage = ({ event, theme }: { event: PremiumEventData; theme?
                 <div className="max-w-2xl mx-auto px-4 text-center">
                   <Music className="w-6 h-6 mx-auto mb-4 text-primary" />
                   <h2 className="font-display text-2xl md:text-3xl text-foreground mb-8">
-                    {t("event.party")}
+                    {el?.party || t("event.party")}
                   </h2>
                   <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line">
                     {event.story_text}
@@ -138,18 +140,18 @@ const PremiumBirthdayPage = ({ event, theme }: { event: PremiumEventData; theme?
             <section className="py-24 bg-card">
               <div className="max-w-5xl mx-auto px-4">
                 <div className="text-center mb-16">
-                  <h2 className="font-display text-2xl md:text-3xl text-foreground">{t("event.details")}</h2>
+                  <h2 className="font-display text-2xl md:text-3xl text-foreground">{el?.details || t("event.details")}</h2>
                 </div>
                 <div className="grid md:grid-cols-2 gap-12 max-w-2xl mx-auto">
                   <div className="text-center">
                     <MapPin className="w-8 h-8 mx-auto mb-4 text-primary" />
-                    <h3 className="font-display text-xl text-foreground mb-3">{t("event.venue")}</h3>
+                    <h3 className="font-display text-xl text-foreground mb-3">{el?.venue || t("event.venue")}</h3>
                     <p className="font-body text-sm text-muted-foreground">{event.location_name || "—"}</p>
                     <p className="font-body text-sm text-muted-foreground">{event.address || ""}</p>
                   </div>
                   <div className="text-center">
                     <Clock className="w-8 h-8 mx-auto mb-4 text-primary" />
-                    <h3 className="font-display text-xl text-foreground mb-3">{t("event.program")}</h3>
+                    <h3 className="font-display text-xl text-foreground mb-3">{el?.program || t("event.program")}</h3>
                     {event.schedule && Array.isArray(event.schedule) ? (
                       event.schedule.map((item: { time: string; label: string }, i: number) => (
                         <p key={i} className="font-body text-sm text-muted-foreground">
@@ -171,6 +173,7 @@ const PremiumBirthdayPage = ({ event, theme }: { event: PremiumEventData; theme?
                 rsvpDeadline={event.rsvp_deadline}
                 menuSelection={event.menu_selection || false}
                 variant="birthday"
+                lang={lang}
               />
             )}
 

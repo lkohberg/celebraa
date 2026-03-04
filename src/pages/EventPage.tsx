@@ -9,12 +9,17 @@ import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayP
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import RsvpForm from "@/components/premium-templates/RsvpForm";
 import { Calendar, Clock, MapPin } from "lucide-react";
+import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 const EventPage = () => {
-  const { eventLink } = useParams();
+  const { eventLink, lang: langParam } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: event, isLoading, error } = useEventByLink(eventLink || "");
+  
+  // Determine event language from URL param, fallback to first language of event, then 'de'
+  const eventLang: EventLang = (langParam as EventLang) || "de";
+  const labels = getEventLabels(eventLang);
   const trackAnalytics = useTrackAnalytics();
 
   // Track page view
@@ -65,27 +70,28 @@ const EventPage = () => {
     const templateId = eventData.template_id;
     if (templateId.startsWith("wedding-premium") || templateId.startsWith("wedding-")) {
       if (templateId.includes("premium")) {
-        return <PremiumWeddingPage event={eventData} />;
+        return <PremiumWeddingPage event={eventData} lang={eventLang} />;
       }
     }
     if (templateId.startsWith("birthday-premium") || templateId.startsWith("birthday-")) {
       if (templateId.includes("premium")) {
-        return <PremiumBirthdayPage event={eventData} />;
+        return <PremiumBirthdayPage event={eventData} lang={eventLang} />;
       }
     }
     if (templateId.startsWith("corporate-premium") || templateId.startsWith("corporate-")) {
       if (templateId.includes("premium")) {
-        return <PremiumCorporatePage event={eventData} />;
+        return <PremiumCorporatePage event={eventData} lang={eventLang} />;
       }
     }
     // Fallback: detect by template prefix for premium tier
-    if (templateId.startsWith("wedding")) return <PremiumWeddingPage event={eventData} />;
-    if (templateId.startsWith("birthday")) return <PremiumBirthdayPage event={eventData} />;
-    if (templateId.startsWith("corporate")) return <PremiumCorporatePage event={eventData} />;
+    if (templateId.startsWith("wedding")) return <PremiumWeddingPage event={eventData} lang={eventLang} />;
+    if (templateId.startsWith("birthday")) return <PremiumBirthdayPage event={eventData} lang={eventLang} />;
+    if (templateId.startsWith("corporate")) return <PremiumCorporatePage event={eventData} lang={eventLang} />;
   }
 
   // Basis template - simple styled page
-  const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", {
+  const dateLocaleMap: Record<string, string> = { de: "de-AT", en: "en-US", es: "es-ES", pt: "pt-BR", fr: "fr-FR", it: "it-IT", pl: "pl-PL", ro: "ro-RO", nl: "nl-NL", tr: "tr-TR", zh: "zh-CN" };
+  const formattedDate = new Date(event.event_date).toLocaleDateString(dateLocaleMap[eventLang] || "de-AT", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -96,7 +102,7 @@ const EventPage = () => {
       <div className="max-w-2xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">
-            {t("configure.invitation")}
+            {labels.rsvp}
           </p>
           <h1
             className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4"
@@ -116,7 +122,7 @@ const EventPage = () => {
           </div>
           <div className="flex items-center gap-3 font-body text-sm text-muted-foreground">
             <Clock className="w-4 h-4" />
-            <span>{event.event_time} Uhr</span>
+            <span>{event.event_time}</span>
           </div>
           {event.location_name && (
             <div className="flex items-center gap-3 font-body text-sm text-muted-foreground">
@@ -132,6 +138,7 @@ const EventPage = () => {
             rsvpDeadline={event.rsvp_deadline}
             menuSelection={event.menu_selection || false}
             variant="wedding"
+            lang={eventLang}
           />
         )}
       </div>

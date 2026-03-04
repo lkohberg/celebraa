@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/i18n";
 
 interface EnvelopeIntroProps {
-  names: string; // e.g. "Lisa & Thomas"
+  names: string;
   onOpen: () => void;
+  tapLabel?: string;
 }
 
-const EnvelopeIntro = ({ names, onOpen }: EnvelopeIntroProps) => {
+const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
   const { t } = useTranslation();
   const [opening, setOpening] = useState(false);
 
@@ -57,7 +58,7 @@ const EnvelopeIntro = ({ names, onOpen }: EnvelopeIntroProps) => {
             animate={{ opacity: [1, 0.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            {t("event.tapToOpen")}
+            {tapLabel || t("event.tapToOpen")}
           </motion.p>
 
           {/* Envelope */}
