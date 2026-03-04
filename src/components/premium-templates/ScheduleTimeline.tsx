@@ -15,10 +15,14 @@ const ScheduleTimeline = ({ schedule, accentColor = "hsl(150, 18%, 38%)" }: Sche
 
   return (
     <div className="relative max-w-lg mx-auto py-4">
-      {/* Vertical line */}
+      {/* Vertical line - starts at first dot, ends at last dot */}
       <div
-        className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-[2px] opacity-30"
-        style={{ backgroundColor: accentColor }}
+        className="absolute left-1/2 -translate-x-px opacity-30 w-[2px]"
+        style={{
+          backgroundColor: accentColor,
+          top: "calc(1.25rem + 8px)",
+          bottom: `calc(${(schedule.length - 1) > 0 ? "1.25rem + 8px" : "100%"})`,
+        }}
       />
 
       <div className="space-y-0">
