@@ -64,7 +64,7 @@ const EnvelopeIntro = ({ names, onOpen }: EnvelopeIntroProps) => {
           <div className="relative w-[280px] h-[200px] sm:w-[340px] sm:h-[240px] md:w-[400px] md:h-[280px]">
             {/* Envelope body */}
             <div
-              className="absolute inset-0 rounded-md overflow-hidden flex items-center justify-center"
+              className="absolute inset-0 rounded-md overflow-hidden flex items-end justify-center pb-8 sm:pb-10 md:pb-12"
               style={{
                 background: "linear-gradient(135deg, hsl(340 30% 94%) 0%, hsl(30 35% 96%) 100%)",
                 boxShadow: "0 8px 32px rgba(219, 112, 147, 0.15), 0 4px 16px rgba(255, 192, 203, 0.1)",
