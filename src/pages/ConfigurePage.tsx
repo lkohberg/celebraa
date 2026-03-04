@@ -341,6 +341,11 @@ const ConfigurePage = () => {
                           <Button size="sm" className="font-body">{t("configure.rsvpYes")}</Button>
                           <Button size="sm" variant="outline" className="font-body">{t("configure.rsvpNo")}</Button>
                         </div>
+                        {form.menuSelection && (
+                          <p className="text-xs font-body text-muted-foreground mt-3 opacity-70">
+                            inkl. Essenspräferenzen (Vegetarisch, Vegan, …)
+                          </p>
+                        )}
                       </div>
                     )}
                   </div>
