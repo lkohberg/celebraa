@@ -26,7 +26,7 @@ const de = {
   "features.1.title": "Kein WhatsApp-Chaos",
   "features.1.desc": "Alle Gäste erhalten einen professionellen Link und Zusagen werden automatisch gesammelt.",
   "features.2.title": "QR-Code inklusive",
-  "features.2.desc": "Perfekt für gedruckte Karten oder Social Media – scannen und sofort zusagen.",
+  "features.2.desc": "Perfekt für gedruckte Karten oder Social Media. Scannen und sofort zusagen.",
   "features.3.title": "In 3 Tagen online",
   "features.3.desc": "Deine Seite ist innerhalb von drei Tagen nach Bestellung verfügbar.",
 
@@ -50,17 +50,17 @@ const de = {
   "usp.title": "Was dich bei uns erwartet",
   "usp.subtitle": "Alles was du für die perfekte Einladung brauchst",
   "usp.cheap.title": "Bis zu 80% günstiger",
-  "usp.cheap.desc": "Im Vergleich zu traditionellen Einladungsservices – ohne Kompromisse bei der Qualität.",
+  "usp.cheap.desc": "Im Vergleich zu traditionellen Einladungsservices ohne Kompromisse bei der Qualität.",
   "usp.quality.title": "Premium-Designs",
-  "usp.quality.desc": "Professionell gestaltete Templates für jeden Anlass – von elegant bis modern.",
+  "usp.quality.desc": "Professionell gestaltete Templates für jeden Anlass, von elegant bis modern.",
   "usp.qr.title": "Gratis QR-Code",
-  "usp.qr.desc": "Bei jedem Paket inklusive – perfekt für gedruckte Save-the-Date Karten.",
+  "usp.qr.desc": "Bei jedem Paket inklusive, perfekt für gedruckte Save-the-Date Karten.",
   "usp.language.title": "Bis zu 3 Sprachen",
-  "usp.language.desc": "Jede Einladung in bis zu 3 Sprachen – jeder Gast bekommt seinen eigenen Link.",
+  "usp.language.desc": "Jede Einladung in bis zu 3 Sprachen! Jeder Gast bekommt seinen eigenen Link.",
   "usp.dashboard.title": "Live-Dashboard",
   "usp.dashboard.desc": "Zu-/Absagen und Essenswünsche in Echtzeit einsehen über deinen persönlichen Link.",
   "usp.export.title": "Excel-Export",
-  "usp.export.desc": "Alle Gästedaten mit einem Klick als CSV exportieren – für Caterer, Location & Co.",
+  "usp.export.desc": "Alle Gästedaten mit einem Klick als CSV exportieren. Für Caterer, Location & Co.",
 
   // Eco Section
   "eco.title": "Nachhaltig feiern",
@@ -124,7 +124,7 @@ const de = {
   "configure.heroImage": "Hero-Bild URL",
   "configure.heroImagePlaceholder": "https://beispiel.com/bild.jpg",
   "configure.languages": "Sprachen der Einladung (max. 3)",
-  "configure.languagesHint": "Wähle bis zu 3 Sprachen – pro Sprache wird ein eigener Link erstellt.",
+  "configure.languagesHint": "Wähle bis zu 3 Sprachen. Pro Sprache wird ein eigener Link erstellt.",
   "configure.languageLinks": "Deine Sprach-Links:",
 
   // Price Summary
