@@ -8,6 +8,8 @@ interface PriceSummaryProps {
   basePrice: number;
   menuSelection: boolean;
   menuPrice: number;
+  extraLangs?: number;
+  langPrice?: number;
   totalPrice: number;
   isValid: boolean;
   loading: boolean;
@@ -15,7 +17,7 @@ interface PriceSummaryProps {
   tier?: "basis" | "premium";
 }
 
-const PriceSummary = ({ templateName, basePrice, menuSelection, menuPrice, totalPrice, isValid, loading, onSubmit, tier = "basis" }: PriceSummaryProps) => {
+const PriceSummary = ({ templateName, basePrice, menuSelection, menuPrice, extraLangs = 0, langPrice = 0, totalPrice, isValid, loading, onSubmit, tier = "basis" }: PriceSummaryProps) => {
   const { t } = useTranslation();
 
   return (
@@ -37,6 +39,12 @@ const PriceSummary = ({ templateName, basePrice, menuSelection, menuPrice, total
         <div className="flex justify-between font-body text-sm">
           <span className="text-muted-foreground">{t("price.menu")}</span>
           <span className="text-foreground">€{menuPrice}</span>
+        </div>
+      )}
+      {extraLangs > 0 && (
+        <div className="flex justify-between font-body text-sm">
+          <span className="text-muted-foreground">{t("price.languages")} ({extraLangs}×€3)</span>
+          <span className="text-foreground">€{langPrice}</span>
         </div>
       )}
       <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
