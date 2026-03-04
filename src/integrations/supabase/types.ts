@@ -100,6 +100,7 @@ export type Database = {
           font: string | null
           hero_image_url: string | null
           id: string
+          languages: string[] | null
           location_name: string | null
           max_guests: number | null
           menu_selection: boolean | null
@@ -131,6 +132,7 @@ export type Database = {
           font?: string | null
           hero_image_url?: string | null
           id?: string
+          languages?: string[] | null
           location_name?: string | null
           max_guests?: number | null
           menu_selection?: boolean | null
@@ -162,6 +164,7 @@ export type Database = {
           font?: string | null
           hero_image_url?: string | null
           id?: string
+          languages?: string[] | null
           location_name?: string | null
           max_guests?: number | null
           menu_selection?: boolean | null

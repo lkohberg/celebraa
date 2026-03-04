@@ -30,6 +30,7 @@ const App = () => (
               <Route path="/success/:eventLink" element={<SuccessPage />} />
               <Route path="/dashboard" element={<AdminDashboard />} />
               <Route path="/e/:eventLink" element={<EventPage />} />
+              <Route path="/e/:eventLink/:lang" element={<EventPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

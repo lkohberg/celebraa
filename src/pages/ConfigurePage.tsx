@@ -7,8 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Clock, MapPin, Users, ArrowLeft, Upload, X } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, ArrowLeft, Upload, X, Globe } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { SUPPORTED_LANGUAGES, type EventLang } from "@/i18n/eventLabels";
 import { useCreateEvent, useCheckEventLink } from "@/hooks/useEvents";
 import { supabase } from "@/integrations/supabase/client";
 import AuthDialog from "@/components/AuthDialog";
@@ -61,6 +62,7 @@ const ConfigurePage = () => {
     receptionLocation: "",
     receptionAddress: "",
     heroImageUrl: template?.defaultHeroImage || "",
+    languages: ["de"] as EventLang[],
   });
 
   const [dragActive, setDragActive] = useState(false);
@@ -133,6 +135,9 @@ const ConfigurePage = () => {
         eventInsert.reception_address = form.receptionAddress || null;
         eventInsert.hero_image_url = form.heroImageUrl || null;
       }
+
+      // Languages
+      eventInsert.languages = form.languages;
 
       const { data: created, error: createError } = await supabase
         .from("events")
@@ -451,6 +456,52 @@ const ConfigurePage = () => {
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
+
+              {/* Language Selection */}
+              <div className="border border-border rounded-lg p-5 space-y-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Globe className="w-4 h-4 text-primary" />
+                  <Label className="font-body font-semibold">{t("configure.languages")}</Label>
+                </div>
+                <p className="font-body text-xs text-muted-foreground">{t("configure.languagesHint")}</p>
+                <div className="flex flex-wrap gap-2">
+                  {SUPPORTED_LANGUAGES.map((lang) => {
+                    const isSelected = form.languages.includes(lang.code);
+                    const isFirst = form.languages[0] === lang.code;
+                    return (
+                      <button
+                        key={lang.code}
+                        type="button"
+                        className={`px-3 py-1.5 rounded-full text-xs font-body border transition-all ${
+                          isSelected
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "bg-card border-border hover:border-primary/50 text-foreground"
+                        } ${isFirst ? "ring-2 ring-primary/30" : ""}`}
+                        onClick={() => {
+                          if (isFirst) return; // Can't remove first language
+                          if (isSelected) {
+                            setForm((prev) => ({ ...prev, languages: prev.languages.filter((l) => l !== lang.code) }));
+                          } else if (form.languages.length < 3) {
+                            setForm((prev) => ({ ...prev, languages: [...prev.languages, lang.code] }));
+                          }
+                        }}
+                      >
+                        {lang.flag} {lang.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                {form.languages.length > 1 && form.eventLink && (
+                  <div className="mt-3 space-y-1">
+                    <p className="font-body text-xs text-muted-foreground font-semibold">{t("configure.languageLinks")}</p>
+                    {form.languages.map((code) => (
+                      <p key={code} className="font-body text-xs text-muted-foreground">
+                        {SUPPORTED_LANGUAGES.find((l) => l.code === code)?.flag} celebra.at/e/{form.eventLink}/{code}
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div>

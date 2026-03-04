@@ -3,11 +3,13 @@ import { Building2, MapPin, Clock, Calendar } from "lucide-react";
 import { useTranslation } from "@/i18n";
 import CountdownTimer from "./CountdownTimer";
 import RsvpForm from "./RsvpForm";
+import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 import { PremiumEventData, PremiumTheme } from "./PremiumWeddingPage";
 
-const PremiumCorporatePage = ({ event, theme }: { event: PremiumEventData; theme?: PremiumTheme }) => {
+const PremiumCorporatePage = ({ event, theme, lang }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang }) => {
   const { t } = useTranslation();
+  const el = lang ? getEventLabels(lang) : null;
 
   const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", {
     day: "numeric",
@@ -45,7 +47,7 @@ const PremiumCorporatePage = ({ event, theme }: { event: PremiumEventData; theme
         >
           <Building2 className="w-12 h-12 mx-auto mb-6 text-white/60" />
           <p className="font-body text-sm tracking-[0.3em] uppercase mb-4 text-white/60">
-            {t("event.youreInvited")}
+            {el?.youreInvited || t("event.youreInvited")}
           </p>
           <h1 className="font-display text-4xl md:text-6xl font-bold text-white mb-6">
             {event.title}
@@ -70,8 +72,8 @@ const PremiumCorporatePage = ({ event, theme }: { event: PremiumEventData; theme
       {/* Countdown */}
       <section className="py-20 bg-card">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="font-display text-2xl text-foreground mb-12">{t("event.countdown")}</h2>
-          <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} />
+          <h2 className="font-display text-2xl text-foreground mb-12">{el?.countdown || t("event.countdown")}</h2>
+          <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} />
         </div>
       </section>
 
@@ -80,7 +82,7 @@ const PremiumCorporatePage = ({ event, theme }: { event: PremiumEventData; theme
         <section className="py-24 bg-background">
           <div className="max-w-2xl mx-auto px-4 text-center">
             <h2 className="font-display text-2xl md:text-3xl text-foreground mb-8">
-              {t("event.agenda")}
+              {el?.agenda || t("event.agenda")}
             </h2>
             <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line">
               {event.story_text}
@@ -93,18 +95,18 @@ const PremiumCorporatePage = ({ event, theme }: { event: PremiumEventData; theme
       <section className="py-24 bg-card">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="font-display text-2xl md:text-3xl text-foreground">{t("event.details")}</h2>
+            <h2 className="font-display text-2xl md:text-3xl text-foreground">{el?.details || t("event.details")}</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-12 max-w-2xl mx-auto">
             <div className="text-center">
               <MapPin className="w-8 h-8 mx-auto mb-4" style={{ color: "hsl(220, 50%, 35%)" }} />
-              <h3 className="font-display text-xl text-foreground mb-3">{t("event.location")}</h3>
+              <h3 className="font-display text-xl text-foreground mb-3">{el?.location || t("event.location")}</h3>
               <p className="font-body text-sm text-muted-foreground">{event.location_name || "—"}</p>
               <p className="font-body text-sm text-muted-foreground">{event.address || ""}</p>
             </div>
             <div className="text-center">
               <Clock className="w-8 h-8 mx-auto mb-4" style={{ color: "hsl(220, 50%, 35%)" }} />
-              <h3 className="font-display text-xl text-foreground mb-3">{t("event.schedule")}</h3>
+              <h3 className="font-display text-xl text-foreground mb-3">{el?.schedule || t("event.schedule")}</h3>
               {event.schedule && Array.isArray(event.schedule) ? (
                 event.schedule.map((item: { time: string; label: string }, i: number) => (
                   <p key={i} className="font-body text-sm text-muted-foreground">
@@ -126,6 +128,7 @@ const PremiumCorporatePage = ({ event, theme }: { event: PremiumEventData; theme
           rsvpDeadline={event.rsvp_deadline}
           menuSelection={event.menu_selection || false}
           variant="corporate"
+          lang={lang}
         />
       )}
 

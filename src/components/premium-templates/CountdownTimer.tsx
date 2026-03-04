@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "@/i18n";
+import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 interface CountdownTimerProps {
-  targetDate: string; // ISO date string
-  targetTime?: string; // HH:mm
+  targetDate: string;
+  targetTime?: string;
   className?: string;
+  lang?: EventLang;
 }
 
-const CountdownTimer = ({ targetDate, targetTime, className }: CountdownTimerProps) => {
+const CountdownTimer = ({ targetDate, targetTime, className, lang }: CountdownTimerProps) => {
   const { t } = useTranslation();
+  const el = lang ? getEventLabels(lang) : null;
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
@@ -36,10 +39,10 @@ const CountdownTimer = ({ targetDate, targetTime, className }: CountdownTimerPro
   const pad = (n: number) => String(n).padStart(2, "0");
 
   const items = [
-    { value: pad(timeLeft.days), label: t("event.days") },
-    { value: pad(timeLeft.hours), label: t("event.hours") },
-    { value: pad(timeLeft.minutes), label: t("event.minutes") },
-    { value: pad(timeLeft.seconds), label: t("event.seconds") },
+    { value: pad(timeLeft.days), label: el?.days || t("event.days") },
+    { value: pad(timeLeft.hours), label: el?.hours || t("event.hours") },
+    { value: pad(timeLeft.minutes), label: el?.minutes || t("event.minutes") },
+    { value: pad(timeLeft.seconds), label: el?.seconds || t("event.seconds") },
   ];
 
   return (
