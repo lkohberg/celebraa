@@ -1,35 +1,74 @@
 
 
-## Plan: Verbleibende Probleme beheben
+## Plan: Neue Event-Optionen (Tagesablauf, Dresscode, Google Maps, Kinder, Hotels)
 
-Nach Analyse des aktuellen Codes gibt es diese offenen Punkte:
-
-### 1. Basis-Template: Schrift & Farbe aus DB anwenden
-**Problem**: Die EventPage rendert das Basis-Template ohne die gespeicherten `font` und `primary_color` Werte aus der Datenbank.
-**Lösung**: In `EventPage.tsx` die DB-Werte `event.font` und `event.primary_color` auf den Basis-Template-Container anwenden (Google Fonts laden, `fontFamily` und Farbe setzen).
-
-### 2. RLS-Problem für öffentliche Event-Seiten
-**Problem**: `useEventByLink` fragt Events als unauthentifizierter User ab. Die RLS-Policy "Anyone can view live events" erlaubt SELECT nur bei `status = 'live'`. Das sollte funktionieren, aber die Query filtert nicht explizit nach Status — wenn kein User eingeloggt ist und das Event "live" ist, sollte es klappen. **Kein Code-Problem**, aber ein Test ist nötig.
-
-### 3. Dashboard: Event manuell auf "archiviert" setzen
-**Problem**: Es gibt keinen Button im Dashboard um ein Event zu deaktivieren/archivieren.
-**Lösung**: Im `EventDetail` einen Toggle-Button hinzufügen (Live / Archiviert).
-
-### 4. Success-Page & Dashboard: Nicht übersetzte Texte
-**Problem**: Einige Texte sind hardcoded auf Deutsch statt über `t()`.
-**Lösung**: Fehlende i18n-Keys in `de.ts` und `en.ts` ergänzen und in den Komponenten verwenden.
+### Zusammenfassung
+Fünf neue Features für den Event-Konfigurator und die Event-Anzeige:
+1. **Tagesablauf** -- vertikaler Zeitstrahl mit Uhrzeiten und Beschreibungen
+2. **Dresscode** -- optionale Auswahl (z.B. Casual, Smart Casual, Elegant, Black Tie)
+3. **Google Maps** -- eingebettete Karte beim Veranstaltungsort
+4. **Kinder willkommen** -- nur bei Hochzeiten, Auswahl ob Kinder erwünscht/nicht erwünscht
+5. **Hotelempfehlungen** -- Liste mit Hotels für Gäste von weiter weg
 
 ---
 
-### Technische Änderungen
+### 1. Datenbank-Migration
 
-| Datei | Änderung |
-|-------|----------|
-| `src/pages/EventPage.tsx` | Google Font laden, `fontFamily` und `primaryColor` auf Basis-Container anwenden |
-| `src/pages/AdminDashboard.tsx` | Archivieren-Button mit `useUpdateEvent` hinzufügen |
-| `src/pages/SuccessPage.tsx` | Hardcoded Texte durch `t()` ersetzen |
-| `src/i18n/de.ts` + `en.ts` | Fehlende Keys für Success-Page und Dashboard |
+Neue Spalten in `events`:
+```sql
+ALTER TABLE events ADD COLUMN dress_code text;           -- z.B. 'casual', 'smart_casual', 'elegant', 'black_tie'
+ALTER TABLE events ADD COLUMN children_welcome boolean;  -- null = nicht angegeben, true/false
+ALTER TABLE events ADD COLUMN hotel_recommendations jsonb; -- [{name, address, url?, note?}]
+```
 
-### Nicht in diesem Schritt
-- **Subdomain-Routing** (`eventname.celebra.at`): Erfordert DNS-Konfiguration und Server-seitige Logik, die außerhalb der App liegt. Kann als separater Schritt geplant werden.
+Die `schedule`-Spalte existiert bereits als `jsonb` -- wird jetzt aktiv genutzt als `[{time: "14:00", label: "Trauung"}, ...]`.
+
+### 2. ConfigurePage -- Neue Formularfelder
+
+Im Konfigurator (`ConfigurePage.tsx`) werden folgende Abschnitte ergänzt:
+
+**Tagesablauf-Editor**: Dynamische Liste mit +/- Buttons. Jede Zeile hat ein Zeitfeld (Input type="time") und ein Textfeld (z.B. "Empfang", "Kuchen anschneiden"). Die Daten werden als `schedule` JSON gespeichert.
+
+**Dresscode-Auswahl**: Ein `Select`-Dropdown mit Optionen: Keine Angabe, Casual, Smart Casual, Elegant, Black Tie.
+
+**Kinder willkommen** (nur bei `eventType === "wedding"`): Ein Switch/Select mit 3 Zuständen: Keine Angabe, Kinder willkommen, Nur Erwachsene.
+
+**Hotelempfehlungen**: Dynamische Liste mit Name, Adresse, optionaler URL. +/- Buttons zum Hinzufügen/Entfernen.
+
+### 3. Event-Seiten -- Anzeige der neuen Daten
+
+**Tagesablauf-Komponente** (neue Datei `src/components/premium-templates/ScheduleTimeline.tsx`):
+- Vertikaler Zeitstrahl mit einer durchgehenden Linie
+- Kreismarkierungen an jedem Punkt
+- Uhrzeit links, Beschreibung rechts
+- Wird in allen 3 Premium-Templates und auch in Basis-Templates eingebunden
+
+**Dresscode-Anzeige**: Wird im Details-Bereich als Icon + Text angezeigt (z.B. Shirt-Icon + "Elegant").
+
+**Google Maps Embed**: Wenn eine Adresse vorhanden ist, wird ein `<iframe>` mit Google Maps Embed API eingebettet. Nutzt die kostenlose Embed-Variante: `https://www.google.com/maps/embed/v1/place?q=ADRESSE&key=API_KEY` oder alternativ die keyless Variante `https://maps.google.com/maps?q=ADRESSE&output=embed`.
+
+**Kinder-Hinweis** (nur Hochzeit): Im Details-Bereich ein dezenter Hinweis "Kinder sind herzlich willkommen" oder "Wir bitten um Verständnis, dass diese Feier nur für Erwachsene geplant ist."
+
+**Hotelempfehlungen**: Eigene Sektion mit Karten-Layout, Name, Adresse und optionalem Link zum Hotel.
+
+### 4. i18n -- Neue Übersetzungen (de.ts, en.ts)
+
+Neue Keys für: Tagesablauf-Labels, Dresscode-Optionen, Kinder-Hinweise, Hotel-Sektion, Google Maps.
+
+### 5. PremiumEventData Interface
+
+Erweitert um: `dress_code`, `children_welcome`, `hotel_recommendations`.
+
+### Dateien die geändert/erstellt werden
+
+| Datei | Aktion |
+|-------|--------|
+| DB Migration | Neue Spalten |
+| `src/components/premium-templates/ScheduleTimeline.tsx` | Neu -- Zeitstrahl-Komponente |
+| `src/components/premium-templates/PremiumWeddingPage.tsx` | Erweitern -- Zeitstrahl, Maps, Dresscode, Kinder, Hotels |
+| `src/components/premium-templates/PremiumBirthdayPage.tsx` | Erweitern -- Zeitstrahl, Maps, Dresscode, Hotels |
+| `src/components/premium-templates/PremiumCorporatePage.tsx` | Erweitern -- Zeitstrahl, Maps, Dresscode, Hotels |
+| `src/pages/ConfigurePage.tsx` | Erweitern -- alle neuen Formularfelder |
+| `src/i18n/de.ts` | Neue Übersetzungen |
+| `src/i18n/en.ts` | Neue Übersetzungen |
 
