@@ -4,23 +4,9 @@ import { useTranslation } from "@/i18n";
 import CountdownTimer from "./CountdownTimer";
 import RsvpForm from "./RsvpForm";
 
-interface EventData {
-  id: string;
-  title: string;
-  event_date: string;
-  event_time: string;
-  description?: string | null;
-  location_name?: string | null;
-  address?: string | null;
-  story_text?: string | null;
-  schedule?: any;
-  hero_image_url?: string | null;
-  rsvp_enabled?: boolean | null;
-  rsvp_deadline?: string | null;
-  menu_selection?: boolean | null;
-}
+import { PremiumEventData, PremiumTheme } from "./PremiumWeddingPage";
 
-const PremiumCorporatePage = ({ event }: { event: EventData }) => {
+const PremiumCorporatePage = ({ event, theme }: { event: PremiumEventData; theme?: PremiumTheme }) => {
   const { t } = useTranslation();
 
   const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", {
@@ -37,7 +23,9 @@ const PremiumCorporatePage = ({ event }: { event: EventData }) => {
         style={{
           background: event.hero_image_url
             ? undefined
-            : "linear-gradient(135deg, hsl(220 40% 15%) 0%, hsl(220 50% 25%) 100%)",
+            : theme
+              ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.secondary} 100%)`
+              : "linear-gradient(135deg, hsl(220 40% 15%) 0%, hsl(220 50% 25%) 100%)",
         }}
       >
         {event.hero_image_url && (

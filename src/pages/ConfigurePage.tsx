@@ -14,6 +14,9 @@ import { supabase } from "@/integrations/supabase/client";
 import AuthDialog from "@/components/AuthDialog";
 import PriceSummary from "@/components/PriceSummary";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPage";
+import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
+import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
 
@@ -175,58 +178,98 @@ const ConfigurePage = () => {
           <div className="order-2 lg:order-1">
             <div className="sticky top-24">
               <h3 className="font-display text-xl font-semibold mb-4 text-foreground">{t("configure.preview")}</h3>
-              <div className="rounded-xl overflow-hidden shadow-card" style={{ background: template.previewGradient }}>
-                <div className="p-8 text-center">
-                  <p className="text-xs font-body uppercase tracking-widest mb-3 opacity-50" style={{ color: template.colors.accent }}>
-                    {t("configure.invitation")}
-                  </p>
-                  <h2
-                    className="text-2xl md:text-3xl font-bold mb-2"
-                    style={{
-                      fontFamily: form.font,
-                      color: template.colors.primary === "#FFFFFF" ? template.colors.accent : template.colors.primary,
-                    }}
-                  >
-                    {form.title || t("configure.yourTitle")}
-                  </h2>
-                  {form.description && (
-                    <p className="font-body text-sm opacity-70 mt-2 max-w-xs mx-auto" style={{ color: template.colors.accent }}>
-                      {form.description}
+              {isPremium ? (
+                <div className="rounded-xl overflow-hidden shadow-card max-h-[70vh] overflow-y-auto">
+                  {(() => {
+                    const previewEvent = {
+                      id: "preview",
+                      title: form.title || t("configure.yourTitle"),
+                      event_date: form.date || "2026-06-20",
+                      event_time: form.time || "18:00",
+                      description: form.description || null,
+                      location_name: form.locationName || null,
+                      address: form.address || null,
+                      story_text: form.storyText || null,
+                      ceremony_location: form.ceremonyLocation || null,
+                      ceremony_address: form.ceremonyAddress || null,
+                      reception_location: form.receptionLocation || null,
+                      reception_address: form.receptionAddress || null,
+                      hero_image_url: form.heroImageUrl || null,
+                      rsvp_enabled: form.rsvpEnabled,
+                      rsvp_deadline: form.rsvpDeadline || null,
+                      menu_selection: form.menuSelection,
+                      schedule: null,
+                    };
+                    const previewTheme = {
+                      primary: form.primaryColor || template.colors.primary,
+                      secondary: template.colors.secondary,
+                      accent: template.colors.accent,
+                      font: form.font || template.font,
+                    };
+                    switch (template.eventType) {
+                      case "wedding":
+                        return <PremiumWeddingPage event={previewEvent} theme={previewTheme} />;
+                      case "birthday":
+                        return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} />;
+                      case "corporate":
+                        return <PremiumCorporatePage event={previewEvent} theme={previewTheme} />;
+                    }
+                  })()}
+                </div>
+              ) : (
+                <div className="rounded-xl overflow-hidden shadow-card" style={{ background: template.previewGradient }}>
+                  <div className="p-8 text-center">
+                    <p className="text-xs font-body uppercase tracking-widest mb-3 opacity-50" style={{ color: template.colors.accent }}>
+                      {t("configure.invitation")}
                     </p>
-                  )}
-                  <div className="mt-6 space-y-2 max-w-xs mx-auto text-left">
-                    {form.date && (
-                      <div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}>
-                        <Calendar className="w-4 h-4" /><span>{form.date}</span>
-                      </div>
+                    <h2
+                      className="text-2xl md:text-3xl font-bold mb-2"
+                      style={{
+                        fontFamily: form.font,
+                        color: template.colors.primary === "#FFFFFF" ? template.colors.accent : template.colors.primary,
+                      }}
+                    >
+                      {form.title || t("configure.yourTitle")}
+                    </h2>
+                    {form.description && (
+                      <p className="font-body text-sm opacity-70 mt-2 max-w-xs mx-auto" style={{ color: template.colors.accent }}>
+                        {form.description}
+                      </p>
                     )}
-                    {form.time && (
-                      <div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}>
-                        <Clock className="w-4 h-4" /><span>{form.time} Uhr</span>
-                      </div>
-                    )}
-                    {form.locationName && (
-                      <div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}>
-                        <MapPin className="w-4 h-4" /><span>{form.locationName}</span>
-                      </div>
-                    )}
-                    {form.maxGuests && (
-                      <div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}>
-                        <Users className="w-4 h-4" /><span>max. {form.maxGuests} {t("dashboard.guests")}</span>
+                    <div className="mt-6 space-y-2 max-w-xs mx-auto text-left">
+                      {form.date && (
+                        <div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}>
+                          <Calendar className="w-4 h-4" /><span>{form.date}</span>
+                        </div>
+                      )}
+                      {form.time && (
+                        <div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}>
+                          <Clock className="w-4 h-4" /><span>{form.time} Uhr</span>
+                        </div>
+                      )}
+                      {form.locationName && (
+                        <div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}>
+                          <MapPin className="w-4 h-4" /><span>{form.locationName}</span>
+                        </div>
+                      )}
+                      {form.maxGuests && (
+                        <div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}>
+                          <Users className="w-4 h-4" /><span>max. {form.maxGuests} {t("dashboard.guests")}</span>
+                        </div>
+                      )}
+                    </div>
+                    {form.rsvpEnabled && (
+                      <div className="mt-8 bg-background/80 backdrop-blur rounded-lg p-5">
+                        <p className="font-display text-base font-semibold text-foreground mb-2">{t("configure.rsvpQuestion")}</p>
+                        <div className="flex gap-3 justify-center">
+                          <Button size="sm" className="font-body">{t("configure.rsvpYes")}</Button>
+                          <Button size="sm" variant="outline" className="font-body">{t("configure.rsvpNo")}</Button>
+                        </div>
                       </div>
                     )}
                   </div>
-                  {form.rsvpEnabled && (
-                    <div className="mt-8 bg-background/80 backdrop-blur rounded-lg p-5">
-                      <p className="font-display text-base font-semibold text-foreground mb-2">{t("configure.rsvpQuestion")}</p>
-                      <div className="flex gap-3 justify-center">
-                        <Button size="sm" className="font-body">{t("configure.rsvpYes")}</Button>
-                        <Button size="sm" variant="outline" className="font-body">{t("configure.rsvpNo")}</Button>
-                      </div>
-                    </div>
-                  )}
                 </div>
-              </div>
+              )}
             </div>
           </div>
 

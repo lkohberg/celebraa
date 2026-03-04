@@ -6,7 +6,7 @@ import EnvelopeIntro from "./EnvelopeIntro";
 import CountdownTimer from "./CountdownTimer";
 import RsvpForm from "./RsvpForm";
 
-interface EventData {
+export interface PremiumEventData {
   id: string;
   title: string;
   event_date: string;
@@ -26,7 +26,14 @@ interface EventData {
   menu_selection?: boolean | null;
 }
 
-const PremiumWeddingPage = ({ event }: { event: EventData }) => {
+export interface PremiumTheme {
+  primary: string;
+  secondary: string;
+  accent: string;
+  font: string;
+}
+
+const PremiumWeddingPage = ({ event, theme }: { event: PremiumEventData; theme?: PremiumTheme }) => {
   const { t } = useTranslation();
   const [showContent, setShowContent] = useState(false);
 
@@ -38,7 +45,7 @@ const PremiumWeddingPage = ({ event }: { event: EventData }) => {
   });
 
   return (
-    <div className="min-h-screen" style={{ fontFamily: "'Lato', 'DM Sans', sans-serif", backgroundColor: "hsl(30, 33%, 96%)", color: "hsl(30, 10%, 25%)" }}>
+    <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'Lato', 'DM Sans', sans-serif", backgroundColor: theme?.secondary || "hsl(30, 33%, 96%)", color: theme?.accent || "hsl(30, 10%, 25%)" }}>
       <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lato:wght@300;400;500&display=swap" rel="stylesheet" />
 
       {!showContent && <EnvelopeIntro names={names} onOpen={() => setShowContent(true)} />}

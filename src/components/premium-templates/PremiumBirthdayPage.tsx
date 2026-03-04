@@ -5,21 +5,7 @@ import { useTranslation } from "@/i18n";
 import CountdownTimer from "./CountdownTimer";
 import RsvpForm from "./RsvpForm";
 
-interface EventData {
-  id: string;
-  title: string;
-  event_date: string;
-  event_time: string;
-  description?: string | null;
-  location_name?: string | null;
-  address?: string | null;
-  story_text?: string | null;
-  schedule?: any;
-  hero_image_url?: string | null;
-  rsvp_enabled?: boolean | null;
-  rsvp_deadline?: string | null;
-  menu_selection?: boolean | null;
-}
+import { PremiumEventData, PremiumTheme } from "./PremiumWeddingPage";
 
 // Simple confetti particles
 const ConfettiParticle = ({ delay }: { delay: number }) => {
@@ -39,7 +25,7 @@ const ConfettiParticle = ({ delay }: { delay: number }) => {
   );
 };
 
-const PremiumBirthdayPage = ({ event }: { event: EventData }) => {
+const PremiumBirthdayPage = ({ event, theme }: { event: PremiumEventData; theme?: PremiumTheme }) => {
   const { t } = useTranslation();
   const [showContent, setShowContent] = useState(false);
   const [confetti, setConfetti] = useState<number[]>([]);
@@ -76,7 +62,9 @@ const PremiumBirthdayPage = ({ event }: { event: EventData }) => {
               style={{
                 background: event.hero_image_url
                   ? undefined
-                  : "linear-gradient(135deg, hsl(340 65% 50%) 0%, hsl(280 60% 55%) 50%, hsl(340 70% 60%) 100%)",
+                  : theme
+                    ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.accent} 50%, ${theme.primary} 100%)`
+                    : "linear-gradient(135deg, hsl(340 65% 50%) 0%, hsl(280 60% 55%) 50%, hsl(340 70% 60%) 100%)",
               }}
             >
               {event.hero_image_url && (
