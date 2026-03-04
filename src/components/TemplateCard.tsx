@@ -71,7 +71,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #FF6B9D 0%, #C44DFF 50%, #4D96FF 100%)",
     tier: "premium",
     premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Programm-Sektion"],
-  },
+    defaultHeroImage: heroBirthdayNeon,
   {
     id: "birthday-premium-glamour",
     name: "Glamour Night",
@@ -82,7 +82,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #1A1A2E 0%, #D4AF37 100%)",
     tier: "premium",
     premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Party-Details"],
-  },
+    defaultHeroImage: heroBirthdayGlamour,
   {
     id: "birthday-premium-garden",
     name: "Garden Party",
@@ -93,7 +93,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #F0F7F4 0%, #6BCB77 100%)",
     tier: "premium",
     premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Location-Details"],
-  },
+    defaultHeroImage: heroBirthdayGarden,
   // Wedding - Basis
   {
     id: "wedding-elegant-gold",
@@ -136,9 +136,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #FFF0F0 0%, #E8D5C4 50%, #D5E8D4 100%)",
     tier: "premium",
     premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
-  },
-  {
-    id: "wedding-premium-classic",
+    defaultHeroImage: heroWeddingFloral,
     name: "Classic Elegance",
     description: "Zeitlos elegant mit allen Premium-Features",
     eventType: "wedding",
@@ -147,9 +145,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #FAF5EF 0%, #D4C5A9 100%)",
     tier: "premium",
     premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
-  },
-  {
-    id: "wedding-premium-modern",
+    defaultHeroImage: heroWeddingClassic,
     name: "Modern Love",
     description: "Modern und minimalistisch mit Premium-Features",
     eventType: "wedding",
@@ -158,8 +154,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #FAFAFA 0%, #E0E0E0 100%)",
     tier: "premium",
     premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
-  },
-  // Corporate - Basis
+    defaultHeroImage: heroWeddingModern,
   {
     id: "corporate-professional",
     name: "Professional Blue",
@@ -201,9 +196,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #1E3A5F 0%, #2C5282 100%)",
     tier: "premium",
     premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
-  },
-  {
-    id: "corporate-premium-tech",
+    defaultHeroImage: heroCorporateExecutive,
     name: "Tech Conference",
     description: "Modern und technisch für IT-Events",
     eventType: "corporate",
@@ -212,9 +205,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #0F0E17 0%, #6C63FF 100%)",
     tier: "premium",
     premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
-  },
-  {
-    id: "corporate-premium-gala",
+    defaultHeroImage: heroCorporateTech,
     name: "Gala Evening",
     description: "Luxuriös und exklusiv für Gala-Abende",
     eventType: "corporate",
@@ -223,8 +214,7 @@ export const templates: Template[] = [
     previewGradient: "linear-gradient(135deg, #0D0D0D 0%, #C8A951 100%)",
     tier: "premium",
     premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
-  },
-];
+    defaultHeroImage: heroCorporateGala,
 
 interface TemplateCardProps {
   template: Template;
