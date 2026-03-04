@@ -360,7 +360,7 @@ const ConfigurePage = () => {
                 </div>
                 <div>
                   <Label className="font-body">{t("configure.time")} *</Label>
-                  <Input type="time" value={form.time} onChange={(e) => updateField("time", e.target.value)} className="font-body mt-1" />
+                  <Input type="time" value={form.time} onChange={(e) => updateField("time", e.target.value)} className="font-body mt-1 w-full min-w-0" />
                 </div>
               </div>
 
