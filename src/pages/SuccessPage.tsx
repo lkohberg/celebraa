@@ -19,7 +19,7 @@ const SuccessPage = () => {
   const languages = (event as any)?.languages as string[] | undefined;
   const hasMultipleLangs = languages && languages.length > 1;
 
-  const baseUrl = `${window.location.origin}/e/${eventLink}`;
+  const baseUrl = `${window.location.origin}/${eventLink}`;
   const primaryUrl = hasMultipleLangs ? `${baseUrl}/${languages[0]}` : baseUrl;
 
   const handleCopy = async (url: string, key: string) => {

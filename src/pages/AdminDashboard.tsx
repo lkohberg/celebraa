@@ -84,7 +84,7 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                     <p className="font-body text-xs sm:text-sm text-muted-foreground">
-                      {new Date(event.event_date).toLocaleDateString("de-AT")} · /e/{event.event_link}
+                      {new Date(event.event_date).toLocaleDateString("de-AT")} · /{event.event_link}
                     </p>
                   </CardContent>
                 </Card>
@@ -169,7 +169,7 @@ const EventDetail = ({ event }: { event: { id: string; title: string; event_link
           <div className="space-y-3">
             <LanguageLinks event={event} />
             <Button variant="outline" asChild className="font-body">
-              <a href={`/e/${event.event_link}`} target="_blank" rel="noopener noreferrer">
+              <a href={`/${event.event_link}`} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="w-4 h-4 mr-2" /> {t("dashboard.openEvent")}
               </a>
             </Button>
@@ -277,7 +277,7 @@ const LanguageLinks = ({ event }: { event: any }) => {
       <div className="space-y-1">
         {languages.map((code) => {
           const lang = SUPPORTED_LANGUAGES.find((l) => l.code === code);
-          const url = `${window.location.origin}/e/${event.event_link}/${code}`;
+          const url = `${window.location.origin}/${event.event_link}/${code}`;
           return (
             <div key={code} className="flex items-center gap-2">
               <span className="text-xs">{lang?.flag}</span>

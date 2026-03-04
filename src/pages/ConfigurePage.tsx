@@ -82,17 +82,28 @@ const ConfigurePage = () => {
     if (e.dataTransfer.files?.[0]) handleHeroFile(e.dataTransfer.files[0]);
   };
 
+  // Reserved routes blocklist
+  const RESERVED_ROUTES = ["templates", "configure", "success", "dashboard", "admin", "login", "signup", "settings", "api", "auth"];
+  const isReservedLink = RESERVED_ROUTES.includes(form.eventLink.toLowerCase());
+
   const updateField = (field: string, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
-    if (field === "eventLink" && typeof value === "string" && value.length >= 3) {
-      checkLink.mutate(value.toLowerCase(), {
-        onSuccess: (res) => setLinkAvailable(res.available),
-      });
+    if (field === "eventLink" && typeof value === "string") {
+      const lower = value.toLowerCase();
+      if (RESERVED_ROUTES.includes(lower)) {
+        setLinkAvailable(null);
+        return;
+      }
+      if (lower.length >= 3) {
+        checkLink.mutate(lower, {
+          onSuccess: (res) => setLinkAvailable(res.available),
+        });
+      }
     }
   };
 
   const linkValid = /^[a-z0-9-]*$/.test(form.eventLink);
-  const isValid = form.title && form.date && form.time && form.eventLink && linkValid && linkAvailable !== false;
+  const isValid = form.title && form.date && form.time && form.eventLink && linkValid && linkAvailable !== false && !isReservedLink;
 
   const menuPrice = form.menuSelection ? 10 : 0;
   const extraLangs = Math.max(0, form.languages.length - 1);
@@ -521,7 +532,7 @@ const ConfigurePage = () => {
                     <p className="font-body text-xs text-muted-foreground font-semibold">{t("configure.languageLinks")}</p>
                     {form.languages.map((code) => (
                       <p key={code} className="font-body text-xs text-muted-foreground">
-                        {SUPPORTED_LANGUAGES.find((l) => l.code === code)?.flag} celebra.at/e/{form.eventLink}/{code}
+                        {SUPPORTED_LANGUAGES.find((l) => l.code === code)?.flag} celebra.at/{form.eventLink}/{code}
                       </p>
                     ))}
                   </div>
@@ -532,7 +543,7 @@ const ConfigurePage = () => {
                 <Label className="font-body">{t("configure.link")} *</Label>
                 <div className="flex items-center mt-1">
                   <span className="text-sm text-muted-foreground font-body bg-secondary px-3 py-2 rounded-l-md border border-r-0 border-input">
-                    celebra.at/e/
+                    celebra.at/
                   </span>
                   <Input
                     placeholder={t("configure.linkPlaceholder")}
@@ -544,10 +555,13 @@ const ConfigurePage = () => {
                 {form.eventLink && !linkValid && (
                   <p className="text-xs text-destructive font-body mt-1">{t("configure.linkError")}</p>
                 )}
-                {form.eventLink && linkValid && linkAvailable === false && (
+                {form.eventLink && linkValid && isReservedLink && (
+                  <p className="text-xs text-destructive font-body mt-1">{t("configure.linkReserved")}</p>
+                )}
+                {form.eventLink && linkValid && !isReservedLink && linkAvailable === false && (
                   <p className="text-xs text-destructive font-body mt-1">{t("configure.linkTaken")}</p>
                 )}
-                {form.eventLink && linkValid && linkAvailable === true && (
+                {form.eventLink && linkValid && !isReservedLink && linkAvailable === true && (
                   <p className="text-xs text-primary font-body mt-1">{t("configure.linkAvailable")}</p>
                 )}
               </div>
