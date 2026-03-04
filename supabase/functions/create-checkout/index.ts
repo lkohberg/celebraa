@@ -7,12 +7,138 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// ── Server-side pricing (must match src/pricing/pricing.ts) ──────────────────
+const BASE_PRICE = 19;
+
+const BLOCKS: Record<string, Record<string, number>> = {
+  wedding: {
+    timeline: 9, our_story: 9, hotels: 19, wishlist: 9, slideshow: 19,
+    dress_code: 9, menu: 19, music_pro: 39, custom_music: 9, bus_shuttle: 19,
+    illustration: 29,
+  },
+  corporate: {
+    timeline: 9, hotels: 19, dress_code: 9, menu: 19, products: 19, agenda: 19,
+    sponsors: 19,
+  },
+  birthday: {
+    timeline: 9, quiz: 19, menu: 19, game_vote: 19, wish_music: 9, bring_list: 19,
+    wishlist: 9, dress_code: 9,
+  },
+};
+
+const PACKAGES: Record<string, Record<string, number>> = {
+  wedding: { wedding_starter: 49, wedding_plus: 69, wedding_premium: 99 },
+  corporate: { business_starter: 49, business_pro: 79 },
+  birthday: { party_fun: 49, party_planner: 49, party_all_in: 79 },
+};
+
+function validateOrderTotal(
+  eventType: string,
+  packageId: string | undefined,
+  selectedBlocks: string[],
+  claimedTotal: number,
+): boolean {
+  const eventTypeKey = eventType?.toLowerCase();
+  if (!BLOCKS[eventTypeKey]) return false;
+
+  let total = 0;
+  if (packageId) {
+    const pkgPrice = PACKAGES[eventTypeKey]?.[packageId];
+    if (pkgPrice === undefined) return false;
+    // Package price is the total (inclusive of base)
+    total = pkgPrice;
+  } else {
+    let addons = 0;
+    for (const blockId of selectedBlocks ?? []) {
+      const price = BLOCKS[eventTypeKey][blockId];
+      if (price === undefined) return false;
+      addons += price;
+    }
+    total = BASE_PRICE + addons;
+  }
+
+  return total === claimedTotal;
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    const body = await req.json();
+
+    // ── New order-mode checkout (no pre-existing event required) ─────────────
+    if (body.orderMode === true) {
+      const {
+        templateId,
+        eventType,
+        packageId,
+        selectedBlocks,
+        totalPrice,
+        customerFirstName,
+        customerLastName,
+        customerEmail,
+        successUrl,
+        cancelUrl,
+      } = body;
+
+      if (!templateId || !eventType || !totalPrice || !customerEmail) {
+        return new Response(JSON.stringify({ error: "Missing required order fields" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // Server-side price validation
+      if (!validateOrderTotal(eventType, packageId, selectedBlocks ?? [], totalPrice)) {
+        return new Response(JSON.stringify({ error: "Price validation failed" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
+        apiVersion: "2025-01-27.acacia",
+      });
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        mode: "payment",
+        customer_email: customerEmail,
+        line_items: [
+          {
+            price_data: {
+              currency: "eur",
+              product_data: {
+                name: `Event-Seite: ${templateId}`,
+                description: `Typ: ${eventType}${packageId ? ` · Paket: ${packageId}` : ""}`,
+              },
+              unit_amount: totalPrice * 100,
+            },
+            quantity: 1,
+          },
+        ],
+        metadata: {
+          template_id: templateId,
+          event_type: eventType,
+          package_id: packageId ?? "",
+          selected_blocks: (selectedBlocks ?? []).join(","),
+          customer_name: `${customerFirstName} ${customerLastName}`,
+          customer_email: customerEmail,
+          total_price: String(totalPrice),
+        },
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+      });
+
+      return new Response(JSON.stringify({ url: session.url }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // ── Legacy event-based checkout ──────────────────────────────────────────
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -38,7 +164,7 @@ Deno.serve(async (req) => {
 
     const userId = claimsData.claims.sub;
 
-    const { eventId, successUrl, cancelUrl } = await req.json();
+    const { eventId, successUrl, cancelUrl } = body;
 
     // Get event from DB
     const adminClient = createClient(
@@ -99,3 +225,4 @@ Deno.serve(async (req) => {
     });
   }
 });
+

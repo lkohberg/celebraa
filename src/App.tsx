@@ -8,6 +8,9 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { I18nProvider } from "@/i18n";
 import Index from "./pages/Index";
 import TemplatesPage from "./pages/TemplatesPage";
+import PackageSelectionPage from "./pages/PackageSelectionPage";
+import CheckoutDetailsPage from "./pages/CheckoutDetailsPage";
+import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 import ConfigurePage from "./pages/ConfigurePage";
 import SuccessPage from "./pages/SuccessPage";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -28,6 +31,9 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/templates" element={<TemplatesPage />} />
+              <Route path="/packages" element={<PackageSelectionPage />} />
+              <Route path="/checkout-details" element={<CheckoutDetailsPage />} />
+              <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
               <Route path="/configure/:templateId" element={<ConfigurePage />} />
               <Route path="/success/:eventLink" element={<SuccessPage />} />
               <Route path="/dashboard" element={<AdminDashboard />} />

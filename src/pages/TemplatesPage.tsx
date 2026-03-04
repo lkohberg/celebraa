@@ -95,7 +95,7 @@ const TemplatesPage = () => {
                     <TemplateCard
                       key={template.id}
                       template={template}
-                      onSelect={(t) => navigate(`/configure/${t.id}`)}
+                      onSelect={(t) => navigate(`/packages?templateId=${t.id}&eventType=${t.eventType}`)}
                       onDemo={(t) => { setDemoTemplate(t); setDemoOpen(true); }}
                     />
                   ))}
