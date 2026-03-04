@@ -154,7 +154,7 @@ const ConfigurePage = () => {
       if (isAdmin) {
         await supabase
           .from("events")
-          .update({ status: "paid", stripe_payment_id: "admin_bypass" })
+          .update({ status: "live", stripe_payment_id: "admin_bypass" })
           .eq("id", created.id);
         window.location.href = `${window.location.origin}/success/${form.eventLink}`;
         return;
