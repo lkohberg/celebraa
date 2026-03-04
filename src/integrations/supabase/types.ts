@@ -14,7 +14,198 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      event_analytics: {
+        Row: {
+          created_at: string
+          event_id: string
+          event_type: string
+          id: string
+          referrer: string | null
+          user_agent: string | null
+          visitor_ip: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          event_type: string
+          id?: string
+          referrer?: string | null
+          user_agent?: string | null
+          visitor_ip?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          event_type?: string
+          id?: string
+          referrer?: string | null
+          user_agent?: string | null
+          visitor_ip?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_analytics_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_logs: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          details: Json | null
+          event_id: string | null
+          id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json | null
+          event_id?: string | null
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json | null
+          event_id?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_logs_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          address: string | null
+          created_at: string
+          description: string | null
+          event_date: string
+          event_link: string
+          event_time: string
+          font: string | null
+          id: string
+          location_name: string | null
+          max_guests: number | null
+          menu_selection: boolean | null
+          price_paid: number | null
+          primary_color: string | null
+          rsvp_deadline: string | null
+          rsvp_enabled: boolean | null
+          status: string
+          stripe_payment_id: string | null
+          template_id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          description?: string | null
+          event_date: string
+          event_link: string
+          event_time: string
+          font?: string | null
+          id?: string
+          location_name?: string | null
+          max_guests?: number | null
+          menu_selection?: boolean | null
+          price_paid?: number | null
+          primary_color?: string | null
+          rsvp_deadline?: string | null
+          rsvp_enabled?: boolean | null
+          status?: string
+          stripe_payment_id?: string | null
+          template_id: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          description?: string | null
+          event_date?: string
+          event_link?: string
+          event_time?: string
+          font?: string | null
+          id?: string
+          location_name?: string | null
+          max_guests?: number | null
+          menu_selection?: boolean | null
+          price_paid?: number | null
+          primary_color?: string | null
+          rsvp_deadline?: string | null
+          rsvp_enabled?: boolean | null
+          status?: string
+          stripe_payment_id?: string | null
+          template_id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      guests: {
+        Row: {
+          created_at: string
+          email: string | null
+          event_id: string
+          id: string
+          menu_choice: string | null
+          message: string | null
+          name: string
+          plus_one: boolean | null
+          responded_at: string | null
+          rsvp_status: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          event_id: string
+          id?: string
+          menu_choice?: string | null
+          message?: string | null
+          name: string
+          plus_one?: boolean | null
+          responded_at?: string | null
+          rsvp_status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          event_id?: string
+          id?: string
+          menu_choice?: string | null
+          message?: string | null
+          name?: string
+          plus_one?: boolean | null
+          responded_at?: string | null
+          rsvp_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guests_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
