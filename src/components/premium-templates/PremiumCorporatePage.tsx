@@ -18,7 +18,8 @@ const PremiumCorporatePage = ({ event, theme, lang }: { event: PremiumEventData;
   });
 
   return (
-    <div className="min-h-screen" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
+      <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
       {/* Hero */}
       <section
         className="relative min-h-[80vh] flex items-center justify-center"

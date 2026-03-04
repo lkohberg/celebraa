@@ -48,7 +48,7 @@ const PremiumWeddingPage = ({ event, theme, lang }: { event: PremiumEventData; t
 
   return (
     <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'Lato', 'DM Sans', sans-serif", backgroundColor: theme?.secondary || "hsl(30, 33%, 96%)", color: theme?.accent || "hsl(30, 10%, 25%)" }}>
-      <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lato:wght@300;400;500&display=swap" rel="stylesheet" />
+      <link href={`https://fonts.googleapis.com/css2?family=Great+Vibes&family=${encodeURIComponent(theme?.font || 'Playfair Display')}:wght@300;400;500;600;700&family=Lato:wght@300;400;500&display=swap`} rel="stylesheet" />
 
       {!showContent && <EnvelopeIntro names={names} onOpen={() => setShowContent(true)} tapLabel={el?.tapToOpen} />}
 
