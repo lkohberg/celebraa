@@ -9,21 +9,25 @@ import HeroSection from "@/components/HeroSection";
 import FeatureGrid from "@/components/FeatureGrid";
 import Footer from "@/components/Footer";
 import AuthDialog from "@/components/AuthDialog";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useAuth } from "@/hooks/useAuth";
-import { LayoutDashboard, LogIn } from "lucide-react";
-
-const eventTypes = [
-  { value: "birthday", label: "Geburtstag" },
-  { value: "wedding", label: "Hochzeit" },
-  { value: "corporate", label: "Firmen Event" },
-] as const;
+import { useTranslation } from "@/i18n";
+import { LayoutDashboard, LogIn, Menu, X } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [demoTemplate, setDemoTemplate] = useState<Template | null>(null);
   const [demoOpen, setDemoOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const eventTypes = [
+    { value: "birthday", label: t("templates.birthday") },
+    { value: "wedding", label: t("templates.wedding") },
+    { value: "corporate", label: t("templates.corporate") },
+  ] as const;
 
   const handleSelect = (template: Template) => {
     navigate(`/configure/${template.id}`);
@@ -42,20 +46,49 @@ const Index = () => {
           <span className="font-display text-xl font-bold text-foreground">
             celebra<span className="text-primary">.at</span>
           </span>
-          <div className="flex gap-4 items-center">
-            <a href="#templates" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">Templates</a>
-            <a href="#features" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">Features</a>
+          {/* Desktop nav */}
+          <div className="hidden md:flex gap-4 items-center">
+            <a href="#templates" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">{t("nav.templates")}</a>
+            <a href="#features" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">{t("nav.features")}</a>
+            <LanguageSwitcher />
             {user ? (
               <Button size="sm" variant="outline" className="font-body" onClick={() => navigate("/dashboard")}>
-                <LayoutDashboard className="w-4 h-4 mr-1" /> Dashboard
+                <LayoutDashboard className="w-4 h-4 mr-1" /> {t("nav.dashboard")}
               </Button>
             ) : (
               <Button size="sm" variant="outline" className="font-body" onClick={() => setAuthOpen(true)}>
-                <LogIn className="w-4 h-4 mr-1" /> Anmelden
+                <LogIn className="w-4 h-4 mr-1" /> {t("nav.login")}
               </Button>
             )}
           </div>
+          {/* Mobile hamburger */}
+          <div className="flex md:hidden items-center gap-2">
+            <LanguageSwitcher />
+            <Button variant="ghost" size="sm" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+          </div>
         </div>
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="md:hidden bg-background border-b border-border px-6 py-4 space-y-3"
+          >
+            <a href="#templates" className="block font-body text-sm text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>{t("nav.templates")}</a>
+            <a href="#features" className="block font-body text-sm text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>{t("nav.features")}</a>
+            {user ? (
+              <Button size="sm" variant="outline" className="w-full font-body" onClick={() => { navigate("/dashboard"); setMobileMenuOpen(false); }}>
+                <LayoutDashboard className="w-4 h-4 mr-1" /> {t("nav.dashboard")}
+              </Button>
+            ) : (
+              <Button size="sm" variant="outline" className="w-full font-body" onClick={() => { setAuthOpen(true); setMobileMenuOpen(false); }}>
+                <LogIn className="w-4 h-4 mr-1" /> {t("nav.login")}
+              </Button>
+            )}
+          </motion.div>
+        )}
       </nav>
 
       <HeroSection />
@@ -72,21 +105,17 @@ const Index = () => {
             className="text-center mb-12"
           >
             <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Wähle dein Design
+              {t("templates.title")}
             </h2>
             <p className="font-body text-muted-foreground text-lg max-w-md mx-auto">
-              Für jeden Anlass das passende Template
+              {t("templates.subtitle")}
             </p>
           </motion.div>
 
           <Tabs defaultValue="birthday" className="max-w-5xl mx-auto">
             <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto mb-10">
               {eventTypes.map((type) => (
-                <TabsTrigger
-                  key={type.value}
-                  value={type.value}
-                  className="font-body"
-                >
+                <TabsTrigger key={type.value} value={type.value} className="font-body">
                   {type.label}
                 </TabsTrigger>
               ))}
@@ -94,7 +123,7 @@ const Index = () => {
 
             {eventTypes.map((type) => (
               <TabsContent key={type.value} value={type.value}>
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {templates
                     .filter((t) => t.eventType === type.value)
                     .map((template) => (
@@ -112,14 +141,8 @@ const Index = () => {
         </div>
       </section>
 
-      <DemoPreview
-        template={demoTemplate}
-        open={demoOpen}
-        onOpenChange={setDemoOpen}
-      />
-
+      <DemoPreview template={demoTemplate} open={demoOpen} onOpenChange={setDemoOpen} />
       <AuthDialog open={authOpen} onOpenChange={setAuthOpen} />
-
       <Footer />
     </div>
   );
