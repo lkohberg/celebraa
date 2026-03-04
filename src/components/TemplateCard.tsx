@@ -4,6 +4,17 @@ import { Badge } from "@/components/ui/badge";
 import { Eye, Crown } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
+// Default hero images for premium templates
+import heroBirthdayNeon from "@/assets/hero-birthday-neon.jpg";
+import heroBirthdayGlamour from "@/assets/hero-birthday-glamour.jpg";
+import heroBirthdayGarden from "@/assets/hero-birthday-garden.jpg";
+import heroWeddingFloral from "@/assets/hero-wedding-floral.jpg";
+import heroWeddingClassic from "@/assets/hero-wedding-classic.jpg";
+import heroWeddingModern from "@/assets/hero-wedding-modern.jpg";
+import heroCorporateExecutive from "@/assets/hero-corporate-executive.jpg";
+import heroCorporateTech from "@/assets/hero-corporate-tech.jpg";
+import heroCorporateGala from "@/assets/hero-corporate-gala.jpg";
+
 export interface Template {
   id: string;
   name: string;
