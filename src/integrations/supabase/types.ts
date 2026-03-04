@@ -92,13 +92,16 @@ export type Database = {
           address: string | null
           ceremony_address: string | null
           ceremony_location: string | null
+          children_welcome: boolean | null
           created_at: string
           description: string | null
+          dress_code: string | null
           event_date: string
           event_link: string
           event_time: string
           font: string | null
           hero_image_url: string | null
+          hotel_recommendations: Json | null
           id: string
           languages: string[] | null
           location_name: string | null
@@ -124,13 +127,16 @@ export type Database = {
           address?: string | null
           ceremony_address?: string | null
           ceremony_location?: string | null
+          children_welcome?: boolean | null
           created_at?: string
           description?: string | null
+          dress_code?: string | null
           event_date: string
           event_link: string
           event_time: string
           font?: string | null
           hero_image_url?: string | null
+          hotel_recommendations?: Json | null
           id?: string
           languages?: string[] | null
           location_name?: string | null
@@ -156,13 +162,16 @@ export type Database = {
           address?: string | null
           ceremony_address?: string | null
           ceremony_location?: string | null
+          children_welcome?: boolean | null
           created_at?: string
           description?: string | null
+          dress_code?: string | null
           event_date?: string
           event_link?: string
           event_time?: string
           font?: string | null
           hero_image_url?: string | null
+          hotel_recommendations?: Json | null
           id?: string
           languages?: string[] | null
           location_name?: string | null
