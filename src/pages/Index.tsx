@@ -34,7 +34,7 @@ const Index = () => {
   ] as const;
 
   const handleSelect = (template: Template) => {
-    navigate(`/configure/${template.id}`);
+    navigate(`/packages?templateId=${template.id}&eventType=${template.eventType}`);
   };
 
   const handleDemo = (template: Template) => {
