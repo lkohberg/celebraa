@@ -157,6 +157,7 @@ const en = {
   "dashboard.loading": "Loading events...",
   "dashboard.exportCsv": "Export CSV",
   "dashboard.status.draft": "Draft",
+  "dashboard.status.unpaid": "Unpaid",
   "dashboard.status.paid": "Paid",
   "dashboard.status.live": "Live",
   "dashboard.status.archived": "Archived",

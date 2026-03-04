@@ -77,9 +77,11 @@ const AdminDashboard = () => {
                   <CardContent className="p-3 sm:p-4">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-display font-semibold text-foreground text-sm sm:text-base truncate mr-2">{event.title}</h3>
-                      <Badge variant={(event.status === "live" ? "default" : "secondary") as "default" | "secondary"}>
-                        {t(`dashboard.status.${event.status}`)}
-                      </Badge>
+                      <div className="flex items-center gap-1.5">
+                        <Badge variant={event.status === "paid" || event.status === "live" ? "default" : "outline"} className={event.status === "draft" ? "border-amber-500 text-amber-600" : ""}>
+                          {event.status === "draft" ? t("dashboard.status.unpaid") : t(`dashboard.status.${event.status}`)}
+                        </Badge>
+                      </div>
                     </div>
                     <p className="font-body text-xs sm:text-sm text-muted-foreground">
                       {new Date(event.event_date).toLocaleDateString("de-AT")} · /e/{event.event_link}
