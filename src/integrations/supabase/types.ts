@@ -90,69 +90,93 @@ export type Database = {
       events: {
         Row: {
           address: string | null
+          ceremony_address: string | null
+          ceremony_location: string | null
           created_at: string
           description: string | null
           event_date: string
           event_link: string
           event_time: string
           font: string | null
+          hero_image_url: string | null
           id: string
           location_name: string | null
           max_guests: number | null
           menu_selection: boolean | null
           price_paid: number | null
           primary_color: string | null
+          reception_address: string | null
+          reception_location: string | null
           rsvp_deadline: string | null
           rsvp_enabled: boolean | null
+          schedule: Json | null
           status: string
+          story_text: string | null
           stripe_payment_id: string | null
           template_id: string
+          tier: string
           title: string
           updated_at: string
           user_id: string
         }
         Insert: {
           address?: string | null
+          ceremony_address?: string | null
+          ceremony_location?: string | null
           created_at?: string
           description?: string | null
           event_date: string
           event_link: string
           event_time: string
           font?: string | null
+          hero_image_url?: string | null
           id?: string
           location_name?: string | null
           max_guests?: number | null
           menu_selection?: boolean | null
           price_paid?: number | null
           primary_color?: string | null
+          reception_address?: string | null
+          reception_location?: string | null
           rsvp_deadline?: string | null
           rsvp_enabled?: boolean | null
+          schedule?: Json | null
           status?: string
+          story_text?: string | null
           stripe_payment_id?: string | null
           template_id: string
+          tier?: string
           title: string
           updated_at?: string
           user_id: string
         }
         Update: {
           address?: string | null
+          ceremony_address?: string | null
+          ceremony_location?: string | null
           created_at?: string
           description?: string | null
           event_date?: string
           event_link?: string
           event_time?: string
           font?: string | null
+          hero_image_url?: string | null
           id?: string
           location_name?: string | null
           max_guests?: number | null
           menu_selection?: boolean | null
           price_paid?: number | null
           primary_color?: string | null
+          reception_address?: string | null
+          reception_location?: string | null
           rsvp_deadline?: string | null
           rsvp_enabled?: boolean | null
+          schedule?: Json | null
           status?: string
+          story_text?: string | null
           stripe_payment_id?: string | null
           template_id?: string
+          tier?: string
           title?: string
           updated_at?: string
           user_id?: string

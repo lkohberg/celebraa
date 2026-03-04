@@ -1,26 +1,6 @@
 import { motion } from "framer-motion";
 import { Link2, QrCode, Zap } from "lucide-react";
-
-const features = [
-  {
-    icon: Link2,
-    title: "Kein WhatsApp-Chaos",
-    description:
-      "Alle Gäste erhalten einen professionellen Link und Zusagen werden automatisch gesammelt.",
-  },
-  {
-    icon: QrCode,
-    title: "QR-Code inklusive",
-    description:
-      "Perfekt für gedruckte Karten oder Social Media – scannen und sofort zusagen.",
-  },
-  {
-    icon: Zap,
-    title: "In 3 Tagen online",
-    description:
-      "Deine Seite ist innerhalb von drei Tagen nach Bestellung verfügbar.",
-  },
-];
+import { useTranslation } from "@/i18n";
 
 const container = {
   hidden: {},
@@ -35,6 +15,14 @@ const item = {
 };
 
 const FeatureGrid = () => {
+  const { t } = useTranslation();
+
+  const features = [
+    { icon: Link2, title: t("features.1.title"), description: t("features.1.desc") },
+    { icon: QrCode, title: t("features.2.title"), description: t("features.2.desc") },
+    { icon: Zap, title: t("features.3.title"), description: t("features.3.desc") },
+  ];
+
   return (
     <section id="features" className="py-24 bg-secondary/50">
       <div className="container mx-auto px-6">
@@ -46,10 +34,10 @@ const FeatureGrid = () => {
           className="text-center mb-16"
         >
           <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Warum Celebra.at?
+            {t("features.title")}
           </h2>
           <p className="font-body text-muted-foreground text-lg max-w-md mx-auto">
-            Drei gute Gründe für deine digitale Einladung
+            {t("features.subtitle")}
           </p>
         </motion.div>
 

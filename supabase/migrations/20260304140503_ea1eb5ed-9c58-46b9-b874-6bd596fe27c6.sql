@@ -1,0 +1,9 @@
+ALTER TABLE public.events 
+  ADD COLUMN IF NOT EXISTS tier TEXT NOT NULL DEFAULT 'basis',
+  ADD COLUMN IF NOT EXISTS story_text TEXT,
+  ADD COLUMN IF NOT EXISTS ceremony_location TEXT,
+  ADD COLUMN IF NOT EXISTS ceremony_address TEXT,
+  ADD COLUMN IF NOT EXISTS reception_location TEXT,
+  ADD COLUMN IF NOT EXISTS reception_address TEXT,
+  ADD COLUMN IF NOT EXISTS schedule JSONB,
+  ADD COLUMN IF NOT EXISTS hero_image_url TEXT;
