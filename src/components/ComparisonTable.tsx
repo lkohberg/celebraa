@@ -18,9 +18,9 @@ const rows: { key: string; paper: CellValue; whatsapp: CellValue; celebra: CellV
 ];
 
 const CellIcon = ({ value }: { value: CellValue }) => {
-  if (value === "yes") return <Check className="w-5 h-5 text-emerald-500 mx-auto" />;
-  if (value === "partial") return <Minus className="w-5 h-5 text-amber-500 mx-auto" />;
-  return <X className="w-5 h-5 text-destructive/60 mx-auto" />;
+  if (value === "yes") return <Check className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 mx-auto" />;
+  if (value === "partial") return <Minus className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500 mx-auto" />;
+  return <X className="w-4 h-4 sm:w-5 sm:h-5 text-destructive/60 mx-auto" />;
 };
 
 const ComparisonTable = () => {
@@ -49,15 +49,15 @@ const ComparisonTable = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-3xl mx-auto -mx-6 px-6 overflow-x-auto"
+          className="max-w-3xl mx-auto"
         >
-          <table className="w-full border-collapse min-w-[480px]">
+          <table className="w-full border-collapse">
             <thead>
               <tr>
                 <th className="text-left font-body text-xs sm:text-sm text-muted-foreground py-3 px-2 sm:px-4">{t("comparison.feature")}</th>
-                <th className="text-center font-body text-xs sm:text-sm text-muted-foreground py-3 px-2 sm:px-4 w-16 sm:w-24">{t("comparison.paper")}</th>
-                <th className="text-center font-body text-xs sm:text-sm text-muted-foreground py-3 px-2 sm:px-4 w-16 sm:w-24">WhatsApp</th>
-                <th className="text-center font-body text-xs sm:text-sm font-semibold text-primary py-3 px-2 sm:px-4 w-20 sm:w-28">celebra.at</th>
+                <th className="text-center font-body text-xs sm:text-sm text-muted-foreground py-3 px-1 sm:px-4 w-12 sm:w-24">{t("comparison.paper")}</th>
+                <th className="text-center font-body text-xs sm:text-sm text-muted-foreground py-3 px-1 sm:px-4 w-12 sm:w-24"><span className="hidden sm:inline">WhatsApp</span><span className="sm:hidden">WA</span></th>
+                <th className="text-center font-body text-xs sm:text-sm font-semibold text-primary py-3 px-1 sm:px-4 w-14 sm:w-28"><span className="hidden sm:inline">celebra.at</span><span className="sm:hidden">✦</span></th>
               </tr>
             </thead>
             <tbody>
@@ -71,9 +71,9 @@ const ComparisonTable = () => {
                   className="border-t border-border"
                 >
                   <td className="font-body text-xs sm:text-sm text-foreground py-3 px-2 sm:px-4">{t(`comparison.row.${row.key}`)}</td>
-                  <td className="py-3 px-2 sm:px-4"><CellIcon value={row.paper} /></td>
-                  <td className="py-3 px-2 sm:px-4"><CellIcon value={row.whatsapp} /></td>
-                  <td className="py-3 px-2 sm:px-4 bg-primary/5"><CellIcon value={row.celebra} /></td>
+                  <td className="py-3 px-1 sm:px-4"><CellIcon value={row.paper} /></td>
+                  <td className="py-3 px-1 sm:px-4"><CellIcon value={row.whatsapp} /></td>
+                  <td className="py-3 px-1 sm:px-4 bg-primary/5"><CellIcon value={row.celebra} /></td>
                 </motion.tr>
               ))}
             </tbody>
