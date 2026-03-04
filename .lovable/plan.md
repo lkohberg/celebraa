@@ -1,60 +1,35 @@
 
 
-## Plan: Mehrsprachige Einladungen — bis zu 3 Sprachen pro Event
+## Plan: Verbleibende Probleme beheben
 
-### Die 11 Sprachen
+Nach Analyse des aktuellen Codes gibt es diese offenen Punkte:
 
-Die 10 meistgesprochenen Sprachen im europäischen und amerikanischen Raum + Mandarin:
+### 1. Basis-Template: Schrift & Farbe aus DB anwenden
+**Problem**: Die EventPage rendert das Basis-Template ohne die gespeicherten `font` und `primary_color` Werte aus der Datenbank.
+**Lösung**: In `EventPage.tsx` die DB-Werte `event.font` und `event.primary_color` auf den Basis-Template-Container anwenden (Google Fonts laden, `fontFamily` und Farbe setzen).
 
-1. **Englisch** (en)
-2. **Spanisch** (es)
-3. **Portugiesisch** (pt)
-4. **Französisch** (fr)
-5. **Deutsch** (de)
-6. **Italienisch** (it)
-7. **Polnisch** (pl)
-8. **Rumänisch** (ro)
-9. **Niederländisch** (nl)
-10. **Türkisch** (tr)
-11. **Mandarin** (zh) — 中文
+### 2. RLS-Problem für öffentliche Event-Seiten
+**Problem**: `useEventByLink` fragt Events als unauthentifizierter User ab. Die RLS-Policy "Anyone can view live events" erlaubt SELECT nur bei `status = 'live'`. Das sollte funktionieren, aber die Query filtert nicht explizit nach Status — wenn kein User eingeloggt ist und das Event "live" ist, sollte es klappen. **Kein Code-Problem**, aber ein Test ist nötig.
 
-### Konzept
+### 3. Dashboard: Event manuell auf "archiviert" setzen
+**Problem**: Es gibt keinen Button im Dashboard um ein Event zu deaktivieren/archivieren.
+**Lösung**: Im `EventDetail` einen Toggle-Button hinzufügen (Live / Archiviert).
 
-- Auf der Konfigurationsseite wählt der Nutzer bis zu 3 Sprachen aus diesen 11
-- Pro gewählte Sprache wird ein eigener Event-Link generiert: `/e/mein-event/de`, `/e/mein-event/en`, etc.
-- Die UI-Labels auf der Event-Seite (Buttons, Formularfelder wie "Name", "Ich komme", "Absagen", "Nachricht") werden automatisch in der Sprache des Links angezeigt
-- Event-Inhalte (Titel, Beschreibung) werden vom Kunden selbst eingegeben — pro Sprache gleicher Inhalt
-- Auf der Success-Seite und im Dashboard werden alle Sprach-Links angezeigt
+### 4. Success-Page & Dashboard: Nicht übersetzte Texte
+**Problem**: Einige Texte sind hardcoded auf Deutsch statt über `t()`.
+**Lösung**: Fehlende i18n-Keys in `de.ts` und `en.ts` ergänzen und in den Komponenten verwenden.
 
-### Datenbank
+---
 
-Neues Feld in `events`-Tabelle:
-```sql
-ALTER TABLE events ADD COLUMN languages text[] DEFAULT '{de}';
-```
+### Technische Änderungen
 
-### Dateien
+| Datei | Änderung |
+|-------|----------|
+| `src/pages/EventPage.tsx` | Google Font laden, `fontFamily` und `primaryColor` auf Basis-Container anwenden |
+| `src/pages/AdminDashboard.tsx` | Archivieren-Button mit `useUpdateEvent` hinzufügen |
+| `src/pages/SuccessPage.tsx` | Hardcoded Texte durch `t()` ersetzen |
+| `src/i18n/de.ts` + `en.ts` | Fehlende Keys für Success-Page und Dashboard |
 
-| Aktion | Datei | Was |
-|--------|-------|-----|
-| **Neu** | `src/i18n/eventLabels.ts` | Statische UI-Labels für alle 11 Sprachen (~15 Strings: Name, E-Mail, Ich komme, Absagen, Nachricht senden, Essenswünsche, etc.) |
-| **Edit** | `src/pages/ConfigurePage.tsx` | Sprachauswahl-UI: Chip-basierte Multi-Select (max 3 aus 11). Speichert in `languages`-Feld. Erste Sprache = Default |
-| **Edit** | `src/App.tsx` | Neue Route `/e/:eventLink/:lang` |
-| **Edit** | `src/pages/EventPage.tsx` | `lang`-Param auslesen, Labels aus `eventLabels.ts` laden, an Templates/RsvpForm durchreichen |
-| **Edit** | `src/components/premium-templates/RsvpForm.tsx` | `lang`-Prop akzeptieren, Labels dynamisch aus eventLabels |
-| **Edit** | `src/components/premium-templates/PremiumWeddingPage.tsx` | `lang`-Prop durchreichen |
-| **Edit** | `src/components/premium-templates/PremiumBirthdayPage.tsx` | `lang`-Prop durchreichen |
-| **Edit** | `src/components/premium-templates/PremiumCorporatePage.tsx` | `lang`-Prop durchreichen |
-| **Edit** | `src/pages/SuccessPage.tsx` | Alle Sprach-Links anzeigen (aus Event-Daten laden) |
-| **Edit** | `src/pages/AdminDashboard.tsx` | Alle Sprach-Links zum Kopieren anzeigen |
-| **Edit** | `src/components/ComparisonTable.tsx` | Marketing-Zeile anpassen: "Bis zu 3 Sprachen pro Einladung" |
-| **Edit** | `src/components/USPSection.tsx` | USP anpassen: "Bis zu 3 Sprachen" |
-| **Edit** | `src/i18n/de.ts` + `en.ts` | Neue Strings für Sprachauswahl-UI + Marketing |
-
-### Sprachauswahl-UI (ConfigurePage)
-
-- Unter den RSVP-Optionen: "Sprachen der Einladung (max. 3)"
-- Klickbare Chips mit Flaggen-Emoji + Sprachname
-- Ausgewählte Chips sind farbig hervorgehoben
-- Vorschau der generierten Links darunter
+### Nicht in diesem Schritt
+- **Subdomain-Routing** (`eventname.celebra.at`): Erfordert DNS-Konfiguration und Server-seitige Logik, die außerhalb der App liegt. Kann als separater Schritt geplant werden.
 
