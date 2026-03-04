@@ -26,9 +26,9 @@ const en = {
   "features.1.title": "No WhatsApp chaos",
   "features.1.desc": "All guests receive a professional link and RSVPs are collected automatically.",
   "features.2.title": "QR code included",
-  "features.2.desc": "Perfect for printed cards or social media – scan and RSVP instantly.",
-  "features.3.title": "Online in 3 days",
-  "features.3.desc": "Your page is available within three days after ordering.",
+  "features.2.desc": "Perfect for printed cards or social media. Scan and RSVP instantly.",
+  "features.3.title": "Online Immediately",
+  "features.3.desc": "Your page is available within seconds of ordering.",
 
   // Comparison Table
   "comparison.title": "Why celebra.at?",
@@ -50,17 +50,17 @@ const en = {
   "usp.title": "What you get with us",
   "usp.subtitle": "Everything you need for the perfect invitation",
   "usp.cheap.title": "Up to 80% cheaper",
-  "usp.cheap.desc": "Compared to traditional invitation services – without compromising on quality.",
+  "usp.cheap.desc": "Compared to traditional invitation services without compromising on quality.",
   "usp.quality.title": "Premium designs",
-  "usp.quality.desc": "Professionally crafted templates for every occasion – from elegant to modern.",
+  "usp.quality.desc": "Professionally crafted templates for every occasion from elegant to modern.",
   "usp.qr.title": "Free QR code",
-  "usp.qr.desc": "Included with every package – perfect for printed save-the-date cards.",
+  "usp.qr.desc": "Included with every package perfect for printed save-the-date cards.",
   "usp.language.title": "Up to 3 languages",
-  "usp.language.desc": "Each invitation in up to 3 languages – every guest gets their own link.",
+  "usp.language.desc": "Each invitation in up to 3 languages! Every guest gets their own link.",
   "usp.dashboard.title": "Live dashboard",
   "usp.dashboard.desc": "View RSVPs and dietary preferences in real-time via your personal link.",
   "usp.export.title": "Excel export",
-  "usp.export.desc": "Export all guest data as CSV with one click – for caterers, venues & more.",
+  "usp.export.desc": "Export all guest data as CSV with one click. For caterers, venues & more.",
 
   // Eco Section
   "eco.title": "Celebrate sustainably",
@@ -124,7 +124,7 @@ const en = {
   "configure.heroImage": "Hero image URL",
   "configure.heroImagePlaceholder": "https://example.com/image.jpg",
   "configure.languages": "Invitation languages (max. 3)",
-  "configure.languagesHint": "Choose up to 3 languages – a separate link is created for each.",
+  "configure.languagesHint": "Choose up to 3 languages, a separate link is created for each.",
   "configure.languageLinks": "Your language links:",
 
   // Price Summary
