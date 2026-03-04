@@ -18,9 +18,9 @@ const FeatureGrid = () => {
   const { t } = useTranslation();
 
   const features = [
-    { icon: Link2, title: t("features.1.title"), description: t("features.1.desc") },
-    { icon: QrCode, title: t("features.2.title"), description: t("features.2.desc") },
-    { icon: Zap, title: t("features.3.title"), description: t("features.3.desc") },
+    { id: "1", icon: Link2, title: t("features.1.title"), description: t("features.1.desc") },
+    { id: "2", icon: QrCode, title: t("features.2.title"), description: t("features.2.desc") },
+    { id: "3", icon: Zap, title: t("features.3.title"), description: t("features.3.desc") },
   ];
 
   return (
@@ -50,7 +50,7 @@ const FeatureGrid = () => {
         >
           {features.map((f) => (
             <motion.div
-              key={f.title}
+              key={f.id}
               variants={item}
               className="bg-card rounded-xl p-8 shadow-card hover:shadow-card-hover transition-shadow duration-300"
             >
