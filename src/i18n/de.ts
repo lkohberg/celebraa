@@ -157,6 +157,7 @@ const de = {
   "dashboard.loading": "Lade Events...",
   "dashboard.exportCsv": "CSV exportieren",
   "dashboard.status.draft": "Entwurf",
+  "dashboard.status.unpaid": "Unbezahlt",
   "dashboard.status.paid": "Bezahlt",
   "dashboard.status.live": "Live",
   "dashboard.status.archived": "Archiviert",
