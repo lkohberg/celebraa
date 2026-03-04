@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar, Clock, MapPin, Users, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useCreateEvent, useCheckEventLink } from "@/hooks/useEvents";
+import { supabase } from "@/integrations/supabase/client";
 import AuthDialog from "@/components/AuthDialog";
 import PriceSummary from "@/components/PriceSummary";
 import { toast } from "sonner";
@@ -70,7 +71,7 @@ const ConfigurePage = () => {
     if (!template) return;
 
     try {
-      await createEvent.mutateAsync({
+      const created = await createEvent.mutateAsync({
         user_id: user.id,
         title: form.title,
         event_date: form.date,
@@ -89,8 +90,22 @@ const ConfigurePage = () => {
         price_paid: totalPrice * 100,
         status: "draft",
       });
-      // TODO: After Stripe integration, redirect to payment instead
-      navigate(`/success/${form.eventLink}`);
+
+      // Create Stripe checkout session
+      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke("create-checkout", {
+        body: {
+          eventId: created.id,
+          successUrl: `${window.location.origin}/success/${form.eventLink}`,
+          cancelUrl: window.location.href,
+        },
+      });
+
+      if (checkoutError || !checkoutData?.url) {
+        toast.error("Fehler beim Erstellen der Zahlung");
+        return;
+      }
+
+      window.location.href = checkoutData.url;
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Fehler beim Erstellen";
       toast.error(message);
