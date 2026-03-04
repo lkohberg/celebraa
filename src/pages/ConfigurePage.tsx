@@ -511,16 +511,12 @@ const ConfigurePage = () => {
               {/* Dress Code */}
               <div>
                 <Label className="font-body">{t("configure.dressCode")}</Label>
-                <Select value={form.dressCode} onValueChange={(v) => setForm((prev) => ({ ...prev, dressCode: v === "none" ? "" : v }))}>
-                  <SelectTrigger className="font-body mt-1"><SelectValue placeholder={t("configure.dressCodeNone")} /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none" className="font-body">{t("configure.dressCodeNone")}</SelectItem>
-                    <SelectItem value="casual" className="font-body">Casual</SelectItem>
-                    <SelectItem value="smart_casual" className="font-body">Smart Casual</SelectItem>
-                    <SelectItem value="elegant" className="font-body">Elegant</SelectItem>
-                    <SelectItem value="black_tie" className="font-body">Black Tie</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Input
+                  placeholder={t("configure.dressCodePlaceholder")}
+                  value={form.dressCode}
+                  onChange={(e) => setForm((prev) => ({ ...prev, dressCode: e.target.value }))}
+                  className="font-body mt-1"
+                />
               </div>
 
               {/* Children Welcome (wedding only) */}

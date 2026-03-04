@@ -125,7 +125,7 @@ const PremiumCorporatePage = ({ event, theme, lang }: { event: PremiumEventData;
               <div className="text-center">
                 <Shirt className="w-8 h-8 mx-auto mb-4" style={{ color: "hsl(220, 50%, 35%)" }} />
                 <h3 className="font-display text-xl text-foreground mb-3">{t("event.dressCode")}</h3>
-                <p className="font-body text-sm text-muted-foreground">{t(`event.dressCode.${event.dress_code}`)}</p>
+                <p className="font-body text-sm text-muted-foreground">{event.dress_code}</p>
               </div>
             )}
           </div>

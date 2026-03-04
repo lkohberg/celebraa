@@ -14,43 +14,70 @@ const ScheduleTimeline = ({ schedule, accentColor = "hsl(150, 18%, 38%)" }: Sche
   if (!schedule || schedule.length === 0) return null;
 
   return (
-    <div className="relative max-w-md mx-auto">
+    <div className="relative max-w-lg mx-auto py-4">
       {/* Vertical line */}
       <div
-        className="absolute left-[72px] top-2 bottom-2 w-px"
-        style={{ backgroundColor: accentColor, opacity: 0.3 }}
+        className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-[2px]"
+        style={{ background: `linear-gradient(to bottom, transparent, ${accentColor}40, ${accentColor}40, transparent)` }}
       />
 
-      <div className="space-y-6">
-        {schedule.map((item, i) => (
-          <motion.div
-            key={i}
-            className="flex items-center gap-4"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: i * 0.1 }}
-          >
-            {/* Time */}
-            <span
-              className="font-body text-sm w-14 text-right shrink-0 tabular-nums"
-              style={{ color: accentColor }}
+      <div className="space-y-0">
+        {schedule.map((item, i) => {
+          const isLeft = i % 2 === 0;
+
+          return (
+            <motion.div
+              key={i}
+              className="relative flex items-center py-5"
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
             >
-              {item.time}
-            </span>
+              {/* Left side */}
+              <div className={`w-[calc(50%-20px)] ${isLeft ? "text-right pr-6" : ""}`}>
+                {isLeft && (
+                  <>
+                    <p className="font-display text-base font-semibold text-foreground leading-tight">
+                      {item.label}
+                    </p>
+                    <p
+                      className="font-body text-xs tracking-widest uppercase mt-1"
+                      style={{ color: accentColor }}
+                    >
+                      {item.time} Uhr
+                    </p>
+                  </>
+                )}
+              </div>
 
-            {/* Dot */}
-            <div
-              className="w-3 h-3 rounded-full shrink-0 border-2 bg-background"
-              style={{ borderColor: accentColor }}
-            />
+              {/* Center dot */}
+              <div className="relative z-10 flex items-center justify-center w-10 shrink-0">
+                <div
+                  className="w-4 h-4 rounded-full border-[3px] bg-background shadow-sm"
+                  style={{ borderColor: accentColor }}
+                />
+              </div>
 
-            {/* Label */}
-            <span className="font-body text-sm text-foreground">
-              {item.label}
-            </span>
-          </motion.div>
-        ))}
+              {/* Right side */}
+              <div className={`w-[calc(50%-20px)] ${!isLeft ? "pl-6" : ""}`}>
+                {!isLeft && (
+                  <>
+                    <p className="font-display text-base font-semibold text-foreground leading-tight">
+                      {item.label}
+                    </p>
+                    <p
+                      className="font-body text-xs tracking-widest uppercase mt-1"
+                      style={{ color: accentColor }}
+                    >
+                      {item.time} Uhr
+                    </p>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );

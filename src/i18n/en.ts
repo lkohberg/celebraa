@@ -241,6 +241,7 @@ const en = {
   "event.childrenWelcome": "Children are welcome 🧒",
   "event.adultsOnly": "We kindly ask for understanding that this celebration is planned for adults only.",
   "event.hotels": "Hotel Recommendations",
+  "event.hotelsSubtitle": "We've put together a selection of nearby hotels for guests traveling from afar.",
   "event.hotelWebsite": "Visit website",
   "event.map": "Directions",
 
@@ -252,7 +253,7 @@ const en = {
   "configure.scheduleLabelPlaceholder": "e.g. Reception, Cake cutting",
   "configure.addScheduleItem": "Add schedule item",
   "configure.dressCode": "Dress Code",
-  "configure.dressCodeNone": "Not specified",
+  "configure.dressCodePlaceholder": "e.g. Elegant, Smart Casual, Black Tie",
   "configure.childrenWelcome": "Children",
   "configure.childrenNone": "Not specified",
   "configure.childrenYes": "Children welcome",
