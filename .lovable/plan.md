@@ -1,70 +1,60 @@
 
 
-## Plan: Erweiterte Hauptseite mit Marketing-Sektionen + Dietary Preferences
+## Plan: Mehrsprachige Einladungen — bis zu 3 Sprachen pro Event
 
-### Was wird gemacht
+### Die 11 Sprachen
 
-Die Hauptseite bekommt mehrere neue Marketing-Sektionen zwischen den bestehenden Bereichen. Zusätzlich wird die Menüauswahl im RSVP-Formular und in der Konfiguration um konkrete Dietary-Optionen erweitert (vegetarisch, vegan, glutenfrei, etc.). Der CSV/Excel-Export im Dashboard zeigt diese Daten ebenfalls an.
+Die 10 meistgesprochenen Sprachen im europäischen und amerikanischen Raum + Mandarin:
 
-### Neue Sektionen auf der Hauptseite (Index.tsx)
+1. **Englisch** (en)
+2. **Spanisch** (es)
+3. **Portugiesisch** (pt)
+4. **Französisch** (fr)
+5. **Deutsch** (de)
+6. **Italienisch** (it)
+7. **Polnisch** (pl)
+8. **Rumänisch** (ro)
+9. **Niederländisch** (nl)
+10. **Türkisch** (tr)
+11. **Mandarin** (zh) — 中文
 
-Die Reihenfolge wird: Hero → FeatureGrid → **ComparisonTable** → **USPSection** → **EcoSection** → Templates → Footer
+### Konzept
 
-1. **ComparisonTable** – Neue Komponente `src/components/ComparisonTable.tsx`
-   - Vergleichstabelle: Papier-Einladung vs. WhatsApp vs. celebra.at
-   - Zeilen: Kosten, Professionelles Design, RSVP-Tracking, QR-Code, Menüauswahl, Mehrsprachig, Umweltfreundlich, Persönlicher Dashboard-Link, Excel-Export, Automatische Gäste-Verwaltung
-   - Papier und WhatsApp bekommen ✗ oder teilweise ✓, celebra.at bekommt überall ✓
-   - Animiert mit framer-motion
+- Auf der Konfigurationsseite wählt der Nutzer bis zu 3 Sprachen aus diesen 11
+- Pro gewählte Sprache wird ein eigener Event-Link generiert: `/e/mein-event/de`, `/e/mein-event/en`, etc.
+- Die UI-Labels auf der Event-Seite (Buttons, Formularfelder wie "Name", "Ich komme", "Absagen", "Nachricht") werden automatisch in der Sprache des Links angezeigt
+- Event-Inhalte (Titel, Beschreibung) werden vom Kunden selbst eingegeben — pro Sprache gleicher Inhalt
+- Auf der Success-Seite und im Dashboard werden alle Sprach-Links angezeigt
 
-2. **USPSection** – Neue Komponente `src/components/USPSection.tsx`
-   - Grid mit 6 USP-Karten:
-     - **Bis zu 80% günstiger** als traditionelle Einladungsservices
-     - **Keine Qualitätskompromisse** – Premium-Designs von Profis
-     - **Gratis QR-Code** bei jedem Paket inklusive
-     - **Jede Sprache** – Einladungen in beliebiger Sprache
-     - **Persönlicher Dashboard-Link** – Zu-/Absagen + Essenswünsche live einsehen
-     - **Excel-Export** – Alle Gästedaten mit einem Klick exportieren
+### Datenbank
 
-3. **EcoSection** – Neue Komponente `src/components/EcoSection.tsx`
-   - Sektion mit Leaf-Icon und Nachhaltigkeits-Message
-   - "Jede digitale Einladung spart Papier und reduziert deinen CO₂-Fußabdruck"
-   - Statistik-Badges: z.B. "0 Papier", "0 CO₂", "100% Digital"
-
-### Dietary Preferences (Essenswünsche)
-
-4. **RsvpForm.tsx** – Menüauswahl erweitern
-   - Statt freiem Textfeld: Dropdown/Radio mit Optionen: Standard, Vegetarisch, Vegan, Glutenfrei, Laktosefrei
-   - Wird in `menu_choice` Feld der `guests`-Tabelle gespeichert (existiert bereits)
-
-5. **ConfigurePage.tsx** – Neue Option im RSVP-Bereich
-   - Wenn `menuSelection` aktiv: Hinweis dass Gäste zwischen dietary options wählen können
-   - Label anpassen: "Essenswünsche abfragen (vegetarisch, vegan, glutenfrei...)"
-
-6. **AdminDashboard.tsx** – Dietary-Info anzeigen
-   - In der Gästeliste: `menu_choice` Badge anzeigen wenn vorhanden
-   - CSV-Export: Bereits existierende Daten werden mit exportiert (menu_choice Spalte)
-
-### i18n
-
-7. **de.ts + en.ts** – Alle neuen Strings für:
-   - Comparison-Tabelle (Zeilen-Labels, Spaltenüberschriften)
-   - USP-Sektion (6 Titel + 6 Beschreibungen)
-   - Eco-Sektion (Headline, Beschreibung, Badges)
-   - Dietary-Optionen (Standard, Vegetarisch, Vegan, Glutenfrei, Laktosefrei)
+Neues Feld in `events`-Tabelle:
+```sql
+ALTER TABLE events ADD COLUMN languages text[] DEFAULT '{de}';
+```
 
 ### Dateien
 
-| Aktion | Datei |
-|--------|-------|
-| Neu | `src/components/ComparisonTable.tsx` |
-| Neu | `src/components/USPSection.tsx` |
-| Neu | `src/components/EcoSection.tsx` |
-| Edit | `src/pages/Index.tsx` – neue Sektionen einbinden |
-| Edit | `src/components/premium-templates/RsvpForm.tsx` – Dropdown statt Freitext |
-| Edit | `src/pages/ConfigurePage.tsx` – Label anpassen |
-| Edit | `src/pages/AdminDashboard.tsx` – menu_choice anzeigen |
-| Edit | `src/i18n/de.ts` – neue Strings |
-| Edit | `src/i18n/en.ts` – neue Strings |
+| Aktion | Datei | Was |
+|--------|-------|-----|
+| **Neu** | `src/i18n/eventLabels.ts` | Statische UI-Labels für alle 11 Sprachen (~15 Strings: Name, E-Mail, Ich komme, Absagen, Nachricht senden, Essenswünsche, etc.) |
+| **Edit** | `src/pages/ConfigurePage.tsx` | Sprachauswahl-UI: Chip-basierte Multi-Select (max 3 aus 11). Speichert in `languages`-Feld. Erste Sprache = Default |
+| **Edit** | `src/App.tsx` | Neue Route `/e/:eventLink/:lang` |
+| **Edit** | `src/pages/EventPage.tsx` | `lang`-Param auslesen, Labels aus `eventLabels.ts` laden, an Templates/RsvpForm durchreichen |
+| **Edit** | `src/components/premium-templates/RsvpForm.tsx` | `lang`-Prop akzeptieren, Labels dynamisch aus eventLabels |
+| **Edit** | `src/components/premium-templates/PremiumWeddingPage.tsx` | `lang`-Prop durchreichen |
+| **Edit** | `src/components/premium-templates/PremiumBirthdayPage.tsx` | `lang`-Prop durchreichen |
+| **Edit** | `src/components/premium-templates/PremiumCorporatePage.tsx` | `lang`-Prop durchreichen |
+| **Edit** | `src/pages/SuccessPage.tsx` | Alle Sprach-Links anzeigen (aus Event-Daten laden) |
+| **Edit** | `src/pages/AdminDashboard.tsx` | Alle Sprach-Links zum Kopieren anzeigen |
+| **Edit** | `src/components/ComparisonTable.tsx` | Marketing-Zeile anpassen: "Bis zu 3 Sprachen pro Einladung" |
+| **Edit** | `src/components/USPSection.tsx` | USP anpassen: "Bis zu 3 Sprachen" |
+| **Edit** | `src/i18n/de.ts` + `en.ts` | Neue Strings für Sprachauswahl-UI + Marketing |
 
-Keine Datenbank-Änderungen nötig – `menu_choice` existiert bereits als Text-Feld in der `guests`-Tabelle.
+### Sprachauswahl-UI (ConfigurePage)
+
+- Unter den RSVP-Optionen: "Sprachen der Einladung (max. 3)"
+- Klickbare Chips mit Flaggen-Emoji + Sprachname
+- Ausgewählte Chips sind farbig hervorgehoben
+- Vorschau der generierten Links darunter
 
