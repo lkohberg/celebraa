@@ -21,7 +21,7 @@ const getDemoEvent = (template: Template) => {
     rsvp_enabled: true,
     rsvp_deadline: "2026-05-01",
     menu_selection: false,
-    hero_image_url: null,
+    hero_image_url: template.defaultHeroImage || null,
   };
 
   if (template.eventType === "wedding") {
