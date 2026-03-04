@@ -11,6 +11,16 @@ import RsvpForm from "@/components/premium-templates/RsvpForm";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
+const loadGoogleFont = (fontName: string) => {
+  const id = `google-font-${fontName.replace(/\s+/g, "-")}`;
+  if (document.getElementById(id)) return;
+  const link = document.createElement("link");
+  link.id = id;
+  link.rel = "stylesheet";
+  link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontName)}:wght@400;600;700&display=swap`;
+  document.head.appendChild(link);
+};
+
 const EventPage = () => {
   const { eventLink, lang: langParam } = useParams();
   const { t } = useTranslation();
@@ -21,6 +31,16 @@ const EventPage = () => {
   const eventLang: EventLang = (langParam as EventLang) || "de";
   const labels = getEventLabels(eventLang);
   const trackAnalytics = useTrackAnalytics();
+
+  const fontName = event?.font || "Playfair Display";
+
+  // Load Google Font for basis template
+  useEffect(() => {
+    const tier = (event as any)?.tier;
+    if (event && (!tier || tier === "basis")) {
+      loadGoogleFont(fontName);
+    }
+  }, [fontName, event]);
 
   // Track page view
   useEffect(() => {
@@ -90,6 +110,8 @@ const EventPage = () => {
   }
 
   // Basis template - simple styled page
+  const primaryColor = event.primary_color || "#C8A951";
+
   const dateLocaleMap: Record<string, string> = { de: "de-AT", en: "en-US", es: "es-ES", pt: "pt-BR", fr: "fr-FR", it: "it-IT", pl: "pl-PL", ro: "ro-RO", nl: "nl-NL", tr: "tr-TR", zh: "zh-CN" };
   const formattedDate = new Date(event.event_date).toLocaleDateString(dateLocaleMap[eventLang] || "de-AT", {
     day: "numeric",
@@ -98,15 +120,15 @@ const EventPage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" style={{ fontFamily: `'${fontName}', serif` }}>
       <div className="max-w-2xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">
             {labels.rsvp}
           </p>
           <h1
-            className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4"
-            style={{ color: event.primary_color || undefined }}
+            className="text-4xl md:text-5xl font-bold text-foreground mb-4"
+            style={{ color: primaryColor }}
           >
             {event.title}
           </h1>

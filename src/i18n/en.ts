@@ -165,6 +165,21 @@ const en = {
   "dashboard.rsvp.declined": "Declined",
   "dashboard.rsvp.pending": "Pending",
 
+  // Success Page
+  "success.title": "Your event page is live!",
+  "success.subtitle": "Share your link or download the QR code",
+  "success.languageLinks": "Your language links:",
+  "success.copyLink": "Copy link",
+  "success.copied": "Copied!",
+  "success.downloadQr": "Download QR code",
+  "success.openEvent": "Open event page",
+  "success.backHome": "Back to home",
+
+  // Dashboard extras
+  "dashboard.archive": "Archive",
+  "dashboard.goLive": "Go Live",
+  "dashboard.languageLinks": "Language links:",
+
   // Footer
   "footer.tagline": "Digital Event Invitations",
   "footer.imprint": "Imprint",

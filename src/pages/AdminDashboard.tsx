@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { useMyEvents, useEventGuests, useEventAnalytics } from "@/hooks/useEvents";
+import { useMyEvents, useEventGuests, useEventAnalytics, useUpdateEvent } from "@/hooks/useEvents";
 import { useTranslation } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe } from "lucide-react";
+import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe, Archive, Radio } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/i18n/eventLabels";
 
 const AdminDashboard = () => {
@@ -110,10 +110,11 @@ const AdminDashboard = () => {
   );
 };
 
-const EventDetail = ({ event }: { event: { id: string; title: string; event_link: string; status: string; price_paid: number | null; event_date: string; stripe_payment_id: string | null } }) => {
+const EventDetail = ({ event }: { event: { id: string; title: string; event_link: string; status: string; price_paid: number | null; event_date: string; stripe_payment_id: string | null; languages?: string[] | null } }) => {
   const { t } = useTranslation();
   const { data: guests } = useEventGuests(event.id);
   const { data: analytics } = useEventAnalytics(event.id);
+  const updateEvent = useUpdateEvent();
 
   const accepted = guests?.filter((g) => g.rsvp_status === "accepted").length || 0;
   const declined = guests?.filter((g) => g.rsvp_status === "declined").length || 0;
@@ -144,6 +145,26 @@ const EventDetail = ({ event }: { event: { id: string; title: string; event_link
           <StatCard label={t("dashboard.accepted")} value={accepted} icon={Users} />
           <StatCard label={t("dashboard.declined")} value={declined} icon={Users} />
         </div>
+
+        {/* Archive / Go Live toggle */}
+        {(event.status === "live" || event.status === "archived") && (
+          <div className="flex items-center gap-3 mb-4">
+            <Button
+              variant={event.status === "live" ? "outline" : "default"}
+              size="sm"
+              className="font-body"
+              disabled={updateEvent.isPending}
+              onClick={() => updateEvent.mutate({ id: event.id, status: event.status === "live" ? "archived" : "live" })}
+            >
+              {event.status === "live" ? (
+                <><Archive className="w-4 h-4 mr-2" />{t("dashboard.archive")}</>
+              ) : (
+                <><Radio className="w-4 h-4 mr-2" />{t("dashboard.goLive")}</>
+              )}
+            </Button>
+          </div>
+        )}
+
         {event.status === "live" && (
           <div className="space-y-3">
             <LanguageLinks event={event} />
@@ -237,6 +258,7 @@ const EventDetail = ({ event }: { event: { id: string; title: string; event_link
 };
 
 const LanguageLinks = ({ event }: { event: any }) => {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState<string | null>(null);
   const languages = event.languages as string[] | undefined;
   if (!languages || languages.length <= 1) return null;
@@ -250,7 +272,7 @@ const LanguageLinks = ({ event }: { event: any }) => {
   return (
     <div className="mb-4">
       <p className="font-body text-xs text-muted-foreground font-semibold mb-2 flex items-center gap-1">
-        <Globe className="w-3 h-3" /> Sprach-Links:
+        <Globe className="w-3 h-3" /> {t("dashboard.languageLinks")}
       </p>
       <div className="space-y-1">
         {languages.map((code) => {
