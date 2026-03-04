@@ -362,7 +362,47 @@ const ConfigurePage = () => {
 
                   <div>
                     <Label className="font-body text-sm">{t("configure.heroImage")}</Label>
-                    <Input placeholder={t("configure.heroImagePlaceholder")} value={form.heroImageUrl} onChange={(e) => updateField("heroImageUrl", e.target.value)} className="font-body mt-1" />
+                    <div
+                      className={`mt-1 relative rounded-lg border-2 border-dashed transition-colors cursor-pointer overflow-hidden ${
+                        dragActive ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"
+                      }`}
+                      onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+                      onDragLeave={() => setDragActive(false)}
+                      onDrop={handleDrop}
+                      onClick={() => {
+                        const input = document.createElement("input");
+                        input.type = "file";
+                        input.accept = "image/*";
+                        input.onchange = (e) => {
+                          const file = (e.target as HTMLInputElement).files?.[0];
+                          if (file) handleHeroFile(file);
+                        };
+                        input.click();
+                      }}
+                    >
+                      {form.heroImageUrl ? (
+                        <div className="relative">
+                          <img src={form.heroImageUrl} alt="Hero" className="w-full h-32 object-cover rounded-md" />
+                          <button
+                            type="button"
+                            className="absolute top-2 right-2 bg-background/80 backdrop-blur rounded-full p-1 hover:bg-background"
+                            onClick={(e) => { e.stopPropagation(); updateField("heroImageUrl", ""); }}
+                          >
+                            <X className="w-4 h-4 text-foreground" />
+                          </button>
+                          <div className="absolute bottom-0 inset-x-0 bg-background/70 backdrop-blur text-center py-1">
+                            <p className="text-xs font-body text-muted-foreground">Klicken oder ziehen zum Ersetzen</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center py-8 px-4">
+                          <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+                          <p className="text-sm font-body text-muted-foreground text-center">
+                            Bild hierher ziehen oder klicken
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
