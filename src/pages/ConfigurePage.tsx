@@ -173,7 +173,12 @@ const ConfigurePage = () => {
         return;
       }
 
-      window.open(checkoutData.url, "_blank");
+      // Use top-level navigation to escape iframe if needed
+      if (window.top) {
+        window.top.location.href = checkoutData.url;
+      } else {
+        window.location.href = checkoutData.url;
+      }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Fehler beim Erstellen";
       toast.error(message);
