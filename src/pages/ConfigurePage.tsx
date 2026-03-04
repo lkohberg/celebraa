@@ -241,7 +241,8 @@ const ConfigurePage = () => {
                   })()}
                 </div>
               ) : (
-                <div className="rounded-xl overflow-hidden shadow-card" style={{ background: template.previewGradient }}>
+                <div className="rounded-xl overflow-hidden shadow-card" style={{ background: template.previewGradient, fontFamily: `'${form.font}', sans-serif` }}>
+                  <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(form.font)}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
                   <div className="p-8 text-center">
                     <p className="text-xs font-body uppercase tracking-widest mb-3 opacity-50" style={{ color: template.colors.accent }}>
                       {t("configure.invitation")}
