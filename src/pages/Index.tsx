@@ -12,7 +12,7 @@ import AuthDialog from "@/components/AuthDialog";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "@/i18n";
-import { LayoutDashboard, LogIn, Menu, X } from "lucide-react";
+import { LayoutDashboard, LogIn, Menu, X, Crown, Layers } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -22,6 +22,7 @@ const Index = () => {
   const [demoOpen, setDemoOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedTier, setSelectedTier] = useState<"basis" | "premium">("premium");
 
   const eventTypes = [
     { value: "birthday", label: t("templates.birthday") },
@@ -112,6 +113,34 @@ const Index = () => {
             </p>
           </motion.div>
 
+          {/* Tier Toggle */}
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex rounded-lg border border-border p-1 bg-muted/50">
+              <button
+                onClick={() => setSelectedTier("basis")}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-md font-body text-sm font-medium transition-all ${
+                  selectedTier === "basis"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Layers className="w-4 h-4" />
+                {t("templates.basis")} · €49
+              </button>
+              <button
+                onClick={() => setSelectedTier("premium")}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-md font-body text-sm font-medium transition-all ${
+                  selectedTier === "premium"
+                    ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Crown className="w-4 h-4" />
+                {t("templates.premium")} · €99
+              </button>
+            </div>
+          </div>
+
           <Tabs defaultValue="birthday" className="max-w-5xl mx-auto">
             <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto mb-10">
               {eventTypes.map((type) => (
@@ -125,7 +154,7 @@ const Index = () => {
               <TabsContent key={type.value} value={type.value}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {templates
-                    .filter((t) => t.eventType === type.value)
+                    .filter((tpl) => tpl.eventType === type.value && tpl.tier === selectedTier)
                     .map((template) => (
                       <TemplateCard
                         key={template.id}
