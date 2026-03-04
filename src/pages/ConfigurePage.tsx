@@ -211,7 +211,7 @@ const ConfigurePage = () => {
                       ceremony_address: form.ceremonyAddress || null,
                       reception_location: form.receptionLocation || null,
                       reception_address: form.receptionAddress || null,
-                      hero_image_url: form.heroImageUrl || null,
+                      hero_image_url: form.heroImageUrl || template.defaultHeroImage || null,
                       rsvp_enabled: form.rsvpEnabled,
                       rsvp_deadline: form.rsvpDeadline || null,
                       menu_selection: form.menuSelection,
