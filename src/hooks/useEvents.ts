@@ -9,6 +9,7 @@ export const useMyEvents = () =>
       const { data, error } = await supabase
         .from("events")
         .select("*")
+        .neq("status", "draft")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
