@@ -454,6 +454,10 @@ const ConfigurePage = () => {
                           <p className="text-sm font-body text-muted-foreground text-center">
                             Bild hierher ziehen oder klicken
                           </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -592,10 +596,6 @@ const ConfigurePage = () => {
                   <Plus className="w-4 h-4 mr-1" /> {t("configure.addHotel")}
                 </Button>
               </div>
-                    </div>
-                  </div>
-                </div>
-              )}
 
               <div className="border border-border rounded-lg p-5 space-y-4">
                 <div className="flex items-center justify-between">
