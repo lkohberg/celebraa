@@ -173,7 +173,7 @@ const ConfigurePage = () => {
         return;
       }
 
-      window.location.href = checkoutData.url;
+      window.open(checkoutData.url, "_blank");
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Fehler beim Erstellen";
       toast.error(message);
