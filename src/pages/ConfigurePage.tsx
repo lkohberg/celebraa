@@ -111,7 +111,7 @@ const ConfigurePage = () => {
   const isValid = form.title && form.date && form.time && form.eventLink && linkValid && linkAvailable !== false && !isReservedLink;
 
   const menuPrice = form.menuSelection ? 10 : 0;
-  const extraLangs = Math.max(0, form.languages.length - 1);
+  const extraLangs = isPremium ? Math.max(0, form.languages.length - 1) : 0;
   const langPrice = extraLangs * 3;
   const totalPrice = basePrice + menuPrice + langPrice;
 
@@ -154,14 +154,14 @@ const ConfigurePage = () => {
         eventInsert.hero_image_url = form.heroImageUrl || null;
       }
 
-      // New fields (available for all tiers)
-      eventInsert.schedule = form.schedule.length > 0 ? form.schedule : null;
+      // New fields
+      eventInsert.schedule = isPremium && form.schedule.length > 0 ? form.schedule : null;
       eventInsert.dress_code = form.dressCode || null;
       eventInsert.children_welcome = form.childrenWelcome === "yes" ? true : form.childrenWelcome === "no" ? false : null;
-      eventInsert.hotel_recommendations = form.hotels.length > 0 ? form.hotels : null;
+      eventInsert.hotel_recommendations = isPremium && form.hotels.length > 0 ? form.hotels : null;
 
-      // Languages
-      eventInsert.languages = form.languages;
+      // Languages (basis = only default language)
+      eventInsert.languages = isPremium ? form.languages : [form.languages[0]];
 
       const { data: created, error: createError } = await supabase
         .from("events")
@@ -461,7 +461,8 @@ const ConfigurePage = () => {
                 </div>
               )}
 
-              {/* Schedule Editor */}
+              {/* Schedule Editor (Premium only) */}
+              {isPremium && (
               <div className="border border-border rounded-lg p-5 space-y-4">
                 <Label className="font-body font-semibold">{t("configure.schedule")}</Label>
                 <p className="font-body text-xs text-muted-foreground">{t("configure.scheduleHint")}</p>
@@ -507,6 +508,7 @@ const ConfigurePage = () => {
                   <Plus className="w-4 h-4 mr-1" /> {t("configure.addScheduleItem")}
                 </Button>
               </div>
+              )}
 
               {/* Dress Code */}
               <div>
@@ -534,7 +536,8 @@ const ConfigurePage = () => {
                 </div>
               )}
 
-              {/* Hotel Recommendations */}
+              {/* Hotel Recommendations (Premium only) */}
+              {isPremium && (
               <div className="border border-border rounded-lg p-5 space-y-4">
                 <Label className="font-body font-semibold">{t("configure.hotels")}</Label>
                 <p className="font-body text-xs text-muted-foreground">{t("configure.hotelsHint")}</p>
@@ -592,6 +595,7 @@ const ConfigurePage = () => {
                   <Plus className="w-4 h-4 mr-1" /> {t("configure.addHotel")}
                 </Button>
               </div>
+              )}
 
               <div className="border border-border rounded-lg p-5 space-y-4">
                 <div className="flex items-center justify-between">
@@ -639,7 +643,8 @@ const ConfigurePage = () => {
                 </div>
               </div>
 
-              {/* Language Selection */}
+              {/* Language Selection (Premium only) */}
+              {isPremium && (
               <div className="border border-border rounded-lg p-5 space-y-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Globe className="w-4 h-4 text-primary" />
@@ -660,7 +665,7 @@ const ConfigurePage = () => {
                             : "bg-card border-border hover:border-primary/50 text-foreground"
                         } ${isFirst ? "ring-2 ring-primary/30" : ""}`}
                         onClick={() => {
-                          if (isFirst) return; // Can't remove first language
+                          if (isFirst) return;
                           if (isSelected) {
                             setForm((prev) => ({ ...prev, languages: prev.languages.filter((l) => l !== lang.code) }));
                           } else if (form.languages.length < 3) {
@@ -684,6 +689,7 @@ const ConfigurePage = () => {
                   </div>
                 )}
               </div>
+              )}
 
               <div>
                 <Label className="font-body">{t("configure.link")} *</Label>
