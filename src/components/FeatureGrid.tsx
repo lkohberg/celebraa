@@ -20,7 +20,7 @@ const FeatureGrid = () => {
   const features = [
     { id: "1", icon: Link2, title: t("features.1.title"), description: t("features.1.desc") },
     { id: "2", icon: QrCode, title: t("features.2.title"), description: t("features.2.desc") },
-    { id: "3", icon: badgeEuro, title: t("features.3.title"), description: t("features.3.desc") },
+    { id: "3", icon: BadgeEuro, title: t("features.3.title"), description: t("features.3.desc") },
   ];
 
   return (
