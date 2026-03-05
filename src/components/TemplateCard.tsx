@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Crown } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
-// Default hero images for premium templates
+// Default hero images for templates
 import heroBirthdayNeon from "@/assets/hero-birthday-neon.jpg";
 import heroBirthdayGlamour from "@/assets/hero-birthday-glamour.jpg";
 import heroBirthdayGarden from "@/assets/hero-birthday-garden.jpg";
@@ -23,44 +23,13 @@ export interface Template {
   colors: { primary: string; secondary: string; accent: string };
   font: string;
   previewGradient: string;
-  tier: "basis" | "premium";
+  tier: "premium";
   premiumFeatures?: string[];
   defaultHeroImage?: string;
 }
 
 export const templates: Template[] = [
-  // Birthday - Basis
-  {
-    id: "birthday-elegant-gold",
-    name: "Elegant Gold",
-    description: "Zeitlos elegant mit goldenen Akzenten",
-    eventType: "birthday",
-    colors: { primary: "#C8A951", secondary: "#FFF8E7", accent: "#1A1A1A" },
-    font: "Playfair Display",
-    previewGradient: "linear-gradient(135deg, #FFF8E7 0%, #C8A951 100%)",
-    tier: "basis",
-  },
-  {
-    id: "birthday-modern-black",
-    name: "Modern Black",
-    description: "Minimalistisch und modern in Schwarz",
-    eventType: "birthday",
-    colors: { primary: "#1A1A1A", secondary: "#F5F5F5", accent: "#E8C547" },
-    font: "DM Sans",
-    previewGradient: "linear-gradient(135deg, #2D2D2D 0%, #1A1A1A 100%)",
-    tier: "basis",
-  },
-  {
-    id: "birthday-boho-nature",
-    name: "Boho Nature",
-    description: "Natürlich und warm mit Erdtönen",
-    eventType: "birthday",
-    colors: { primary: "#8B7355", secondary: "#F5EDE0", accent: "#4A6741" },
-    font: "Playfair Display",
-    previewGradient: "linear-gradient(135deg, #F5EDE0 0%, #D4C5A9 100%)",
-    tier: "basis",
-  },
-  // Birthday - Premium
+  // Birthday
   {
     id: "birthday-premium-neon",
     name: "Neon Party",
@@ -97,38 +66,7 @@ export const templates: Template[] = [
     premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Location-Details"],
     defaultHeroImage: heroBirthdayGarden,
   },
-  // Wedding - Basis
-  {
-    id: "wedding-elegant-gold",
-    name: "Romantik Gold",
-    description: "Klassisch romantisch mit Goldakzenten",
-    eventType: "wedding",
-    colors: { primary: "#B8965A", secondary: "#FDF6EC", accent: "#2C2C2C" },
-    font: "Playfair Display",
-    previewGradient: "linear-gradient(135deg, #FDF6EC 0%, #E8D5B0 100%)",
-    tier: "basis",
-  },
-  {
-    id: "wedding-modern-minimal",
-    name: "Modern Minimal",
-    description: "Schlicht und stilvoll in Weiß",
-    eventType: "wedding",
-    colors: { primary: "#333333", secondary: "#FFFFFF", accent: "#C9A96E" },
-    font: "DM Sans",
-    previewGradient: "linear-gradient(135deg, #FFFFFF 0%, #F0F0F0 100%)",
-    tier: "basis",
-  },
-  {
-    id: "wedding-garden-blush",
-    name: "Garden Blush",
-    description: "Zartes Rosa mit floralen Akzenten",
-    eventType: "wedding",
-    colors: { primary: "#D4A0A0", secondary: "#FFF0F0", accent: "#5C7A5C" },
-    font: "Playfair Display",
-    previewGradient: "linear-gradient(135deg, #FFF0F0 0%, #F5D5D5 100%)",
-    tier: "basis",
-  },
-  // Wedding - Premium
+  // Wedding
   {
     id: "wedding-premium-floral",
     name: "Floral Romance",
@@ -138,7 +76,7 @@ export const templates: Template[] = [
     font: "Playfair Display",
     previewGradient: "linear-gradient(135deg, #FFF0F0 0%, #E8D5C4 50%, #D5E8D4 100%)",
     tier: "premium",
-    premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
+    premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "RSVP-Formular"],
     defaultHeroImage: heroWeddingFloral,
   },
   {
@@ -150,7 +88,7 @@ export const templates: Template[] = [
     font: "Playfair Display",
     previewGradient: "linear-gradient(135deg, #FAF5EF 0%, #D4C5A9 100%)",
     tier: "premium",
-    premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
+    premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "RSVP-Formular"],
     defaultHeroImage: heroWeddingClassic,
   },
   {
@@ -162,41 +100,10 @@ export const templates: Template[] = [
     font: "DM Sans",
     previewGradient: "linear-gradient(135deg, #FAFAFA 0%, #E0E0E0 100%)",
     tier: "premium",
-    premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "Geschichte-Sektion", "Details & Zeitplan", "RSVP-Formular"],
+    premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "RSVP-Formular"],
     defaultHeroImage: heroWeddingModern,
   },
-  // Corporate - Basis
-  {
-    id: "corporate-professional",
-    name: "Professional Blue",
-    description: "Seriös und professionell für Business Events",
-    eventType: "corporate",
-    colors: { primary: "#1E3A5F", secondary: "#F0F4F8", accent: "#C8A951" },
-    font: "DM Sans",
-    previewGradient: "linear-gradient(135deg, #F0F4F8 0%, #D1DCE8 100%)",
-    tier: "basis",
-  },
-  {
-    id: "corporate-dark-elegance",
-    name: "Dark Elegance",
-    description: "Dunkel und elegant für exklusive Events",
-    eventType: "corporate",
-    colors: { primary: "#0D0D0D", secondary: "#1A1A2E", accent: "#E8C547" },
-    font: "DM Sans",
-    previewGradient: "linear-gradient(135deg, #1A1A2E 0%, #0D0D0D 100%)",
-    tier: "basis",
-  },
-  {
-    id: "corporate-fresh-green",
-    name: "Fresh Green",
-    description: "Frisch und nachhaltig für moderne Firmen",
-    eventType: "corporate",
-    colors: { primary: "#2D6A4F", secondary: "#F0F7F4", accent: "#1A1A1A" },
-    font: "DM Sans",
-    previewGradient: "linear-gradient(135deg, #F0F7F4 0%, #D8E8DF 100%)",
-    tier: "basis",
-  },
-  // Corporate - Premium
+  // Corporate
   {
     id: "corporate-premium-executive",
     name: "Executive Summit",
@@ -206,7 +113,7 @@ export const templates: Template[] = [
     font: "DM Sans",
     previewGradient: "linear-gradient(135deg, #1E3A5F 0%, #2C5282 100%)",
     tier: "premium",
-    premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
+    premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Anmelde-Formular"],
     defaultHeroImage: heroCorporateExecutive,
   },
   {
@@ -218,7 +125,7 @@ export const templates: Template[] = [
     font: "DM Sans",
     previewGradient: "linear-gradient(135deg, #0F0E17 0%, #6C63FF 100%)",
     tier: "premium",
-    premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
+    premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Anmelde-Formular"],
     defaultHeroImage: heroCorporateTech,
   },
   {
@@ -230,7 +137,7 @@ export const templates: Template[] = [
     font: "Playfair Display",
     previewGradient: "linear-gradient(135deg, #0D0D0D 0%, #C8A951 100%)",
     tier: "premium",
-    premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Location-Details", "Anmelde-Formular"],
+    premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Anmelde-Formular"],
     defaultHeroImage: heroCorporateGala,
   },
 ];
@@ -250,7 +157,6 @@ const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
       transition={{ duration: 0.25 }}
       className="group bg-card rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-300"
     >
-      {/* Preview */}
       <div
         className="h-48 relative overflow-hidden"
         style={{ background: template.previewGradient }}
@@ -268,11 +174,7 @@ const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
               className="text-2xl font-bold opacity-80"
               style={{
                 fontFamily: template.font,
-                color: template.defaultHeroImage
-                  ? "#FFFFFF"
-                  : template.colors.primary === "#FFFFFF" || template.colors.secondary === "#FFFFFF"
-                    ? template.colors.accent
-                    : template.colors.primary,
+                color: template.defaultHeroImage ? "#FFFFFF" : template.colors.primary,
                 textShadow: template.defaultHeroImage ? "0 2px 8px rgba(0,0,0,0.5)" : undefined,
               }}
             >
@@ -280,15 +182,6 @@ const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
             </p>
           </div>
         </div>
-        {/* Premium Badge */}
-        {template.tier === "premium" && (
-          <div className="absolute top-3 right-3">
-            <Badge className="bg-gradient-to-r from-amber-500 to-amber-600 text-white border-0 gap-1 font-body text-xs">
-              <Crown className="w-3 h-3" />
-              {t("templates.premium")}
-            </Badge>
-          </div>
-        )}
         <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/5 transition-colors duration-300" />
       </div>
 
@@ -298,7 +191,7 @@ const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
             {template.name}
           </h3>
           <Badge variant="outline" className="font-body text-[10px] px-1.5 py-0">
-            {template.tier === "premium" ? "€99" : "€49"}
+            ab €19
           </Badge>
         </div>
         <p className="font-body text-sm text-muted-foreground mb-3">

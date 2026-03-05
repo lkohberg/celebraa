@@ -93,6 +93,9 @@ export type Database = {
           ceremony_address: string | null
           ceremony_location: string | null
           children_welcome: boolean | null
+          contact_email: string | null
+          contact_first_name: string | null
+          contact_last_name: string | null
           created_at: string
           description: string | null
           dress_code: string | null
@@ -114,6 +117,7 @@ export type Database = {
           rsvp_deadline: string | null
           rsvp_enabled: boolean | null
           schedule: Json | null
+          selected_blocks: string[] | null
           status: string
           story_text: string | null
           stripe_payment_id: string | null
@@ -128,6 +132,9 @@ export type Database = {
           ceremony_address?: string | null
           ceremony_location?: string | null
           children_welcome?: boolean | null
+          contact_email?: string | null
+          contact_first_name?: string | null
+          contact_last_name?: string | null
           created_at?: string
           description?: string | null
           dress_code?: string | null
@@ -149,6 +156,7 @@ export type Database = {
           rsvp_deadline?: string | null
           rsvp_enabled?: boolean | null
           schedule?: Json | null
+          selected_blocks?: string[] | null
           status?: string
           story_text?: string | null
           stripe_payment_id?: string | null
@@ -163,6 +171,9 @@ export type Database = {
           ceremony_address?: string | null
           ceremony_location?: string | null
           children_welcome?: boolean | null
+          contact_email?: string | null
+          contact_first_name?: string | null
+          contact_last_name?: string | null
           created_at?: string
           description?: string | null
           dress_code?: string | null
@@ -184,6 +195,7 @@ export type Database = {
           rsvp_deadline?: string | null
           rsvp_enabled?: boolean | null
           schedule?: Json | null
+          selected_blocks?: string[] | null
           status?: string
           story_text?: string | null
           stripe_payment_id?: string | null
