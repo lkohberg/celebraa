@@ -21,9 +21,7 @@ const HeroSection = () => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary mb-8">
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-body font-medium text-muted-foreground">
-              {t("hero.badge")}
-            </span>
+            <span className="text-sm font-body font-medium text-muted-foreground">{t("hero.badge")}</span>
           </div>
 
           <h1 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-foreground">
