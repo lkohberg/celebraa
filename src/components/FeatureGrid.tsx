@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link2, QrCode, Zap, badgeEuro } from "lucide-react";
+import { Link2, QrCode, Zap, BadgeEuro } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
 const container = {
