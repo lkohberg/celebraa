@@ -24,10 +24,11 @@ const en = {
   "features.title": "Why buy a digital invitation?",
   "features.1.title": "No WhatsApp chaos",
   "features.1.desc": "All guests receive a professional link and RSVPs are collected automatically.",
-  "features.2.title": "QR code included",
-  "features.2.desc": "Perfect for printed cards or social media. Scan and RSVP instantly.",
-  "features.3.title": "Online Immediately",
-  "features.3.desc": "Your page is available within seconds of ordering.",
+  "features.2.title": "Nobody likes writing invitations.",
+  "features.2.desc":
+    "Save yourself time and nerves—and that nagging feeling afterward that you forgot something important.",
+  "features.3.title": "Save Money",
+  "features.3.desc": "Our research shows that invitations for just 50 people typically cost €200–€400 on average.",
 
   // Comparison Table
   "comparison.title": "Why celebra.at?",

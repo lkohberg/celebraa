@@ -24,10 +24,10 @@ const de = {
   "features.title": "Warum digitale Einladungen?",
   "features.1.title": "Kein WhatsApp-Chaos",
   "features.1.desc": "Alle Gäste erhalten einen professionellen Link und Zusagen werden automatisch gesammelt.",
-  "features.2.title": "QR-Code inklusive",
-  "features.2.desc": "Perfekt für gedruckte Karten oder Social Media. Scannen und sofort zusagen.",
-  "features.3.title": "In 3 Tagen online",
-  "features.3.desc": "Deine Seite ist innerhalb von drei Tagen nach Bestellung verfügbar.",
+  "features.2.title": "Niemand schreibt gerne Einladungen.",
+  "features.2.desc": "Spare dir Zeit, Nerven und danach dieses Gefühl, irgendwas Wichtiges vergessen zu haben.",
+  "features.3.title": "Spare kosten.",
+  "features.3.desc": "Unsere Recherchen ergeben das einladungen für nur 50 leute durschnitlich 200-400 euro kosten",
 
   // Comparison Table
   "comparison.title": "Warum celebra.at?",
