@@ -9,7 +9,7 @@ const de = {
   "nav.home": "Startseite",
 
   // Hero
-  "hero.badge": "Gemacht mit 🧡 in Österreich",
+  "hero.badge": "Für unsere Erde 🌍",
   "hero.title1": "Deine digitale Event-Einladung",
   "hero.title2": "in Minuten erstellt",
   "hero.subtitle": "Modern · Persönlich · Mit RSVP",

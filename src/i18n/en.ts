@@ -9,7 +9,7 @@ const en = {
   "nav.home": "Home",
 
   // Hero
-  "hero.badge": "Made with 🧡 in Austria",
+  "hero.badge": "For our Planet 🌍",
   "hero.title1": "Your digital event invitation",
   "hero.title2": "created in minutes",
   "hero.subtitle": "Modern · Personal · With RSVP",
