@@ -22,7 +22,6 @@ const de = {
 
   // Features
   "features.title": "Warum digitale Einladungen?",
-  "features.subtitle": "Drei gute Gründe für deine digitale Einladung",
   "features.1.title": "Kein WhatsApp-Chaos",
   "features.1.desc": "Alle Gäste erhalten einen professionellen Link und Zusagen werden automatisch gesammelt.",
   "features.2.title": "QR-Code inklusive",
@@ -32,7 +31,6 @@ const de = {
 
   // Comparison Table
   "comparison.title": "Warum celebra.at?",
-  "comparison.subtitle": "Vergleiche die Möglichkeiten auf einen Blick",
   "comparison.feature": "Feature",
   "comparison.paper": "Papier",
   "comparison.row.cost": "Günstige Kosten",
@@ -48,7 +46,6 @@ const de = {
 
   // USP Section
   "usp.title": "Was dich bei uns erwartet",
-  "usp.subtitle": "Alles was du für die perfekte Einladung brauchst",
   "usp.cheap.title": "Bis zu 80% günstiger",
   "usp.cheap.desc": "Im Vergleich zu traditionellen Einladungsservices ohne Kompromisse bei der Qualität.",
   "usp.quality.title": "Premium-Designs",

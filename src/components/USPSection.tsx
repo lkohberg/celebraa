@@ -24,12 +24,7 @@ const USPSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-14"
         >
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-            {t("usp.title")}
-          </h2>
-          <p className="font-body text-muted-foreground text-lg max-w-md mx-auto">
-            {t("usp.subtitle")}
-          </p>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">{t("usp.title")}</h2>
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -43,12 +38,8 @@ const USPSection = () => {
               className="rounded-xl border border-border bg-card p-6 hover:shadow-card-hover transition-shadow"
             >
               <usp.icon className="w-8 h-8 text-primary mb-4" />
-              <h3 className="font-display text-lg font-semibold text-foreground mb-2">
-                {t(`usp.${usp.key}.title`)}
-              </h3>
-              <p className="font-body text-sm text-muted-foreground">
-                {t(`usp.${usp.key}.desc`)}
-              </p>
+              <h3 className="font-display text-lg font-semibold text-foreground mb-2">{t(`usp.${usp.key}.title`)}</h3>
+              <p className="font-body text-sm text-muted-foreground">{t(`usp.${usp.key}.desc`)}</p>
             </motion.div>
           ))}
         </div>

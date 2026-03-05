@@ -22,7 +22,6 @@ const en = {
 
   // Features
   "features.title": "Why buy a digital invitation?",
-  "features.subtitle": "Three reasons for your digital invitation",
   "features.1.title": "No WhatsApp chaos",
   "features.1.desc": "All guests receive a professional link and RSVPs are collected automatically.",
   "features.2.title": "QR code included",
@@ -32,7 +31,6 @@ const en = {
 
   // Comparison Table
   "comparison.title": "Why celebra.at?",
-  "comparison.subtitle": "Compare your options at a glance",
   "comparison.feature": "Feature",
   "comparison.paper": "Paper",
   "comparison.row.cost": "Low cost",
@@ -48,7 +46,6 @@ const en = {
 
   // USP Section
   "usp.title": "What you get with us",
-  "usp.subtitle": "Everything you need for the perfect invitation",
   "usp.cheap.title": "Up to 80% cheaper",
   "usp.cheap.desc": "Compared to traditional invitation services without compromising on quality.",
   "usp.quality.title": "Premium designs",
