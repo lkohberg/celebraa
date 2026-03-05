@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TemplateCard, { templates, Template } from "@/components/TemplateCard";
 import DemoPreview from "@/components/DemoPreview";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Crown, Layers } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
 const eventTypes = [
@@ -19,7 +19,6 @@ const TemplatesPage = () => {
   const { t } = useTranslation();
   const [demoTemplate, setDemoTemplate] = useState<Template | null>(null);
   const [demoOpen, setDemoOpen] = useState(false);
-  const [selectedTier, setSelectedTier] = useState<"basis" | "premium">("premium");
 
   return (
     <div className="min-h-screen bg-background">
@@ -49,34 +48,6 @@ const TemplatesPage = () => {
           </p>
         </motion.div>
 
-        {/* Tier Toggle */}
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex rounded-lg border border-border p-1 bg-muted/50">
-            <button
-              onClick={() => setSelectedTier("basis")}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-md font-body text-sm font-medium transition-all ${
-                selectedTier === "basis"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Layers className="w-4 h-4" />
-              {t("templates.basis")} · €49
-            </button>
-            <button
-              onClick={() => setSelectedTier("premium")}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-md font-body text-sm font-medium transition-all ${
-                selectedTier === "premium"
-                  ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Crown className="w-4 h-4" />
-              {t("templates.premium")} · €99
-            </button>
-          </div>
-        </div>
-
         <Tabs defaultValue="birthday" className="max-w-5xl mx-auto">
           <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto mb-10">
             {eventTypes.map((type) => (
@@ -90,12 +61,12 @@ const TemplatesPage = () => {
             <TabsContent key={type.value} value={type.value}>
               <div className="grid md:grid-cols-3 gap-6">
                 {templates
-                  .filter((tpl) => tpl.eventType === type.value && tpl.tier === selectedTier)
+                  .filter((tpl) => tpl.eventType === type.value)
                   .map((template) => (
                     <TemplateCard
                       key={template.id}
                       template={template}
-                      onSelect={(t) => navigate(`/configure/${t.id}`)}
+                      onSelect={(t) => navigate(`/order/${t.id}`)}
                       onDemo={(t) => { setDemoTemplate(t); setDemoOpen(true); }}
                     />
                   ))}

@@ -9,6 +9,7 @@ import { I18nProvider } from "@/i18n";
 import Index from "./pages/Index";
 import TemplatesPage from "./pages/TemplatesPage";
 import ConfigurePage from "./pages/ConfigurePage";
+import OrderFlow from "./pages/OrderFlow";
 import SuccessPage from "./pages/SuccessPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import EventPage from "./pages/EventPage";
@@ -29,6 +30,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/templates" element={<TemplatesPage />} />
               <Route path="/configure/:templateId" element={<ConfigurePage />} />
+              <Route path="/order/:templateId" element={<OrderFlow />} />
               <Route path="/success/:eventLink" element={<SuccessPage />} />
               <Route path="/dashboard" element={<AdminDashboard />} />
               <Route path="/:eventLink" element={<EventPage />} />

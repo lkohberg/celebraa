@@ -1,0 +1,817 @@
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { templates } from "@/components/TemplateCard";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar, Clock, MapPin, ArrowLeft, ArrowRight, Upload, X, Check, Package, Sparkles, User, CreditCard, Eye, Trash2, Plus } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useCheckEventLink } from "@/hooks/useEvents";
+import { supabase } from "@/integrations/supabase/client";
+import AuthDialog from "@/components/AuthDialog";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPage";
+import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
+import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
+import LegalDialogs from "@/components/LegalDialogs";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useTranslation } from "@/i18n";
+import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
+import { blocks, packages, getBlocksForCategory, getPackagesForCategory, calculatePrice, getAllSelectedBlockIds, BASE_PRICE, type Block, type Package as PackageType } from "@/data/blocks";
+
+const fontOptions = [
+  { value: "Playfair Display", label: "Playfair Display (Elegant)" },
+  { value: "DM Sans", label: "DM Sans (Modern)" },
+  { value: "Georgia", label: "Georgia (Klassisch)" },
+];
+
+const STEPS = [
+  { key: "configure", icon: Calendar, label: "Event" },
+  { key: "blocks", icon: Package, label: "Blöcke" },
+  { key: "preview", icon: Eye, label: "Vorschau" },
+  { key: "contact", icon: User, label: "Kontakt" },
+];
+
+const RESERVED_ROUTES = ["templates", "configure", "success", "dashboard", "admin", "login", "signup", "settings", "api", "auth", "order"];
+
+const OrderFlow = () => {
+  const { templateId } = useParams();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const template = templates.find((t) => t.id === templateId);
+  const { user } = useAuth();
+  const checkLink = useCheckEventLink();
+  const [authOpen, setAuthOpen] = useState(false);
+  const [linkAvailable, setLinkAvailable] = useState<boolean | null>(null);
+  const [step, setStep] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  // Event config
+  const [form, setForm] = useState({
+    title: "",
+    date: "",
+    time: "",
+    locationName: "",
+    address: "",
+    description: "",
+    rsvpEnabled: true,
+    rsvpDeadline: "",
+    maxGuests: "",
+    primaryColor: template?.colors.primary || "#C8A951",
+    font: template?.font || "Playfair Display",
+    eventLink: "",
+    heroImageUrl: template?.defaultHeroImage || "",
+    // Wedding specifics
+    storyText: "",
+    ceremonyLocation: "",
+    ceremonyAddress: "",
+    receptionLocation: "",
+    receptionAddress: "",
+  });
+
+  // Block selection
+  const [selectedBlockIds, setSelectedBlockIds] = useState<string[]>([]);
+  const [selectedPackageId, setSelectedPackageId] = useState<string | undefined>();
+
+  // Contact
+  const [contact, setContact] = useState({ firstName: "", lastName: "", email: "" });
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const [dragActive, setDragActive] = useState(false);
+
+  if (!template) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <p className="text-muted-foreground font-body mb-4">{t("configure.notFound")}</p>
+          <Button onClick={() => navigate("/")}>{t("configure.backHome")}</Button>
+        </div>
+      </div>
+    );
+  }
+
+  const category = template.eventType;
+  const categoryBlocks = getBlocksForCategory(category);
+  const categoryPackages = getPackagesForCategory(category);
+
+  const allSelectedBlocks = getAllSelectedBlockIds(selectedBlockIds, selectedPackageId);
+  const totalPrice = calculatePrice(selectedBlockIds, selectedPackageId);
+
+  const linkValid = /^[a-z0-9-]*$/.test(form.eventLink);
+  const isReservedLink = RESERVED_ROUTES.includes(form.eventLink.toLowerCase());
+  const step1Valid = form.title && form.date && form.time && form.eventLink && linkValid && linkAvailable !== false && !isReservedLink && form.eventLink.length >= 3;
+  const step4Valid = contact.firstName.trim() && contact.lastName.trim() && contact.email.trim() && /\S+@\S+\.\S+/.test(contact.email) && termsAccepted;
+
+  const handleLinkChange = (value: string) => {
+    const lower = value.toLowerCase();
+    setForm(prev => ({ ...prev, eventLink: lower }));
+    if (RESERVED_ROUTES.includes(lower)) {
+      setLinkAvailable(null);
+      return;
+    }
+    if (lower.length >= 3) {
+      checkLink.mutate(lower, { onSuccess: (res) => setLinkAvailable(res.available) });
+    } else {
+      setLinkAvailable(null);
+    }
+  };
+
+  const handleHeroFile = (file: File) => {
+    if (!file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = (e) => setForm(prev => ({ ...prev, heroImageUrl: e.target?.result as string }));
+    reader.readAsDataURL(file);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragActive(false);
+    if (e.dataTransfer.files?.[0]) handleHeroFile(e.dataTransfer.files[0]);
+  };
+
+  const toggleBlock = (blockId: string) => {
+    setSelectedBlockIds(prev =>
+      prev.includes(blockId) ? prev.filter(id => id !== blockId) : [...prev, blockId]
+    );
+  };
+
+  const selectPackage = (pkgId: string) => {
+    if (selectedPackageId === pkgId) {
+      setSelectedPackageId(undefined);
+    } else {
+      setSelectedPackageId(pkgId);
+      // Remove blocks that are in the package from individual selection
+      const pkg = packages.find(p => p.id === pkgId);
+      if (pkg) {
+        setSelectedBlockIds(prev => prev.filter(id => !pkg.blockIds.includes(id)));
+      }
+    }
+  };
+
+  const buildPreviewEvent = () => {
+    const selected = allSelectedBlocks;
+    const hasBlock = (suffix: string) => selected.some(id => id.endsWith(suffix));
+
+    return {
+      id: "preview",
+      title: form.title || "Dein Event-Titel",
+      event_date: form.date || "2026-06-20",
+      event_time: form.time || "18:00",
+      description: form.description || null,
+      location_name: form.locationName || null,
+      address: form.address || null,
+      story_text: hasBlock("-story") ? (form.storyText || "Eure Geschichte wird hier erzählt. Ein wunderschöner Text über euch als Paar, eure gemeinsamen Erlebnisse und den Weg bis hierher.") : null,
+      ceremony_location: form.ceremonyLocation || null,
+      ceremony_address: form.ceremonyAddress || null,
+      reception_location: form.receptionLocation || null,
+      reception_address: form.receptionAddress || null,
+      hero_image_url: form.heroImageUrl || template.defaultHeroImage || null,
+      rsvp_enabled: form.rsvpEnabled,
+      rsvp_deadline: form.rsvpDeadline || null,
+      menu_selection: hasBlock("-menu"),
+      schedule: hasBlock("-timeline") ? [
+        { time: "15:00", label: "Empfang" },
+        { time: "16:00", label: "Zeremonie" },
+        { time: "18:00", label: "Abendessen" },
+        { time: "20:00", label: "Party" },
+      ] : null,
+      dress_code: hasBlock("-dresscode") ? "Elegant / Semi-formal" : null,
+      children_welcome: null,
+      hotel_recommendations: hasBlock("-hotels") ? [
+        { name: "Hotel Beispiel", address: "Musterstraße 1", url: "https://example.com" },
+      ] : null,
+      // New block flags for preview
+      selectedBlocks: selected,
+    };
+  };
+
+  const handleSubmit = async () => {
+    if (!user) {
+      setAuthOpen(true);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const eventInsert: any = {
+        user_id: user.id,
+        title: form.title,
+        event_date: form.date,
+        event_time: form.time,
+        location_name: form.locationName || null,
+        address: form.address || null,
+        description: form.description || null,
+        template_id: template.id,
+        primary_color: form.primaryColor,
+        font: form.font,
+        event_link: form.eventLink,
+        rsvp_enabled: form.rsvpEnabled,
+        rsvp_deadline: form.rsvpDeadline || null,
+        max_guests: form.maxGuests ? parseInt(form.maxGuests) : null,
+        menu_selection: allSelectedBlocks.some(id => id.endsWith("-menu")),
+        price_paid: totalPrice * 100,
+        status: "draft",
+        tier: "premium",
+        selected_blocks: allSelectedBlocks,
+        contact_first_name: contact.firstName,
+        contact_last_name: contact.lastName,
+        contact_email: contact.email,
+        hero_image_url: form.heroImageUrl || null,
+        story_text: form.storyText || null,
+        ceremony_location: form.ceremonyLocation || null,
+        ceremony_address: form.ceremonyAddress || null,
+        reception_location: form.receptionLocation || null,
+        reception_address: form.receptionAddress || null,
+        dress_code: allSelectedBlocks.some(id => id.endsWith("-dresscode")) ? "Elegant" : null,
+        schedule: allSelectedBlocks.some(id => id.endsWith("-timeline")) ? [] : null,
+        hotel_recommendations: allSelectedBlocks.some(id => id.endsWith("-hotels")) ? [] : null,
+        languages: ["de"],
+      };
+
+      const { data: created, error: createError } = await supabase
+        .from("events")
+        .insert(eventInsert)
+        .select()
+        .single();
+
+      if (createError) throw createError;
+
+      // Admin bypass
+      const isAdmin = user.email === "admin@celebra.at";
+      if (isAdmin) {
+        await supabase
+          .from("events")
+          .update({ status: "live", stripe_payment_id: "admin_bypass" })
+          .eq("id", created.id);
+        window.location.href = `${window.location.origin}/success/${form.eventLink}`;
+        return;
+      }
+
+      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke("create-checkout", {
+        body: {
+          eventId: created.id,
+          successUrl: `${window.location.origin}/success/${form.eventLink}`,
+          cancelUrl: window.location.href,
+        },
+      });
+
+      if (checkoutError || !checkoutData?.url) {
+        toast.error("Fehler beim Erstellen der Zahlung");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        if (window.top && window.top !== window.self) {
+          window.top.location.href = checkoutData.url;
+        } else {
+          window.location.href = checkoutData.url;
+        }
+      } catch {
+        window.open(checkoutData.url, "_blank");
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Fehler beim Erstellen";
+      toast.error(message);
+      setLoading(false);
+    }
+  };
+
+  const previewTheme = {
+    primary: form.primaryColor || template.colors.primary,
+    secondary: template.colors.secondary,
+    accent: template.colors.accent,
+    font: form.font || template.font,
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Navbar */}
+      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="sm" onClick={() => step > 0 ? setStep(step - 1) : navigate("/templates")}>
+              <ArrowLeft className="w-4 h-4 mr-1" /> {step > 0 ? "Zurück" : t("nav.back")}
+            </Button>
+            <span className="font-display text-lg font-bold text-foreground">
+              celebra<span className="text-primary">.at</span>
+            </span>
+          </div>
+          <LanguageSwitcher />
+        </div>
+      </nav>
+
+      {/* Step Progress */}
+      <div className="border-b border-border bg-card">
+        <div className="container mx-auto px-6 py-3">
+          <div className="flex items-center justify-center gap-2 md:gap-8">
+            {STEPS.map((s, i) => (
+              <button
+                key={s.key}
+                onClick={() => {
+                  if (i < step) setStep(i);
+                }}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg font-body text-sm transition-all ${
+                  i === step
+                    ? "bg-primary text-primary-foreground font-semibold"
+                    : i < step
+                      ? "text-primary cursor-pointer hover:bg-primary/10"
+                      : "text-muted-foreground"
+                }`}
+              >
+                <s.icon className="w-4 h-4" />
+                <span className="hidden sm:inline">{s.label}</span>
+                <span className="sm:hidden">{i + 1}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-6 py-10">
+        <AnimatePresence mode="wait">
+          {/* STEP 1: Configure Event */}
+          {step === 0 && (
+            <motion.div key="step-configure" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="max-w-2xl mx-auto">
+              <h2 className="font-display text-2xl font-bold text-foreground mb-2">Dein Event konfigurieren</h2>
+              <p className="font-body text-muted-foreground mb-8">Gib die grundlegenden Informationen zu deinem Event ein.</p>
+
+              <div className="space-y-6">
+                <div>
+                  <Label className="font-body">Event-Titel *</Label>
+                  <Input placeholder="z.B. Sarahs 30. Geburtstag" value={form.title} onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))} className="font-body mt-1" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="font-body">Datum *</Label>
+                    <Input type="date" value={form.date} onChange={(e) => setForm(prev => ({ ...prev, date: e.target.value }))} className="font-body mt-1" />
+                  </div>
+                  <div>
+                    <Label className="font-body">Uhrzeit *</Label>
+                    <Input type="time" value={form.time} onChange={(e) => setForm(prev => ({ ...prev, time: e.target.value }))} className="font-body mt-1 w-full min-w-0" />
+                  </div>
+                </div>
+                <div>
+                  <Label className="font-body">Location</Label>
+                  <Input placeholder="z.B. Schloss Mirabell" value={form.locationName} onChange={(e) => setForm(prev => ({ ...prev, locationName: e.target.value }))} className="font-body mt-1" />
+                </div>
+                <div>
+                  <Label className="font-body">Adresse</Label>
+                  <Input placeholder="Straße, PLZ Ort" value={form.address} onChange={(e) => setForm(prev => ({ ...prev, address: e.target.value }))} className="font-body mt-1" />
+                </div>
+                <div>
+                  <Label className="font-body">Beschreibung</Label>
+                  <Textarea placeholder="Erzähle deinen Gästen mehr..." value={form.description} onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))} className="font-body mt-1" rows={3} />
+                </div>
+
+                {category === "wedding" && (
+                  <div className="border border-border rounded-lg p-5 space-y-4">
+                    <h4 className="font-display text-base font-semibold text-foreground">Hochzeitsdetails</h4>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label className="font-body text-sm">Trauungsort</Label>
+                        <Input value={form.ceremonyLocation} onChange={(e) => setForm(prev => ({ ...prev, ceremonyLocation: e.target.value }))} className="font-body mt-1" />
+                      </div>
+                      <div>
+                        <Label className="font-body text-sm">Adresse Trauung</Label>
+                        <Input value={form.ceremonyAddress} onChange={(e) => setForm(prev => ({ ...prev, ceremonyAddress: e.target.value }))} className="font-body mt-1" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label className="font-body text-sm">Feier-Location</Label>
+                        <Input value={form.receptionLocation} onChange={(e) => setForm(prev => ({ ...prev, receptionLocation: e.target.value }))} className="font-body mt-1" />
+                      </div>
+                      <div>
+                        <Label className="font-body text-sm">Adresse Feier</Label>
+                        <Input value={form.receptionAddress} onChange={(e) => setForm(prev => ({ ...prev, receptionAddress: e.target.value }))} className="font-body mt-1" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Hero Image */}
+                <div>
+                  <Label className="font-body">Hero-Bild</Label>
+                  <div
+                    className={`mt-1 relative rounded-lg border-2 border-dashed transition-colors cursor-pointer overflow-hidden ${
+                      dragActive ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"
+                    }`}
+                    onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+                    onDragLeave={() => setDragActive(false)}
+                    onDrop={handleDrop}
+                    onClick={() => {
+                      const input = document.createElement("input");
+                      input.type = "file";
+                      input.accept = "image/*";
+                      input.onchange = (e) => {
+                        const file = (e.target as HTMLInputElement).files?.[0];
+                        if (file) handleHeroFile(file);
+                      };
+                      input.click();
+                    }}
+                  >
+                    {form.heroImageUrl ? (
+                      <div className="relative">
+                        <img src={form.heroImageUrl} alt="Hero" className="w-full h-32 object-cover rounded-md" />
+                        <button
+                          type="button"
+                          className="absolute top-2 right-2 bg-background/80 backdrop-blur rounded-full p-1 hover:bg-background"
+                          onClick={(e) => { e.stopPropagation(); setForm(prev => ({ ...prev, heroImageUrl: "" })); }}
+                        >
+                          <X className="w-4 h-4 text-foreground" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center py-8 px-4">
+                        <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+                        <p className="text-sm font-body text-muted-foreground text-center">Bild hierher ziehen oder klicken</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* RSVP */}
+                <div className="border border-border rounded-lg p-5 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="font-body">RSVP aktivieren</Label>
+                    <Switch checked={form.rsvpEnabled} onCheckedChange={(v) => setForm(prev => ({ ...prev, rsvpEnabled: v }))} />
+                  </div>
+                  {form.rsvpEnabled && (
+                    <>
+                      <div>
+                        <Label className="font-body text-sm">RSVP Frist</Label>
+                        <Input type="date" value={form.rsvpDeadline} onChange={(e) => setForm(prev => ({ ...prev, rsvpDeadline: e.target.value }))} className="font-body mt-1" />
+                      </div>
+                      <div>
+                        <Label className="font-body text-sm">Max. Gäste (optional)</Label>
+                        <Input type="number" placeholder="z.B. 80" value={form.maxGuests} onChange={(e) => setForm(prev => ({ ...prev, maxGuests: e.target.value }))} className="font-body mt-1" />
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Style */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="font-body">Hauptfarbe</Label>
+                    <Input type="color" value={form.primaryColor} onChange={(e) => setForm(prev => ({ ...prev, primaryColor: e.target.value }))} className="mt-1 h-12 cursor-pointer" />
+                  </div>
+                  <div>
+                    <Label className="font-body">Schriftart</Label>
+                    <Select value={form.font} onValueChange={(v) => setForm(prev => ({ ...prev, font: v }))}>
+                      <SelectTrigger className="font-body mt-1"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {fontOptions.map((f) => (
+                          <SelectItem key={f.value} value={f.value} className="font-body">{f.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Event Link */}
+                <div>
+                  <Label className="font-body">Event-Link *</Label>
+                  <div className="flex items-center mt-1">
+                    <span className="text-sm text-muted-foreground font-body bg-secondary px-3 py-2 rounded-l-md border border-r-0 border-input">celebra.at/</span>
+                    <Input
+                      placeholder="mein-event"
+                      value={form.eventLink}
+                      onChange={(e) => handleLinkChange(e.target.value)}
+                      className="font-body rounded-l-none"
+                    />
+                  </div>
+                  {form.eventLink && !linkValid && <p className="text-xs text-destructive font-body mt-1">Nur Kleinbuchstaben, Zahlen und Bindestriche.</p>}
+                  {form.eventLink && linkValid && isReservedLink && <p className="text-xs text-destructive font-body mt-1">Dieser Name ist reserviert.</p>}
+                  {form.eventLink && linkValid && !isReservedLink && linkAvailable === false && <p className="text-xs text-destructive font-body mt-1">Bereits vergeben.</p>}
+                  {form.eventLink && linkValid && !isReservedLink && linkAvailable === true && <p className="text-xs text-primary font-body mt-1">✓ Verfügbar!</p>}
+                </div>
+
+                <Button className="w-full font-body font-semibold text-base py-5" disabled={!step1Valid} onClick={() => setStep(1)}>
+                  Weiter zu Blöcke & Pakete <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 2: Block Selection */}
+          {step === 1 && (
+            <motion.div key="step-blocks" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="max-w-4xl mx-auto">
+              <h2 className="font-display text-2xl font-bold text-foreground mb-2">Blöcke & Pakete wählen</h2>
+              <p className="font-body text-muted-foreground mb-8">Stelle deine Event-Seite individuell zusammen oder wähle ein Paket.</p>
+
+              <div className="grid lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2 space-y-8">
+                  {/* Packages */}
+                  <div>
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-primary" /> Pakete
+                    </h3>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {categoryPackages.map((pkg) => {
+                        const isSelected = selectedPackageId === pkg.id;
+                        const pkgBlocks = pkg.blockIds.map(id => blocks.find(b => b.id === id)!).filter(Boolean);
+                        return (
+                          <button
+                            key={pkg.id}
+                            onClick={() => selectPackage(pkg.id)}
+                            className={`text-left p-5 rounded-xl border-2 transition-all ${
+                              isSelected
+                                ? "border-primary bg-primary/5 shadow-md"
+                                : "border-border bg-card hover:border-primary/30"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="font-display font-semibold text-foreground">{pkg.name}</h4>
+                              <span className="font-display text-lg font-bold text-primary">€{pkg.price}</span>
+                            </div>
+                            <div className="flex flex-wrap gap-1">
+                              {pkgBlocks.map(b => (
+                                <span key={b.id} className="text-[10px] font-body bg-secondary text-muted-foreground px-2 py-0.5 rounded-full">
+                                  {b.icon} {b.name}
+                                </span>
+                              ))}
+                            </div>
+                            {isSelected && (
+                              <div className="mt-3 flex items-center gap-1 text-xs font-body text-primary">
+                                <Check className="w-3 h-3" /> Ausgewählt
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Individual Blocks */}
+                  <div>
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                      <Package className="w-5 h-5 text-muted-foreground" /> Einzelne Blöcke
+                    </h3>
+                    <p className="font-body text-xs text-muted-foreground mb-4">Wähle einzelne Blöcke oder ergänze dein Paket.</p>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      {categoryBlocks.map((block) => {
+                        const inPackage = selectedPackageId ? packages.find(p => p.id === selectedPackageId)?.blockIds.includes(block.id) : false;
+                        const isSelected = selectedBlockIds.includes(block.id) || inPackage;
+                        return (
+                          <button
+                            key={block.id}
+                            onClick={() => !inPackage && toggleBlock(block.id)}
+                            disabled={!!inPackage}
+                            className={`text-left p-4 rounded-lg border transition-all ${
+                              inPackage
+                                ? "border-primary/30 bg-primary/5 opacity-60 cursor-not-allowed"
+                                : isSelected
+                                  ? "border-primary bg-primary/5"
+                                  : "border-border bg-card hover:border-primary/30"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <span className="text-lg">{block.icon}</span>
+                                <div>
+                                  <p className="font-body text-sm font-medium text-foreground">{block.name}</p>
+                                  <p className="font-body text-[11px] text-muted-foreground">{block.description}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-body text-sm font-semibold text-primary">+€{block.price}</span>
+                                {(isSelected || inPackage) && <Check className="w-4 h-4 text-primary" />}
+                              </div>
+                            </div>
+                            {inPackage && (
+                              <p className="font-body text-[10px] text-primary mt-1">Im Paket enthalten</p>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Price Sidebar */}
+                <div className="lg:col-span-1">
+                  <div className="sticky top-36 bg-secondary rounded-xl p-6 space-y-3">
+                    <h4 className="font-display text-lg font-semibold text-foreground">Preisübersicht</h4>
+                    <div className="flex justify-between font-body text-sm">
+                      <span className="text-muted-foreground">Basis Event-Seite</span>
+                      <span className="text-foreground">€{BASE_PRICE}</span>
+                    </div>
+                    {selectedPackageId && (() => {
+                      const pkg = packages.find(p => p.id === selectedPackageId);
+                      return pkg ? (
+                        <div className="flex justify-between font-body text-sm">
+                          <span className="text-muted-foreground">{pkg.name}</span>
+                          <span className="text-foreground">€{pkg.price}</span>
+                        </div>
+                      ) : null;
+                    })()}
+                    {selectedBlockIds.filter(id => !packages.find(p => p.id === selectedPackageId)?.blockIds.includes(id)).map(id => {
+                      const block = blocks.find(b => b.id === id);
+                      return block ? (
+                        <div key={id} className="flex justify-between font-body text-sm">
+                          <span className="text-muted-foreground">{block.icon} {block.name}</span>
+                          <span className="text-foreground">€{block.price}</span>
+                        </div>
+                      ) : null;
+                    })}
+                    <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
+                      <span className="text-foreground">Gesamt</span>
+                      <span className="text-primary text-lg">€{totalPrice}</span>
+                    </div>
+                    <Button className="w-full font-body font-semibold mt-3" onClick={() => setStep(2)}>
+                      Weiter zur Vorschau <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 3: Preview */}
+          {step === 2 && (
+            <motion.div key="step-preview" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <div className="max-w-5xl mx-auto">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="font-display text-2xl font-bold text-foreground">Vorschau</h2>
+                    <p className="font-body text-muted-foreground">So wird deine Event-Seite aussehen.</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-body text-sm text-muted-foreground">Gesamtpreis</p>
+                    <p className="font-display text-2xl font-bold text-primary">€{totalPrice}</p>
+                  </div>
+                </div>
+
+                <div className="grid lg:grid-cols-4 gap-6">
+                  {/* Selected blocks summary */}
+                  <div className="lg:col-span-1">
+                    <div className="bg-secondary rounded-xl p-4 space-y-2">
+                      <h4 className="font-display text-sm font-semibold text-foreground mb-2">Ausgewählte Blöcke</h4>
+                      <div className="flex justify-between font-body text-xs">
+                        <span className="text-muted-foreground">Basis-Seite</span>
+                        <span>€{BASE_PRICE}</span>
+                      </div>
+                      {allSelectedBlocks.map(id => {
+                        const block = blocks.find(b => b.id === id);
+                        return block ? (
+                          <div key={id} className="flex justify-between font-body text-xs">
+                            <span className="text-muted-foreground">{block.icon} {block.name}</span>
+                            <span>€{block.price}</span>
+                          </div>
+                        ) : null;
+                      })}
+                      <div className="border-t border-border pt-2 flex justify-between font-body text-sm font-semibold">
+                        <span>Gesamt</span>
+                        <span className="text-primary">€{totalPrice}</span>
+                      </div>
+                    </div>
+                    <Button className="w-full mt-4 font-body font-semibold" onClick={() => setStep(3)}>
+                      Weiter zu Kontakt <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+
+                  {/* Preview */}
+                  <div className="lg:col-span-3">
+                    <div className="rounded-xl overflow-hidden shadow-card max-h-[75vh] overflow-y-auto">
+                      {(() => {
+                        const previewEvent = buildPreviewEvent();
+                        switch (category) {
+                          case "wedding":
+                            return <PremiumWeddingPage event={previewEvent} theme={previewTheme} />;
+                          case "birthday":
+                            return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} />;
+                          case "corporate":
+                            return <PremiumCorporatePage event={previewEvent} theme={previewTheme} />;
+                        }
+                      })()}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 4: Contact Details */}
+          {step === 3 && (
+            <motion.div key="step-contact" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="max-w-lg mx-auto">
+              <h2 className="font-display text-2xl font-bold text-foreground mb-2">Kontaktdaten</h2>
+              <p className="font-body text-muted-foreground mb-8">Damit wir deine Event-Seite erstellen können.</p>
+
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="font-body">Vorname *</Label>
+                    <Input
+                      placeholder="Max"
+                      value={contact.firstName}
+                      onChange={(e) => setContact(prev => ({ ...prev, firstName: e.target.value }))}
+                      className="font-body mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="font-body">Nachname *</Label>
+                    <Input
+                      placeholder="Mustermann"
+                      value={contact.lastName}
+                      onChange={(e) => setContact(prev => ({ ...prev, lastName: e.target.value }))}
+                      className="font-body mt-1"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label className="font-body">E-Mail-Adresse *</Label>
+                  <Input
+                    type="email"
+                    placeholder="max@beispiel.at"
+                    value={contact.email}
+                    onChange={(e) => setContact(prev => ({ ...prev, email: e.target.value }))}
+                    className="font-body mt-1"
+                  />
+                </div>
+
+                {/* Price Summary */}
+                <div className="bg-secondary rounded-xl p-6 space-y-3">
+                  <h4 className="font-display text-lg font-semibold text-foreground">Zusammenfassung</h4>
+                  <div className="flex justify-between font-body text-sm">
+                    <span className="text-muted-foreground">Template: {template.name}</span>
+                  </div>
+                  <div className="flex justify-between font-body text-sm">
+                    <span className="text-muted-foreground">Basis Event-Seite</span>
+                    <span className="text-foreground">€{BASE_PRICE}</span>
+                  </div>
+                  {selectedPackageId && (() => {
+                    const pkg = packages.find(p => p.id === selectedPackageId);
+                    return pkg ? (
+                      <div className="flex justify-between font-body text-sm">
+                        <span className="text-muted-foreground">Paket: {pkg.name}</span>
+                        <span className="text-foreground">€{pkg.price}</span>
+                      </div>
+                    ) : null;
+                  })()}
+                  {selectedBlockIds.filter(id => !packages.find(p => p.id === selectedPackageId)?.blockIds.includes(id)).map(id => {
+                    const block = blocks.find(b => b.id === id);
+                    return block ? (
+                      <div key={id} className="flex justify-between font-body text-sm">
+                        <span className="text-muted-foreground">{block.icon} {block.name}</span>
+                        <span className="text-foreground">€{block.price}</span>
+                      </div>
+                    ) : null;
+                  })}
+                  <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
+                    <span className="text-foreground">Gesamt</span>
+                    <span className="text-primary text-lg">€{totalPrice}</span>
+                  </div>
+                </div>
+
+                {/* Terms */}
+                <div className="flex items-start gap-2">
+                  <Checkbox
+                    id="terms"
+                    checked={termsAccepted}
+                    onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                    className="mt-0.5"
+                  />
+                  <label htmlFor="terms" className="text-xs text-muted-foreground font-body leading-relaxed cursor-pointer">
+                    <LegalDialogs
+                      inline
+                      renderTrigger={(openDialog) => (
+                        <>
+                          Ich akzeptiere die{" "}
+                          <button type="button" onClick={() => openDialog("terms")} className="underline hover:text-foreground transition-colors">AGB</button>
+                          {" "}&{" "}
+                          <button type="button" onClick={() => openDialog("privacy")} className="underline hover:text-foreground transition-colors">Datenschutz</button>
+                        </>
+                      )}
+                    />
+                  </label>
+                </div>
+
+                <Button
+                  className="w-full font-body font-semibold text-base py-5"
+                  disabled={!step4Valid || loading}
+                  onClick={handleSubmit}
+                >
+                  {loading ? "Wird verarbeitet..." : `Jetzt €${totalPrice} sicher bezahlen`}
+                  {!loading && <CreditCard className="w-4 h-4 ml-2" />}
+                </Button>
+                <p className="text-xs text-muted-foreground text-center font-body">
+                  Zahlung via Stripe · Kreditkarte, Apple Pay, Google Pay
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <AuthDialog open={authOpen} onOpenChange={setAuthOpen} />
+    </div>
+  );
+};
+
+export default OrderFlow;
