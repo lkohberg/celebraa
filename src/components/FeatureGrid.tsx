@@ -33,12 +33,7 @@ const FeatureGrid = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-            {t("features.title")}
-          </h2>
-          <p className="font-body text-muted-foreground text-lg max-w-md mx-auto">
-            {t("features.subtitle")}
-          </p>
+          <p className="font-body text-muted-foreground text-lg max-w-md mx-auto">{t("features.subtitle")}</p>
         </motion.div>
 
         <motion.div
@@ -57,12 +52,8 @@ const FeatureGrid = () => {
               <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
                 <f.icon className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="font-display text-xl font-semibold text-foreground mb-3">
-                {f.title}
-              </h3>
-              <p className="font-body text-muted-foreground leading-relaxed">
-                {f.description}
-              </p>
+              <h3 className="font-display text-xl font-semibold text-foreground mb-3">{f.title}</h3>
+              <p className="font-body text-muted-foreground leading-relaxed">{f.description}</p>
             </motion.div>
           ))}
         </motion.div>
