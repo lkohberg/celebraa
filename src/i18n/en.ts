@@ -13,6 +13,7 @@ const en = {
   "hero.title1": "Your digital event invitation",
   "hero.title2": "created in minutes",
   "hero.subtitle": "Modern · Personal · With RSVP",
+  "hero.description": "",
   "hero.cta": "Choose your design",
   "hero.secondary": "How it works",
   "hero.trust1": "✓ No app needed",
