@@ -21,7 +21,7 @@ const en = {
   "hero.trust3": "✓ Online in 3 days",
 
   // Features
-  "features.title": "Why Celebra.at?",
+  "features.title": "Why buy a digital invitation??",
   "features.subtitle": "Three reasons for your digital invitation",
   "features.1.title": "No WhatsApp chaos",
   "features.1.desc": "All guests receive a professional link and RSVPs are collected automatically.",

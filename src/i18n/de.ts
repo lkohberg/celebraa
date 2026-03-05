@@ -21,7 +21,7 @@ const de = {
   "hero.trust3": "✓ In 3 Tagen online",
 
   // Features
-  "features.title": "Warum Celebra.at?",
+  "features.title": "Warum digitale Einladungen??",
   "features.subtitle": "Drei gute Gründe für deine digitale Einladung",
   "features.1.title": "Kein WhatsApp-Chaos",
   "features.1.desc": "Alle Gäste erhalten einen professionellen Link und Zusagen werden automatisch gesammelt.",
