@@ -13,7 +13,6 @@ const de = {
   "hero.title1": "Deine digitale Event-Einladung",
   "hero.title2": "in Minuten erstellt",
   "hero.subtitle": "Modern · Persönlich · Mit RSVP",
-  "hero.description": "Gemacht mit ♥️ in Österreich",
   "hero.cta": "Jetzt Design auswählen",
   "hero.secondary": "So funktioniert es",
   "hero.trust1": "✓ Keine App nötig",
