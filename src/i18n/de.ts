@@ -27,7 +27,7 @@ const de = {
   "features.2.title": "Niemand schreibt gerne Einladungen.",
   "features.2.desc": "Spare dir Zeit, Nerven und danach dieses Gefühl, irgendwas Wichtiges vergessen zu haben.",
   "features.3.title": "Spare kosten.",
-  "features.3.desc": "Unsere Recherchen ergeben das einladungen für nur 50 leute durschnitlich 200-400 euro kosten",
+  "features.3.desc": "Unsere Recherchen zeigen das Einladungen für nur 50 Personen durschnitlich €200-€400 kosten",
 
   // Comparison Table
   "comparison.title": "Warum celebra.at?",

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link2, QrCode, Zap } from "lucide-react";
 import { useTranslation } from "@/i18n";
+import { createIcons, badgeEuro } from "lucide";
 
 const container = {
   hidden: {},
@@ -20,7 +21,7 @@ const FeatureGrid = () => {
   const features = [
     { id: "1", icon: Link2, title: t("features.1.title"), description: t("features.1.desc") },
     { id: "2", icon: QrCode, title: t("features.2.title"), description: t("features.2.desc") },
-    { id: "3", icon: Zap, title: t("features.3.title"), description: t("features.3.desc") },
+    { id: "3", icon: badgeEuro, title: t("features.3.title"), description: t("features.3.desc") },
   ];
 
   return (
