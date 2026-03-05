@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
-import { Link2, QrCode, Zap } from "lucide-react";
+import { Link2, QrCode, Zap, badgeEuro } from "lucide-react";
 import { useTranslation } from "@/i18n";
-import { createIcons, badgeEuro } from "lucide";
 
 const container = {
   hidden: {},
