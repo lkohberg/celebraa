@@ -12,6 +12,7 @@ import USPSection from "@/components/USPSection";
 import EcoSection from "@/components/EcoSection";
 import Footer from "@/components/Footer";
 import AuthDialog from "@/components/AuthDialog";
+import HowItWorksDialog from "@/components/HowItWorksDialog";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "@/i18n";
@@ -24,6 +25,7 @@ const Index = () => {
   const [demoTemplate, setDemoTemplate] = useState<Template | null>(null);
   const [demoOpen, setDemoOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [howItWorksOpen, setHowItWorksOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const eventTypes = [
@@ -91,7 +93,7 @@ const Index = () => {
         )}
       </nav>
 
-      <HeroSection />
+      <HeroSection onHowItWorks={() => setHowItWorksOpen(true)} />
       <FeatureGrid />
       <ComparisonTable />
       <USPSection />
@@ -146,6 +148,7 @@ const Index = () => {
 
       <DemoPreview template={demoTemplate} open={demoOpen} onOpenChange={setDemoOpen} />
       <AuthDialog open={authOpen} onOpenChange={setAuthOpen} />
+      <HowItWorksDialog open={howItWorksOpen} onOpenChange={setHowItWorksOpen} />
       <Footer />
     </div>
   );

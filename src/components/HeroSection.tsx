@@ -4,7 +4,11 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/i18n";
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  onHowItWorks?: () => void;
+}
+
+const HeroSection = ({ onHowItWorks }: HeroSectionProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -50,9 +54,7 @@ const HeroSection = () => {
               variant="outline"
               size="lg"
               className="text-lg px-8 py-6 font-body font-semibold"
-              onClick={() => {
-                document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
-              }}
+              onClick={onHowItWorks}
             >
               {t("hero.secondary")}
             </Button>

@@ -8,25 +8,45 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe, Archive, Radio } from "lucide-react";
+import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe, Archive, Radio, AlertTriangle, Rocket } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/i18n/eventLabels";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { blocks, isManualBlock } from "@/data/blocks";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const { t } = useTranslation();
   const { data: events, isLoading } = useMyEvents();
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   const selectedEvent = events?.find((e) => e.id === selectedEventId);
 
-  if (isLoading) {
+  // Auth guard - redirect if not logged in
+  if (!authLoading && !user) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="font-body text-muted-foreground mb-4">Du musst eingeloggt sein, um dein Dashboard zu sehen.</p>
+          <Button onClick={() => navigate("/")} className="font-body">
+            Zur Startseite
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading || authLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <p className="font-body text-muted-foreground">{t("dashboard.loading")}</p>
       </div>
     );
   }
+
+  const isAdmin = user?.email === "admin@celebra.at";
+  const pendingEvents = events?.filter(e => (e as any).status === "pending_review") || [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,6 +74,21 @@ const AdminDashboard = () => {
       <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-10">
         <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8">{t("dashboard.title")}</h1>
 
+        {/* Admin: Pending Review Section */}
+        {isAdmin && pendingEvents.length > 0 && (
+          <div className="mb-8">
+            <h2 className="font-display text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-500" />
+              Wartend auf Bearbeitung ({pendingEvents.length})
+            </h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {pendingEvents.map((event) => (
+                <PendingEventCard key={event.id} event={event} />
+              ))}
+            </div>
+          </div>
+        )}
+
         {!events?.length ? (
           <Card>
             <CardContent className="py-16 text-center">
@@ -65,7 +100,6 @@ const AdminDashboard = () => {
           </Card>
         ) : (
           <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
-            {/* Events List */}
             <div className="space-y-4">
               <h2 className="font-display text-lg sm:text-xl font-semibold text-foreground">{t("dashboard.yourEvents")}</h2>
               {events.map((event) => (
@@ -78,8 +112,8 @@ const AdminDashboard = () => {
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-display font-semibold text-foreground text-sm sm:text-base truncate mr-2">{event.title}</h3>
                       <div className="flex items-center gap-1.5">
-                        <Badge variant={event.status === "paid" || event.status === "live" ? "default" : "outline"} className={event.status === "draft" ? "border-amber-500 text-amber-600" : ""}>
-                          {event.status === "draft" ? t("dashboard.status.unpaid") : t(`dashboard.status.${event.status}`)}
+                        <Badge variant={event.status === "paid" || event.status === "live" ? "default" : event.status === "pending_review" ? "secondary" : "outline"} className={event.status === "draft" ? "border-amber-500 text-amber-600" : event.status === "pending_review" ? "bg-amber-100 text-amber-700" : ""}>
+                          {event.status === "draft" ? t("dashboard.status.unpaid") : event.status === "pending_review" ? "In Bearbeitung" : t(`dashboard.status.${event.status}`)}
                         </Badge>
                       </div>
                     </div>
@@ -91,10 +125,9 @@ const AdminDashboard = () => {
               ))}
             </div>
 
-            {/* Detail View */}
             <div className="lg:col-span-2">
               {selectedEvent ? (
-                <EventDetail event={selectedEvent} />
+                <EventDetail event={selectedEvent} isAdmin={isAdmin} />
               ) : (
                 <Card>
                   <CardContent className="py-16 text-center">
@@ -110,7 +143,69 @@ const AdminDashboard = () => {
   );
 };
 
-const EventDetail = ({ event }: { event: { id: string; title: string; event_link: string; status: string; price_paid: number | null; event_date: string; stripe_payment_id: string | null; languages?: string[] | null } }) => {
+const PendingEventCard = ({ event }: { event: any }) => {
+  const [publishing, setPublishing] = useState(false);
+  const selectedBlocks = (event.selected_blocks || []) as string[];
+  const manualBlocksList = selectedBlocks.filter(id => isManualBlock(id));
+
+  const handlePublish = async () => {
+    setPublishing(true);
+    try {
+      const { error } = await supabase
+        .from("events")
+        .update({ status: "live" } as any)
+        .eq("id", event.id);
+      if (error) throw error;
+      toast.success(`Event "${event.title}" ist jetzt live!`);
+      window.location.reload();
+    } catch (err) {
+      toast.error("Fehler beim Veröffentlichen");
+    }
+    setPublishing(false);
+  };
+
+  return (
+    <Card className="border-amber-300 bg-amber-50/50 dark:bg-amber-950/10">
+      <CardContent className="p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="font-display font-semibold text-foreground text-sm truncate mr-2">{event.title}</h3>
+          <Badge className="bg-amber-100 text-amber-700 text-[10px]">Wartend</Badge>
+        </div>
+        <p className="font-body text-xs text-muted-foreground">
+          {event.contact_first_name} {event.contact_last_name} · {event.contact_email}
+        </p>
+        <p className="font-body text-xs text-muted-foreground">
+          {new Date(event.event_date).toLocaleDateString("de-AT")} · /{event.event_link}
+        </p>
+
+        <div className="space-y-1">
+          <p className="font-body text-xs font-semibold text-foreground">Manuelle Blöcke:</p>
+          {manualBlocksList.map(id => {
+            const block = blocks.find(b => b.id === id);
+            return block ? (
+              <div key={id} className="font-body text-xs text-muted-foreground flex items-center gap-1">
+                <span>{block.icon}</span> {block.name}
+                {block.requiresManualWork && <span className="text-amber-600">– {block.manualWorkDescription}</span>}
+              </div>
+            ) : null;
+          })}
+        </div>
+
+        <Button
+          className="w-full font-body font-semibold"
+          size="sm"
+          disabled={publishing}
+          onClick={handlePublish}
+        >
+          <Rocket className="w-4 h-4 mr-2" />
+          {publishing ? "Wird veröffentlicht..." : "Jetzt freischalten"}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+};
+
+const EventDetail = ({ event, isAdmin }: { event: { id: string; title: string; event_link: string; status: string; price_paid: number | null; event_date: string; stripe_payment_id: string | null; languages?: string[] | null }; isAdmin?: boolean }) => {
   const { t } = useTranslation();
   const { data: guests } = useEventGuests(event.id);
   const { data: analytics } = useEventAnalytics(event.id);
@@ -120,6 +215,20 @@ const EventDetail = ({ event }: { event: { id: string; title: string; event_link
   const declined = guests?.filter((g) => g.rsvp_status === "declined").length || 0;
   const pageViews = analytics?.filter((a) => a.event_type === "page_view").length || 0;
   const qrScans = analytics?.filter((a) => a.event_type === "qr_scan").length || 0;
+
+  const handlePublish = async () => {
+    try {
+      const { error } = await supabase
+        .from("events")
+        .update({ status: "live" } as any)
+        .eq("id", event.id);
+      if (error) throw error;
+      toast.success("Event ist jetzt live!");
+      window.location.reload();
+    } catch {
+      toast.error("Fehler beim Veröffentlichen");
+    }
+  };
 
   return (
     <Tabs defaultValue="analytics">
@@ -146,7 +255,16 @@ const EventDetail = ({ event }: { event: { id: string; title: string; event_link
           <StatCard label={t("dashboard.declined")} value={declined} icon={Users} />
         </div>
 
-        {/* Archive / Go Live toggle */}
+        {/* Admin: Publish pending_review events */}
+        {isAdmin && event.status === "pending_review" && (
+          <div className="mb-4 p-4 border border-amber-300 bg-amber-50 dark:bg-amber-950/20 rounded-lg">
+            <p className="font-body text-sm text-amber-700 mb-3">Dieses Event wartet auf manuelle Bearbeitung.</p>
+            <Button size="sm" className="font-body" onClick={handlePublish}>
+              <Rocket className="w-4 h-4 mr-2" /> Jetzt freischalten
+            </Button>
+          </div>
+        )}
+
         {(event.status === "live" || event.status === "archived") && (
           <div className="flex items-center gap-3 mb-4">
             <Button
@@ -236,7 +354,7 @@ const EventDetail = ({ event }: { event: { id: string; title: string; event_link
           <CardContent className="p-4 sm:p-6 space-y-3">
             <div className="flex justify-between font-body">
               <span className="text-muted-foreground">{t("dashboard.status")}</span>
-              <Badge>{t(`dashboard.status.${event.status}`)}</Badge>
+              <Badge>{event.status === "pending_review" ? "In Bearbeitung" : t(`dashboard.status.${event.status}`)}</Badge>
             </div>
             <div className="flex justify-between font-body">
               <span className="text-muted-foreground">{t("dashboard.paid")}</span>

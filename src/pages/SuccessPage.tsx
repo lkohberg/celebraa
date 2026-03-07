@@ -1,7 +1,7 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { QRCodeSVG } from "qrcode.react";
-import { Copy, Download, ExternalLink, Check } from "lucide-react";
+import { Copy, Download, ExternalLink, Check, Clock } from "lucide-react";
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useEventByLink } from "@/hooks/useEvents";
@@ -12,6 +12,8 @@ const SuccessPage = () => {
   const { eventLink } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const isPending = searchParams.get("pending") === "true";
   const [copied, setCopied] = useState<string | null>(null);
   const qrRef = useRef<HTMLDivElement>(null);
   const { data: event } = useEventByLink(eventLink || "");
@@ -46,6 +48,59 @@ const SuccessPage = () => {
     };
     img.src = "data:image/svg+xml;base64," + btoa(svgData);
   };
+
+  // Pending manual review
+  if (isPending) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          className="container max-w-lg mx-auto px-6 py-16 text-center"
+        >
+          <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-6">
+            <Clock className="w-8 h-8 text-amber-600" />
+          </div>
+
+          <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
+            Danke für deine Bestellung!
+          </h1>
+          <p className="font-body text-muted-foreground text-lg mb-4">
+            Deine Event-Seite enthält individuelle Elemente, die von unserem Team bearbeitet werden.
+          </p>
+          <p className="font-body text-muted-foreground mb-10">
+            Wir melden uns in Kürze bei dir per E-Mail. Sobald alles fertig ist, findest du deine Seite in deinem Dashboard.
+          </p>
+
+          <div className="bg-secondary rounded-xl p-6 mb-8 text-left space-y-2">
+            <h3 className="font-display text-sm font-semibold text-foreground">Was passiert jetzt?</h3>
+            <div className="flex items-start gap-3 font-body text-sm text-muted-foreground">
+              <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">1</span>
+              <span>Unser Team bearbeitet deine individuellen Blöcke (z.B. Illustration, Musik).</span>
+            </div>
+            <div className="flex items-start gap-3 font-body text-sm text-muted-foreground">
+              <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">2</span>
+              <span>Du erhältst eine E-Mail, sobald deine Seite fertig ist.</span>
+            </div>
+            <div className="flex items-start gap-3 font-body text-sm text-muted-foreground">
+              <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">3</span>
+              <span>Deine Event-Seite erscheint dann in deinem Dashboard und ist live.</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button onClick={() => navigate("/dashboard")} className="font-body">
+              Zum Dashboard
+            </Button>
+            <Button variant="ghost" onClick={() => navigate("/")} className="font-body text-muted-foreground">
+              Zur Startseite
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
