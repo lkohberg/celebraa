@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Clock, MapPin, ArrowLeft, ArrowRight, Upload, X, Check, Package, Sparkles, User, CreditCard, Eye, Trash2, Plus } from "lucide-react";
+import { Calendar, Clock, MapPin, ArrowLeft, ArrowRight, Upload, X, Check, Package, Sparkles, User, CreditCard, Eye, Crown, Star } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useCheckEventLink } from "@/hooks/useEvents";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,7 +21,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
-import { blocks, packages, getBlocksForCategory, getPackagesForCategory, calculatePrice, getAllSelectedBlockIds, BASE_PRICE, type Block, type Package as PackageType } from "@/data/blocks";
+import {
+  blocks, packages, getBlocksForCategory, getPackagesForCategory,
+  calculatePrice, getAllSelectedBlockIds, BASE_PRICE, hasManualBlocks, getManualBlocks,
+  type Block, type Package as PackageType
+} from "@/data/blocks";
 
 const fontOptions = [
   { value: "Playfair Display", label: "Playfair Display (Elegant)" },
@@ -29,9 +33,10 @@ const fontOptions = [
   { value: "Georgia", label: "Georgia (Klassisch)" },
 ];
 
+// New flow: Blocks first → Configure → Preview → Contact
 const STEPS = [
-  { key: "configure", icon: Calendar, label: "Event" },
   { key: "blocks", icon: Package, label: "Blöcke" },
+  { key: "configure", icon: Calendar, label: "Event" },
   { key: "preview", icon: Eye, label: "Vorschau" },
   { key: "contact", icon: User, label: "Kontakt" },
 ];
@@ -65,7 +70,6 @@ const OrderFlow = () => {
     font: template?.font || "Playfair Display",
     eventLink: "",
     heroImageUrl: template?.defaultHeroImage || "",
-    // Wedding specifics
     storyText: "",
     ceremonyLocation: "",
     ceremonyAddress: "",
@@ -76,6 +80,9 @@ const OrderFlow = () => {
   // Block selection
   const [selectedBlockIds, setSelectedBlockIds] = useState<string[]>([]);
   const [selectedPackageId, setSelectedPackageId] = useState<string | undefined>();
+
+  // Manual block info
+  const [manualInfo, setManualInfo] = useState<Record<string, string>>({});
 
   // Contact
   const [contact, setContact] = useState({ firstName: "", lastName: "", email: "" });
@@ -100,10 +107,12 @@ const OrderFlow = () => {
 
   const allSelectedBlocks = getAllSelectedBlockIds(selectedBlockIds, selectedPackageId);
   const totalPrice = calculatePrice(selectedBlockIds, selectedPackageId);
+  const needsManualWork = hasManualBlocks(allSelectedBlocks);
+  const manualBlocks = getManualBlocks(allSelectedBlocks);
 
   const linkValid = /^[a-z0-9-]*$/.test(form.eventLink);
   const isReservedLink = RESERVED_ROUTES.includes(form.eventLink.toLowerCase());
-  const step1Valid = form.title && form.date && form.time && form.eventLink && linkValid && linkAvailable !== false && !isReservedLink && form.eventLink.length >= 3;
+  const step2Valid = form.title && form.date && form.time && form.eventLink && linkValid && linkAvailable !== false && !isReservedLink && form.eventLink.length >= 3;
   const step4Valid = contact.firstName.trim() && contact.lastName.trim() && contact.email.trim() && /\S+@\S+\.\S+/.test(contact.email) && termsAccepted;
 
   const handleLinkChange = (value: string) => {
@@ -144,7 +153,6 @@ const OrderFlow = () => {
       setSelectedPackageId(undefined);
     } else {
       setSelectedPackageId(pkgId);
-      // Remove blocks that are in the package from individual selection
       const pkg = packages.find(p => p.id === pkgId);
       if (pkg) {
         setSelectedBlockIds(prev => prev.filter(id => !pkg.blockIds.includes(id)));
@@ -164,7 +172,7 @@ const OrderFlow = () => {
       description: form.description || null,
       location_name: form.locationName || null,
       address: form.address || null,
-      story_text: hasBlock("-story") ? (form.storyText || "Eure Geschichte wird hier erzählt. Ein wunderschöner Text über euch als Paar, eure gemeinsamen Erlebnisse und den Weg bis hierher.") : null,
+      story_text: hasBlock("-story") ? (form.storyText || "Eure Geschichte wird hier erzählt. Ein wunderschöner Text über euch als Paar.") : null,
       ceremony_location: form.ceremonyLocation || null,
       ceremony_address: form.ceremonyAddress || null,
       reception_location: form.receptionLocation || null,
@@ -184,7 +192,6 @@ const OrderFlow = () => {
       hotel_recommendations: hasBlock("-hotels") ? [
         { name: "Hotel Beispiel", address: "Musterstraße 1", url: "https://example.com" },
       ] : null,
-      // New block flags for preview
       selectedBlocks: selected,
     };
   };
@@ -243,18 +250,27 @@ const OrderFlow = () => {
       // Admin bypass
       const isAdmin = user.email === "admin@celebra.at";
       if (isAdmin) {
+        // If manual blocks selected, set status to pending_review instead of live
+        const newStatus = needsManualWork ? "pending_review" : "live";
         await supabase
           .from("events")
-          .update({ status: "live", stripe_payment_id: "admin_bypass" })
+          .update({ status: newStatus, stripe_payment_id: "admin_bypass" })
           .eq("id", created.id);
-        window.location.href = `${window.location.origin}/success/${form.eventLink}`;
+        
+        if (needsManualWork) {
+          navigate(`/success/${form.eventLink}?pending=true`);
+        } else {
+          window.location.href = `${window.location.origin}/success/${form.eventLink}`;
+        }
         return;
       }
 
       const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke("create-checkout", {
         body: {
           eventId: created.id,
-          successUrl: `${window.location.origin}/success/${form.eventLink}`,
+          successUrl: needsManualWork
+            ? `${window.location.origin}/success/${form.eventLink}?pending=true`
+            : `${window.location.origin}/success/${form.eventLink}`,
           cancelUrl: window.location.href,
         },
       });
@@ -288,6 +304,8 @@ const OrderFlow = () => {
     font: form.font || template.font,
   };
 
+  const isPremiumBlock = (block: Block) => block.price > 12;
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
@@ -312,9 +330,7 @@ const OrderFlow = () => {
             {STEPS.map((s, i) => (
               <button
                 key={s.key}
-                onClick={() => {
-                  if (i < step) setStep(i);
-                }}
+                onClick={() => { if (i < step) setStep(i); }}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg font-body text-sm transition-all ${
                   i === step
                     ? "bg-primary text-primary-foreground font-semibold"
@@ -334,8 +350,195 @@ const OrderFlow = () => {
 
       <div className="container mx-auto px-6 py-10">
         <AnimatePresence mode="wait">
-          {/* STEP 1: Configure Event */}
+          {/* STEP 1: Block Selection (NOW FIRST) */}
           {step === 0 && (
+            <motion.div key="step-blocks" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="max-w-4xl mx-auto">
+              <h2 className="font-display text-2xl font-bold text-foreground mb-2">Blöcke & Pakete wählen</h2>
+              <p className="font-body text-muted-foreground mb-8">Stelle deine Event-Seite individuell zusammen oder wähle ein vorteilhaftes Paket.</p>
+
+              <div className="grid lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2 space-y-8">
+                  {/* Packages */}
+                  <div>
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-primary" /> Pakete
+                      <span className="text-xs font-body font-normal text-muted-foreground ml-2">Spare bis zu 30%</span>
+                    </h3>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {categoryPackages.map((pkg) => {
+                        const isSelected = selectedPackageId === pkg.id;
+                        const pkgBlocks = pkg.blockIds.map(id => blocks.find(b => b.id === id)!).filter(Boolean);
+                        const individualPrice = pkgBlocks.reduce((sum, b) => sum + b.price, 0);
+                        const savings = individualPrice - pkg.price;
+                        const isTopPkg = pkg.id.includes("premium") || pkg.id.includes("allin") || pkg.id.includes("pro");
+                        return (
+                          <button
+                            key={pkg.id}
+                            onClick={() => selectPackage(pkg.id)}
+                            className={`relative text-left p-5 rounded-xl border-2 transition-all ${
+                              isSelected
+                                ? "border-primary bg-primary/5 shadow-md"
+                                : "border-border bg-card hover:border-primary/30 hover:shadow-sm"
+                            }`}
+                          >
+                            {isTopPkg && (
+                              <div className="absolute -top-3 right-4 bg-primary text-primary-foreground text-[10px] font-body font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+                                <Crown className="w-3 h-3" /> Beliebt
+                              </div>
+                            )}
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="font-display font-semibold text-foreground">{pkg.name}</h4>
+                              <div className="text-right">
+                                <span className="font-display text-lg font-bold text-primary">€{pkg.price}</span>
+                                {savings > 0 && (
+                                  <p className="text-[10px] font-body text-green-600">Spare €{savings}</p>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex flex-wrap gap-1">
+                              {pkgBlocks.map(b => (
+                                <span key={b.id} className="text-[10px] font-body bg-secondary text-muted-foreground px-2 py-0.5 rounded-full">
+                                  {b.icon} {b.name}
+                                </span>
+                              ))}
+                            </div>
+                            {isSelected && (
+                              <div className="mt-3 flex items-center gap-1 text-xs font-body text-primary">
+                                <Check className="w-3 h-3" /> Ausgewählt
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Individual Blocks */}
+                  <div>
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                      <Package className="w-5 h-5 text-muted-foreground" /> Einzelne Blöcke
+                    </h3>
+                    <p className="font-body text-xs text-muted-foreground mb-4">Wähle einzelne Blöcke oder ergänze dein Paket.</p>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      {categoryBlocks.map((block) => {
+                        const inPackage = selectedPackageId ? packages.find(p => p.id === selectedPackageId)?.blockIds.includes(block.id) : false;
+                        const isSelected = selectedBlockIds.includes(block.id) || inPackage;
+                        const premium = isPremiumBlock(block);
+                        return (
+                          <button
+                            key={block.id}
+                            onClick={() => !inPackage && toggleBlock(block.id)}
+                            disabled={!!inPackage}
+                            className={`relative text-left p-4 rounded-lg border transition-all ${
+                              inPackage
+                                ? "border-primary/30 bg-primary/5 opacity-60 cursor-not-allowed"
+                                : isSelected
+                                  ? "border-primary bg-primary/5"
+                                  : "border-border bg-card hover:border-primary/30"
+                            }`}
+                          >
+                            {premium && (
+                              <div className="absolute -top-2 right-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-[9px] font-body font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
+                                <Star className="w-2.5 h-2.5" /> PREMIUM
+                              </div>
+                            )}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <span className="text-lg">{block.icon}</span>
+                                <div>
+                                  <p className="font-body text-sm font-medium text-foreground">{block.name}</p>
+                                  <p className="font-body text-[11px] text-muted-foreground">{block.description}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className={`font-body text-sm font-semibold ${premium ? "text-amber-600" : "text-primary"}`}>+€{block.price}</span>
+                                {(isSelected || inPackage) && <Check className="w-4 h-4 text-primary" />}
+                              </div>
+                            </div>
+                            {inPackage && (
+                              <p className="font-body text-[10px] text-primary mt-1">Im Paket enthalten</p>
+                            )}
+                            {block.requiresManualWork && (
+                              <p className="font-body text-[10px] text-amber-600 mt-1">✋ Wird individuell für dich erstellt</p>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Manual block info collection */}
+                  {manualBlocks.length > 0 && (
+                    <div className="border border-amber-300 bg-amber-50 dark:bg-amber-950/20 rounded-xl p-6 space-y-4">
+                      <h3 className="font-display text-base font-semibold text-foreground flex items-center gap-2">
+                        ✋ Individuelle Anpassungen
+                      </h3>
+                      <p className="font-body text-xs text-muted-foreground">
+                        Für diese Blöcke benötigen wir zusätzliche Infos von dir. Deine Seite wird nach Bearbeitung durch unser Team freigeschaltet.
+                      </p>
+                      {manualBlocks.map(block => (
+                        <div key={block.id}>
+                          <Label className="font-body text-sm">{block.icon} {block.name}</Label>
+                          <p className="font-body text-xs text-muted-foreground mb-1">{block.manualWorkDescription}</p>
+                          <Textarea
+                            placeholder="Deine Angaben hier..."
+                            value={manualInfo[block.id] || ""}
+                            onChange={(e) => setManualInfo(prev => ({ ...prev, [block.id]: e.target.value }))}
+                            className="font-body mt-1"
+                            rows={2}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Price Sidebar */}
+                <div className="lg:col-span-1">
+                  <div className="sticky top-36 bg-secondary rounded-xl p-6 space-y-3">
+                    <h4 className="font-display text-lg font-semibold text-foreground">Preisübersicht</h4>
+                    <div className="flex justify-between font-body text-sm">
+                      <span className="text-muted-foreground">Basis Event-Seite</span>
+                      <span className="text-foreground">€{BASE_PRICE}</span>
+                    </div>
+                    {selectedPackageId && (() => {
+                      const pkg = packages.find(p => p.id === selectedPackageId);
+                      return pkg ? (
+                        <div className="flex justify-between font-body text-sm">
+                          <span className="text-muted-foreground">{pkg.name}</span>
+                          <span className="text-foreground">€{pkg.price}</span>
+                        </div>
+                      ) : null;
+                    })()}
+                    {selectedBlockIds.filter(id => !packages.find(p => p.id === selectedPackageId)?.blockIds.includes(id)).map(id => {
+                      const block = blocks.find(b => b.id === id);
+                      return block ? (
+                        <div key={id} className="flex justify-between font-body text-sm">
+                          <span className="text-muted-foreground">{block.icon} {block.name}</span>
+                          <span className="text-foreground">€{block.price}</span>
+                        </div>
+                      ) : null;
+                    })}
+                    <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
+                      <span className="text-foreground">Gesamt</span>
+                      <span className="text-primary text-lg">€{totalPrice}</span>
+                    </div>
+                    {needsManualWork && (
+                      <p className="text-[10px] font-body text-amber-600">
+                        ✋ Enthält individuelle Blöcke – Seite wird nach Bearbeitung freigeschaltet.
+                      </p>
+                    )}
+                    <Button className="w-full font-body font-semibold mt-3" onClick={() => setStep(1)}>
+                      Weiter zum Event <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 2: Configure Event (NOW SECOND) */}
+          {step === 1 && (
             <motion.div key="step-configure" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="max-w-2xl mx-auto">
               <h2 className="font-display text-2xl font-bold text-foreground mb-2">Dein Event konfigurieren</h2>
               <p className="font-body text-muted-foreground mb-8">Gib die grundlegenden Informationen zu deinem Event ein.</p>
@@ -492,143 +695,9 @@ const OrderFlow = () => {
                   {form.eventLink && linkValid && !isReservedLink && linkAvailable === true && <p className="text-xs text-primary font-body mt-1">✓ Verfügbar!</p>}
                 </div>
 
-                <Button className="w-full font-body font-semibold text-base py-5" disabled={!step1Valid} onClick={() => setStep(1)}>
-                  Weiter zu Blöcke & Pakete <ArrowRight className="w-4 h-4 ml-2" />
+                <Button className="w-full font-body font-semibold text-base py-5" disabled={!step2Valid} onClick={() => setStep(2)}>
+                  Weiter zur Vorschau <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
-              </div>
-            </motion.div>
-          )}
-
-          {/* STEP 2: Block Selection */}
-          {step === 1 && (
-            <motion.div key="step-blocks" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="max-w-4xl mx-auto">
-              <h2 className="font-display text-2xl font-bold text-foreground mb-2">Blöcke & Pakete wählen</h2>
-              <p className="font-body text-muted-foreground mb-8">Stelle deine Event-Seite individuell zusammen oder wähle ein Paket.</p>
-
-              <div className="grid lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 space-y-8">
-                  {/* Packages */}
-                  <div>
-                    <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-primary" /> Pakete
-                    </h3>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      {categoryPackages.map((pkg) => {
-                        const isSelected = selectedPackageId === pkg.id;
-                        const pkgBlocks = pkg.blockIds.map(id => blocks.find(b => b.id === id)!).filter(Boolean);
-                        return (
-                          <button
-                            key={pkg.id}
-                            onClick={() => selectPackage(pkg.id)}
-                            className={`text-left p-5 rounded-xl border-2 transition-all ${
-                              isSelected
-                                ? "border-primary bg-primary/5 shadow-md"
-                                : "border-border bg-card hover:border-primary/30"
-                            }`}
-                          >
-                            <div className="flex items-center justify-between mb-3">
-                              <h4 className="font-display font-semibold text-foreground">{pkg.name}</h4>
-                              <span className="font-display text-lg font-bold text-primary">€{pkg.price}</span>
-                            </div>
-                            <div className="flex flex-wrap gap-1">
-                              {pkgBlocks.map(b => (
-                                <span key={b.id} className="text-[10px] font-body bg-secondary text-muted-foreground px-2 py-0.5 rounded-full">
-                                  {b.icon} {b.name}
-                                </span>
-                              ))}
-                            </div>
-                            {isSelected && (
-                              <div className="mt-3 flex items-center gap-1 text-xs font-body text-primary">
-                                <Check className="w-3 h-3" /> Ausgewählt
-                              </div>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Individual Blocks */}
-                  <div>
-                    <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                      <Package className="w-5 h-5 text-muted-foreground" /> Einzelne Blöcke
-                    </h3>
-                    <p className="font-body text-xs text-muted-foreground mb-4">Wähle einzelne Blöcke oder ergänze dein Paket.</p>
-                    <div className="grid sm:grid-cols-2 gap-3">
-                      {categoryBlocks.map((block) => {
-                        const inPackage = selectedPackageId ? packages.find(p => p.id === selectedPackageId)?.blockIds.includes(block.id) : false;
-                        const isSelected = selectedBlockIds.includes(block.id) || inPackage;
-                        return (
-                          <button
-                            key={block.id}
-                            onClick={() => !inPackage && toggleBlock(block.id)}
-                            disabled={!!inPackage}
-                            className={`text-left p-4 rounded-lg border transition-all ${
-                              inPackage
-                                ? "border-primary/30 bg-primary/5 opacity-60 cursor-not-allowed"
-                                : isSelected
-                                  ? "border-primary bg-primary/5"
-                                  : "border-border bg-card hover:border-primary/30"
-                            }`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <span className="text-lg">{block.icon}</span>
-                                <div>
-                                  <p className="font-body text-sm font-medium text-foreground">{block.name}</p>
-                                  <p className="font-body text-[11px] text-muted-foreground">{block.description}</p>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-body text-sm font-semibold text-primary">+€{block.price}</span>
-                                {(isSelected || inPackage) && <Check className="w-4 h-4 text-primary" />}
-                              </div>
-                            </div>
-                            {inPackage && (
-                              <p className="font-body text-[10px] text-primary mt-1">Im Paket enthalten</p>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Price Sidebar */}
-                <div className="lg:col-span-1">
-                  <div className="sticky top-36 bg-secondary rounded-xl p-6 space-y-3">
-                    <h4 className="font-display text-lg font-semibold text-foreground">Preisübersicht</h4>
-                    <div className="flex justify-between font-body text-sm">
-                      <span className="text-muted-foreground">Basis Event-Seite</span>
-                      <span className="text-foreground">€{BASE_PRICE}</span>
-                    </div>
-                    {selectedPackageId && (() => {
-                      const pkg = packages.find(p => p.id === selectedPackageId);
-                      return pkg ? (
-                        <div className="flex justify-between font-body text-sm">
-                          <span className="text-muted-foreground">{pkg.name}</span>
-                          <span className="text-foreground">€{pkg.price}</span>
-                        </div>
-                      ) : null;
-                    })()}
-                    {selectedBlockIds.filter(id => !packages.find(p => p.id === selectedPackageId)?.blockIds.includes(id)).map(id => {
-                      const block = blocks.find(b => b.id === id);
-                      return block ? (
-                        <div key={id} className="flex justify-between font-body text-sm">
-                          <span className="text-muted-foreground">{block.icon} {block.name}</span>
-                          <span className="text-foreground">€{block.price}</span>
-                        </div>
-                      ) : null;
-                    })}
-                    <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
-                      <span className="text-foreground">Gesamt</span>
-                      <span className="text-primary text-lg">€{totalPrice}</span>
-                    </div>
-                    <Button className="w-full font-body font-semibold mt-3" onClick={() => setStep(2)}>
-                      Weiter zur Vorschau <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </div>
-                </div>
               </div>
             </motion.div>
           )}
@@ -649,7 +718,6 @@ const OrderFlow = () => {
                 </div>
 
                 <div className="grid lg:grid-cols-4 gap-6">
-                  {/* Selected blocks summary */}
                   <div className="lg:col-span-1">
                     <div className="bg-secondary rounded-xl p-4 space-y-2">
                       <h4 className="font-display text-sm font-semibold text-foreground mb-2">Ausgewählte Blöcke</h4>
@@ -676,7 +744,6 @@ const OrderFlow = () => {
                     </Button>
                   </div>
 
-                  {/* Preview */}
                   <div className="lg:col-span-3">
                     <div className="rounded-xl overflow-hidden shadow-card max-h-[75vh] overflow-y-auto">
                       {(() => {
@@ -767,6 +834,11 @@ const OrderFlow = () => {
                     <span className="text-foreground">Gesamt</span>
                     <span className="text-primary text-lg">€{totalPrice}</span>
                   </div>
+                  {needsManualWork && (
+                    <p className="text-xs font-body text-amber-600">
+                      ✋ Deine Seite enthält individuelle Blöcke und wird nach Bearbeitung durch unser Team freigeschaltet.
+                    </p>
+                  )}
                 </div>
 
                 {/* Terms */}
