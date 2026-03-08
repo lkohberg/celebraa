@@ -69,8 +69,8 @@ const en = {
   "eco.badge3": "100% Digital",
 
   // Templates
-  "templates.title": "Choose your design",
-  "templates.subtitle": "The perfect template for every occasion",
+  "templates.title": "Explore our designs",
+  "templates.subtitle": "Browse the demos and get inspired",
   "templates.birthday": "Birthday",
   "templates.wedding": "Wedding",
   "templates.corporate": "Corporate",
