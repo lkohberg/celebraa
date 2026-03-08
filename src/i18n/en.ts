@@ -575,6 +575,133 @@ const en = {
   "demo.corporate.products.2.desc": "AI-powered assistant for productivity.",
   "demo.corporate.products.3.name": "SecureNet VPN",
   "demo.corporate.products.3.desc": "Highly secure network solution.",
+
+  // Index page
+  "index.discoverAll": "Discover all designs",
+
+  // Success Page - Pending
+  "success.pending.title": "Thank you for your order!",
+  "success.pending.subtitle": "Your event page contains custom elements that will be processed by our team.",
+  "success.pending.info": "We'll contact you shortly via email. Once everything is ready, you'll find your page in your dashboard.",
+  "success.pending.whatNow": "What happens now?",
+  "success.pending.step1": "Our team processes your custom blocks (e.g. illustration, music).",
+  "success.pending.step2": "You'll receive an email once your page is ready.",
+  "success.pending.step3": "Your event page will then appear in your dashboard and go live.",
+  "success.pending.dashboard": "Go to Dashboard",
+  "success.pending.home": "Back to Home",
+
+  // ConfigurePage extras
+  "configure.premiumDetails": "Premium Details",
+  "configure.introAnimation": "Intro Animation",
+  "configure.introAnimationDesc": "Opening animation before the invitation",
+  "configure.clickOrDragReplace": "Click or drag to replace",
+  "configure.dragOrClickUpload": "Drag image here or click",
+  "configure.menuDietaryPreview": "incl. dietary preferences (Vegetarian, Vegan, …)",
+  "configure.timeUnit": "o'clock",
+
+  // OrderFlow extras
+  "order.maxGuestsPlaceholder": "e.g. 80",
+  "order.emailPlaceholder": "max@example.com",
+
+  // Font labels
+  "font.playfair": "Playfair Display (Elegant)",
+  "font.dmsans": "DM Sans (Modern)",
+  "font.georgia": "Georgia (Classic)",
+
+  // Block names
+  "block.timeline": "Timeline",
+  "block.story": "Our Story",
+  "block.wishlist": "Wishlist / Gifts",
+  "block.dresscode": "Dress Code (M/F)",
+  "block.dresscode.single": "Dress Code",
+  "block.bgmusic": "Music on Open",
+  "block.hotels": "Hotel Recommendations",
+  "block.slideshow": "Photo Slideshow",
+  "block.menu": "Food Menu",
+  "block.shuttle": "Bus & Shuttle Times",
+  "block.musicpro": "Music Pro + DJ Export",
+  "block.illustration": "Custom Illustration",
+  "block.agenda": "Agenda",
+  "block.products": "Products (Photos + Text)",
+  "block.sponsors": "Sponsors",
+  "block.musicwish": "Music Wishes",
+  "block.quiz": "Quiz / Poll about Host",
+  "block.games": "Game Voting",
+  "block.potluck": "Potluck List",
+
+  "block.desc.timeline": "Schedule as timeline (time + text).",
+  "block.desc.story": "Story section about the couple.",
+  "block.desc.wishlist": "Gift wishes + links/notes.",
+  "block.desc.dresscode": "Dress code separated for men/women.",
+  "block.desc.bgmusic": "Your favorite song as intro when opening the page.",
+  "block.desc.hotels": "Nearby hotels (list + links).",
+  "block.desc.slideshow": "Auto-rotating photos of the couple.",
+  "block.desc.menu": "Menu / food section.",
+  "block.desc.shuttle": "Shuttle schedule with times/info.",
+  "block.desc.musicpro": "Collect song requests + export for DJ.",
+  "block.desc.illustration": "Hand-crafted illustration of your venue as a section.",
+  "block.desc.agenda": "Agenda / sessions overview.",
+  "block.desc.products": "Product tiles (image + description).",
+  "block.desc.sponsors": "Sponsor logos + links.",
+  "block.desc.musicwish": "Collect song wishes.",
+  "block.desc.quiz": "Quiz / survey (questions + results).",
+  "block.desc.games": "Poll: which games, result display.",
+  "block.desc.potluck": "\"Who brings what?\" list.",
+  "block.desc.timeline.party": "Party schedule as timeline.",
+  "block.desc.timeline.business": "Schedule / slots as timeline.",
+  "block.desc.dresscode.single": "Dress code hint.",
+  "block.desc.hotels.business": "Hotel recommendations (list + links).",
+  "block.desc.menu.business": "Catering / menu section.",
+  "block.desc.menu.party": "Menu / snacks section.",
+  "block.desc.dresscode.party": "Dress code separated men/women.",
+  "block.desc.wishlist.party": "Things/links the host wishes for.",
+
+  "block.manual.bgmusic": "Please upload your desired song or share the title with us.",
+  "block.manual.musicpro": "We'll set up the DJ export function for you.",
+  "block.manual.illustration": "Please share the name and address of your venue so we can create the illustration.",
+
+  // Package names
+  "pkg.wedding.starter": "Wedding Starter",
+  "pkg.wedding.plus": "Wedding Plus",
+  "pkg.wedding.premium": "Wedding Premium",
+  "pkg.business.starter": "Business Starter",
+  "pkg.business.pro": "Business Pro",
+  "pkg.party.fun": "Party Fun",
+  "pkg.party.planer": "Party Planner",
+  "pkg.party.allin": "Party All-in",
+
+  // Auth extras
+  "auth.forgotPassword": "Forgot password?",
+  "auth.resetPassword": "Reset Password",
+  "auth.resetPasswordDesc": "Enter your email and we'll send you a reset link.",
+  "auth.sendResetLink": "Send reset link",
+  "auth.resetSent": "Reset email sent! Please check your inbox.",
+  "auth.newPassword": "New password",
+  "auth.confirmPassword": "Confirm password",
+  "auth.updatePassword": "Update password",
+  "auth.passwordUpdated": "Password updated successfully!",
+  "auth.passwordMismatch": "Passwords do not match.",
+  "auth.backToLogin": "Back to login",
+
+  // Cookie consent
+  "cookie.message": "We use cookies to provide you with the best possible experience on our website.",
+  "cookie.accept": "Accept",
+  "cookie.decline": "Decline",
+  "cookie.learnMore": "Learn more",
+
+  // RSVP error
+  "event.rsvpError": "Error submitting RSVP",
+
+  // Preview fallbacks
+  "preview.fallback.reception": "Reception",
+  "preview.fallback.ceremony": "Ceremony",
+  "preview.fallback.dinner": "Dinner",
+  "preview.fallback.party": "Party",
+  "preview.fallback.dressMale": "Men",
+  "preview.fallback.dressFemale": "Women",
+  "preview.fallback.storyText": "Your story will be told here. A beautiful text about you as a couple.",
+  "preview.fallback.hotelName": "Example Hotel",
+  "preview.fallback.hotelAddress": "123 Example Street",
 };
 
 export default en;

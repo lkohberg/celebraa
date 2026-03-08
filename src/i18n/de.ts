@@ -576,6 +576,133 @@ const de = {
   "demo.corporate.products.2.desc": "KI-gestützter Assistent für Produktivität.",
   "demo.corporate.products.3.name": "SecureNet VPN",
   "demo.corporate.products.3.desc": "Hochsichere Netzwerklösung.",
+
+  // Index page
+  "index.discoverAll": "Alle Designs entdecken",
+
+  // Success Page - Pending
+  "success.pending.title": "Danke für deine Bestellung!",
+  "success.pending.subtitle": "Deine Event-Seite enthält individuelle Elemente, die von unserem Team bearbeitet werden.",
+  "success.pending.info": "Wir melden uns in Kürze bei dir per E-Mail. Sobald alles fertig ist, findest du deine Seite in deinem Dashboard.",
+  "success.pending.whatNow": "Was passiert jetzt?",
+  "success.pending.step1": "Unser Team bearbeitet deine individuellen Blöcke (z.B. Illustration, Musik).",
+  "success.pending.step2": "Du erhältst eine E-Mail, sobald deine Seite fertig ist.",
+  "success.pending.step3": "Deine Event-Seite erscheint dann in deinem Dashboard und ist live.",
+  "success.pending.dashboard": "Zum Dashboard",
+  "success.pending.home": "Zur Startseite",
+
+  // ConfigurePage extras
+  "configure.premiumDetails": "Premium-Details",
+  "configure.introAnimation": "Intro-Animation",
+  "configure.introAnimationDesc": "Öffnungsanimation vor der Einladung",
+  "configure.clickOrDragReplace": "Klicken oder ziehen zum Ersetzen",
+  "configure.dragOrClickUpload": "Bild hierher ziehen oder klicken",
+  "configure.menuDietaryPreview": "inkl. Essenspräferenzen (Vegetarisch, Vegan, …)",
+  "configure.timeUnit": "Uhr",
+
+  // OrderFlow extras
+  "order.maxGuestsPlaceholder": "z.B. 80",
+  "order.emailPlaceholder": "max@beispiel.at",
+
+  // Font labels
+  "font.playfair": "Playfair Display (Elegant)",
+  "font.dmsans": "DM Sans (Modern)",
+  "font.georgia": "Georgia (Klassisch)",
+
+  // Block names (for localization)
+  "block.timeline": "Timeline",
+  "block.story": "Our Story",
+  "block.wishlist": "Wunschliste / Geschenke",
+  "block.dresscode": "Dress Code (M/F)",
+  "block.dresscode.single": "Dress Code",
+  "block.bgmusic": "Musik beim Öffnen",
+  "block.hotels": "Hotelempfehlungen",
+  "block.slideshow": "Fotos rotieren (Slideshow)",
+  "block.menu": "Essensmenü",
+  "block.shuttle": "Bus & Shuttle Zeiten",
+  "block.musicpro": "Music Pro + DJ-Export",
+  "block.illustration": "Custom Illustration",
+  "block.agenda": "Agenda",
+  "block.products": "Produkte (Fotos + Text)",
+  "block.sponsors": "Sponsoren",
+  "block.musicwish": "Wunschmusik",
+  "block.quiz": "Quiz/Abstimmung über Host",
+  "block.games": "Spiele-Abstimmung",
+  "block.potluck": "Mitbringliste",
+
+  "block.desc.timeline": "Ablauf als Zeitstrahl (Uhrzeit + Text).",
+  "block.desc.story": "Story-Sektion über das Paar.",
+  "block.desc.wishlist": "Geschenkewünsche + Links/Hinweis.",
+  "block.desc.dresscode": "Dresscode getrennt für Männer/Frauen.",
+  "block.desc.bgmusic": "Dein Lieblingssong als Intro beim Öffnen der Seite.",
+  "block.desc.hotels": "Hotels in der Nähe (Liste + Links).",
+  "block.desc.slideshow": "Automatisch rotierende Fotos des Paars.",
+  "block.desc.menu": "Menü-/Speisen-Sektion.",
+  "block.desc.shuttle": "Shuttleplan mit Zeiten/Infos.",
+  "block.desc.musicpro": "Songwünsche sammeln + Export für DJ.",
+  "block.desc.illustration": "Handgefertigte Illustration deiner Location als Sektion.",
+  "block.desc.agenda": "Agenda/Sessions Übersicht.",
+  "block.desc.products": "Produkt-Kacheln (Bild + Beschreibung).",
+  "block.desc.sponsors": "Sponsor-Logos + Links.",
+  "block.desc.musicwish": "Songwünsche einsammeln.",
+  "block.desc.quiz": "Quiz/Umfrage (Fragen + Ergebnisse).",
+  "block.desc.games": "Poll: welche Spiele, Ergebnisanzeige.",
+  "block.desc.potluck": "\"Wer bringt was mit?\" Liste.",
+  "block.desc.timeline.party": "Party-Ablauf als Zeitstrahl.",
+  "block.desc.timeline.business": "Ablauf/Slots als Zeitstrahl.",
+  "block.desc.dresscode.single": "Dresscode-Hinweis.",
+  "block.desc.hotels.business": "Hotel-Empfehlungen (Liste + Links).",
+  "block.desc.menu.business": "Catering-/Menü-Sektion.",
+  "block.desc.menu.party": "Menü-/Snacks-Sektion.",
+  "block.desc.dresscode.party": "Dresscode getrennt Männer/Frauen.",
+  "block.desc.wishlist.party": "Dinge/Links, die sich der Host wünscht.",
+
+  "block.manual.bgmusic": "Bitte lade deinen gewünschten Song hoch oder teile uns den Titel mit.",
+  "block.manual.musicpro": "Wir richten die DJ-Export-Funktion für dich ein.",
+  "block.manual.illustration": "Bitte teile uns den Namen und die Adresse deiner Location mit, damit wir die Illustration erstellen können.",
+
+  // Package names
+  "pkg.wedding.starter": "Hochzeit Starter",
+  "pkg.wedding.plus": "Hochzeit Plus",
+  "pkg.wedding.premium": "Hochzeit Premium",
+  "pkg.business.starter": "Business Starter",
+  "pkg.business.pro": "Business Pro",
+  "pkg.party.fun": "Party Fun",
+  "pkg.party.planer": "Party Planer",
+  "pkg.party.allin": "Party All-in",
+
+  // Auth extras
+  "auth.forgotPassword": "Passwort vergessen?",
+  "auth.resetPassword": "Passwort zurücksetzen",
+  "auth.resetPasswordDesc": "Gib deine E-Mail ein und wir senden dir einen Link zum Zurücksetzen.",
+  "auth.sendResetLink": "Link senden",
+  "auth.resetSent": "E-Mail zum Zurücksetzen gesendet! Bitte prüfe dein Postfach.",
+  "auth.newPassword": "Neues Passwort",
+  "auth.confirmPassword": "Passwort bestätigen",
+  "auth.updatePassword": "Passwort aktualisieren",
+  "auth.passwordUpdated": "Passwort erfolgreich aktualisiert!",
+  "auth.passwordMismatch": "Passwörter stimmen nicht überein.",
+  "auth.backToLogin": "Zurück zum Login",
+
+  // Cookie consent
+  "cookie.message": "Wir verwenden Cookies, um dir die bestmögliche Nutzung unserer Website zu ermöglichen.",
+  "cookie.accept": "Akzeptieren",
+  "cookie.decline": "Ablehnen",
+  "cookie.learnMore": "Mehr erfahren",
+
+  // RSVP error
+  "event.rsvpError": "Fehler beim Absenden der Rückmeldung",
+
+  // Preview fallbacks
+  "preview.fallback.reception": "Empfang",
+  "preview.fallback.ceremony": "Zeremonie",
+  "preview.fallback.dinner": "Abendessen",
+  "preview.fallback.party": "Party",
+  "preview.fallback.dressMale": "Herren",
+  "preview.fallback.dressFemale": "Damen",
+  "preview.fallback.storyText": "Eure Geschichte wird hier erzählt. Ein wunderschöner Text über euch als Paar.",
+  "preview.fallback.hotelName": "Hotel Beispiel",
+  "preview.fallback.hotelAddress": "Musterstraße 1",
 };
 
 export default de;
