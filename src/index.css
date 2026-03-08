@@ -96,6 +96,8 @@
 @layer base {
   * {
     @apply border-border;
+    hyphens: none;
+    -webkit-hyphens: none;
   }
 
   body {
