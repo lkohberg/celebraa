@@ -133,7 +133,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
                 <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "24px 24px" }} />
                 <div className="relative max-w-3xl mx-auto px-4">
                   <div className="text-center mb-12">
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${accent}15` }}>
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                       <Clock className="w-6 h-6" style={{ color: accent }} />
                     </div>
                     <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
