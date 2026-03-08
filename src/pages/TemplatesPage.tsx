@@ -14,10 +14,10 @@ const eventTypes = [
   { value: "corporate", labelKey: "templates.corporate", icon: Building2, color: "hsl(220, 50%, 35%)" },
 ] as const;
 
-const categoryDescriptions: Record<string, string> = {
-  birthday: "Feiere deinen besonderen Tag mit Stil — von wild und bunt bis elegant und glamourös.",
-  wedding: "Euer großer Tag verdient eine Einladung, die genauso schön ist wie eure Liebe.",
-  corporate: "Professionelle Event-Seiten, die beeindrucken — von Konferenzen bis Gala-Abende.",
+const categoryDescriptionKeys: Record<string, string> = {
+  birthday: "templates.cat.birthday",
+  wedding: "templates.cat.wedding",
+  corporate: "templates.cat.corporate",
 };
 
 const TemplatesPage = () => {
