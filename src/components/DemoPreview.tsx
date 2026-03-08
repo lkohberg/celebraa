@@ -192,11 +192,11 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   const renderPreview = () => {
     switch (template.eventType) {
       case "wedding":
-        return <PremiumWeddingPage event={demoEvent} theme={theme} />;
+        return <PremiumWeddingPage event={demoEvent} theme={theme} isDemo />;
       case "birthday":
-        return <PremiumBirthdayPage event={demoEvent} theme={theme} />;
+        return <PremiumBirthdayPage event={demoEvent} theme={theme} isDemo />;
       case "corporate":
-        return <PremiumCorporatePage event={demoEvent} theme={theme} />;
+        return <PremiumCorporatePage event={demoEvent} theme={theme} isDemo />;
     }
   };
 
