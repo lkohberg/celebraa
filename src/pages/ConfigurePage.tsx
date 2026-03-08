@@ -368,38 +368,6 @@ const ConfigurePage = () => {
               )}
             </div>
           </div>
-        ) : (
-          <div className="rounded-xl overflow-hidden shadow-card" style={{ background: template.previewGradient, fontFamily: `'${form.font}', sans-serif` }}>
-            <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(form.font)}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
-            <div className="p-8 text-center">
-              <p className="text-xs font-body uppercase tracking-widest mb-3 opacity-50" style={{ color: template.colors.accent }}>
-                {t("configure.invitation")}
-              </p>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ fontFamily: form.font, color: template.colors.primary === "#FFFFFF" ? template.colors.accent : template.colors.primary }}>{form.title || t("configure.yourTitle")}</h2>
-              {form.description && (<p className="font-body text-sm opacity-70 mt-2 max-w-xs mx-auto" style={{ color: template.colors.accent }}>{form.description}</p>)}
-              <div className="mt-6 space-y-2 max-w-xs mx-auto text-left">
-                {form.date && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><Calendar className="w-4 h-4" /><span>{form.date}</span></div>)}
-                {form.time && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><Clock className="w-4 h-4" /><span>{form.time} {t("configure.timeUnit")}</span></div>)}
-                {form.locationName && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><MapPin className="w-4 h-4" /><span>{form.locationName}</span></div>)}
-                {form.maxGuests && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><Users className="w-4 h-4" /><span>max. {form.maxGuests} {t("dashboard.guests")}</span></div>)}
-                {form.dressCode && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><span className="w-4 h-4 text-center">👔</span><span>{form.dressCode}</span></div>)}
-              </div>
-              {form.rsvpEnabled && (
-                <div className="mt-8 bg-background/80 backdrop-blur rounded-lg p-5">
-                  <p className="font-display text-base font-semibold text-foreground mb-2">{t("configure.rsvpQuestion")}</p>
-                  <div className="flex gap-3 justify-center">
-                    <Button size="sm" className="font-body">{t("configure.rsvpYes")}</Button>
-                    <Button size="sm" variant="outline" className="font-body">{t("configure.rsvpNo")}</Button>
-                  </div>
-                  {form.menuSelection && (
-                    <p className="text-xs font-body text-muted-foreground mt-3 opacity-70">
-                      {t("configure.menuDietaryPreview")}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
 
           {/* Config Form */}
           <div className="order-1 lg:order-2">
