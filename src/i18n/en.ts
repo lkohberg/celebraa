@@ -180,6 +180,10 @@ const en = {
   "dashboard.archive": "Archive",
   "dashboard.goLive": "Go Live",
   "dashboard.languageLinks": "Language links:",
+  "dashboard.deleteEvent": "Delete event",
+  "dashboard.deleteConfirm": "Are you sure you want to permanently delete this event?",
+  "dashboard.deleteSuccess": "Event deleted",
+  "dashboard.deleteError": "Error deleting event",
 
   // Footer
   "footer.tagline": "Digital Event Invitations",

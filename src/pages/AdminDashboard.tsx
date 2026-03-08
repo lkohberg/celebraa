@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
@@ -9,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe, Archive, Radio, AlertTriangle, Rocket, Music } from "lucide-react";
+import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe, Archive, Radio, AlertTriangle, Rocket, Music, Trash2 } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/i18n/eventLabels";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -104,7 +105,7 @@ const AdminDashboard = () => {
             </div>
             <div className="lg:col-span-2">
               {selectedEvent ? (
-                <EventDetail event={selectedEvent} isAdmin={isAdmin} />
+                <EventDetail event={selectedEvent} isAdmin={isAdmin} onDeleted={() => setSelectedEventId(null)} />
               ) : (
                 <Card><CardContent className="py-16 text-center">
                   <p className="font-body text-muted-foreground">{t("dashboard.selectEvent")}</p>
@@ -164,12 +165,29 @@ const PendingEventCard = ({ event }: { event: any }) => {
   );
 };
 
-const EventDetail = ({ event, isAdmin }: { event: any; isAdmin?: boolean }) => {
+const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: boolean; onDeleted?: () => void }) => {
   const { t } = useTranslation();
   const { data: guests } = useEventGuests(event.id);
   const { data: analytics } = useEventAnalytics(event.id);
   const { data: musicWishes } = useMusicWishes(event.id);
   const updateEvent = useUpdateEvent();
+  const queryClient = useQueryClient();
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (!confirm(t("dashboard.deleteConfirm"))) return;
+    setDeleting(true);
+    try {
+      const { error } = await supabase.from("events").delete().eq("id", event.id);
+      if (error) throw error;
+      toast.success(t("dashboard.deleteSuccess"));
+      queryClient.invalidateQueries({ queryKey: ["my-events"] });
+      onDeleted?.();
+    } catch {
+      toast.error(t("dashboard.deleteError"));
+    }
+    setDeleting(false);
+  };
 
   const accepted = guests?.filter((g) => g.rsvp_status === "accepted").length || 0;
   const declined = guests?.filter((g) => g.rsvp_status === "declined").length || 0;
@@ -338,6 +356,11 @@ const EventDetail = ({ event, isAdmin }: { event: any; isAdmin?: boolean }) => {
           <div className="flex justify-between font-body"><span className="text-muted-foreground">{t("dashboard.status")}</span><Badge>{event.status === "pending_review" ? t("admin.inProgress") : t(`dashboard.status.${event.status}`)}</Badge></div>
           <div className="flex justify-between font-body"><span className="text-muted-foreground">{t("dashboard.paid")}</span><span className="text-foreground font-semibold">{event.price_paid ? `€${(event.price_paid / 100).toFixed(2)}` : "–"}</span></div>
           {event.stripe_payment_id && <div className="flex justify-between font-body"><span className="text-muted-foreground">Stripe ID</span><span className="text-foreground text-sm font-mono truncate max-w-[200px]">{event.stripe_payment_id}</span></div>}
+          <div className="pt-4 border-t border-border">
+            <Button variant="destructive" size="sm" className="font-body" disabled={deleting} onClick={handleDelete}>
+              <Trash2 className="w-4 h-4 mr-2" /> {deleting ? "..." : t("dashboard.deleteEvent")}
+            </Button>
+          </div>
         </CardContent></Card>
       </TabsContent>
     </Tabs>
