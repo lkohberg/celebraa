@@ -158,7 +158,7 @@ interface TemplateCardProps {
   demoOnly?: boolean;
 }
 
-const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
+const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: TemplateCardProps) => {
   const { t } = useTranslation();
 
   return (
