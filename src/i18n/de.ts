@@ -179,6 +179,10 @@ const de = {
   "dashboard.archive": "Archivieren",
   "dashboard.goLive": "Live schalten",
   "dashboard.languageLinks": "Sprach-Links:",
+  "dashboard.deleteEvent": "Event löschen",
+  "dashboard.deleteConfirm": "Möchtest du dieses Event wirklich unwiderruflich löschen?",
+  "dashboard.deleteSuccess": "Event gelöscht",
+  "dashboard.deleteError": "Fehler beim Löschen",
 
   // Footer
   "footer.tagline": "Digitale Event-Einladungen",

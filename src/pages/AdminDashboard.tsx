@@ -164,12 +164,27 @@ const PendingEventCard = ({ event }: { event: any }) => {
   );
 };
 
-const EventDetail = ({ event, isAdmin }: { event: any; isAdmin?: boolean }) => {
+const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: boolean; onDeleted?: () => void }) => {
   const { t } = useTranslation();
   const { data: guests } = useEventGuests(event.id);
   const { data: analytics } = useEventAnalytics(event.id);
   const { data: musicWishes } = useMusicWishes(event.id);
   const updateEvent = useUpdateEvent();
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (!confirm(t("dashboard.deleteConfirm"))) return;
+    setDeleting(true);
+    try {
+      const { error } = await supabase.from("events").delete().eq("id", event.id);
+      if (error) throw error;
+      toast.success(t("dashboard.deleteSuccess"));
+      onDeleted?.();
+    } catch {
+      toast.error(t("dashboard.deleteError"));
+    }
+    setDeleting(false);
+  };
 
   const accepted = guests?.filter((g) => g.rsvp_status === "accepted").length || 0;
   const declined = guests?.filter((g) => g.rsvp_status === "declined").length || 0;
