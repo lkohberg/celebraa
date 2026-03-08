@@ -113,7 +113,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
             </button>
           </section>
 
-          {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} />}
+          {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} />}
 
           {/* Countdown */}
           <section id="countdown" className="py-24 relative overflow-hidden" style={{ backgroundColor: "hsl(30, 30%, 98%)" }}>
