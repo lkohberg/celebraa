@@ -821,7 +821,7 @@ const OrderFlow = () => {
                   <Label className="font-body">{t("order.emailAddress")} *</Label>
                   <Input
                     type="email"
-                    placeholder="max@beispiel.at"
+                    placeholder={t("order.emailPlaceholder")}
                     value={contact.email}
                     onChange={(e) => setContact(prev => ({ ...prev, email: e.target.value }))}
                     className="font-body mt-1"

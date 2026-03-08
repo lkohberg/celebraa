@@ -55,7 +55,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
       setMessage("");
       setMenuChoice("");
     } catch {
-      toast.error("Error submitting RSVP");
+      toast.error(t("event.rsvpError"));
     }
   };
 

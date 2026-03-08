@@ -64,37 +64,37 @@ const SuccessPage = () => {
           </div>
 
           <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
-            Danke für deine Bestellung!
+            {t("success.pending.title")}
           </h1>
           <p className="font-body text-muted-foreground text-lg mb-4">
-            Deine Event-Seite enthält individuelle Elemente, die von unserem Team bearbeitet werden.
+            {t("success.pending.subtitle")}
           </p>
           <p className="font-body text-muted-foreground mb-10">
-            Wir melden uns in Kürze bei dir per E-Mail. Sobald alles fertig ist, findest du deine Seite in deinem Dashboard.
+            {t("success.pending.info")}
           </p>
 
           <div className="bg-secondary rounded-xl p-6 mb-8 text-left space-y-2">
-            <h3 className="font-display text-sm font-semibold text-foreground">Was passiert jetzt?</h3>
+            <h3 className="font-display text-sm font-semibold text-foreground">{t("success.pending.whatNow")}</h3>
             <div className="flex items-start gap-3 font-body text-sm text-muted-foreground">
               <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">1</span>
-              <span>Unser Team bearbeitet deine individuellen Blöcke (z.B. Illustration, Musik).</span>
+              <span>{t("success.pending.step1")}</span>
             </div>
             <div className="flex items-start gap-3 font-body text-sm text-muted-foreground">
               <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">2</span>
-              <span>Du erhältst eine E-Mail, sobald deine Seite fertig ist.</span>
+              <span>{t("success.pending.step2")}</span>
             </div>
             <div className="flex items-start gap-3 font-body text-sm text-muted-foreground">
               <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">3</span>
-              <span>Deine Event-Seite erscheint dann in deinem Dashboard und ist live.</span>
+              <span>{t("success.pending.step3")}</span>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button onClick={() => navigate("/dashboard")} className="font-body">
-              Zum Dashboard
+              {t("success.pending.dashboard")}
             </Button>
             <Button variant="ghost" onClick={() => navigate("/")} className="font-body text-muted-foreground">
-              Zur Startseite
+              {t("success.pending.home")}
             </Button>
           </div>
         </motion.div>
