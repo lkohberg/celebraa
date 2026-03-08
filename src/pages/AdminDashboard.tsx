@@ -150,8 +150,8 @@ const PendingEventCard = ({ event }: { event: any }) => {
             const block = blocks.find(b => b.id === id);
             return block ? (
               <div key={id} className="font-body text-xs text-muted-foreground flex items-center gap-1">
-                <span>{block.icon}</span> {block.name}
-                {block.requiresManualWork && <span className="text-amber-600">– {block.manualWorkDescription}</span>}
+                <span>{block.icon}</span> {t(block.nameKey)}
+                {block.requiresManualWork && <span className="text-amber-600">– {block.manualWorkDescriptionKey ? t(block.manualWorkDescriptionKey) : ""}</span>}
               </div>
             ) : null;
           })}
