@@ -526,7 +526,7 @@ const OrderFlow = () => {
                       const block = blocks.find(b => b.id === id);
                       return block ? (
                         <div key={id} className="flex justify-between font-body text-sm">
-                          <span className="text-muted-foreground">{block.icon} {block.name}</span>
+                           <span className="text-muted-foreground">{block.icon} {t(block.nameKey)}</span>
                           <span className="text-foreground">€{block.price}</span>
                         </div>
                       ) : null;
