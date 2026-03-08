@@ -184,7 +184,7 @@ const en = {
   "dashboard.deleteConfirm": "Are you sure you want to permanently delete this event?",
   "dashboard.deleteSuccess": "Event deleted",
   "dashboard.deleteError": "Error deleting event",
-  "dashboard.createdBy": "Created by (User ID)",
+  "dashboard.createdBy": "Created by",
 
   // Footer
   "footer.tagline": "Digital Event Invitations",
