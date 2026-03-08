@@ -89,7 +89,11 @@ const OrderFlow = () => {
   const [contact, setContact] = useState({ firstName: "", lastName: "", email: "" });
   const [termsAccepted, setTermsAccepted] = useState(false);
 
+  const [blockConfig, setBlockConfig] = useState<any>({});
   const [dragActive, setDragActive] = useState(false);
+
+  // Scroll to top on step change
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [step]);
 
   if (!template) {
     return (
