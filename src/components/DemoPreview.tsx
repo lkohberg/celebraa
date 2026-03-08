@@ -39,6 +39,7 @@ const getDemoEvent = (template: Template) => {
       children_welcome: true,
       hotel_recommendations: [
         { name: "Hotel Sacher Salzburg", address: "Schwarzstraße 5-7, 5020 Salzburg", url: "https://www.sacher.com" },
+        { name: "Hotel Bristol", address: "Makartplatz 4, 5020 Salzburg", url: "https://www.bristol.at" },
       ],
       schedule: [
         { time: "15:00", label: "Trauung" },
@@ -46,6 +47,30 @@ const getDemoEvent = (template: Template) => {
         { time: "18:00", label: "Abendessen" },
         { time: "20:00", label: "Party & Tanz" },
       ],
+      selected_blocks: [
+        "wedding-timeline", "wedding-story", "wedding-wishlist", "wedding-dresscode",
+        "wedding-bgmusic", "wedding-hotels", "wedding-slideshow", "wedding-menu",
+        "wedding-shuttle", "wedding-musicpro", "wedding-illustration",
+      ],
+      block_config: {
+        menu: [
+          { name: "Vorspeise", description: "Lachstatar auf Avocadocreme" },
+          { name: "Hauptgang", description: "Filet vom Weiderind mit Trüffelrisotto" },
+          { name: "Dessert", description: "Marillenknödel mit Vanillesauce" },
+        ],
+        dresscode_male: "Anzug / Hemd mit Sakko",
+        dresscode_female: "Cocktailkleid / Elegantes Kleid",
+        shuttle: [
+          { time: "14:30", from: "Hauptbahnhof", to: "Kirche St. Peter", note: "Abfahrt pünktlich" },
+          { time: "16:00", from: "Kirche St. Peter", to: "Schloss Mirabell" },
+          { time: "00:00", from: "Schloss Mirabell", to: "Hauptbahnhof", note: "Letzte Fahrt" },
+        ],
+        wishlist: [
+          { name: "Beitrag zur Hochzeitsreise", hint: "Wir freuen uns über jeden Beitrag!" },
+          { name: "KitchenAid Artisan", hint: "In Creme, bitte 😊", url: "https://example.com" },
+          { name: "Gutschein für ein Abendessen", hint: "Zum Beispiel von einem Lieblingsrestaurant." },
+        ],
+      },
     };
   }
 
@@ -64,6 +89,39 @@ const getDemoEvent = (template: Template) => {
         { time: "20:30", label: "Torte & Überraschung" },
         { time: "21:00", label: "Party!" },
       ],
+      selected_blocks: [
+        "party-timeline", "party-musicwish", "party-wishlist", "party-dresscode",
+        "party-quiz", "party-menu", "party-games", "party-potluck",
+      ],
+      block_config: {
+        menu: [
+          { name: "Finger Food", description: "Mini-Burger, Bruschetta, Garnelen-Spieße" },
+          { name: "Hauptbuffet", description: "Pasta-Station, Grill & Salate" },
+          { name: "Süßes", description: "Candy Bar & Geburtstagstorte" },
+        ],
+        dresscode_male: "Smart Casual / Hemd",
+        dresscode_female: "Schick & Bunt – Hauptsache gute Laune!",
+        quiz: [
+          { question: "Was ist Sarahs Lieblingssong?", options: ["Dancing Queen", "Bohemian Rhapsody", "Happy", "Shut Up and Dance"] },
+          { question: "Welches Land will Sarah als nächstes bereisen?", options: ["Japan", "Island", "Mexiko", "Neuseeland"] },
+        ],
+        games: [
+          { name: "Beer Pong", emoji: "🍺" },
+          { name: "Karaoke Battle", emoji: "🎤" },
+          { name: "Wer bin ich?", emoji: "🤔" },
+          { name: "Flunkyball", emoji: "⚽" },
+        ],
+        potluck: [
+          { item: "Chips & Dips", assignedTo: "" },
+          { item: "Cocktail-Zutaten", assignedTo: "" },
+          { item: "Bluetooth-Lautsprecher", assignedTo: "" },
+        ],
+        wishlist: [
+          { name: "Konzertkarten", hint: "Egal welches Konzert – Hauptsache live Musik!" },
+          { name: "Reisegutschein", hint: "Für das nächste Abenteuer ✈️" },
+          { name: "Fotobuch", hint: "Mit gemeinsamen Erinnerungen 📸" },
+        ],
+      },
     };
   }
 
@@ -75,12 +133,44 @@ const getDemoEvent = (template: Template) => {
     address: "Bruno-Kreisky-Platz 1, 1220 Wien",
     story_text: "Treffen Sie Branchenführer und entdecken Sie neue Trends.",
     dress_code: "Business Attire",
+    hotel_recommendations: [
+      { name: "Melia Vienna", address: "Donau-City-Straße 7, 1220 Wien", url: "https://www.melia.com" },
+      { name: "Hilton Vienna Danube", address: "Handelskai 269, 1020 Wien", url: "https://www.hilton.com" },
+    ],
     schedule: [
       { time: "09:00", label: "Registrierung & Kaffee" },
       { time: "10:00", label: "Keynote" },
       { time: "12:00", label: "Mittagspause" },
       { time: "14:00", label: "Workshops" },
     ],
+    selected_blocks: [
+      "business-timeline", "business-dresscode", "business-hotels",
+      "business-menu", "business-agenda", "business-products", "business-sponsors",
+    ],
+    block_config: {
+      menu: [
+        { name: "Kaffeepause", description: "Kaffee, Tee, Gebäck & Obst" },
+        { name: "Business Lunch", description: "3-Gang Menü mit vegetarischer Option" },
+        { name: "Networking Dinner", description: "Flying Buffet mit Cocktailbar" },
+      ],
+      agenda: [
+        { time: "10:00", title: "Keynote: KI im Unternehmen", speaker: "Dr. Maria Weber" },
+        { time: "11:30", title: "Panel: Zukunft der Arbeit", speaker: "Diverse Sprecher" },
+        { time: "14:00", title: "Workshop A: Digitale Transformation", speaker: "Thomas Richter" },
+        { time: "14:00", title: "Workshop B: Nachhaltige Innovation", speaker: "Lisa Berger" },
+      ],
+      products: [
+        { name: "CloudBase Pro", description: "Enterprise Cloud-Lösung für skalierbare Infrastruktur.", imageUrl: "" },
+        { name: "AI Assistant Suite", description: "KI-gestützter Assistent für Produktivität.", imageUrl: "" },
+        { name: "SecureNet VPN", description: "Hochsichere Netzwerklösung.", imageUrl: "" },
+      ],
+      sponsors: [
+        { name: "TechCorp" },
+        { name: "InnovateLab" },
+        { name: "FutureVision" },
+        { name: "CloudBase" },
+      ],
+    },
   };
 };
 
