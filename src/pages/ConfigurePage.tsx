@@ -428,7 +428,13 @@ const ConfigurePage = () => {
 
               <div>
                 <Label className="font-body">{t("configure.address")}</Label>
-                <Input placeholder={t("configure.addressPlaceholder")} value={form.address} onChange={(e) => updateField("address", e.target.value)} className="font-body mt-1" />
+                <div className="grid grid-cols-1 gap-2 mt-1">
+                  <Input placeholder={t("configure.streetPlaceholder")} value={form.street} onChange={(e) => updateField("street", e.target.value)} className="font-body" />
+                  <div className="grid grid-cols-3 gap-2">
+                    <Input placeholder={t("configure.zipPlaceholder")} value={form.zip} onChange={(e) => updateField("zip", e.target.value)} className="font-body" />
+                    <Input placeholder={t("configure.cityPlaceholder")} value={form.city} onChange={(e) => updateField("city", e.target.value)} className="font-body col-span-2" />
+                  </div>
+                </div>
               </div>
 
               <div>
