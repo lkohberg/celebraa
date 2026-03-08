@@ -62,9 +62,9 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
         dresscode_male: t("demo.wedding.dresscode.male"),
         dresscode_female: t("demo.wedding.dresscode.female"),
         shuttle: [
-          { time: "14:30", from: "Hauptbahnhof", to: t("demo.wedding.ceremonyLocation"), note: t("demo.wedding.shuttle.1.note") },
+          { time: "14:30", from: t("demo.wedding.shuttle.from"), to: t("demo.wedding.ceremonyLocation"), note: t("demo.wedding.shuttle.1.note") },
           { time: "16:00", from: t("demo.wedding.ceremonyLocation"), to: t("demo.wedding.location") },
-          { time: "00:00", from: t("demo.wedding.location"), to: "Hauptbahnhof", note: t("demo.wedding.shuttle.3.note") },
+          { time: "00:00", from: t("demo.wedding.location"), to: t("demo.wedding.shuttle.from"), note: t("demo.wedding.shuttle.3.note") },
         ],
         wishlist: [
           { name: t("demo.wedding.wishlist.1.name"), hint: t("demo.wedding.wishlist.1.hint") },
@@ -81,7 +81,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
       title: t("demo.birthday.title"),
       description: t("demo.birthday.description"),
       location_name: t("demo.birthday.location"),
-      address: "Herrengasse 10, 1010 Wien",
+      address: t("demo.birthday.address"),
       story_text: t("demo.birthday.story"),
       dress_code: t("demo.birthday.dressCode"),
       schedule: [
@@ -107,15 +107,15 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
           { question: t("demo.birthday.quiz.2.question"), options: ["Japan", "Island", "Mexiko", "Neuseeland"] },
         ],
         games: [
-          { name: "Beer Pong", emoji: "🍺" },
-          { name: "Karaoke Battle", emoji: "🎤" },
-          { name: "Wer bin ich?", emoji: "🤔" },
-          { name: "Flunkyball", emoji: "⚽" },
+          { name: t("demo.birthday.games.1"), emoji: "🍺" },
+          { name: t("demo.birthday.games.2"), emoji: "🎤" },
+          { name: t("demo.birthday.games.3"), emoji: "🤔" },
+          { name: t("demo.birthday.games.4"), emoji: "⚽" },
         ],
         potluck: [
-          { item: "Chips & Dips", assignedTo: "" },
-          { item: "Cocktail-Zutaten", assignedTo: "" },
-          { item: "Bluetooth-Lautsprecher", assignedTo: "" },
+          { item: t("demo.birthday.potluck.1"), assignedTo: "" },
+          { item: t("demo.birthday.potluck.2"), assignedTo: "" },
+          { item: t("demo.birthday.potluck.3"), assignedTo: "" },
         ],
         wishlist: [
           { name: t("demo.birthday.wishlist.1.name"), hint: t("demo.birthday.wishlist.1.hint") },
@@ -131,7 +131,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
     title: t("demo.corporate.title"),
     description: t("demo.corporate.description"),
     location_name: t("demo.corporate.location"),
-    address: "Bruno-Kreisky-Platz 1, 1220 Wien",
+    address: t("demo.corporate.address"),
     story_text: t("demo.corporate.story"),
     dress_code: t("demo.corporate.dressCode"),
     hotel_recommendations: [
