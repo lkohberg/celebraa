@@ -87,7 +87,7 @@ export const templates: Template[] = [
     id: "wedding-premium-classic",
     name: "Classic Elegance",
     tagline: "Ewige Schönheit 💍",
-    description: "Zeitlos und raffiniert — warme Crème- und Goldtöne, klassische Typografie und eine Eleganz, die nie aus der Mode kommt.",
+    description: "Zeitlos und raffiniert — warme Crème und Goldtöne, klassische Typografie und eine Eleganz, die nie aus der Mode kommt.",
     eventType: "wedding",
     colors: { primary: "#8B7355", secondary: "#FAF5EF", accent: "#1A1A1A" },
     font: "Playfair Display",
