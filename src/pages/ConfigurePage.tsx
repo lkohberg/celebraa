@@ -178,7 +178,6 @@ const ConfigurePage = () => {
 
       // Admin bypass: skip payment for admin user
       if (isAdmin) {
-      if (isAdmin) {
         await supabase
           .from("events")
           .update({ status: "live", stripe_payment_id: "admin_bypass" })
