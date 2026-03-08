@@ -16,12 +16,12 @@ const corsHeaders = {
 }
 
 const EMAIL_SUBJECTS: Record<string, string> = {
-  signup: 'Confirm your email',
-  invite: "You've been invited",
-  magiclink: 'Your login link',
-  recovery: 'Reset your password',
-  email_change: 'Confirm your new email',
-  reauthentication: 'Your verification code',
+  signup: 'Bestätige deine E-Mail – Celebra',
+  invite: 'Du wurdest eingeladen – Celebra',
+  magiclink: 'Dein Login-Link – Celebra',
+  recovery: 'Passwort zurücksetzen – Celebra',
+  email_change: 'Neue E-Mail bestätigen – Celebra',
+  reauthentication: 'Dein Bestätigungscode – Celebra',
 }
 
 // Template mapping
@@ -35,7 +35,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "celebraa"
+const SITE_NAME = "Celebra"
 const SENDER_DOMAIN = "notify.celebra.at"
 const ROOT_DOMAIN = "celebra.at"
 const FROM_DOMAIN = "celebra.at" // Domain shown in From address (may be root or sender subdomain)
