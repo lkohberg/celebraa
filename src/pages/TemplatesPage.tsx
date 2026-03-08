@@ -56,6 +56,7 @@ const TemplatesPage = () => {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full text-primary font-body text-xs tracking-wide mb-6">
               <Sparkles className="w-3 h-3" />
               9 handverlesene Designs
+              {t("templates.handpicked")}
             </div>
             <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
               {t("templates.title")}
