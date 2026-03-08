@@ -50,7 +50,9 @@ const ConfigurePage = () => {
     date: "",
     time: "",
     locationName: "",
-    address: "",
+    street: "",
+    zip: "",
+    city: "",
     description: "",
     rsvpEnabled: true,
     rsvpDeadline: "",
@@ -62,9 +64,13 @@ const ConfigurePage = () => {
     // Premium fields
     storyText: "",
     ceremonyLocation: "",
-    ceremonyAddress: "",
+    ceremonyStreet: "",
+    ceremonyZip: "",
+    ceremonyCity: "",
     receptionLocation: "",
-    receptionAddress: "",
+    receptionStreet: "",
+    receptionZip: "",
+    receptionCity: "",
     heroImageUrl: template?.defaultHeroImage || "",
     languages: ["de"] as EventLang[],
     // New fields
@@ -128,13 +134,18 @@ const ConfigurePage = () => {
     if (!template) return;
 
     try {
+      const combineAddr = (street: string, zip: string, city: string) => {
+        const parts = [street, [zip, city].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+        return parts || null;
+      };
+
       const eventInsert: any = {
         user_id: user.id,
         title: form.title,
         event_date: form.date,
         event_time: form.time,
         location_name: form.locationName || null,
-        address: form.address || null,
+        address: combineAddr(form.street, form.zip, form.city),
         description: form.description || null,
         template_id: template.id,
         primary_color: form.primaryColor,
@@ -153,9 +164,9 @@ const ConfigurePage = () => {
       if (isPremium) {
         eventInsert.story_text = form.storyText || null;
         eventInsert.ceremony_location = form.ceremonyLocation || null;
-        eventInsert.ceremony_address = form.ceremonyAddress || null;
+        eventInsert.ceremony_address = combineAddr(form.ceremonyStreet, form.ceremonyZip, form.ceremonyCity);
         eventInsert.reception_location = form.receptionLocation || null;
-        eventInsert.reception_address = form.receptionAddress || null;
+        eventInsert.reception_address = combineAddr(form.receptionStreet, form.receptionZip, form.receptionCity);
         eventInsert.hero_image_url = form.heroImageUrl || null;
       }
 
@@ -259,12 +270,12 @@ const ConfigurePage = () => {
                       event_time: form.time || "18:00",
                       description: form.description || null,
                       location_name: form.locationName || null,
-                      address: form.address || null,
+                      address: [form.street, [form.zip, form.city].filter(Boolean).join(" ")].filter(Boolean).join(", ") || null,
                       story_text: form.storyText || null,
                       ceremony_location: form.ceremonyLocation || null,
-                      ceremony_address: form.ceremonyAddress || null,
+                      ceremony_address: [form.ceremonyStreet, [form.ceremonyZip, form.ceremonyCity].filter(Boolean).join(" ")].filter(Boolean).join(", ") || null,
                       reception_location: form.receptionLocation || null,
-                      reception_address: form.receptionAddress || null,
+                      reception_address: [form.receptionStreet, [form.receptionZip, form.receptionCity].filter(Boolean).join(" ")].filter(Boolean).join(", ") || null,
                       hero_image_url: form.heroImageUrl || template.defaultHeroImage || null,
                       rsvp_enabled: form.rsvpEnabled,
                       rsvp_deadline: form.rsvpDeadline || null,
@@ -357,38 +368,6 @@ const ConfigurePage = () => {
               )}
             </div>
           </div>
-        ) : (
-          <div className="rounded-xl overflow-hidden shadow-card" style={{ background: template.previewGradient, fontFamily: `'${form.font}', sans-serif` }}>
-            <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(form.font)}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
-            <div className="p-8 text-center">
-              <p className="text-xs font-body uppercase tracking-widest mb-3 opacity-50" style={{ color: template.colors.accent }}>
-                {t("configure.invitation")}
-              </p>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ fontFamily: form.font, color: template.colors.primary === "#FFFFFF" ? template.colors.accent : template.colors.primary }}>{form.title || t("configure.yourTitle")}</h2>
-              {form.description && (<p className="font-body text-sm opacity-70 mt-2 max-w-xs mx-auto" style={{ color: template.colors.accent }}>{form.description}</p>)}
-              <div className="mt-6 space-y-2 max-w-xs mx-auto text-left">
-                {form.date && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><Calendar className="w-4 h-4" /><span>{form.date}</span></div>)}
-                {form.time && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><Clock className="w-4 h-4" /><span>{form.time} {t("configure.timeUnit")}</span></div>)}
-                {form.locationName && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><MapPin className="w-4 h-4" /><span>{form.locationName}</span></div>)}
-                {form.maxGuests && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><Users className="w-4 h-4" /><span>max. {form.maxGuests} {t("dashboard.guests")}</span></div>)}
-                {form.dressCode && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><span className="w-4 h-4 text-center">👔</span><span>{form.dressCode}</span></div>)}
-              </div>
-              {form.rsvpEnabled && (
-                <div className="mt-8 bg-background/80 backdrop-blur rounded-lg p-5">
-                  <p className="font-display text-base font-semibold text-foreground mb-2">{t("configure.rsvpQuestion")}</p>
-                  <div className="flex gap-3 justify-center">
-                    <Button size="sm" className="font-body">{t("configure.rsvpYes")}</Button>
-                    <Button size="sm" variant="outline" className="font-body">{t("configure.rsvpNo")}</Button>
-                  </div>
-                  {form.menuSelection && (
-                    <p className="text-xs font-body text-muted-foreground mt-3 opacity-70">
-                      {t("configure.menuDietaryPreview")}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
 
           {/* Config Form */}
           <div className="order-1 lg:order-2">
@@ -417,7 +396,13 @@ const ConfigurePage = () => {
 
               <div>
                 <Label className="font-body">{t("configure.address")}</Label>
-                <Input placeholder={t("configure.addressPlaceholder")} value={form.address} onChange={(e) => updateField("address", e.target.value)} className="font-body mt-1" />
+                <div className="grid grid-cols-1 gap-2 mt-1">
+                  <Input placeholder={t("configure.streetPlaceholder")} value={form.street} onChange={(e) => updateField("street", e.target.value)} className="font-body" />
+                  <div className="grid grid-cols-3 gap-2">
+                    <Input placeholder={t("configure.zipPlaceholder")} value={form.zip} onChange={(e) => updateField("zip", e.target.value)} className="font-body" />
+                    <Input placeholder={t("configure.cityPlaceholder")} value={form.city} onChange={(e) => updateField("city", e.target.value)} className="font-body col-span-2" />
+                  </div>
+                </div>
               </div>
 
               <div>
@@ -445,24 +430,32 @@ const ConfigurePage = () => {
 
                   {template.eventType === "wedding" && (
                     <>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="font-body text-sm">{t("configure.ceremonyLocation")}</Label>
-                          <Input value={form.ceremonyLocation} onChange={(e) => updateField("ceremonyLocation", e.target.value)} className="font-body mt-1" />
-                        </div>
-                        <div>
-                          <Label className="font-body text-sm">{t("configure.ceremonyAddress")}</Label>
-                          <Input value={form.ceremonyAddress} onChange={(e) => updateField("ceremonyAddress", e.target.value)} className="font-body mt-1" />
+                      <div>
+                        <Label className="font-body text-sm">{t("configure.ceremonyLocation")}</Label>
+                        <Input value={form.ceremonyLocation} onChange={(e) => updateField("ceremonyLocation", e.target.value)} className="font-body mt-1" />
+                      </div>
+                      <div>
+                        <Label className="font-body text-sm">{t("configure.ceremonyAddress")}</Label>
+                        <div className="grid grid-cols-1 gap-2 mt-1">
+                          <Input placeholder={t("configure.streetPlaceholder")} value={form.ceremonyStreet} onChange={(e) => updateField("ceremonyStreet", e.target.value)} className="font-body" />
+                          <div className="grid grid-cols-3 gap-2">
+                            <Input placeholder={t("configure.zipPlaceholder")} value={form.ceremonyZip} onChange={(e) => updateField("ceremonyZip", e.target.value)} className="font-body" />
+                            <Input placeholder={t("configure.cityPlaceholder")} value={form.ceremonyCity} onChange={(e) => updateField("ceremonyCity", e.target.value)} className="font-body col-span-2" />
+                          </div>
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="font-body text-sm">{t("configure.receptionLocation")}</Label>
-                          <Input value={form.receptionLocation} onChange={(e) => updateField("receptionLocation", e.target.value)} className="font-body mt-1" />
-                        </div>
-                        <div>
-                          <Label className="font-body text-sm">{t("configure.receptionAddress")}</Label>
-                          <Input value={form.receptionAddress} onChange={(e) => updateField("receptionAddress", e.target.value)} className="font-body mt-1" />
+                      <div>
+                        <Label className="font-body text-sm">{t("configure.receptionLocation")}</Label>
+                        <Input value={form.receptionLocation} onChange={(e) => updateField("receptionLocation", e.target.value)} className="font-body mt-1" />
+                      </div>
+                      <div>
+                        <Label className="font-body text-sm">{t("configure.receptionAddress")}</Label>
+                        <div className="grid grid-cols-1 gap-2 mt-1">
+                          <Input placeholder={t("configure.streetPlaceholder")} value={form.receptionStreet} onChange={(e) => updateField("receptionStreet", e.target.value)} className="font-body" />
+                          <div className="grid grid-cols-3 gap-2">
+                            <Input placeholder={t("configure.zipPlaceholder")} value={form.receptionZip} onChange={(e) => updateField("receptionZip", e.target.value)} className="font-body" />
+                            <Input placeholder={t("configure.cityPlaceholder")} value={form.receptionCity} onChange={(e) => updateField("receptionCity", e.target.value)} className="font-body col-span-2" />
+                          </div>
                         </div>
                       </div>
                     </>
@@ -567,12 +560,20 @@ const ConfigurePage = () => {
               {/* Dress Code */}
               <div>
                 <Label className="font-body">{t("configure.dressCode")}</Label>
-                <Input
-                  placeholder={t("configure.dressCodePlaceholder")}
-                  value={form.dressCode}
-                  onChange={(e) => setForm((prev) => ({ ...prev, dressCode: e.target.value }))}
-                  className="font-body mt-1"
-                />
+                <Select value={form.dressCode || "none"} onValueChange={(v) => setForm((prev) => ({ ...prev, dressCode: v === "none" ? "" : v }))}>
+                  <SelectTrigger className="font-body mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none" className="font-body">{t("configure.dressCodeNone")}</SelectItem>
+                    <SelectItem value="Casual" className="font-body">Casual</SelectItem>
+                    <SelectItem value="Smart Casual" className="font-body">Smart Casual</SelectItem>
+                    <SelectItem value="Business Casual" className="font-body">Business Casual</SelectItem>
+                    <SelectItem value="Cocktail" className="font-body">Cocktail</SelectItem>
+                    <SelectItem value="Festlich / Formal" className="font-body">{t("configure.dressCodeFormal")}</SelectItem>
+                    <SelectItem value="Black Tie" className="font-body">Black Tie</SelectItem>
+                    <SelectItem value="White Tie" className="font-body">White Tie</SelectItem>
+                    <SelectItem value="Motto / Themed" className="font-body">{t("configure.dressCodeThemed")}</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Children Welcome (wedding only) */}
@@ -796,3 +797,4 @@ const ConfigurePage = () => {
 };
 
 export default ConfigurePage;
+
