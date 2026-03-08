@@ -28,7 +28,14 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="initial-loader" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:hsl(30,33%,96%);font-family:system-ui,sans-serif;color:hsl(30,10%,25%)">
+        <div style="text-align:center">
+          <div style="font-size:1.75rem;font-weight:600;letter-spacing:0.05em">Celebra</div>
+          <div style="margin-top:0.5rem;font-size:0.875rem;opacity:0.5">Wird geladen…</div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
