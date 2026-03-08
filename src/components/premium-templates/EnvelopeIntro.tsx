@@ -152,7 +152,7 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
 
             {/* Wax seal with irregular edge */}
             <div
-              className="absolute z-20 w-[56px] h-[56px] sm:w-[68px] sm:h-[68px] md:w-[76px] md:h-[76px]"
+              className="absolute z-20 w-[44px] h-[44px] sm:w-[58px] sm:h-[58px] md:w-[76px] md:h-[76px]"
               style={{ top: "calc(50% - 22px)", left: "50%", transform: "translateX(-50%)" }}
             >
             <motion.div
@@ -179,13 +179,13 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
                   />
                 </svg>
                 <div
-                  className="w-[64px] h-[64px] rounded-full flex items-center justify-center relative z-10"
+                  className="w-[36px] h-[36px] sm:w-[48px] sm:h-[48px] md:w-[64px] md:h-[64px] rounded-full flex items-center justify-center relative z-10"
                   style={{
                     background: "radial-gradient(circle at 35% 35%, hsl(5 55% 48%), hsl(5 50% 35%))",
                     boxShadow: "inset 0 1px 3px rgba(255,255,255,0.15), inset 0 -2px 4px rgba(0,0,0,0.2)",
                   }}
                 >
-                  <div className="w-[52px] h-[52px]">
+                  <div className="w-[28px] h-[28px] sm:w-[38px] sm:h-[38px] md:w-[52px] md:h-[52px]">
                     <SealLogo />
                   </div>
                 </div>
