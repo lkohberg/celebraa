@@ -155,6 +155,7 @@ interface TemplateCardProps {
   template: Template;
   onSelect: (template: Template) => void;
   onDemo: (template: Template) => void;
+  demoOnly?: boolean;
 }
 
 const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
