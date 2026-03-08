@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PartyPopper, MapPin, Clock, Music, Sparkles, Star } from "lucide-react";
 import { useTranslation } from "@/i18n";
+import GiftBoxIntro from "./GiftBoxIntro";
 import CountdownTimer from "./CountdownTimer";
 import RsvpForm from "./RsvpForm";
 import ScheduleTimeline from "./ScheduleTimeline";
