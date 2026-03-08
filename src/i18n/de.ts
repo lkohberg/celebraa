@@ -274,6 +274,8 @@ const de = {
   "auth.loading": "Wird geladen...",
   "auth.loginSuccess": "Erfolgreich angemeldet!",
   "auth.registerSuccess": "Registrierung erfolgreich! Bitte bestätige deine E-Mail.",
+  "auth.verifyTitle": "Prüfe dein Postfach",
+  "auth.verifyDesc": "Wir haben dir eine Bestätigungs-E-Mail gesendet. Bitte klicke auf den Link in der E-Mail, um dein Konto zu aktivieren.",
   "auth.noAccount": "Noch kein Konto?",
   "auth.hasAccount": "Bereits registriert?",
 

@@ -273,6 +273,8 @@ const en = {
   "auth.loading": "Loading...",
   "auth.loginSuccess": "Successfully signed in!",
   "auth.registerSuccess": "Registration successful! Please confirm your email.",
+  "auth.verifyTitle": "Check your inbox",
+  "auth.verifyDesc": "We've sent you a confirmation email. Please click the link in the email to activate your account.",
   "auth.noAccount": "Don't have an account?",
   "auth.hasAccount": "Already registered?",
 
