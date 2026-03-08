@@ -31,7 +31,14 @@ const ConfigurePage = () => {
   const { templateId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const template = templates.find((t) => t.id === templateId);
+
+  const fontOptions = [
+    { value: "Playfair Display", label: t("font.playfair") },
+    { value: "DM Sans", label: t("font.dmsans") },
+    { value: "Georgia", label: t("font.georgia") },
+  ];
+
+  const template = templates.find((tp) => tp.id === templateId);
   const { user } = useAuth();
   const createEvent = useCreateEvent();
   const checkLink = useCheckEventLink();
