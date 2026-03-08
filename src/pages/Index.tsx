@@ -154,10 +154,10 @@ const Index = () => {
           >
             <button
               onClick={() => navigate("/templates")}
-              className="group inline-flex items-center gap-3 font-display text-base md:text-lg font-semibold px-10 py-4 rounded-full border-2 border-primary bg-transparent text-foreground transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:shadow-lg active:scale-[0.97]"
+              className="group inline-flex items-center gap-3 font-display text-sm md:text-base tracking-widest uppercase px-10 py-4 rounded-full border border-primary/40 text-foreground transition-all duration-500 hover:border-primary hover:bg-primary/5 hover:tracking-[0.2em] active:scale-[0.97]"
             >
               <span>Alle Designs entdecken</span>
-              <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+              <span className="inline-block transition-transform duration-500 group-hover:translate-x-1.5 text-primary">→</span>
             </button>
           </motion.div>
         </div>
