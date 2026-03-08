@@ -490,8 +490,8 @@ const OrderFlow = () => {
                       </p>
                       {manualBlocks.map(block => (
                         <div key={block.id}>
-                          <Label className="font-body text-sm">{block.icon} {block.name}</Label>
-                          <p className="font-body text-xs text-muted-foreground mb-1">{block.manualWorkDescription}</p>
+                          <Label className="font-body text-sm">{block.icon} {t(block.nameKey)}</Label>
+                          <p className="font-body text-xs text-muted-foreground mb-1">{block.manualWorkDescriptionKey ? t(block.manualWorkDescriptionKey) : ""}</p>
                           <Textarea
                             placeholder={t("order.manualPlaceholder")}
                             value={manualInfo[block.id] || ""}
