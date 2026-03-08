@@ -136,7 +136,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
           </div>
           <div className={`grid gap-12 max-w-2xl mx-auto ${event.dress_code ? "md:grid-cols-2" : "md:grid-cols-1 max-w-lg"}`}>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                 <MapPin className="w-6 h-6" style={{ color: accent }} />
               </div>
               <h3 className="font-display text-xl text-foreground mb-3">{el?.location || t("event.location")}</h3>
