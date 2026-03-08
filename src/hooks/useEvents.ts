@@ -27,7 +27,7 @@ export const useEventByLink = (eventLink: string) =>
         .eq("event_link", eventLink)
         .single();
       if (error) throw error;
-      return data;
+      return data as unknown as PublicEvent;
     },
     enabled: !!eventLink,
   });
