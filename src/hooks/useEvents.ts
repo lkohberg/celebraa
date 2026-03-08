@@ -20,7 +20,7 @@ export const useEventByLink = (eventLink: string) =>
     queryKey: ["event", eventLink],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("events")
+        .from("events_public" as any)
         .select("*")
         .eq("event_link", eventLink)
         .single();
