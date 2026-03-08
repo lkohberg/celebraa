@@ -231,15 +231,13 @@ const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: Template
               {t("templates.select")}
             </Button>
           )}
-          <Button
-            size="sm"
-            variant={demoOnly ? "default" : "outline"}
-            className={`gap-1.5 ${demoOnly ? "flex-1 font-body" : ""}`}
+          <button
+            className={`inline-flex items-center justify-center gap-2 font-body text-xs tracking-wide rounded-full border border-border px-5 py-2.5 text-muted-foreground transition-all duration-300 hover:border-primary hover:text-foreground hover:bg-primary/5 ${demoOnly ? "flex-1" : ""}`}
             onClick={() => onDemo(template)}
           >
-            <Eye className="w-4 h-4" />
-            <span className="font-body text-xs">Demo ansehen</span>
-          </Button>
+            <Eye className="w-3.5 h-3.5" />
+            Demo ansehen
+          </button>
         </div>
       </div>
     </motion.div>
