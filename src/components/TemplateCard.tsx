@@ -140,7 +140,7 @@ export const templates: Template[] = [
     id: "corporate-premium-gala",
     name: "Gala Evening",
     tagline: "Black Tie Glamour 🥂",
-    description: "Luxuriös und exklusiv — Gold auf Schwarz, für Gala-Abende, Award-Ceremonies und Events, die beeindrucken sollen.",
+    description: "Luxuriös und exklusiv — Gold auf Schwarz, für Gala Abende, Award Ceremonies und Events, die beeindrucken sollen.",
     eventType: "corporate",
     colors: { primary: "#C8A951", secondary: "#0D0D0D", accent: "#F5F5DC" },
     font: "Playfair Display",
