@@ -60,7 +60,7 @@ export const templates: Template[] = [
     id: "birthday-premium-garden",
     name: "Garden Party",
     tagline: "Nature vibes 🌿",
-    description: "Frisch und natürlich — sanfte Grüntöne und organische Formen für entspannte Outdoor-Feiern im Grünen. Leichtigkeit pur.",
+    description: "Frisch und natürlich — sanfte Grüntöne und organische Formen für entspannte Feiern im Grünen. Leichtigkeit pur.",
     eventType: "birthday",
     colors: { primary: "#6BCB77", secondary: "#F0F7F4", accent: "#2D6A4F" },
     font: "Playfair Display",
