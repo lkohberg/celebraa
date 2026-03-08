@@ -22,44 +22,42 @@ const HowItWorksDialog = ({ open, onOpenChange }: HowItWorksDialogProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto p-4 sm:p-6">
-        <DialogHeader>
+      <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[80vh] overflow-y-auto rounded-2xl p-5 sm:p-8 border border-border/50 shadow-2xl">
+        <DialogHeader className="space-y-2">
           <DialogTitle className="font-display text-xl sm:text-2xl text-center">
             {t("howItWorks.title")}
           </DialogTitle>
-          <p className="font-body text-xs sm:text-sm text-muted-foreground text-center mt-1">
+          <p className="font-body text-xs sm:text-sm text-muted-foreground text-center">
             {t("howItWorks.subtitle")}
           </p>
         </DialogHeader>
 
-        <div className="flex flex-col gap-3 mt-4 sm:mt-6">
+        <div className="flex flex-col gap-2.5 mt-5">
           {steps.map((step, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.08, duration: 0.3 }}
-              className={`relative flex flex-col sm:flex-row items-center sm:items-start gap-3 p-4 rounded-xl ${step.bg}`}
+              transition={{ delay: index * 0.07, duration: 0.3 }}
+              className={`flex items-start gap-3.5 p-3.5 rounded-xl ${step.bg}`}
             >
-              {/* Step number badge */}
-              <div className="absolute -top-2 -left-1 sm:static w-6 h-6 sm:w-auto sm:h-auto">
-                <span className="sm:hidden inline-flex items-center justify-center w-6 h-6 rounded-full bg-background text-[10px] font-bold text-muted-foreground shadow-sm border border-border/50">
+              <div className="relative shrink-0">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-background shadow-sm">
+                  <step.icon className={`w-5 h-5 ${step.color}`} />
+                </div>
+                <span className="absolute -top-1.5 -right-1.5 inline-flex items-center justify-center w-5 h-5 rounded-full bg-background text-[10px] font-bold text-muted-foreground shadow-sm border border-border/40">
                   {index + 1}
                 </span>
               </div>
-
-              <div className={`w-12 h-12 sm:w-10 sm:h-10 rounded-xl sm:rounded-lg flex items-center justify-center shrink-0 bg-background shadow-sm`}>
-                <step.icon className={`w-6 h-6 sm:w-5 sm:h-5 ${step.color}`} />
-              </div>
-              <div className="text-center sm:text-left">
-                <h3 className="font-display text-sm font-semibold text-foreground">{t(step.titleKey)}</h3>
-                <p className="font-body text-xs sm:text-sm text-muted-foreground mt-1">{t(step.descKey)}</p>
+              <div className="min-w-0">
+                <h3 className="font-display text-sm font-semibold text-foreground leading-tight">{t(step.titleKey)}</h3>
+                <p className="font-body text-xs text-muted-foreground mt-0.5 leading-relaxed">{t(step.descKey)}</p>
               </div>
             </motion.div>
           ))}
         </div>
 
-        <div className="mt-4 sm:mt-6 text-center">
+        <div className="mt-5 text-center">
           <p className="font-body text-xs text-muted-foreground">
             {t("howItWorks.price")} <span className="font-semibold text-primary">€19</span> · {t("howItWorks.priceNote")}
           </p>
