@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PartyPopper, MapPin, Clock, Music, Sparkles, Star } from "lucide-react";
 import { useTranslation } from "@/i18n";
+import GiftBoxIntro from "./GiftBoxIntro";
 import CountdownTimer from "./CountdownTimer";
 import RsvpForm from "./RsvpForm";
 import ScheduleTimeline from "./ScheduleTimeline";
@@ -49,7 +50,6 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
   const [showContent, setShowContent] = useState(false);
-  const [confetti, setConfetti] = useState<number[]>([]);
 
   const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", { day: "numeric", month: "long", year: "numeric" });
 
@@ -58,23 +58,15 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
   const hasBlock = (suffix: string) => selectedBlocks.some((id: string) => id.endsWith(suffix));
   const accent = theme?.primary || "hsl(340, 65%, 50%)";
 
-  useEffect(() => {
-    const particles = Array.from({ length: 40 }, (_, i) => i);
-    setConfetti(particles);
-    const timer = setTimeout(() => setShowContent(true), 800);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="min-h-screen overflow-hidden" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
       <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
-      <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
-        {confetti.map((i) => (<ConfettiParticle key={i} delay={i * 0.07} />))}
-      </div>
+
+      {!showContent && <GiftBoxIntro title={event.title} onOpen={() => setShowContent(true)} accentColor={accent} />}
 
       <AnimatePresence>
         {showContent && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
             {/* Hero */}
             <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{
               background: event.hero_image_url ? undefined

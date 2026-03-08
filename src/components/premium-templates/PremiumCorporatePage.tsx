@@ -1,6 +1,8 @@
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Building2, MapPin, Clock, Calendar, Shirt, Sparkles } from "lucide-react";
 import { useTranslation } from "@/i18n";
+import BadgeScanIntro from "./BadgeScanIntro";
 import CountdownTimer from "./CountdownTimer";
 import RsvpForm from "./RsvpForm";
 import ScheduleTimeline from "./ScheduleTimeline";
@@ -26,6 +28,7 @@ const CorpDivider = ({ color }: { color: string }) => (
 const PremiumCorporatePage = ({ event, theme, lang }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang }) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
+  const [showContent, setShowContent] = useState(false);
 
   const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", { day: "numeric", month: "long", year: "numeric" });
 
@@ -39,6 +42,10 @@ const PremiumCorporatePage = ({ event, theme, lang }: { event: PremiumEventData;
     <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
       <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
 
+      {!showContent && <BadgeScanIntro title={event.title} onOpen={() => setShowContent(true)} accentColor={accent} />}
+
+      {showContent && (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
       {/* Hero */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden" style={{
         background: event.hero_image_url ? undefined
@@ -171,6 +178,8 @@ const PremiumCorporatePage = ({ event, theme, lang }: { event: PremiumEventData;
           <p className="font-body text-sm text-muted-foreground mt-3">{formattedDate}</p>
         </div>
       </footer>
+      </motion.div>
+      )}
     </div>
   );
 };
