@@ -462,24 +462,32 @@ const ConfigurePage = () => {
 
                   {template.eventType === "wedding" && (
                     <>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="font-body text-sm">{t("configure.ceremonyLocation")}</Label>
-                          <Input value={form.ceremonyLocation} onChange={(e) => updateField("ceremonyLocation", e.target.value)} className="font-body mt-1" />
-                        </div>
-                        <div>
-                          <Label className="font-body text-sm">{t("configure.ceremonyAddress")}</Label>
-                          <Input value={form.ceremonyAddress} onChange={(e) => updateField("ceremonyAddress", e.target.value)} className="font-body mt-1" />
+                      <div>
+                        <Label className="font-body text-sm">{t("configure.ceremonyLocation")}</Label>
+                        <Input value={form.ceremonyLocation} onChange={(e) => updateField("ceremonyLocation", e.target.value)} className="font-body mt-1" />
+                      </div>
+                      <div>
+                        <Label className="font-body text-sm">{t("configure.ceremonyAddress")}</Label>
+                        <div className="grid grid-cols-1 gap-2 mt-1">
+                          <Input placeholder={t("configure.streetPlaceholder")} value={form.ceremonyStreet} onChange={(e) => updateField("ceremonyStreet", e.target.value)} className="font-body" />
+                          <div className="grid grid-cols-3 gap-2">
+                            <Input placeholder={t("configure.zipPlaceholder")} value={form.ceremonyZip} onChange={(e) => updateField("ceremonyZip", e.target.value)} className="font-body" />
+                            <Input placeholder={t("configure.cityPlaceholder")} value={form.ceremonyCity} onChange={(e) => updateField("ceremonyCity", e.target.value)} className="font-body col-span-2" />
+                          </div>
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="font-body text-sm">{t("configure.receptionLocation")}</Label>
-                          <Input value={form.receptionLocation} onChange={(e) => updateField("receptionLocation", e.target.value)} className="font-body mt-1" />
-                        </div>
-                        <div>
-                          <Label className="font-body text-sm">{t("configure.receptionAddress")}</Label>
-                          <Input value={form.receptionAddress} onChange={(e) => updateField("receptionAddress", e.target.value)} className="font-body mt-1" />
+                      <div>
+                        <Label className="font-body text-sm">{t("configure.receptionLocation")}</Label>
+                        <Input value={form.receptionLocation} onChange={(e) => updateField("receptionLocation", e.target.value)} className="font-body mt-1" />
+                      </div>
+                      <div>
+                        <Label className="font-body text-sm">{t("configure.receptionAddress")}</Label>
+                        <div className="grid grid-cols-1 gap-2 mt-1">
+                          <Input placeholder={t("configure.streetPlaceholder")} value={form.receptionStreet} onChange={(e) => updateField("receptionStreet", e.target.value)} className="font-body" />
+                          <div className="grid grid-cols-3 gap-2">
+                            <Input placeholder={t("configure.zipPlaceholder")} value={form.receptionZip} onChange={(e) => updateField("receptionZip", e.target.value)} className="font-body" />
+                            <Input placeholder={t("configure.cityPlaceholder")} value={form.receptionCity} onChange={(e) => updateField("receptionCity", e.target.value)} className="font-body col-span-2" />
+                          </div>
                         </div>
                       </div>
                     </>
