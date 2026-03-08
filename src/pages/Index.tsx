@@ -137,12 +137,19 @@ const Index = () => {
                         template={template}
                         onSelect={handleSelect}
                         onDemo={handleDemo}
+                        demoOnly
                       />
                     ))}
                 </div>
               </TabsContent>
             ))}
           </Tabs>
+
+          <div className="text-center mt-12">
+            <Button size="lg" className="font-body text-base px-10" onClick={() => navigate("/templates")}>
+              Jetzt Design auswählen
+            </Button>
+          </div>
         </div>
       </section>
 

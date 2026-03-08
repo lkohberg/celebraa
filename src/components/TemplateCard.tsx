@@ -155,9 +155,10 @@ interface TemplateCardProps {
   template: Template;
   onSelect: (template: Template) => void;
   onDemo: (template: Template) => void;
+  demoOnly?: boolean;
 }
 
-const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
+const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: TemplateCardProps) => {
   const { t } = useTranslation();
 
   return (
@@ -221,21 +222,23 @@ const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
 
         {/* Actions */}
         <div className="flex gap-2">
+          {!demoOnly && (
+            <Button
+              size="sm"
+              className="flex-1 font-body"
+              onClick={() => onSelect(template)}
+            >
+              {t("templates.select")}
+            </Button>
+          )}
           <Button
             size="sm"
-            className="flex-1 font-body"
-            onClick={() => onSelect(template)}
-          >
-            {t("templates.select")}
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            className="gap-1.5"
+            variant={demoOnly ? "default" : "outline"}
+            className={`gap-1.5 ${demoOnly ? "flex-1 font-body" : ""}`}
             onClick={() => onDemo(template)}
           >
             <Eye className="w-4 h-4" />
-            <span className="font-body text-xs">Demo</span>
+            <span className="font-body text-xs">Demo ansehen</span>
           </Button>
         </div>
       </div>
