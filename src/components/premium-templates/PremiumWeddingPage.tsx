@@ -62,7 +62,7 @@ const FloralDivider = ({ color }: { color: string }) => (
   </div>
 );
 
-const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean }) => {
+const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = false }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean; isDemo?: boolean }) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
   const [showContent, setShowContent] = useState(!showIntro);
@@ -113,7 +113,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
             </button>
           </section>
 
-          {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} />}
+          {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} />}
 
           {/* Countdown */}
           <section id="countdown" className="py-24 relative overflow-hidden" style={{ backgroundColor: "hsl(30, 30%, 98%)" }}>
@@ -215,7 +215,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
 
           {hasBlock("-shuttle") && <ShuttleSection routes={blockCfg.shuttle} accentColor={accent} lang={lang} />}
           {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} lang={lang} />}
-          {hasBlock("-musicpro") && <MusicProSection accentColor={accent} eventId={event.id} lang={lang} />}
+          {hasBlock("-musicpro") && <MusicProSection accentColor={accent} eventId={event.id} lang={lang} isPreview={isDemo} />}
 
           {event.rsvp_enabled && (
             <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="wedding" lang={lang} />
