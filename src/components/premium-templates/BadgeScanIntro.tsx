@@ -248,8 +248,8 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
               className="absolute -inset-4 rounded-2xl -z-10"
               style={{
                 background: phase === "verified"
-                  ? `radial-gradient(ellipse at center, hsla(140, 70%, 45%, 0.15), transparent 70%)`
-                  : `radial-gradient(ellipse at center, ${accent}15, transparent 70%)`,
+                   ? `radial-gradient(ellipse at center, hsla(140, 70%, 45%, 0.15), transparent 70%)`
+                   : `radial-gradient(ellipse at center, ${colorWithAlpha(accent, 0.15)}, transparent 70%)`,
               }}
               animate={
                 phase === "scanning"
