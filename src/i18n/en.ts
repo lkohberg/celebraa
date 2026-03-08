@@ -589,7 +589,7 @@ const en = {
   "demo.corporate.products.3.desc": "Highly secure network solution.",
 
   // Index page
-  "index.discoverAll": "Discover all designs",
+  "index.discoverAll": "Choose your design now",
 
   // Success Page - Pending
   "success.pending.title": "Thank you for your order!",
