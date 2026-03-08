@@ -24,6 +24,7 @@ export interface Template {
   font: string;
   previewGradient: string;
   tier: "premium";
+  premiumFeatureKeys?: string[];
   premiumFeatures?: string[];
   defaultHeroImage?: string;
 }
@@ -40,7 +41,7 @@ export const templates: Template[] = [
     font: "DM Sans",
     previewGradient: "linear-gradient(135deg, #FF6B9D 0%, #C44DFF 50%, #4D96FF 100%)",
     tier: "premium",
-    premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Programm-Sektion"],
+    premiumFeatureKeys: ["templateCard.confettiAnimation", "templateCard.countdownTimer", "templateCard.rsvpForm", "templateCard.programSection"],
     defaultHeroImage: heroBirthdayNeon,
   },
   {
@@ -53,7 +54,7 @@ export const templates: Template[] = [
     font: "Playfair Display",
     previewGradient: "linear-gradient(135deg, #1A1A2E 0%, #D4AF37 100%)",
     tier: "premium",
-    premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Party-Details"],
+    premiumFeatureKeys: ["templateCard.confettiAnimation", "templateCard.countdownTimer", "templateCard.rsvpForm", "templateCard.partyDetails"],
     defaultHeroImage: heroBirthdayGlamour,
   },
   {
@@ -66,7 +67,7 @@ export const templates: Template[] = [
     font: "Playfair Display",
     previewGradient: "linear-gradient(135deg, #F0F7F4 0%, #6BCB77 100%)",
     tier: "premium",
-    premiumFeatures: ["Konfetti-Animation", "Countdown-Timer", "RSVP-Formular", "Location-Details"],
+    premiumFeatureKeys: ["templateCard.confettiAnimation", "templateCard.countdownTimer", "templateCard.rsvpForm", "templateCard.locationDetails"],
     defaultHeroImage: heroBirthdayGarden,
   },
   // Wedding
@@ -80,7 +81,7 @@ export const templates: Template[] = [
     font: "Playfair Display",
     previewGradient: "linear-gradient(135deg, #FFF0F0 0%, #E8D5C4 50%, #D5E8D4 100%)",
     tier: "premium",
-    premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "RSVP-Formular"],
+    premiumFeatureKeys: ["templateCard.envelopeAnimation", "templateCard.countdownTimer", "templateCard.rsvpForm"],
     defaultHeroImage: heroWeddingFloral,
   },
   {
@@ -93,7 +94,7 @@ export const templates: Template[] = [
     font: "Playfair Display",
     previewGradient: "linear-gradient(135deg, #FAF5EF 0%, #D4C5A9 100%)",
     tier: "premium",
-    premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "RSVP-Formular"],
+    premiumFeatureKeys: ["templateCard.envelopeAnimation", "templateCard.countdownTimer", "templateCard.rsvpForm"],
     defaultHeroImage: heroWeddingClassic,
   },
   {
@@ -106,7 +107,7 @@ export const templates: Template[] = [
     font: "DM Sans",
     previewGradient: "linear-gradient(135deg, #FAFAFA 0%, #E0E0E0 100%)",
     tier: "premium",
-    premiumFeatures: ["Envelope-Animation", "Countdown-Timer", "RSVP-Formular"],
+    premiumFeatureKeys: ["templateCard.envelopeAnimation", "templateCard.countdownTimer", "templateCard.rsvpForm"],
     defaultHeroImage: heroWeddingModern,
   },
   // Corporate
@@ -120,7 +121,7 @@ export const templates: Template[] = [
     font: "DM Sans",
     previewGradient: "linear-gradient(135deg, #1E3A5F 0%, #2C5282 100%)",
     tier: "premium",
-    premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Anmelde-Formular"],
+    premiumFeatureKeys: ["templateCard.countdownTimer", "templateCard.agendaSection", "templateCard.registrationForm"],
     defaultHeroImage: heroCorporateExecutive,
   },
   {
@@ -133,7 +134,7 @@ export const templates: Template[] = [
     font: "DM Sans",
     previewGradient: "linear-gradient(135deg, #0F0E17 0%, #6C63FF 100%)",
     tier: "premium",
-    premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Anmelde-Formular"],
+    premiumFeatureKeys: ["templateCard.countdownTimer", "templateCard.agendaSection", "templateCard.registrationForm"],
     defaultHeroImage: heroCorporateTech,
   },
   {
@@ -146,7 +147,7 @@ export const templates: Template[] = [
     font: "Playfair Display",
     previewGradient: "linear-gradient(135deg, #0D0D0D 0%, #C8A951 100%)",
     tier: "premium",
-    premiumFeatures: ["Countdown-Timer", "Agenda-Sektion", "Anmelde-Formular"],
+    premiumFeatureKeys: ["templateCard.countdownTimer", "templateCard.agendaSection", "templateCard.registrationForm"],
     defaultHeroImage: heroCorporateGala,
   },
 ];
@@ -167,67 +168,46 @@ const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: Template
       transition={{ duration: 0.25 }}
       className="group bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 border border-border/30"
     >
-      {/* Image area */}
       <div
         className="h-52 relative overflow-hidden"
         style={{ background: template.previewGradient }}
       >
         {template.defaultHeroImage && (
-          <img
-            src={template.defaultHeroImage}
-            alt={template.name}
-            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-          />
+          <img src={template.defaultHeroImage} alt={template.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
         )}
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-
-        {/* Template name overlay */}
         <div className="absolute inset-0 flex items-end justify-between p-5">
           <div>
-            <p
-              className="text-2xl font-bold text-white"
-              style={{
-                fontFamily: template.font,
-                textShadow: "0 2px 10px rgba(0,0,0,0.4)",
-              }}
-            >
+            <p className="text-2xl font-bold text-white" style={{ fontFamily: template.font, textShadow: "0 2px 10px rgba(0,0,0,0.4)" }}>
               {template.name}
             </p>
             <p className="text-white/70 text-xs font-body mt-0.5">{template.tagline}</p>
           </div>
           <Badge className="bg-white/20 backdrop-blur-sm text-white border-white/20 font-body text-[10px]">
-            ab €19
+            {t("templateCard.from")} €19
           </Badge>
         </div>
       </div>
 
-      {/* Content */}
       <div className="p-5">
         <p className="font-body text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-3">
           {template.description}
         </p>
 
-        {/* Feature chips */}
-        {template.premiumFeatures && (
+        {template.premiumFeatureKeys && (
           <div className="flex flex-wrap gap-1.5 mb-5">
-            {template.premiumFeatures.slice(0, 4).map((f) => (
-              <span key={f} className="text-[10px] font-body bg-secondary/80 text-muted-foreground px-2 py-0.5 rounded-full flex items-center gap-1">
+            {template.premiumFeatureKeys.slice(0, 4).map((key) => (
+              <span key={key} className="text-[10px] font-body bg-secondary/80 text-muted-foreground px-2 py-0.5 rounded-full flex items-center gap-1">
                 <Sparkles className="w-2.5 h-2.5" />
-                {f}
+                {t(key)}
               </span>
             ))}
           </div>
         )}
 
-        {/* Actions */}
         <div className="flex gap-2">
           {!demoOnly && (
-            <Button
-              size="sm"
-              className="flex-1 font-body"
-              onClick={() => onSelect(template)}
-            >
+            <Button size="sm" className="flex-1 font-body" onClick={() => onSelect(template)}>
               {t("templates.select")}
             </Button>
           )}
@@ -236,7 +216,7 @@ const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: Template
             onClick={() => onDemo(template)}
           >
             <Eye className="w-3.5 h-3.5" />
-            Demo ansehen
+            {t("templateCard.demoView")}
           </button>
         </div>
       </div>

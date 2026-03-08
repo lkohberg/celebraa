@@ -1,51 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ArrowRight, Palette, Package, Eye, User, CreditCard, PartyPopper } from "lucide-react";
+import { Palette, Package, Eye, User, CreditCard, PartyPopper } from "lucide-react";
 import { motion } from "framer-motion";
-
-const steps = [
-  {
-    icon: Palette,
-    title: "1. Design wählen",
-    description: "Wähle aus unseren Premium-Designs für Hochzeiten, Geburtstage oder Business-Events. Jedes Design ist individuell anpassbar.",
-    color: "text-pink-500",
-    bg: "bg-pink-50 dark:bg-pink-950/20",
-  },
-  {
-    icon: Package,
-    title: "2. Blöcke & Pakete",
-    description: "Stelle deine Event-Seite individuell zusammen. Wähle ein vorteilhaftes Paket oder einzelne Blöcke wie Timeline, Essensmenü, Dresscode und mehr.",
-    color: "text-blue-500",
-    bg: "bg-blue-50 dark:bg-blue-950/20",
-  },
-  {
-    icon: Eye,
-    title: "3. Live-Vorschau",
-    description: "Sieh dir eine Vorschau deiner Event-Seite mit allen gewählten Blöcken an, bevor du bezahlst. So weißt du genau, was du bekommst.",
-    color: "text-purple-500",
-    bg: "bg-purple-50 dark:bg-purple-950/20",
-  },
-  {
-    icon: User,
-    title: "4. Kontaktdaten",
-    description: "Gib deinen Namen und deine E-Mail-Adresse an, damit wir dich über den Status informieren können.",
-    color: "text-green-500",
-    bg: "bg-green-50 dark:bg-green-950/20",
-  },
-  {
-    icon: CreditCard,
-    title: "5. Sicher bezahlen",
-    description: "Bezahle sicher über Stripe mit Kreditkarte, Apple Pay oder Google Pay. Einmalzahlung – kein Abo.",
-    color: "text-amber-500",
-    bg: "bg-amber-50 dark:bg-amber-950/20",
-  },
-  {
-    icon: PartyPopper,
-    title: "6. Fertig!",
-    description: "Deine Event-Seite ist sofort verfügbar (oder nach kurzer Bearbeitung bei individuellen Blöcken). Teile den Link mit deinen Gästen!",
-    color: "text-primary",
-    bg: "bg-primary/5",
-  },
-];
+import { useTranslation } from "@/i18n";
 
 interface HowItWorksDialogProps {
   open: boolean;
@@ -53,15 +9,26 @@ interface HowItWorksDialogProps {
 }
 
 const HowItWorksDialog = ({ open, onOpenChange }: HowItWorksDialogProps) => {
+  const { t } = useTranslation();
+
+  const steps = [
+    { icon: Palette, titleKey: "howItWorks.step1.title", descKey: "howItWorks.step1.desc", color: "text-pink-500", bg: "bg-pink-50 dark:bg-pink-950/20" },
+    { icon: Package, titleKey: "howItWorks.step2.title", descKey: "howItWorks.step2.desc", color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-950/20" },
+    { icon: Eye, titleKey: "howItWorks.step3.title", descKey: "howItWorks.step3.desc", color: "text-purple-500", bg: "bg-purple-50 dark:bg-purple-950/20" },
+    { icon: User, titleKey: "howItWorks.step4.title", descKey: "howItWorks.step4.desc", color: "text-green-500", bg: "bg-green-50 dark:bg-green-950/20" },
+    { icon: CreditCard, titleKey: "howItWorks.step5.title", descKey: "howItWorks.step5.desc", color: "text-amber-500", bg: "bg-amber-50 dark:bg-amber-950/20" },
+    { icon: PartyPopper, titleKey: "howItWorks.step6.title", descKey: "howItWorks.step6.desc", color: "text-primary", bg: "bg-primary/5" },
+  ];
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl text-center">
-            Wie funktioniert's?
+            {t("howItWorks.title")}
           </DialogTitle>
           <p className="font-body text-sm text-muted-foreground text-center mt-1">
-            In 6 einfachen Schritten zu deiner perfekten Event-Seite
+            {t("howItWorks.subtitle")}
           </p>
         </DialogHeader>
 
@@ -78,8 +45,8 @@ const HowItWorksDialog = ({ open, onOpenChange }: HowItWorksDialogProps) => {
                 <step.icon className={`w-5 h-5 ${step.color}`} />
               </div>
               <div>
-                <h3 className="font-display text-sm font-semibold text-foreground">{step.title}</h3>
-                <p className="font-body text-sm text-muted-foreground mt-1">{step.description}</p>
+                <h3 className="font-display text-sm font-semibold text-foreground">{t(step.titleKey)}</h3>
+                <p className="font-body text-sm text-muted-foreground mt-1">{t(step.descKey)}</p>
               </div>
             </motion.div>
           ))}
@@ -87,7 +54,7 @@ const HowItWorksDialog = ({ open, onOpenChange }: HowItWorksDialogProps) => {
 
         <div className="mt-6 text-center">
           <p className="font-body text-xs text-muted-foreground">
-            Ab nur <span className="font-semibold text-primary">€19</span> · Einmalzahlung · Kein Abo
+            {t("howItWorks.price")} <span className="font-semibold text-primary">€19</span> · {t("howItWorks.priceNote")}
           </p>
         </div>
       </DialogContent>
