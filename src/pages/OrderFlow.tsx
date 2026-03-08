@@ -177,7 +177,7 @@ const OrderFlow = () => {
       description: form.description || null,
       location_name: form.locationName || null,
       address: form.address || null,
-      story_text: hasBlock("-story") ? (form.storyText || "Eure Geschichte wird hier erzählt. Ein wunderschöner Text über euch als Paar.") : null,
+      story_text: hasBlock("-story") ? (blockConfig.story_text || "Eure Geschichte wird hier erzählt. Ein wunderschöner Text über euch als Paar.") : null,
       ceremony_location: form.ceremonyLocation || null,
       ceremony_address: form.ceremonyAddress || null,
       reception_location: form.receptionLocation || null,
