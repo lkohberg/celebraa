@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PartyPopper, MapPin, Clock, Music, Shirt } from "lucide-react";
+import { PartyPopper, MapPin, Clock, Music } from "lucide-react";
 import { useTranslation } from "@/i18n";
 import CountdownTimer from "./CountdownTimer";
 import RsvpForm from "./RsvpForm";
@@ -11,13 +11,20 @@ import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 import { PremiumEventData, PremiumTheme } from "./PremiumWeddingPage";
 
-// Simple confetti particles
+// Block components
+import MusicWishSection from "@/components/blocks/MusicWishSection";
+import WishlistSection from "@/components/blocks/WishlistSection";
+import DressCodeMFSection from "@/components/blocks/DressCodeMFSection";
+import QuizSection from "@/components/blocks/QuizSection";
+import FoodMenuSection from "@/components/blocks/FoodMenuSection";
+import GamesVoteSection from "@/components/blocks/GamesVoteSection";
+import PotluckSection from "@/components/blocks/PotluckSection";
+
 const ConfettiParticle = ({ delay }: { delay: number }) => {
   const colors = ["#FF6B9D", "#C44DFF", "#FFD93D", "#6BCB77", "#4D96FF"];
   const color = colors[Math.floor(Math.random() * colors.length)];
   const left = Math.random() * 100;
   const size = 6 + Math.random() * 8;
-
   return (
     <motion.div
       className="absolute rounded-sm pointer-events-none"
@@ -35,14 +42,14 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
   const [showContent, setShowContent] = useState(false);
   const [confetti, setConfetti] = useState<number[]>([]);
 
-  const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", { day: "numeric", month: "long", year: "numeric" });
+
+  const selectedBlocks = event.selectedBlocks || (event as any).selected_blocks || [];
+  const blockCfg = (event as any).block_config || {};
+  const hasBlock = (suffix: string) => selectedBlocks.some((id: string) => id.endsWith(suffix));
+  const accent = "hsl(340, 65%, 50%)";
 
   useEffect(() => {
-    // Launch confetti on mount
     const particles = Array.from({ length: 30 }, (_, i) => i);
     setConfetti(particles);
     const timer = setTimeout(() => setShowContent(true), 800);
@@ -52,75 +59,42 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
   return (
     <div className="min-h-screen overflow-hidden" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
       <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
-      {/* Confetti overlay */}
       <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
-        {confetti.map((i) => (
-          <ConfettiParticle key={i} delay={i * 0.08} />
-        ))}
+        {confetti.map((i) => (<ConfettiParticle key={i} delay={i * 0.08} />))}
       </div>
 
       <AnimatePresence>
         {showContent && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
             {/* Hero */}
-            <section
-              className="relative min-h-screen flex items-center justify-center"
-              style={{
-                background: event.hero_image_url
-                  ? undefined
-                  : theme
-                    ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.accent} 50%, ${theme.primary} 100%)`
-                    : "linear-gradient(135deg, hsl(340 65% 50%) 0%, hsl(280 60% 55%) 50%, hsl(340 70% 60%) 100%)",
-              }}
-            >
+            <section className="relative min-h-screen flex items-center justify-center" style={{
+              background: event.hero_image_url ? undefined
+                : theme ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.accent} 50%, ${theme.primary} 100%)`
+                : "linear-gradient(135deg, hsl(340 65% 50%) 0%, hsl(280 60% 55%) 50%, hsl(340 70% 60%) 100%)",
+            }}>
               {event.hero_image_url && (
                 <>
-                  <div className="absolute inset-0">
-                    <img src={event.hero_image_url} alt="" className="w-full h-full object-cover" />
-                  </div>
+                  <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" /></div>
                   <div className="absolute inset-0 bg-black/40" />
                 </>
               )}
-
-              <motion.div
-                className="relative z-10 text-center px-4"
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-              >
-                <motion.div
-                  animate={{ rotate: [0, -10, 10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                >
+              <motion.div className="relative z-10 text-center px-4" initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }}>
+                <motion.div animate={{ rotate: [0, -10, 10, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
                   <PartyPopper className="w-16 h-16 mx-auto mb-6 text-white/80" />
                 </motion.div>
-                <p className="font-body text-sm tracking-[0.3em] uppercase mb-4 text-white/70">
-                  {el?.letsCelebrate || t("event.letsCelebrate")}
-                </p>
-                <h1 className="font-display text-5xl md:text-7xl font-bold text-white mb-4">
-                  {event.title}
-                </h1>
+                <p className="font-body text-sm tracking-[0.3em] uppercase mb-4 text-white/70">{el?.letsCelebrate || t("event.letsCelebrate")}</p>
+                <h1 className="font-display text-5xl md:text-7xl font-bold text-white mb-4">{event.title}</h1>
                 <div className="w-24 h-px mx-auto mb-4 bg-white/40" />
-                <p className="font-display text-2xl md:text-3xl text-white/90 italic">
-                  {formattedDate}
-                </p>
-                {event.description && (
-                  <p className="font-body text-white/70 mt-4 text-lg max-w-md mx-auto">
-                    {event.description}
-                  </p>
-                )}
+                <p className="font-display text-2xl md:text-3xl text-white/90 italic">{formattedDate}</p>
+                {event.description && <p className="font-body text-white/70 mt-4 text-lg max-w-md mx-auto">{event.description}</p>}
               </motion.div>
             </section>
 
             {/* Countdown */}
             <section className="py-20 bg-card">
               <div className="max-w-3xl mx-auto px-4 text-center">
-                <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">
-                  {el?.countdown || t("event.countdown")}
-                </p>
-                <h2 className="font-display text-2xl md:text-3xl text-foreground mb-12">
-                  {el?.countdownSub || t("event.countdownSub")}
-                </h2>
+                <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">{el?.countdown || t("event.countdown")}</p>
+                <h2 className="font-display text-2xl md:text-3xl text-foreground mb-12">{el?.countdownSub || t("event.countdownSub")}</h2>
                 <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} />
               </div>
             </section>
@@ -130,17 +104,13 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
               <section className="py-24 bg-background">
                 <div className="max-w-2xl mx-auto px-4 text-center">
                   <Music className="w-6 h-6 mx-auto mb-4 text-primary" />
-                  <h2 className="font-display text-2xl md:text-3xl text-foreground mb-8">
-                    {el?.party || t("event.party")}
-                  </h2>
-                  <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line">
-                    {event.story_text}
-                  </p>
+                  <h2 className="font-display text-2xl md:text-3xl text-foreground mb-8">{el?.party || t("event.party")}</h2>
+                  <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line">{event.story_text}</p>
                 </div>
               </section>
             )}
 
-            {/* Schedule Timeline */}
+            {/* Timeline */}
             {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
               <section className="py-16 bg-background">
                 <div className="max-w-3xl mx-auto px-4">
@@ -153,59 +123,63 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
               </section>
             )}
 
+            {/* Food Menu */}
+            {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} />}
+
+            {/* Dresscode M/F */}
+            {hasBlock("-dresscode") && (
+              <DressCodeMFSection dressCode={{ male: blockCfg.dresscode_male, female: blockCfg.dresscode_female }} accentColor={accent} />
+            )}
+
             {/* Details */}
             <section className="py-24 bg-card">
               <div className="max-w-5xl mx-auto px-4">
                 <div className="text-center mb-16">
                   <h2 className="font-display text-2xl md:text-3xl text-foreground">{el?.details || t("event.details")}</h2>
                 </div>
-                <div className="grid md:grid-cols-2 gap-12 max-w-2xl mx-auto">
+                <div className="grid md:grid-cols-1 gap-12 max-w-lg mx-auto">
                   <div className="text-center">
                     <MapPin className="w-8 h-8 mx-auto mb-4 text-primary" />
                     <h3 className="font-display text-xl text-foreground mb-3">{el?.venue || t("event.venue")}</h3>
                     <p className="font-body text-sm text-muted-foreground">{event.location_name || "—"}</p>
                     <p className="font-body text-sm text-muted-foreground">{event.address || ""}</p>
                   </div>
-                  {event.dress_code && (
-                    <div className="text-center">
-                      <Shirt className="w-8 h-8 mx-auto mb-4 text-primary" />
-                      <h3 className="font-display text-xl text-foreground mb-3">{t("event.dressCode")}</h3>
-                      <p className="font-body text-sm text-muted-foreground">{event.dress_code}</p>
-                    </div>
-                  )}
                 </div>
-
-                {/* Google Maps */}
                 {event.address && (
-                  <div className="mt-12 max-w-xl mx-auto">
-                    <GoogleMapsEmbed address={event.address} />
-                  </div>
+                  <div className="mt-12 max-w-xl mx-auto"><GoogleMapsEmbed address={event.address} /></div>
                 )}
               </div>
             </section>
 
-            {/* Hotel Recommendations */}
+            {/* Hotels */}
             {event.hotel_recommendations && Array.isArray(event.hotel_recommendations) && event.hotel_recommendations.length > 0 && (
               <HotelRecommendations hotels={event.hotel_recommendations} />
             )}
 
+            {/* Quiz */}
+            {hasBlock("-quiz") && <QuizSection questions={blockCfg.quiz} accentColor={accent} />}
+
+            {/* Games Vote */}
+            {hasBlock("-games") && <GamesVoteSection games={blockCfg.games} accentColor={accent} />}
+
+            {/* Potluck */}
+            {hasBlock("-potluck") && <PotluckSection items={blockCfg.potluck} accentColor={accent} />}
+
+            {/* Wishlist */}
+            {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} />}
+
+            {/* Music Wish */}
+            {hasBlock("-musicwish") && <MusicWishSection accentColor={accent} eventId={event.id} />}
+
             {/* RSVP */}
             {event.rsvp_enabled && (
-              <RsvpForm
-                eventId={event.id}
-                rsvpDeadline={event.rsvp_deadline}
-                menuSelection={event.menu_selection || false}
-                variant="birthday"
-                lang={lang}
-              />
+              <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="birthday" lang={lang} />
             )}
 
             {/* Footer */}
             <footer className="py-16 text-center bg-card">
               <h2 className="font-display text-3xl text-primary mb-2">{event.title}</h2>
-              <p className="font-body text-sm text-muted-foreground tracking-[0.15em] uppercase">
-                {formattedDate}
-              </p>
+              <p className="font-body text-sm text-muted-foreground tracking-[0.15em] uppercase">{formattedDate}</p>
             </footer>
           </motion.div>
         )}

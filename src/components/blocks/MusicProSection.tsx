@@ -1,12 +1,37 @@
 import { useState } from "react";
-import { Music, Send } from "lucide-react";
+import { Music, Send, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSubmitMusicWish } from "@/hooks/useEvents";
+import { toast } from "sonner";
 
-const MusicProSection = ({ accentColor, isPreview = false }: { accentColor?: string; isPreview?: boolean }) => {
+const MusicProSection = ({ accentColor, eventId, isPreview = false }: { accentColor?: string; eventId?: string; isPreview?: boolean }) => {
   const [song, setSong] = useState("");
   const [artist, setArtist] = useState("");
+  const [guestName, setGuestName] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const submitWish = useSubmitMusicWish();
   const color = accentColor || "hsl(38, 65%, 50%)";
+
+  const handleSubmit = async () => {
+    if (isPreview || !eventId || !song.trim()) return;
+    try {
+      await submitWish.mutateAsync({
+        event_id: eventId,
+        song_title: song.trim(),
+        artist: artist.trim() || undefined,
+        guest_name: guestName.trim() || undefined,
+      });
+      toast.success("Songwunsch gespeichert! 🎵");
+      setSong("");
+      setArtist("");
+      setGuestName("");
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 3000);
+    } catch {
+      toast.error("Fehler beim Speichern");
+    }
+  };
 
   return (
     <section className="py-20 bg-background">
@@ -17,26 +42,29 @@ const MusicProSection = ({ accentColor, isPreview = false }: { accentColor?: str
           <p className="font-body text-sm text-muted-foreground mt-2">Welcher Song bringt dich auf die Tanzfläche?</p>
         </div>
         <div className="bg-card rounded-xl p-6 border border-border space-y-4">
-          <div>
-            <Input
-              placeholder="Song-Titel"
-              value={song}
-              onChange={(e) => !isPreview && setSong(e.target.value)}
-              className="font-body"
-              disabled={isPreview}
-            />
-          </div>
-          <div>
-            <Input
-              placeholder="Künstler / Band"
-              value={artist}
-              onChange={(e) => !isPreview && setArtist(e.target.value)}
-              className="font-body"
-              disabled={isPreview}
-            />
-          </div>
-          <Button className="w-full font-body" disabled={isPreview}>
-            <Send className="w-4 h-4 mr-2" /> Songwunsch senden
+          <Input
+            placeholder="Dein Name"
+            value={guestName}
+            onChange={(e) => setGuestName(e.target.value)}
+            className="font-body"
+            disabled={isPreview}
+          />
+          <Input
+            placeholder="Song-Titel"
+            value={song}
+            onChange={(e) => setSong(e.target.value)}
+            className="font-body"
+            disabled={isPreview}
+          />
+          <Input
+            placeholder="Künstler / Band"
+            value={artist}
+            onChange={(e) => setArtist(e.target.value)}
+            className="font-body"
+            disabled={isPreview}
+          />
+          <Button className="w-full font-body" onClick={handleSubmit} disabled={isPreview || submitWish.isPending || !song.trim()}>
+            {submitted ? <><Check className="w-4 h-4 mr-2" /> Gespeichert!</> : <><Send className="w-4 h-4 mr-2" /> Songwunsch senden</>}
           </Button>
         </div>
       </div>
