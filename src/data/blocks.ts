@@ -1,19 +1,21 @@
 // Block and Package definitions for the order flow
+// Names, descriptions, and manual work descriptions use i18n keys
+// that are resolved at render time via the t() function
 
 export interface Block {
   id: string;
-  name: string;
-  description: string;
+  nameKey: string;
+  descriptionKey: string;
   price: number;
   category: "wedding" | "birthday" | "corporate";
   icon: string; // emoji
-  requiresManualWork?: boolean; // blocks that need admin to fulfill manually
-  manualWorkDescription?: string; // what the customer needs to provide
+  requiresManualWork?: boolean;
+  manualWorkDescriptionKey?: string;
 }
 
 export interface Package {
   id: string;
-  name: string;
+  nameKey: string;
   price: number;
   blockIds: string[];
   category: "wedding" | "birthday" | "corporate";
@@ -21,7 +23,6 @@ export interface Package {
 
 export const BASE_PRICE = 19;
 
-// MANUAL_BLOCKS: blocks that require admin intervention before event can go live
 export const MANUAL_BLOCK_SUFFIXES = ["-illustration", "-musicpro", "-bgmusic"];
 
 export const isManualBlock = (blockId: string) =>
@@ -30,55 +31,49 @@ export const isManualBlock = (blockId: string) =>
 export const hasManualBlocks = (blockIds: string[]) =>
   blockIds.some(id => isManualBlock(id));
 
-// Sorted by price ascending within each category
 export const blocks: Block[] = [
-  // Wedding — sorted cheap → expensive
-  { id: "wedding-timeline", name: "Timeline", description: "Ablauf als Zeitstrahl (Uhrzeit + Text).", price: 9, category: "wedding", icon: "🕐" },
-  { id: "wedding-story", name: "Our Story", description: "Story-Sektion über das Paar.", price: 9, category: "wedding", icon: "💕" },
-  { id: "wedding-wishlist", name: "Wunschliste / Geschenke", description: "Geschenkewünsche + Links/Hinweis.", price: 9, category: "wedding", icon: "🎁" },
-  { id: "wedding-dresscode", name: "Dress Code (M/F)", description: "Dresscode getrennt für Männer/Frauen.", price: 9, category: "wedding", icon: "👔" },
-  { id: "wedding-bgmusic", name: "Musik beim Öffnen", description: "Dein Lieblingssong als Intro beim Öffnen der Seite.", price: 9, category: "wedding", icon: "🎶", requiresManualWork: true, manualWorkDescription: "Bitte lade deinen gewünschten Song hoch oder teile uns den Titel mit." },
-  { id: "wedding-hotels", name: "Hotelempfehlungen", description: "Hotels in der Nähe (Liste + Links).", price: 19, category: "wedding", icon: "🏨" },
-  { id: "wedding-slideshow", name: "Fotos rotieren (Slideshow)", description: "Automatisch rotierende Fotos des Paars.", price: 19, category: "wedding", icon: "📸" },
-  { id: "wedding-menu", name: "Essensmenü", description: "Menü-/Speisen-Sektion.", price: 19, category: "wedding", icon: "🍽️" },
-  { id: "wedding-shuttle", name: "Bus & Shuttle Zeiten", description: "Shuttleplan mit Zeiten/Infos.", price: 19, category: "wedding", icon: "🚌" },
-  { id: "wedding-musicpro", name: "Music Pro + DJ-Export", description: "Songwünsche sammeln + Export für DJ.", price: 19, category: "wedding", icon: "🎵", requiresManualWork: true, manualWorkDescription: "Wir richten die DJ-Export-Funktion für dich ein." },
-  { id: "wedding-illustration", name: "Custom Illustration", description: "Handgefertigte Illustration deiner Location als Sektion.", price: 29, category: "wedding", icon: "🎨", requiresManualWork: true, manualWorkDescription: "Bitte teile uns den Namen und die Adresse deiner Location mit, damit wir die Illustration erstellen können." },
+  // Wedding
+  { id: "wedding-timeline", nameKey: "block.timeline", descriptionKey: "block.desc.timeline", price: 9, category: "wedding", icon: "🕐" },
+  { id: "wedding-story", nameKey: "block.story", descriptionKey: "block.desc.story", price: 9, category: "wedding", icon: "💕" },
+  { id: "wedding-wishlist", nameKey: "block.wishlist", descriptionKey: "block.desc.wishlist", price: 9, category: "wedding", icon: "🎁" },
+  { id: "wedding-dresscode", nameKey: "block.dresscode", descriptionKey: "block.desc.dresscode", price: 9, category: "wedding", icon: "👔" },
+  { id: "wedding-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 9, category: "wedding", icon: "🎶", requiresManualWork: true, manualWorkDescriptionKey: "block.manual.bgmusic" },
+  { id: "wedding-hotels", nameKey: "block.hotels", descriptionKey: "block.desc.hotels", price: 19, category: "wedding", icon: "🏨" },
+  { id: "wedding-slideshow", nameKey: "block.slideshow", descriptionKey: "block.desc.slideshow", price: 19, category: "wedding", icon: "📸" },
+  { id: "wedding-menu", nameKey: "block.menu", descriptionKey: "block.desc.menu", price: 19, category: "wedding", icon: "🍽️" },
+  { id: "wedding-shuttle", nameKey: "block.shuttle", descriptionKey: "block.desc.shuttle", price: 19, category: "wedding", icon: "🚌" },
+  { id: "wedding-musicpro", nameKey: "block.musicpro", descriptionKey: "block.desc.musicpro", price: 19, category: "wedding", icon: "🎵", requiresManualWork: true, manualWorkDescriptionKey: "block.manual.musicpro" },
+  { id: "wedding-illustration", nameKey: "block.illustration", descriptionKey: "block.desc.illustration", price: 29, category: "wedding", icon: "🎨", requiresManualWork: true, manualWorkDescriptionKey: "block.manual.illustration" },
 
-  // Corporate — sorted cheap → expensive
-  { id: "business-timeline", name: "Timeline", description: "Ablauf/Slots als Zeitstrahl.", price: 9, category: "corporate", icon: "🕐" },
-  { id: "business-dresscode", name: "Dress Code", description: "Dresscode-Hinweis.", price: 9, category: "corporate", icon: "👔" },
-  { id: "business-hotels", name: "Hotels", description: "Hotel-Empfehlungen (Liste + Links).", price: 9, category: "corporate", icon: "🏨" },
-  { id: "business-menu", name: "Essensmenü", description: "Catering-/Menü-Sektion.", price: 9, category: "corporate", icon: "🍽️" },
-  { id: "business-agenda", name: "Agenda", description: "Agenda/Sessions Übersicht.", price: 9, category: "corporate", icon: "📋" },
-  { id: "business-products", name: "Produkte (Fotos + Text)", description: "Produkt-Kacheln (Bild + Beschreibung).", price: 19, category: "corporate", icon: "📦" },
-  { id: "business-sponsors", name: "Sponsoren", description: "Sponsor-Logos + Links.", price: 19, category: "corporate", icon: "🤝" },
+  // Corporate
+  { id: "business-timeline", nameKey: "block.timeline", descriptionKey: "block.desc.timeline.business", price: 9, category: "corporate", icon: "🕐" },
+  { id: "business-dresscode", nameKey: "block.dresscode.single", descriptionKey: "block.desc.dresscode.single", price: 9, category: "corporate", icon: "👔" },
+  { id: "business-hotels", nameKey: "block.hotels", descriptionKey: "block.desc.hotels.business", price: 9, category: "corporate", icon: "🏨" },
+  { id: "business-menu", nameKey: "block.menu", descriptionKey: "block.desc.menu.business", price: 9, category: "corporate", icon: "🍽️" },
+  { id: "business-agenda", nameKey: "block.agenda", descriptionKey: "block.desc.agenda", price: 9, category: "corporate", icon: "📋" },
+  { id: "business-products", nameKey: "block.products", descriptionKey: "block.desc.products", price: 19, category: "corporate", icon: "📦" },
+  { id: "business-sponsors", nameKey: "block.sponsors", descriptionKey: "block.desc.sponsors", price: 19, category: "corporate", icon: "🤝" },
 
-  // Birthday/Party — ALL max €9, sorted cheap → expensive
-  { id: "party-timeline", name: "Timeline", description: "Party-Ablauf als Zeitstrahl.", price: 5, category: "birthday", icon: "🕐" },
-  { id: "party-musicwish", name: "Wunschmusik", description: "Songwünsche einsammeln.", price: 5, category: "birthday", icon: "🎵" },
-  { id: "party-wishlist", name: "Wunschliste", description: "Dinge/Links, die sich der Host wünscht.", price: 5, category: "birthday", icon: "🎁" },
-  { id: "party-dresscode", name: "Dress Code (M/F)", description: "Dresscode getrennt Männer/Frauen.", price: 5, category: "birthday", icon: "👔" },
-  { id: "party-quiz", name: "Quiz/Abstimmung über Host", description: "Quiz/Umfrage (Fragen + Ergebnisse).", price: 9, category: "birthday", icon: "❓" },
-  { id: "party-menu", name: "Menü Essen", description: "Menü-/Snacks-Sektion.", price: 9, category: "birthday", icon: "🍽️" },
-  { id: "party-games", name: "Spiele-Abstimmung", description: "Poll: welche Spiele, Ergebnisanzeige.", price: 9, category: "birthday", icon: "🎮" },
-  { id: "party-potluck", name: "Mitbringliste", description: "\"Wer bringt was mit?\" Liste.", price: 9, category: "birthday", icon: "🧺" },
+  // Birthday/Party
+  { id: "party-timeline", nameKey: "block.timeline", descriptionKey: "block.desc.timeline.party", price: 5, category: "birthday", icon: "🕐" },
+  { id: "party-musicwish", nameKey: "block.musicwish", descriptionKey: "block.desc.musicwish", price: 5, category: "birthday", icon: "🎵" },
+  { id: "party-wishlist", nameKey: "block.wishlist", descriptionKey: "block.desc.wishlist.party", price: 5, category: "birthday", icon: "🎁" },
+  { id: "party-dresscode", nameKey: "block.dresscode", descriptionKey: "block.desc.dresscode.party", price: 5, category: "birthday", icon: "👔" },
+  { id: "party-quiz", nameKey: "block.quiz", descriptionKey: "block.desc.quiz", price: 9, category: "birthday", icon: "❓" },
+  { id: "party-menu", nameKey: "block.menu", descriptionKey: "block.desc.menu.party", price: 9, category: "birthday", icon: "🍽️" },
+  { id: "party-games", nameKey: "block.games", descriptionKey: "block.desc.games", price: 9, category: "birthday", icon: "🎮" },
+  { id: "party-potluck", nameKey: "block.potluck", descriptionKey: "block.desc.potluck", price: 9, category: "birthday", icon: "🧺" },
 ];
 
 export const packages: Package[] = [
-  // Wedding — adjusted prices
-  { id: "wedding-starter", name: "Hochzeit Starter", price: 39, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle"], category: "wedding" },
-  { id: "wedding-plus", name: "Hochzeit Plus", price: 49, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle", "wedding-menu"], category: "wedding" },
-  { id: "wedding-premium", name: "Hochzeit Premium", price: 79, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle", "wedding-menu", "wedding-slideshow", "wedding-story", "wedding-wishlist"], category: "wedding" },
-
-  // Business — adjusted prices
-  { id: "business-starter", name: "Business Starter", price: 29, blockIds: ["business-timeline", "business-dresscode", "business-hotels", "business-agenda"], category: "corporate" },
-  { id: "business-pro", name: "Business Pro", price: 49, blockIds: ["business-timeline", "business-dresscode", "business-hotels", "business-agenda", "business-products", "business-sponsors"], category: "corporate" },
-
-  // Party — adjusted prices (all blocks max €9)
-  { id: "party-fun", name: "Party Fun", price: 25, blockIds: ["party-timeline", "party-musicwish", "party-games", "party-quiz"], category: "birthday" },
-  { id: "party-planer", name: "Party Planer", price: 25, blockIds: ["party-timeline", "party-menu", "party-potluck", "party-dresscode"], category: "birthday" },
-  { id: "party-allin", name: "Party All-in", price: 45, blockIds: ["party-timeline", "party-musicwish", "party-games", "party-quiz", "party-menu", "party-potluck", "party-dresscode", "party-wishlist"], category: "birthday" },
+  { id: "wedding-starter", nameKey: "pkg.wedding.starter", price: 39, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle"], category: "wedding" },
+  { id: "wedding-plus", nameKey: "pkg.wedding.plus", price: 49, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle", "wedding-menu"], category: "wedding" },
+  { id: "wedding-premium", nameKey: "pkg.wedding.premium", price: 79, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle", "wedding-menu", "wedding-slideshow", "wedding-story", "wedding-wishlist"], category: "wedding" },
+  { id: "business-starter", nameKey: "pkg.business.starter", price: 29, blockIds: ["business-timeline", "business-dresscode", "business-hotels", "business-agenda"], category: "corporate" },
+  { id: "business-pro", nameKey: "pkg.business.pro", price: 49, blockIds: ["business-timeline", "business-dresscode", "business-hotels", "business-agenda", "business-products", "business-sponsors"], category: "corporate" },
+  { id: "party-fun", nameKey: "pkg.party.fun", price: 25, blockIds: ["party-timeline", "party-musicwish", "party-games", "party-quiz"], category: "birthday" },
+  { id: "party-planer", nameKey: "pkg.party.planer", price: 25, blockIds: ["party-timeline", "party-menu", "party-potluck", "party-dresscode"], category: "birthday" },
+  { id: "party-allin", nameKey: "pkg.party.allin", price: 45, blockIds: ["party-timeline", "party-musicwish", "party-games", "party-quiz", "party-menu", "party-potluck", "party-dresscode", "party-wishlist"], category: "birthday" },
 ];
 
 export const getBlocksForCategory = (category: "wedding" | "birthday" | "corporate") =>
@@ -106,7 +101,6 @@ export const calculatePrice = (selectedBlockIds: string[], selectedPackageId?: s
   return BASE_PRICE + blocksPrice;
 };
 
-// Get all selected block IDs (from package + individual selections)
 export const getAllSelectedBlockIds = (selectedBlockIds: string[], selectedPackageId?: string): string[] => {
   const ids = new Set(selectedBlockIds);
   if (selectedPackageId) {
@@ -118,7 +112,6 @@ export const getAllSelectedBlockIds = (selectedBlockIds: string[], selectedPacka
   return Array.from(ids);
 };
 
-// Get manual blocks from selection
 export const getManualBlocks = (selectedBlockIds: string[]): Block[] =>
   selectedBlockIds
     .filter(id => isManualBlock(id))
