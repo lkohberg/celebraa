@@ -62,9 +62,9 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
         dresscode_male: t("demo.wedding.dresscode.male"),
         dresscode_female: t("demo.wedding.dresscode.female"),
         shuttle: [
-          { time: "14:30", from: "Hauptbahnhof", to: t("demo.wedding.ceremonyLocation"), note: t("demo.wedding.shuttle.1.note") },
+          { time: "14:30", from: t("demo.wedding.shuttle.from"), to: t("demo.wedding.ceremonyLocation"), note: t("demo.wedding.shuttle.1.note") },
           { time: "16:00", from: t("demo.wedding.ceremonyLocation"), to: t("demo.wedding.location") },
-          { time: "00:00", from: t("demo.wedding.location"), to: "Hauptbahnhof", note: t("demo.wedding.shuttle.3.note") },
+          { time: "00:00", from: t("demo.wedding.location"), to: t("demo.wedding.shuttle.from"), note: t("demo.wedding.shuttle.3.note") },
         ],
         wishlist: [
           { name: t("demo.wedding.wishlist.1.name"), hint: t("demo.wedding.wishlist.1.hint") },
