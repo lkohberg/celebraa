@@ -152,7 +152,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
               <div className="relative max-w-3xl mx-auto px-4">
                 <div className="text-center mb-12">
                   <Clock className="w-6 h-6 mx-auto mb-3" style={{ color: accent }} />
-                  <h2 className="font-display text-2xl md:text-3xl text-foreground">{t("event.timeline")}</h2>
+                  <h2 className="font-display text-2xl md:text-3xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
                   <FloralDivider color={accent} />
                 </div>
                 <ScheduleTimeline schedule={event.schedule} accentColor={accent} />
