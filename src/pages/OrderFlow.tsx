@@ -194,10 +194,11 @@ const OrderFlow = () => {
       ]) : null,
       dress_code: hasBlock("-dresscode") ? (blockConfig.dresscode_male ? `Herren: ${blockConfig.dresscode_male} | Damen: ${blockConfig.dresscode_female}` : "Elegant / Semi-formal") : null,
       children_welcome: null,
-      hotel_recommendations: hasBlock("-hotels") ? [
+      hotel_recommendations: hasBlock("-hotels") ? (blockConfig.hotels?.length > 0 ? blockConfig.hotels : [
         { name: "Hotel Beispiel", address: "Musterstraße 1", url: "https://example.com" },
-      ] : null,
+      ]) : null,
       selectedBlocks: selected,
+      block_config: blockConfig,
     };
   };
 
