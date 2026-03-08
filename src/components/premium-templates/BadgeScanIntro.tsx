@@ -117,12 +117,12 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
               {/* QR-code-style block pattern */}
               <div className="flex justify-center mt-6">
                 <div className="grid grid-cols-5 gap-1 opacity-20">
-                  {Array.from({ length: 25 }).map((_, i) => (
+                  {qrPattern.map((filled, i) => (
                     <div
                       key={i}
                       className="w-3 h-3 rounded-sm"
                       style={{
-                        backgroundColor: Math.random() > 0.4 ? "white" : "transparent",
+                        backgroundColor: filled ? "white" : "transparent",
                       }}
                     />
                   ))}
