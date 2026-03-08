@@ -353,6 +353,11 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
           <div className="flex justify-between font-body"><span className="text-muted-foreground">{t("dashboard.status")}</span><Badge>{event.status === "pending_review" ? t("admin.inProgress") : t(`dashboard.status.${event.status}`)}</Badge></div>
           <div className="flex justify-between font-body"><span className="text-muted-foreground">{t("dashboard.paid")}</span><span className="text-foreground font-semibold">{event.price_paid ? `€${(event.price_paid / 100).toFixed(2)}` : "–"}</span></div>
           {event.stripe_payment_id && <div className="flex justify-between font-body"><span className="text-muted-foreground">Stripe ID</span><span className="text-foreground text-sm font-mono truncate max-w-[200px]">{event.stripe_payment_id}</span></div>}
+          <div className="pt-4 border-t border-border">
+            <Button variant="destructive" size="sm" className="font-body" disabled={deleting} onClick={handleDelete}>
+              <Trash2 className="w-4 h-4 mr-2" /> {deleting ? "..." : t("dashboard.deleteEvent")}
+            </Button>
+          </div>
         </CardContent></Card>
       </TabsContent>
     </Tabs>
