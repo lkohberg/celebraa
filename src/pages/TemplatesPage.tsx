@@ -86,7 +86,7 @@ const TemplatesPage = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center font-body text-sm text-muted-foreground mb-10 max-w-lg mx-auto"
           >
-            {categoryDescriptions[activeTab]}
+            {t(categoryDescriptionKeys[activeTab])}
           </motion.p>
 
           {eventTypes.map((type) => (

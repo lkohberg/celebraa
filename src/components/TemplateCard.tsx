@@ -17,15 +17,14 @@ import heroCorporateGala from "@/assets/hero-corporate-gala.jpg";
 export interface Template {
   id: string;
   name: string;
-  description: string;
-  tagline: string;
+  descriptionKey: string;
+  taglineKey: string;
   eventType: "birthday" | "wedding" | "corporate";
   colors: { primary: string; secondary: string; accent: string };
   font: string;
   previewGradient: string;
   tier: "premium";
   premiumFeatureKeys?: string[];
-  premiumFeatures?: string[];
   defaultHeroImage?: string;
 }
 
@@ -34,8 +33,8 @@ export const templates: Template[] = [
   {
     id: "birthday-premium-neon",
     name: "Neon Party",
-    tagline: "Let's glow! 🌟",
-    description: "Lebhaft und farbenfroh — mit Konfettiregen, pulsierenden Neonfarben und einer Energie, die man sofort spürt. Perfekt für unvergessliche Partynächte.",
+    taglineKey: "tpl.neonParty.tagline",
+    descriptionKey: "tpl.neonParty.desc",
     eventType: "birthday",
     colors: { primary: "#FF6B9D", secondary: "#FFF0F5", accent: "#4D96FF" },
     font: "DM Sans",
@@ -47,8 +46,8 @@ export const templates: Template[] = [
   {
     id: "birthday-premium-glamour",
     name: "Glamour Night",
-    tagline: "Shine bright ✨",
-    description: "Opulent und glamourös — goldene Akzente auf dunklem Samt, für Geburtstagsfeiern mit dem gewissen Wow Faktor. Eleganz trifft auf Party.",
+    taglineKey: "tpl.glamourNight.tagline",
+    descriptionKey: "tpl.glamourNight.desc",
     eventType: "birthday",
     colors: { primary: "#D4AF37", secondary: "#0D0D0D", accent: "#F5F5DC" },
     font: "Playfair Display",
@@ -60,8 +59,8 @@ export const templates: Template[] = [
   {
     id: "birthday-premium-garden",
     name: "Garden Party",
-    tagline: "Nature vibes 🌿",
-    description: "Frisch und natürlich — sanfte Grüntöne und organische Formen für entspannte Feiern im Grünen. Leichtigkeit pur.",
+    taglineKey: "tpl.gardenParty.tagline",
+    descriptionKey: "tpl.gardenParty.desc",
     eventType: "birthday",
     colors: { primary: "#6BCB77", secondary: "#F0F7F4", accent: "#2D6A4F" },
     font: "Playfair Display",
@@ -74,8 +73,8 @@ export const templates: Template[] = [
   {
     id: "wedding-premium-floral",
     name: "Floral Romance",
-    tagline: "Zeitlose Romantik 🌸",
-    description: "Romantisch und verträumt — zarte Blütenfarben, eine elegante Briefumschlag Animation und jedes Detail liebevoll gestaltet. Für Hochzeiten wie aus dem Märchen.",
+    taglineKey: "tpl.floralRomance.tagline",
+    descriptionKey: "tpl.floralRomance.desc",
     eventType: "wedding",
     colors: { primary: "#5C7A5C", secondary: "#FFF8F0", accent: "#D4A0A0" },
     font: "Playfair Display",
@@ -87,8 +86,8 @@ export const templates: Template[] = [
   {
     id: "wedding-premium-classic",
     name: "Classic Elegance",
-    tagline: "Ewige Schönheit 💍",
-    description: "Zeitlos und raffiniert — warme Crème und Goldtöne, klassische Typografie und eine Eleganz, die nie aus der Mode kommt.",
+    taglineKey: "tpl.classicElegance.tagline",
+    descriptionKey: "tpl.classicElegance.desc",
     eventType: "wedding",
     colors: { primary: "#8B7355", secondary: "#FAF5EF", accent: "#1A1A1A" },
     font: "Playfair Display",
@@ -100,8 +99,8 @@ export const templates: Template[] = [
   {
     id: "wedding-premium-modern",
     name: "Modern Love",
-    tagline: "Puristisch schön 🤍",
-    description: "Minimalistisch und modern — klare Linien, reduzierte Farbpalette und goldene Akzente. Für Paare, die Understatement lieben.",
+    taglineKey: "tpl.modernLove.tagline",
+    descriptionKey: "tpl.modernLove.desc",
     eventType: "wedding",
     colors: { primary: "#2C2C2C", secondary: "#FAFAFA", accent: "#C9A96E" },
     font: "DM Sans",
@@ -114,8 +113,8 @@ export const templates: Template[] = [
   {
     id: "corporate-premium-executive",
     name: "Executive Summit",
-    tagline: "Business Excellence 📊",
-    description: "Professionell und repräsentativ — Navy Blau trifft auf goldene Akzente. Ideal für Konferenzen, Summits und hochkarätige Events.",
+    taglineKey: "tpl.executiveSummit.tagline",
+    descriptionKey: "tpl.executiveSummit.desc",
     eventType: "corporate",
     colors: { primary: "#1E3A5F", secondary: "#F8F9FA", accent: "#C8A951" },
     font: "DM Sans",
@@ -127,8 +126,8 @@ export const templates: Template[] = [
   {
     id: "corporate-premium-tech",
     name: "Tech Conference",
-    tagline: "Innovation trifft Design 💡",
-    description: "Futuristisch und dynamisch — dunkle Basis mit leuchtenden Akzentfarben. Für Tech Events, Hackathons und digitale Konferenzen.",
+    taglineKey: "tpl.techConference.tagline",
+    descriptionKey: "tpl.techConference.desc",
     eventType: "corporate",
     colors: { primary: "#6C63FF", secondary: "#0F0E17", accent: "#FF6584" },
     font: "DM Sans",
@@ -140,8 +139,8 @@ export const templates: Template[] = [
   {
     id: "corporate-premium-gala",
     name: "Gala Evening",
-    tagline: "Black Tie Glamour 🥂",
-    description: "Luxuriös und exklusiv — Gold auf Schwarz, für Gala Abende, Award Ceremonies und Events, die beeindrucken sollen.",
+    taglineKey: "tpl.galaEvening.tagline",
+    descriptionKey: "tpl.galaEvening.desc",
     eventType: "corporate",
     colors: { primary: "#C8A951", secondary: "#0D0D0D", accent: "#F5F5DC" },
     font: "Playfair Display",
@@ -181,7 +180,7 @@ const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: Template
             <p className="text-2xl font-bold text-white" style={{ fontFamily: template.font, textShadow: "0 2px 10px rgba(0,0,0,0.4)" }}>
               {template.name}
             </p>
-            <p className="text-white/70 text-xs font-body mt-0.5">{template.tagline}</p>
+            <p className="text-white/70 text-xs font-body mt-0.5">{t(template.taglineKey)}</p>
           </div>
           <Badge className="bg-white/20 backdrop-blur-sm text-white border-white/20 font-body text-[10px]">
             {t("templateCard.from")} €19
@@ -191,7 +190,7 @@ const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: Template
 
       <div className="p-5">
         <p className="font-body text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-3">
-          {template.description}
+          {t(template.descriptionKey)}
         </p>
 
         {template.premiumFeatureKeys && (
