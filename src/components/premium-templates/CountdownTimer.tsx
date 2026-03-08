@@ -15,7 +15,10 @@ const CountdownTimer = ({ targetDate, targetTime, className, lang }: CountdownTi
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    const target = new Date(`${targetDate}T${targetTime || "12:00"}:00`).getTime();
+    // Parse date and time manually to avoid UTC interpretation
+    const [year, month, day] = targetDate.split("-").map(Number);
+    const [hours, minutes] = (targetTime || "12:00").split(":").map(Number);
+    const target = new Date(year, month - 1, day, hours, minutes, 0).getTime();
 
     const update = () => {
       const diff = target - Date.now();
