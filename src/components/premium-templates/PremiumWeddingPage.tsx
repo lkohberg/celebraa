@@ -176,7 +176,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
               </div>
               <div className="grid md:grid-cols-2 gap-12 max-w-3xl mx-auto">
                 <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="text-center p-8 bg-card/60 backdrop-blur-sm rounded-2xl border border-border/30">
-                  <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
+                  <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                     <MapPin className="w-6 h-6" style={{ color: accent }} />
                   </div>
                   <h3 className="font-display text-xl text-foreground mb-3">{el?.ceremony || t("event.ceremony")}</h3>
