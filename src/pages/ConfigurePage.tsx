@@ -279,11 +279,11 @@ const ConfigurePage = () => {
                     };
                     switch (template.eventType) {
                       case "wedding":
-                        return <PremiumWeddingPage event={previewEvent} theme={previewTheme} />;
+                        return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
                       case "birthday":
-                        return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} />;
+                        return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
                       case "corporate":
-                        return <PremiumCorporatePage event={previewEvent} theme={previewTheme} />;
+                        return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
                     }
                   })()}
                 </div>
