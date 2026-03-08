@@ -117,7 +117,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
               <section className="py-28 relative overflow-hidden bg-background">
                 <div className="absolute top-10 right-10 w-64 h-64 rounded-full opacity-[0.04]" style={{ background: `radial-gradient(circle, ${accent}, transparent)` }} />
                 <div className="relative max-w-2xl mx-auto px-4 text-center">
-                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${accent}15` }}>
+                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                     <Music className="w-6 h-6" style={{ color: accent }} />
                   </div>
                   <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{el?.party || t("event.party")}</h2>
