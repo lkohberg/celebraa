@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MailCheck } from "lucide-react";
 
 interface AuthDialogProps {
   open: boolean;
@@ -17,7 +17,7 @@ interface AuthDialogProps {
 const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const { signIn, signUp } = useAuth();
   const { t } = useTranslation();
-  const [mode, setMode] = useState<"login" | "register" | "forgot">("login");
+  const [mode, setMode] = useState<"login" | "register" | "forgot" | "verify">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,13 +42,24 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     }
 
     const loginEmail = email.includes("@") ? email : `${email}@celebra.at`;
-    const fn = mode === "login" ? signIn : signUp;
-    const { error } = await fn(loginEmail, password);
+
+    if (mode === "register") {
+      const { error } = await signUp(loginEmail, password);
+      setLoading(false);
+      if (error) {
+        toast.error(error.message);
+      } else {
+        setMode("verify");
+      }
+      return;
+    }
+
+    const { error } = await signIn(loginEmail, password);
     setLoading(false);
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success(mode === "login" ? t("auth.loginSuccess") : t("auth.registerSuccess"));
+      toast.success(t("auth.loginSuccess"));
       onOpenChange(false);
     }
   };
@@ -58,11 +69,27 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       <DialogContent className="max-w-sm">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl">
-            {mode === "forgot" ? t("auth.resetPassword") : mode === "login" ? t("auth.login") : t("auth.register")}
+            {mode === "verify"
+              ? t("auth.verifyTitle")
+              : mode === "forgot"
+              ? t("auth.resetPassword")
+              : mode === "login"
+              ? t("auth.login")
+              : t("auth.register")}
           </DialogTitle>
         </DialogHeader>
 
-        {mode === "forgot" ? (
+        {mode === "verify" ? (
+          <div className="space-y-4 text-center py-4">
+            <MailCheck className="w-12 h-12 text-primary mx-auto" />
+            <p className="font-body text-sm text-muted-foreground">
+              {t("auth.verifyDesc")}
+            </p>
+            <Button variant="outline" className="font-body" onClick={() => { setMode("login"); }}>
+              {t("auth.backToLogin")}
+            </Button>
+          </div>
+        ) : mode === "forgot" ? (
           <form onSubmit={handleSubmit} className="space-y-4">
             <p className="font-body text-sm text-muted-foreground">{t("auth.resetPasswordDesc")}</p>
             <div>

@@ -136,9 +136,17 @@ Deno.serve(async (req) => {
       apiVersion: "2025-01-27.acacia",
     });
 
+    // Get user email for receipt
+    const { data: userData } = await supabase.auth.getUser(token);
+    const userEmail = userData?.user?.email;
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
+      customer_email: userEmail || undefined,
+      payment_intent_data: {
+        receipt_email: userEmail || undefined,
+      },
       line_items: [
         {
           price_data: {
