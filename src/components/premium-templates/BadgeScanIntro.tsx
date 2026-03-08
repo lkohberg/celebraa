@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/i18n";
 
@@ -11,22 +11,47 @@ interface BadgeScanIntroProps {
 
 const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntroProps) => {
   const { t } = useTranslation();
-  const [phase, setPhase] = useState<"idle" | "scanning" | "verified" | "done">("idle");
+  // phases: entering → idle → scanning → verified → done
+  const [phase, setPhase] = useState<"entering" | "idle" | "scanning" | "verified" | "done">("entering");
   const accent = accentColor || "hsl(220, 50%, 45%)";
+  const scanRed = "hsl(0, 75%, 55%)";
 
-  // Pre-compute random values so they don't change on re-render
+  // Badge slides in on mount
+  useEffect(() => {
+    const timer = setTimeout(() => setPhase("idle"), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
   const qrPattern = useMemo(() => Array.from({ length: 25 }, () => Math.random() > 0.4), []);
   const barWidths = useMemo(() => Array.from({ length: 30 }, () => 2 + Math.random() * 3), []);
   const barHeights = useMemo(() => Array.from({ length: 30 }, () => 16 + Math.random() * 16), []);
 
+  // Typewriter text for "ACCESS GRANTED"
+  const grantedText = "ACCESS GRANTED";
+  const [typedChars, setTypedChars] = useState(0);
+
+  useEffect(() => {
+    if (phase !== "verified") {
+      setTypedChars(0);
+      return;
+    }
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setTypedChars(i);
+      if (i >= grantedText.length) clearInterval(interval);
+    }, 50);
+    return () => clearInterval(interval);
+  }, [phase]);
+
   const handleClick = () => {
     if (phase !== "idle") return;
     setPhase("scanning");
-    setTimeout(() => setPhase("verified"), 1400);
+    setTimeout(() => setPhase("verified"), 1600);
     setTimeout(() => {
       setPhase("done");
       onOpen();
-    }, 2600);
+    }, 3200);
   };
 
   return (
@@ -52,25 +77,34 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
           />
 
           {/* Tap hint */}
-          <motion.p
-            className="font-body text-[10px] tracking-[0.5em] uppercase mb-10 relative z-10"
-            style={{ color: `${accent}` }}
-            animate={{ opacity: [0.3, 0.7, 0.3] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
-          >
-            {tapLabel || t("event.tapToOpen")}
-          </motion.p>
+          {phase === "idle" && (
+            <motion.p
+              className="font-body text-[10px] tracking-[0.5em] uppercase mb-10 relative z-10"
+              style={{ color: accent }}
+              animate={{ opacity: [0.3, 0.7, 0.3] }}
+              transition={{ duration: 2.5, repeat: Infinity }}
+            >
+              {tapLabel || t("event.tapToOpen")}
+            </motion.p>
+          )}
 
-          {/* Badge card */}
+          {/* Badge card – slides in from bottom */}
           <motion.div
             className="relative z-10"
             style={{ width: 240, height: 320 }}
+            initial={{ y: 400, opacity: 0 }}
             animate={
-              phase === "verified"
-                ? { scale: [1, 1.05, 1], y: [0, -10, 0] }
-                : {}
+              phase === "entering"
+                ? { y: 400, opacity: 0 }
+                : phase === "verified"
+                ? { y: 0, opacity: 1, scale: [1, 1.03, 1] }
+                : { y: 0, opacity: 1 }
             }
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={
+              phase === "entering"
+                ? { duration: 0 }
+                : { duration: 0.7, ease: [0.2, 0.8, 0.3, 1] }
+            }
           >
             {/* Card */}
             <div
@@ -106,115 +140,96 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
               {/* Event title */}
               <div className="text-center px-6">
                 <p className="text-white/40 text-[9px] tracking-[0.3em] uppercase mb-2">Event Access</p>
-                <p
-                  className="text-white text-base font-semibold tracking-wide leading-tight"
-                  style={{ fontFamily: "'DM Sans', sans-serif" }}
-                >
+                <p className="text-white text-base font-semibold tracking-wide leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                   {title}
                 </p>
               </div>
 
-              {/* QR-code-style block pattern */}
+              {/* QR pattern */}
               <div className="flex justify-center mt-6">
                 <div className="grid grid-cols-5 gap-1 opacity-20">
                   {qrPattern.map((filled, i) => (
-                    <div
-                      key={i}
-                      className="w-3 h-3 rounded-sm"
-                      style={{
-                        backgroundColor: filled ? "white" : "transparent",
-                      }}
-                    />
+                    <div key={i} className="w-3 h-3 rounded-sm" style={{ backgroundColor: filled ? "white" : "transparent" }} />
                   ))}
                 </div>
               </div>
 
-              {/* Bottom bar code lines */}
+              {/* Bar code */}
               <div className="absolute bottom-6 left-6 right-6 flex gap-[2px] items-end justify-center opacity-15">
                 {barWidths.map((w, i) => (
-                  <div
-                    key={i}
-                    className="bg-white"
-                    style={{
-                      width: w,
-                      height: barHeights[i],
-                    }}
-                  />
+                  <div key={i} className="bg-white" style={{ width: w, height: barHeights[i] }} />
                 ))}
               </div>
 
-              {/* Barcode scan line */}
+              {/* RED scan line over barcode only */}
               <AnimatePresence>
                 {phase === "scanning" && (
                   <motion.div
                     className="absolute left-6 right-6 h-[2px] z-20"
                     style={{
-                      background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
-                      boxShadow: `0 0 12px ${accent}80, 0 0 30px ${accent}40`,
+                      background: `linear-gradient(90deg, transparent, ${scanRed}, transparent)`,
+                      boxShadow: `0 0 12px ${scanRed}80, 0 0 30px ${scanRed}40`,
                     }}
                     initial={{ bottom: "24px" }}
-                    animate={{ bottom: ["56px", "24px", "56px"] }}
-                    transition={{ duration: 1.2, ease: "easeInOut" }}
+                    animate={{ bottom: ["56px", "24px", "56px", "24px"] }}
+                    transition={{ duration: 1.4, ease: "easeInOut" }}
                   />
                 )}
               </AnimatePresence>
 
-              {/* NFC pulse rings */}
-              <AnimatePresence>
-                {phase === "scanning" && (
-                  <>
-                    {[0, 0.3, 0.6].map((delay, i) => (
-                      <motion.div
-                        key={`ring-${i}`}
-                        className="absolute inset-0 rounded-xl z-20 pointer-events-none"
-                        style={{ border: `2px solid ${accent}` }}
-                        initial={{ opacity: 0.6, scale: 1 }}
-                        animate={{ opacity: 0, scale: 1.25 }}
-                        transition={{ duration: 1, delay, repeat: 1, ease: "easeOut" }}
-                      />
-                    ))}
-                  </>
-                )}
-              </AnimatePresence>
-
-              {/* Verified checkmark overlay */}
+              {/* Green border flash on verified */}
               <AnimatePresence>
                 {phase === "verified" && (
                   <motion.div
-                    className="absolute inset-0 flex items-center justify-center z-20"
-                    style={{ background: `${accent}20` }}
+                    className="absolute inset-0 rounded-xl z-15 pointer-events-none"
+                    style={{ border: "2px solid hsl(140, 70%, 45%)" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0, 1, 0.6, 1, 0.4] }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                  />
+                )}
+              </AnimatePresence>
+
+              {/* ACCESS GRANTED overlay */}
+              <AnimatePresence>
+                {phase === "verified" && (
+                  <motion.div
+                    className="absolute inset-0 flex flex-col items-center justify-center z-20"
+                    style={{ background: "rgba(0,0,0,0.7)" }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
+                    {/* Checkmark */}
                     <motion.div
-                      className="w-20 h-20 rounded-full flex items-center justify-center"
+                      className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
                       style={{
-                        background: accent,
-                        boxShadow: `0 0 40px ${accent}60`,
+                        background: "hsl(140, 70%, 45%)",
+                        boxShadow: "0 0 30px hsla(140, 70%, 45%, 0.5)",
                       }}
                       initial={{ scale: 0 }}
                       animate={{ scale: [0, 1.2, 1] }}
-                      transition={{ duration: 0.5, ease: "easeOut" }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
                     >
-                      <motion.svg
-                        viewBox="0 0 24 24"
-                        className="w-10 h-10"
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
+                      <motion.svg viewBox="0 0 24 24" className="w-8 h-8" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <motion.path
                           d="M5 13l4 4L19 7"
                           initial={{ pathLength: 0 }}
                           animate={{ pathLength: 1 }}
-                          transition={{ duration: 0.4, delay: 0.3 }}
+                          transition={{ duration: 0.3, delay: 0.2 }}
                         />
                       </motion.svg>
                     </motion.div>
+
+                    {/* Typewriter text */}
+                    <p
+                      className="text-sm tracking-[0.4em] uppercase font-mono"
+                      style={{ color: "hsl(140, 70%, 55%)", textShadow: "0 0 10px hsla(140, 70%, 45%, 0.4)" }}
+                    >
+                      {grantedText.slice(0, typedChars)}
+                      <span className="animate-pulse">|</span>
+                    </p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -231,11 +246,13 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
               />
             </div>
 
-            {/* Glow effect behind card */}
+            {/* Glow behind card */}
             <motion.div
               className="absolute -inset-4 rounded-2xl -z-10"
               style={{
-                background: `radial-gradient(ellipse at center, ${accent}15, transparent 70%)`,
+                background: phase === "verified"
+                  ? `radial-gradient(ellipse at center, hsla(140, 70%, 45%, 0.15), transparent 70%)`
+                  : `radial-gradient(ellipse at center, ${accent}15, transparent 70%)`,
               }}
               animate={
                 phase === "scanning"
