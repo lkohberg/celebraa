@@ -1,11 +1,28 @@
 import { useState } from "react";
-import { Music2, Send } from "lucide-react";
+import { Music2, Send, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSubmitMusicWish } from "@/hooks/useEvents";
+import { toast } from "sonner";
 
-const MusicWishSection = ({ accentColor, isPreview = false }: { accentColor?: string; isPreview?: boolean }) => {
+const MusicWishSection = ({ accentColor, eventId, isPreview = false }: { accentColor?: string; eventId?: string; isPreview?: boolean }) => {
   const [song, setSong] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const submitWish = useSubmitMusicWish();
   const color = accentColor || "hsl(340, 65%, 50%)";
+
+  const handleSubmit = async () => {
+    if (isPreview || !eventId || !song.trim()) return;
+    try {
+      await submitWish.mutateAsync({ event_id: eventId, song_title: song.trim() });
+      toast.success("Songwunsch gespeichert! 🎵");
+      setSong("");
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 3000);
+    } catch {
+      toast.error("Fehler beim Speichern");
+    }
+  };
 
   return (
     <section className="py-20 bg-background">
@@ -19,12 +36,13 @@ const MusicWishSection = ({ accentColor, isPreview = false }: { accentColor?: st
           <Input
             placeholder="Song + Künstler eingeben..."
             value={song}
-            onChange={(e) => !isPreview && setSong(e.target.value)}
+            onChange={(e) => setSong(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             className="font-body"
             disabled={isPreview}
           />
-          <Button disabled={isPreview}>
-            <Send className="w-4 h-4" />
+          <Button onClick={handleSubmit} disabled={isPreview || submitWish.isPending || !song.trim()}>
+            {submitted ? <Check className="w-4 h-4" /> : <Send className="w-4 h-4" />}
           </Button>
         </div>
       </div>

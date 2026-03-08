@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { templates } from "@/components/TemplateCard";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPag
 import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import LegalDialogs from "@/components/LegalDialogs";
+import BlockConfigurator from "@/components/BlockConfigurator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
@@ -88,7 +89,11 @@ const OrderFlow = () => {
   const [contact, setContact] = useState({ firstName: "", lastName: "", email: "" });
   const [termsAccepted, setTermsAccepted] = useState(false);
 
+  const [blockConfig, setBlockConfig] = useState<any>({});
   const [dragActive, setDragActive] = useState(false);
+
+  // Scroll to top on step change
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [step]);
 
   if (!template) {
     return (
@@ -172,7 +177,7 @@ const OrderFlow = () => {
       description: form.description || null,
       location_name: form.locationName || null,
       address: form.address || null,
-      story_text: hasBlock("-story") ? (form.storyText || "Eure Geschichte wird hier erzählt. Ein wunderschöner Text über euch als Paar.") : null,
+      story_text: hasBlock("-story") ? (blockConfig.story_text || "Eure Geschichte wird hier erzählt. Ein wunderschöner Text über euch als Paar.") : null,
       ceremony_location: form.ceremonyLocation || null,
       ceremony_address: form.ceremonyAddress || null,
       reception_location: form.receptionLocation || null,
@@ -181,18 +186,19 @@ const OrderFlow = () => {
       rsvp_enabled: form.rsvpEnabled,
       rsvp_deadline: form.rsvpDeadline || null,
       menu_selection: hasBlock("-menu"),
-      schedule: hasBlock("-timeline") ? [
+      schedule: hasBlock("-timeline") ? (blockConfig.schedule?.length > 0 ? blockConfig.schedule : [
         { time: "15:00", label: "Empfang" },
         { time: "16:00", label: "Zeremonie" },
         { time: "18:00", label: "Abendessen" },
         { time: "20:00", label: "Party" },
-      ] : null,
-      dress_code: hasBlock("-dresscode") ? "Elegant / Semi-formal" : null,
+      ]) : null,
+      dress_code: hasBlock("-dresscode") ? (blockConfig.dresscode_male ? `Herren: ${blockConfig.dresscode_male} | Damen: ${blockConfig.dresscode_female}` : "Elegant / Semi-formal") : null,
       children_welcome: null,
-      hotel_recommendations: hasBlock("-hotels") ? [
+      hotel_recommendations: hasBlock("-hotels") ? (blockConfig.hotels?.length > 0 ? blockConfig.hotels : [
         { name: "Hotel Beispiel", address: "Musterstraße 1", url: "https://example.com" },
-      ] : null,
+      ]) : null,
       selectedBlocks: selected,
+      block_config: blockConfig,
     };
   };
 
@@ -228,14 +234,15 @@ const OrderFlow = () => {
         contact_last_name: contact.lastName,
         contact_email: contact.email,
         hero_image_url: form.heroImageUrl || null,
-        story_text: form.storyText || null,
+        story_text: blockConfig.story_text || form.storyText || null,
         ceremony_location: form.ceremonyLocation || null,
         ceremony_address: form.ceremonyAddress || null,
         reception_location: form.receptionLocation || null,
         reception_address: form.receptionAddress || null,
-        dress_code: allSelectedBlocks.some(id => id.endsWith("-dresscode")) ? "Elegant" : null,
-        schedule: allSelectedBlocks.some(id => id.endsWith("-timeline")) ? [] : null,
-        hotel_recommendations: allSelectedBlocks.some(id => id.endsWith("-hotels")) ? [] : null,
+        dress_code: allSelectedBlocks.some(id => id.endsWith("-dresscode")) ? (blockConfig.dresscode_male ? `Herren: ${blockConfig.dresscode_male} | Damen: ${blockConfig.dresscode_female}` : "Elegant") : null,
+        schedule: blockConfig.schedule?.length > 0 ? blockConfig.schedule : null,
+        hotel_recommendations: blockConfig.hotels?.length > 0 ? blockConfig.hotels : null,
+        block_config: blockConfig,
         languages: ["de"],
       };
 
@@ -694,6 +701,20 @@ const OrderFlow = () => {
                   {form.eventLink && linkValid && !isReservedLink && linkAvailable === false && <p className="text-xs text-destructive font-body mt-1">Bereits vergeben.</p>}
                   {form.eventLink && linkValid && !isReservedLink && linkAvailable === true && <p className="text-xs text-primary font-body mt-1">✓ Verfügbar!</p>}
                 </div>
+
+                {/* Block Configuration */}
+                {allSelectedBlocks.length > 0 && (
+                  <div>
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-4">Blöcke konfigurieren</h3>
+                    <p className="font-body text-xs text-muted-foreground mb-4">Fülle die Details für deine ausgewählten Blöcke aus. Du kannst Einträge auch später ergänzen.</p>
+                    <BlockConfigurator
+                      selectedBlocks={allSelectedBlocks}
+                      blockConfig={blockConfig}
+                      setBlockConfig={setBlockConfig}
+                      category={category}
+                    />
+                  </div>
+                )}
 
                 <Button className="w-full font-body font-semibold text-base py-5" disabled={!step2Valid} onClick={() => setStep(2)}>
                   Weiter zur Vorschau <ArrowRight className="w-4 h-4 ml-2" />

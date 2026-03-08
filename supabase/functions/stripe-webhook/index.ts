@@ -11,6 +11,8 @@ const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
   apiVersion: "2025-01-27.acacia",
 });
 
+const MANUAL_BLOCK_SUFFIXES = ["-illustration", "-musicpro", "-bgmusic"];
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -22,15 +24,14 @@ Deno.serve(async (req) => {
       return new Response("No signature", { status: 400 });
     }
 
-    const body = await req.text();
     const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
-
-    let event: Stripe.Event;
-    if (webhookSecret) {
-      event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-    } else {
-      event = JSON.parse(body) as Stripe.Event;
+    if (!webhookSecret) {
+      console.error("STRIPE_WEBHOOK_SECRET is not configured");
+      return new Response("Webhook secret not configured", { status: 500 });
     }
+
+    const body = await req.text();
+    const event: Stripe.Event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -42,16 +43,28 @@ Deno.serve(async (req) => {
       const eventId = session.metadata?.event_id;
 
       if (eventId) {
-        // Update event status to paid
+        // Check if event has manual blocks
+        const { data: eventData } = await supabase
+          .from("events")
+          .select("selected_blocks")
+          .eq("id", eventId)
+          .single();
+
+        const selectedBlocks = (eventData?.selected_blocks || []) as string[];
+        const hasManual = selectedBlocks.some((id: string) =>
+          MANUAL_BLOCK_SUFFIXES.some(suffix => id.endsWith(suffix))
+        );
+
+        const newStatus = hasManual ? "pending_review" : "live";
+
         await supabase
           .from("events")
           .update({
-            status: "live",
+            status: newStatus,
             stripe_payment_id: session.payment_intent as string,
           })
           .eq("id", eventId);
 
-        // Log the payment
         await supabase.from("event_logs").insert({
           event_id: eventId,
           action: "payment_completed",
@@ -59,11 +72,12 @@ Deno.serve(async (req) => {
             stripe_session_id: session.id,
             amount: session.amount_total,
             currency: session.currency,
+            status_set: newStatus,
           },
           actor_id: session.metadata?.user_id,
         });
 
-        console.log(`Payment completed for event ${eventId}`);
+        console.log(`Payment completed for event ${eventId}, status: ${newStatus}`);
       }
     }
 

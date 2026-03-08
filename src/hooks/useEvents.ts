@@ -120,3 +120,32 @@ export const useCheckEventLink = () =>
       return { available: !data };
     },
   });
+
+// Music wishes
+export const useMusicWishes = (eventId: string) =>
+  useQuery({
+    queryKey: ["music-wishes", eventId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("music_wishes" as any)
+        .select("*")
+        .eq("event_id", eventId)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data as any[];
+    },
+    enabled: !!eventId,
+  });
+
+export const useSubmitMusicWish = () =>
+  useMutation({
+    mutationFn: async (wish: { event_id: string; song_title: string; artist?: string; guest_name?: string }) => {
+      const { data, error } = await supabase
+        .from("music_wishes" as any)
+        .insert(wish)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+  });

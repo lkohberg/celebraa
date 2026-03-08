@@ -9,7 +9,7 @@ const CustomIllustrationSection = ({ imageUrl, accentColor }: { imageUrl?: strin
         <div className="text-center mb-10">
           <Paintbrush className="w-6 h-6 mx-auto mb-3" style={{ color }} />
           <h2 className="font-display text-2xl md:text-3xl text-foreground">Unsere Location</h2>
-          <p className="font-body text-sm text-muted-foreground mt-2">Individuell illustriert mit KI</p>
+          <p className="font-body text-sm text-muted-foreground mt-2">Individuell illustriert</p>
         </div>
         <div className="rounded-xl overflow-hidden shadow-lg">
           {imageUrl ? (
@@ -18,7 +18,7 @@ const CustomIllustrationSection = ({ imageUrl, accentColor }: { imageUrl?: strin
             <div className="w-full h-64 bg-gradient-to-br from-primary/10 via-secondary to-primary/5 flex items-center justify-center">
               <div className="text-center">
                 <Paintbrush className="w-12 h-12 mx-auto mb-3 text-muted-foreground/50" />
-                <p className="font-body text-sm text-muted-foreground">KI-Illustration wird nach Bestellung erstellt</p>
+                <p className="font-body text-sm text-muted-foreground">Illustration wird nach Bestellung erstellt</p>
               </div>
             </div>
           )}

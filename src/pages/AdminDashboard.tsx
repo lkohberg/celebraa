@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { useMyEvents, useEventGuests, useEventAnalytics, useUpdateEvent } from "@/hooks/useEvents";
+import { useMyEvents, useEventGuests, useEventAnalytics, useUpdateEvent, useMusicWishes } from "@/hooks/useEvents";
 import { useTranslation } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe, Archive, Radio, AlertTriangle, Rocket } from "lucide-react";
+import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe, Archive, Radio, AlertTriangle, Rocket, Music } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/i18n/eventLabels";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -23,15 +23,12 @@ const AdminDashboard = () => {
 
   const selectedEvent = events?.find((e) => e.id === selectedEventId);
 
-  // Auth guard - redirect if not logged in
   if (!authLoading && !user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <p className="font-body text-muted-foreground mb-4">Du musst eingeloggt sein, um dein Dashboard zu sehen.</p>
-          <Button onClick={() => navigate("/")} className="font-body">
-            Zur Startseite
-          </Button>
+          <Button onClick={() => navigate("/")} className="font-body">Zur Startseite</Button>
         </div>
       </div>
     );
@@ -54,19 +51,14 @@ const AdminDashboard = () => {
         <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-4">
             <Button variant="ghost" size="sm" onClick={() => navigate("/")}>
-              <ArrowLeft className="w-4 h-4 sm:mr-1" />
-              <span className="hidden sm:inline">{t("nav.home")}</span>
+              <ArrowLeft className="w-4 h-4 sm:mr-1" /><span className="hidden sm:inline">{t("nav.home")}</span>
             </Button>
-            <span className="font-display text-lg font-bold text-foreground">
-              celebra<span className="text-primary">.at</span>
-            </span>
+            <span className="font-display text-lg font-bold text-foreground">celebra<span className="text-primary">.at</span></span>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <LanguageSwitcher />
             <span className="text-sm text-muted-foreground font-body hidden sm:block">{user?.email}</span>
-            <Button variant="outline" size="sm" onClick={signOut} className="font-body">
-              {t("nav.logout")}
-            </Button>
+            <Button variant="outline" size="sm" onClick={signOut} className="font-body">{t("nav.logout")}</Button>
           </div>
         </div>
       </nav>
@@ -74,48 +66,34 @@ const AdminDashboard = () => {
       <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-10">
         <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8">{t("dashboard.title")}</h1>
 
-        {/* Admin: Pending Review Section */}
         {isAdmin && pendingEvents.length > 0 && (
           <div className="mb-8">
             <h2 className="font-display text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-amber-500" />
-              Wartend auf Bearbeitung ({pendingEvents.length})
+              <AlertTriangle className="w-5 h-5 text-amber-500" /> Wartend auf Bearbeitung ({pendingEvents.length})
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {pendingEvents.map((event) => (
-                <PendingEventCard key={event.id} event={event} />
-              ))}
+              {pendingEvents.map((event) => (<PendingEventCard key={event.id} event={event} />))}
             </div>
           </div>
         )}
 
         {!events?.length ? (
-          <Card>
-            <CardContent className="py-16 text-center">
-              <p className="font-body text-muted-foreground mb-4">{t("dashboard.noEvents")}</p>
-              <Button onClick={() => navigate("/templates")} className="font-body">
-                {t("dashboard.createFirst")}
-              </Button>
-            </CardContent>
-          </Card>
+          <Card><CardContent className="py-16 text-center">
+            <p className="font-body text-muted-foreground mb-4">{t("dashboard.noEvents")}</p>
+            <Button onClick={() => navigate("/templates")} className="font-body">{t("dashboard.createFirst")}</Button>
+          </CardContent></Card>
         ) : (
           <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
             <div className="space-y-4">
               <h2 className="font-display text-lg sm:text-xl font-semibold text-foreground">{t("dashboard.yourEvents")}</h2>
               {events.map((event) => (
-                <Card
-                  key={event.id}
-                  className={`cursor-pointer transition-all ${selectedEventId === event.id ? "ring-2 ring-primary" : "hover:shadow-card-hover"}`}
-                  onClick={() => setSelectedEventId(event.id)}
-                >
+                <Card key={event.id} className={`cursor-pointer transition-all ${selectedEventId === event.id ? "ring-2 ring-primary" : "hover:shadow-card-hover"}`} onClick={() => setSelectedEventId(event.id)}>
                   <CardContent className="p-3 sm:p-4">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-display font-semibold text-foreground text-sm sm:text-base truncate mr-2">{event.title}</h3>
-                      <div className="flex items-center gap-1.5">
-                        <Badge variant={event.status === "paid" || event.status === "live" ? "default" : event.status === "pending_review" ? "secondary" : "outline"} className={event.status === "draft" ? "border-amber-500 text-amber-600" : event.status === "pending_review" ? "bg-amber-100 text-amber-700" : ""}>
-                          {event.status === "draft" ? t("dashboard.status.unpaid") : event.status === "pending_review" ? "In Bearbeitung" : t(`dashboard.status.${event.status}`)}
-                        </Badge>
-                      </div>
+                      <Badge variant={event.status === "paid" || event.status === "live" ? "default" : event.status === "pending_review" ? "secondary" : "outline"} className={event.status === "draft" ? "border-amber-500 text-amber-600" : event.status === "pending_review" ? "bg-amber-100 text-amber-700" : ""}>
+                        {event.status === "draft" ? t("dashboard.status.unpaid") : event.status === "pending_review" ? "In Bearbeitung" : t(`dashboard.status.${event.status}`)}
+                      </Badge>
                     </div>
                     <p className="font-body text-xs sm:text-sm text-muted-foreground">
                       {new Date(event.event_date).toLocaleDateString("de-AT")} · /{event.event_link}
@@ -124,16 +102,13 @@ const AdminDashboard = () => {
                 </Card>
               ))}
             </div>
-
             <div className="lg:col-span-2">
               {selectedEvent ? (
                 <EventDetail event={selectedEvent} isAdmin={isAdmin} />
               ) : (
-                <Card>
-                  <CardContent className="py-16 text-center">
-                    <p className="font-body text-muted-foreground">{t("dashboard.selectEvent")}</p>
-                  </CardContent>
-                </Card>
+                <Card><CardContent className="py-16 text-center">
+                  <p className="font-body text-muted-foreground">{t("dashboard.selectEvent")}</p>
+                </CardContent></Card>
               )}
             </div>
           </div>
@@ -151,16 +126,11 @@ const PendingEventCard = ({ event }: { event: any }) => {
   const handlePublish = async () => {
     setPublishing(true);
     try {
-      const { error } = await supabase
-        .from("events")
-        .update({ status: "live" } as any)
-        .eq("id", event.id);
+      const { error } = await supabase.from("events").update({ status: "live" } as any).eq("id", event.id);
       if (error) throw error;
       toast.success(`Event "${event.title}" ist jetzt live!`);
       window.location.reload();
-    } catch (err) {
-      toast.error("Fehler beim Veröffentlichen");
-    }
+    } catch { toast.error("Fehler beim Veröffentlichen"); }
     setPublishing(false);
   };
 
@@ -171,13 +141,8 @@ const PendingEventCard = ({ event }: { event: any }) => {
           <h3 className="font-display font-semibold text-foreground text-sm truncate mr-2">{event.title}</h3>
           <Badge className="bg-amber-100 text-amber-700 text-[10px]">Wartend</Badge>
         </div>
-        <p className="font-body text-xs text-muted-foreground">
-          {event.contact_first_name} {event.contact_last_name} · {event.contact_email}
-        </p>
-        <p className="font-body text-xs text-muted-foreground">
-          {new Date(event.event_date).toLocaleDateString("de-AT")} · /{event.event_link}
-        </p>
-
+        <p className="font-body text-xs text-muted-foreground">{event.contact_first_name} {event.contact_last_name} · {event.contact_email}</p>
+        <p className="font-body text-xs text-muted-foreground">{new Date(event.event_date).toLocaleDateString("de-AT")} · /{event.event_link}</p>
         <div className="space-y-1">
           <p className="font-body text-xs font-semibold text-foreground">Manuelle Blöcke:</p>
           {manualBlocksList.map(id => {
@@ -190,25 +155,19 @@ const PendingEventCard = ({ event }: { event: any }) => {
             ) : null;
           })}
         </div>
-
-        <Button
-          className="w-full font-body font-semibold"
-          size="sm"
-          disabled={publishing}
-          onClick={handlePublish}
-        >
-          <Rocket className="w-4 h-4 mr-2" />
-          {publishing ? "Wird veröffentlicht..." : "Jetzt freischalten"}
+        <Button className="w-full font-body font-semibold" size="sm" disabled={publishing} onClick={handlePublish}>
+          <Rocket className="w-4 h-4 mr-2" /> {publishing ? "Wird veröffentlicht..." : "Jetzt freischalten"}
         </Button>
       </CardContent>
     </Card>
   );
 };
 
-const EventDetail = ({ event, isAdmin }: { event: { id: string; title: string; event_link: string; status: string; price_paid: number | null; event_date: string; stripe_payment_id: string | null; languages?: string[] | null }; isAdmin?: boolean }) => {
+const EventDetail = ({ event, isAdmin }: { event: any; isAdmin?: boolean }) => {
   const { t } = useTranslation();
   const { data: guests } = useEventGuests(event.id);
   const { data: analytics } = useEventAnalytics(event.id);
+  const { data: musicWishes } = useMusicWishes(event.id);
   const updateEvent = useUpdateEvent();
 
   const accepted = guests?.filter((g) => g.rsvp_status === "accepted").length || 0;
@@ -218,32 +177,49 @@ const EventDetail = ({ event, isAdmin }: { event: { id: string; title: string; e
 
   const handlePublish = async () => {
     try {
-      const { error } = await supabase
-        .from("events")
-        .update({ status: "live" } as any)
-        .eq("id", event.id);
+      const { error } = await supabase.from("events").update({ status: "live" } as any).eq("id", event.id);
       if (error) throw error;
       toast.success("Event ist jetzt live!");
       window.location.reload();
-    } catch {
-      toast.error("Fehler beim Veröffentlichen");
-    }
+    } catch { toast.error("Fehler beim Veröffentlichen"); }
   };
+
+  const exportMusicWishesCSV = () => {
+    if (!musicWishes?.length) return;
+    const headers = ["Song", "Künstler", "Gast", "Datum"];
+    const rows = musicWishes.map((w: any) => [
+      w.song_title || "",
+      w.artist || "",
+      w.guest_name || "",
+      w.created_at ? new Date(w.created_at).toLocaleDateString("de-AT") : "",
+    ].map(v => `"${v}"`).join(","));
+    const csv = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `musikwuensche-${event.event_link}.csv`; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const selectedBlocks = (event.selected_blocks || []) as string[];
+  const hasMusicBlock = selectedBlocks.some((id: string) => id.endsWith("-musicpro") || id.endsWith("-musicwish"));
 
   return (
     <Tabs defaultValue="analytics">
-      <TabsList className="mb-6 w-full sm:w-auto">
+      <TabsList className="mb-6 w-full sm:w-auto flex-wrap">
         <TabsTrigger value="analytics" className="font-body text-xs sm:text-sm">
-          <BarChart3 className="w-4 h-4 sm:mr-2" />
-          <span className="hidden sm:inline">{t("dashboard.analytics")}</span>
+          <BarChart3 className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">{t("dashboard.analytics")}</span>
         </TabsTrigger>
         <TabsTrigger value="guests" className="font-body text-xs sm:text-sm">
-          <Users className="w-4 h-4 sm:mr-2" />
-          <span className="hidden sm:inline">{t("dashboard.guests")}</span>
+          <Users className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">{t("dashboard.guests")}</span>
         </TabsTrigger>
+        {hasMusicBlock && (
+          <TabsTrigger value="music" className="font-body text-xs sm:text-sm">
+            <Music className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Musikwünsche</span>
+          </TabsTrigger>
+        )}
         <TabsTrigger value="payment" className="font-body text-xs sm:text-sm">
-          <CreditCard className="w-4 h-4 sm:mr-2" />
-          <span className="hidden sm:inline">{t("dashboard.payment")}</span>
+          <CreditCard className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">{t("dashboard.payment")}</span>
         </TabsTrigger>
       </TabsList>
 
@@ -255,7 +231,6 @@ const EventDetail = ({ event, isAdmin }: { event: { id: string; title: string; e
           <StatCard label={t("dashboard.declined")} value={declined} icon={Users} />
         </div>
 
-        {/* Admin: Publish pending_review events */}
         {isAdmin && event.status === "pending_review" && (
           <div className="mb-4 p-4 border border-amber-300 bg-amber-50 dark:bg-amber-950/20 rounded-lg">
             <p className="font-body text-sm text-amber-700 mb-3">Dieses Event wartet auf manuelle Bearbeitung.</p>
@@ -267,18 +242,9 @@ const EventDetail = ({ event, isAdmin }: { event: { id: string; title: string; e
 
         {(event.status === "live" || event.status === "archived") && (
           <div className="flex items-center gap-3 mb-4">
-            <Button
-              variant={event.status === "live" ? "outline" : "default"}
-              size="sm"
-              className="font-body"
-              disabled={updateEvent.isPending}
-              onClick={() => updateEvent.mutate({ id: event.id, status: event.status === "live" ? "archived" : "live" })}
-            >
-              {event.status === "live" ? (
-                <><Archive className="w-4 h-4 mr-2" />{t("dashboard.archive")}</>
-              ) : (
-                <><Radio className="w-4 h-4 mr-2" />{t("dashboard.goLive")}</>
-              )}
+            <Button variant={event.status === "live" ? "outline" : "default"} size="sm" className="font-body" disabled={updateEvent.isPending}
+              onClick={() => updateEvent.mutate({ id: event.id, status: event.status === "live" ? "archived" : "live" })}>
+              {event.status === "live" ? (<><Archive className="w-4 h-4 mr-2" />{t("dashboard.archive")}</>) : (<><Radio className="w-4 h-4 mr-2" />{t("dashboard.goLive")}</>)}
             </Button>
           </div>
         )}
@@ -304,20 +270,11 @@ const EventDetail = ({ event, isAdmin }: { event: { id: string; title: string; e
               <Button variant="outline" size="sm" className="font-body" onClick={() => {
                 if (!guests) return;
                 const headers = ["Name", "Email", "RSVP", "Plus One", "Menu Choice", "Message", "Date"];
-                const csvRows = guests.map(g => [
-                  g.name,
-                  g.email || "",
-                  g.rsvp_status,
-                  g.plus_one ? "Yes" : "No",
-                  g.menu_choice || "",
-                  (g.message || "").replace(/"/g, '""'),
-                  g.responded_at ? new Date(g.responded_at).toLocaleDateString("de-AT") : "",
-                ].map(v => `"${v}"`).join(","));
+                const csvRows = guests.map(g => [g.name, g.email || "", g.rsvp_status, g.plus_one ? "Yes" : "No", g.menu_choice || "", (g.message || "").replace(/"/g, '""'), g.responded_at ? new Date(g.responded_at).toLocaleDateString("de-AT") : ""].map(v => `"${v}"`).join(","));
                 const csv = [headers.join(","), ...csvRows].join("\n");
                 const blob = new Blob([csv], { type: "text/csv" });
                 const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url; a.download = `guests-${event.event_link}.csv`; a.click();
+                const a = document.createElement("a"); a.href = url; a.download = `guests-${event.event_link}.csv`; a.click();
                 URL.revokeObjectURL(url);
               }}>
                 <Download className="w-4 h-4 mr-2" /> {t("dashboard.exportCsv")}
@@ -325,51 +282,62 @@ const EventDetail = ({ event, isAdmin }: { event: { id: string; title: string; e
             </div>
             <div className="space-y-3">
               {guests.map((guest) => (
-                <Card key={guest.id}>
-                  <CardContent className="p-3 sm:p-4 flex items-center justify-between">
-                    <div className="min-w-0">
-                      <p className="font-body font-medium text-foreground truncate">{guest.name}</p>
-                      {guest.email && <p className="font-body text-sm text-muted-foreground truncate">{guest.email}</p>}
-                      {guest.menu_choice && (
-                        <Badge variant="outline" className="mt-1 text-xs">{t(`event.dietary.${guest.menu_choice}`) || guest.menu_choice}</Badge>
-                      )}
-                      {guest.message && <p className="font-body text-sm text-muted-foreground italic mt-1 truncate">"{guest.message}"</p>}
-                    </div>
-                    <Badge
-                      className="ml-2 shrink-0"
-                      variant={guest.rsvp_status === "accepted" ? "default" : guest.rsvp_status === "declined" ? "destructive" : "secondary"}
-                    >
-                      {t(`dashboard.rsvp.${guest.rsvp_status}`)}
-                    </Badge>
-                  </CardContent>
-                </Card>
+                <Card key={guest.id}><CardContent className="p-3 sm:p-4 flex items-center justify-between">
+                  <div className="min-w-0">
+                    <p className="font-body font-medium text-foreground truncate">{guest.name}</p>
+                    {guest.email && <p className="font-body text-sm text-muted-foreground truncate">{guest.email}</p>}
+                    {guest.menu_choice && <Badge variant="outline" className="mt-1 text-xs">{guest.menu_choice}</Badge>}
+                    {guest.message && <p className="font-body text-sm text-muted-foreground italic mt-1 truncate">"{guest.message}"</p>}
+                  </div>
+                  <Badge className="ml-2 shrink-0" variant={guest.rsvp_status === "accepted" ? "default" : guest.rsvp_status === "declined" ? "destructive" : "secondary"}>
+                    {t(`dashboard.rsvp.${guest.rsvp_status}`)}
+                  </Badge>
+                </CardContent></Card>
               ))}
             </div>
           </>
         )}
       </TabsContent>
 
-      <TabsContent value="payment">
-        <Card>
-          <CardContent className="p-4 sm:p-6 space-y-3">
-            <div className="flex justify-between font-body">
-              <span className="text-muted-foreground">{t("dashboard.status")}</span>
-              <Badge>{event.status === "pending_review" ? "In Bearbeitung" : t(`dashboard.status.${event.status}`)}</Badge>
-            </div>
-            <div className="flex justify-between font-body">
-              <span className="text-muted-foreground">{t("dashboard.paid")}</span>
-              <span className="text-foreground font-semibold">
-                {event.price_paid ? `€${(event.price_paid / 100).toFixed(2)}` : "–"}
-              </span>
-            </div>
-            {event.stripe_payment_id && (
-              <div className="flex justify-between font-body">
-                <span className="text-muted-foreground">Stripe ID</span>
-                <span className="text-foreground text-sm font-mono truncate max-w-[200px]">{event.stripe_payment_id}</span>
-              </div>
+      {hasMusicBlock && (
+        <TabsContent value="music">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-display text-lg font-semibold text-foreground">Musikwünsche ({musicWishes?.length || 0})</h3>
+            {musicWishes && musicWishes.length > 0 && (
+              <Button variant="outline" size="sm" className="font-body" onClick={exportMusicWishesCSV}>
+                <Download className="w-4 h-4 mr-2" /> CSV Export
+              </Button>
             )}
-          </CardContent>
-        </Card>
+          </div>
+          {!musicWishes?.length ? (
+            <p className="font-body text-muted-foreground">Noch keine Musikwünsche eingegangen.</p>
+          ) : (
+            <div className="space-y-2">
+              {musicWishes.map((wish: any) => (
+                <Card key={wish.id}><CardContent className="p-3 sm:p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-body font-medium text-foreground">🎵 {wish.song_title}</p>
+                      {wish.artist && <p className="font-body text-sm text-muted-foreground">{wish.artist}</p>}
+                    </div>
+                    <div className="text-right">
+                      {wish.guest_name && <p className="font-body text-sm text-muted-foreground">{wish.guest_name}</p>}
+                      <p className="font-body text-xs text-muted-foreground">{new Date(wish.created_at).toLocaleDateString("de-AT")}</p>
+                    </div>
+                  </div>
+                </CardContent></Card>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+      )}
+
+      <TabsContent value="payment">
+        <Card><CardContent className="p-4 sm:p-6 space-y-3">
+          <div className="flex justify-between font-body"><span className="text-muted-foreground">{t("dashboard.status")}</span><Badge>{event.status === "pending_review" ? "In Bearbeitung" : t(`dashboard.status.${event.status}`)}</Badge></div>
+          <div className="flex justify-between font-body"><span className="text-muted-foreground">{t("dashboard.paid")}</span><span className="text-foreground font-semibold">{event.price_paid ? `€${(event.price_paid / 100).toFixed(2)}` : "–"}</span></div>
+          {event.stripe_payment_id && <div className="flex justify-between font-body"><span className="text-muted-foreground">Stripe ID</span><span className="text-foreground text-sm font-mono truncate max-w-[200px]">{event.stripe_payment_id}</span></div>}
+        </CardContent></Card>
       </TabsContent>
     </Tabs>
   );
@@ -394,15 +362,15 @@ const LanguageLinks = ({ event }: { event: any }) => {
       </p>
       <div className="space-y-1">
         {languages.map((code) => {
-          const lang = SUPPORTED_LANGUAGES.find((l) => l.code === code);
+          const langLabel = SUPPORTED_LANGUAGES.find((l) => l.code === code)?.label || code;
           const url = `${window.location.origin}/${event.event_link}/${code}`;
           return (
-            <div key={code} className="flex items-center gap-2">
-              <span className="text-xs">{lang?.flag}</span>
-              <span className="font-body text-xs text-muted-foreground break-all flex-1">{url}</span>
-              <button onClick={() => handleCopy(url, code)} className="text-muted-foreground hover:text-foreground">
+            <div key={code} className="flex items-center gap-2 font-body text-sm">
+              <span className="text-muted-foreground">{langLabel}:</span>
+              <code className="text-xs bg-secondary text-foreground px-2 py-0.5 rounded truncate max-w-[200px]">{url}</code>
+              <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => handleCopy(url, code)}>
                 {copied === code ? <Check className="w-3 h-3 text-primary" /> : <Copy className="w-3 h-3" />}
-              </button>
+              </Button>
             </div>
           );
         })}
@@ -411,14 +379,12 @@ const LanguageLinks = ({ event }: { event: any }) => {
   );
 };
 
-const StatCard = ({ label, value, icon: Icon }: { label: string; value: number; icon: React.ElementType }) => (
-  <Card>
-    <CardContent className="p-3 sm:p-4 text-center">
-      <Icon className="w-5 h-5 text-primary mx-auto mb-2" />
-      <p className="font-display text-xl sm:text-2xl font-bold text-foreground">{value}</p>
-      <p className="font-body text-[10px] sm:text-xs text-muted-foreground">{label}</p>
-    </CardContent>
-  </Card>
+const StatCard = ({ label, value, icon: Icon }: { label: string; value: number; icon: any }) => (
+  <Card><CardContent className="p-3 sm:p-4 text-center">
+    <Icon className="w-5 h-5 mx-auto text-muted-foreground mb-1" />
+    <p className="font-display text-xl sm:text-2xl font-bold text-foreground">{value}</p>
+    <p className="font-body text-[10px] sm:text-xs text-muted-foreground">{label}</p>
+  </CardContent></Card>
 );
 
 export default AdminDashboard;

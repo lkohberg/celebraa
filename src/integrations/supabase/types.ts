@@ -90,6 +90,7 @@ export type Database = {
       events: {
         Row: {
           address: string | null
+          block_config: Json | null
           ceremony_address: string | null
           ceremony_location: string | null
           children_welcome: boolean | null
@@ -129,6 +130,7 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          block_config?: Json | null
           ceremony_address?: string | null
           ceremony_location?: string | null
           children_welcome?: boolean | null
@@ -168,6 +170,7 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          block_config?: Json | null
           ceremony_address?: string | null
           ceremony_location?: string | null
           children_welcome?: boolean | null
@@ -247,6 +250,41 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "guests_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      music_wishes: {
+        Row: {
+          artist: string | null
+          created_at: string
+          event_id: string
+          guest_name: string | null
+          id: string
+          song_title: string
+        }
+        Insert: {
+          artist?: string | null
+          created_at?: string
+          event_id: string
+          guest_name?: string | null
+          id?: string
+          song_title: string
+        }
+        Update: {
+          artist?: string | null
+          created_at?: string
+          event_id?: string
+          guest_name?: string | null
+          id?: string
+          song_title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "music_wishes_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
