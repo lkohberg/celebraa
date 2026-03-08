@@ -171,6 +171,7 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
   const { data: analytics } = useEventAnalytics(event.id);
   const { data: musicWishes } = useMusicWishes(event.id);
   const updateEvent = useUpdateEvent();
+  const queryClient = useQueryClient();
   const [deleting, setDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -180,6 +181,7 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
       const { error } = await supabase.from("events").delete().eq("id", event.id);
       if (error) throw error;
       toast.success(t("dashboard.deleteSuccess"));
+      queryClient.invalidateQueries({ queryKey: ["my-events"] });
       onDeleted?.();
     } catch {
       toast.error(t("dashboard.deleteError"));
