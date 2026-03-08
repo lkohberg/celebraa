@@ -152,7 +152,7 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
 
             {/* Wax seal with irregular edge */}
             <div
-              className="absolute z-20 w-[56px] h-[56px] sm:w-[68px] sm:h-[68px] md:w-[76px] md:h-[76px]"
+              className="absolute z-20 w-[44px] h-[44px] sm:w-[58px] sm:h-[58px] md:w-[76px] md:h-[76px]"
               style={{ top: "calc(50% - 22px)", left: "50%", transform: "translateX(-50%)" }}
             >
             <motion.div
