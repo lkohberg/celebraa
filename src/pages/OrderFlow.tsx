@@ -28,11 +28,7 @@ import {
   type Block, type Package as PackageType
 } from "@/data/blocks";
 
-const fontOptions = [
-  { value: "Playfair Display", label: "Playfair Display (Elegant)" },
-  { value: "DM Sans", label: "DM Sans (Modern)" },
-  { value: "Georgia", label: "Georgia (Klassisch)" },
-];
+const RESERVED_ROUTES_CONST = ["templates", "configure", "success", "dashboard", "admin", "login", "signup", "settings", "api", "auth", "order"];
 
 const RESERVED_ROUTES = ["templates", "configure", "success", "dashboard", "admin", "login", "signup", "settings", "api", "auth", "order"];
 
