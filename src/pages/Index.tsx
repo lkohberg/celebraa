@@ -16,7 +16,7 @@ import HowItWorksDialog from "@/components/HowItWorksDialog";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "@/i18n";
-import { LayoutDashboard, LogIn, Menu, X } from "lucide-react";
+import { LayoutDashboard, LogIn, LogOut, Menu, X } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();

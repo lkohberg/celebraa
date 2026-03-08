@@ -21,11 +21,6 @@ import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporat
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
 
-const fontOptions = [
-  { value: "Playfair Display", label: "Playfair Display (Elegant)" },
-  { value: "DM Sans", label: "DM Sans (Modern)" },
-  { value: "Georgia", label: "Georgia (Klassisch)" },
-];
 
 const ConfigurePage = () => {
   const { templateId } = useParams();
