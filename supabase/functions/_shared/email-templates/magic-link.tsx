@@ -32,7 +32,7 @@ export const MagicLinkEmail = ({
     <Body style={main}>
       <Container style={container}>
         <Section style={logoSection}>
-          <Img src="https://nycaurobmnnrskwlzgym.supabase.co/storage/v1/object/public/email-assets/celebra-logo.ico" width="80" height="80" alt="Celebra" style={logoImg} />
+          <Img src="https://nycaurobmnnrskwlzgym.supabase.co/storage/v1/object/public/email-assets/celebra-logo.png" width="80" height="80" alt="Celebra" style={logoImg} />
         </Section>
         <Hr style={divider} />
         <Heading style={h1}>Dein Login-Link</Heading>
