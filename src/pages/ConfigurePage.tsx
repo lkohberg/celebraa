@@ -395,6 +395,14 @@ const ConfigurePage = () => {
                 <div className="border border-primary/30 rounded-lg p-5 space-y-4 bg-primary/5">
                   <h4 className="font-display text-base font-semibold text-foreground">Premium-Details</h4>
 
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="font-body text-sm">Intro-Animation</Label>
+                      <p className="text-xs text-muted-foreground font-body">Öffnungsanimation vor der Einladung</p>
+                    </div>
+                    <Switch checked={form.showIntro} onCheckedChange={(v) => updateField("showIntro", v)} />
+                  </div>
+
                   <div>
                     <Label className="font-body text-sm">{t("configure.storyText")}</Label>
                     <Textarea placeholder={t("configure.storyPlaceholder")} value={form.storyText} onChange={(e) => updateField("storyText", e.target.value)} className="font-body mt-1" rows={4} />
