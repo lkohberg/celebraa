@@ -260,7 +260,6 @@ const OrderFlow = () => {
 
       // Admin bypass
       if (isAdmin) {
-      if (isAdmin) {
         const newStatus = needsManualWork ? "pending_review" : "live";
         await supabase
           .from("events")

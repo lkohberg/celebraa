@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar, Clock, MapPin, Users, ArrowLeft, Upload, X, Globe, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { SUPPORTED_LANGUAGES, type EventLang } from "@/i18n/eventLabels";
 import { useCreateEvent, useCheckEventLink } from "@/hooks/useEvents";
 import { supabase } from "@/integrations/supabase/client";
