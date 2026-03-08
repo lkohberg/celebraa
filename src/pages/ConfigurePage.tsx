@@ -513,7 +513,7 @@ const ConfigurePage = () => {
                         <div className="flex flex-col items-center justify-center py-8 px-4">
                           <Upload className="w-8 h-8 text-muted-foreground mb-2" />
                           <p className="text-sm font-body text-muted-foreground text-center">
-                            Bild hierher ziehen oder klicken
+                            {t("configure.dragOrClickUpload")}
                           </p>
                         </div>
                       )}
