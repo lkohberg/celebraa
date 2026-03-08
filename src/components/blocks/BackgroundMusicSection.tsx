@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { motion } from "framer-motion";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
@@ -10,9 +10,9 @@ const BackgroundMusicSection = ({ accentColor, lang, isDemo = false }: { accentC
   const audioCtxRef = useRef<AudioContext | null>(null);
   const gainRef = useRef<GainNode | null>(null);
   const intervalRef = useRef<number | null>(null);
+  const autoStarted = useRef(false);
 
-  // Simple ambient melody using Web Audio API for demo
-  const startMusic = () => {
+  const startMusic = useCallback(() => {
     if (audioCtxRef.current) return;
     const ctx = new AudioContext();
     audioCtxRef.current = ctx;
@@ -44,9 +44,9 @@ const BackgroundMusicSection = ({ accentColor, lang, isDemo = false }: { accentC
     playNote();
     intervalRef.current = window.setInterval(playNote, 1000);
     setPlaying(true);
-  };
+  }, []);
 
-  const stopMusic = () => {
+  const stopMusic = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (audioCtxRef.current) {
       audioCtxRef.current.close();
@@ -55,11 +55,30 @@ const BackgroundMusicSection = ({ accentColor, lang, isDemo = false }: { accentC
     gainRef.current = null;
     intervalRef.current = null;
     setPlaying(false);
-  };
-
-  useEffect(() => {
-    return () => { stopMusic(); };
   }, []);
+
+  // Auto-start on first user interaction with the page
+  useEffect(() => {
+    if (autoStarted.current) return;
+    const handleInteraction = () => {
+      if (!autoStarted.current) {
+        autoStarted.current = true;
+        startMusic();
+      }
+      document.removeEventListener("click", handleInteraction);
+      document.removeEventListener("touchstart", handleInteraction);
+      document.removeEventListener("scroll", handleInteraction);
+    };
+    document.addEventListener("click", handleInteraction, { once: true });
+    document.addEventListener("touchstart", handleInteraction, { once: true });
+    document.addEventListener("scroll", handleInteraction, { once: true });
+    return () => {
+      document.removeEventListener("click", handleInteraction);
+      document.removeEventListener("touchstart", handleInteraction);
+      document.removeEventListener("scroll", handleInteraction);
+      stopMusic();
+    };
+  }, [startMusic, stopMusic]);
 
   return (
     <section className="py-8 relative overflow-hidden">
@@ -72,9 +91,9 @@ const BackgroundMusicSection = ({ accentColor, lang, isDemo = false }: { accentC
           className="inline-flex items-center gap-3 bg-background/80 backdrop-blur-sm rounded-full px-6 py-3.5 border border-border/50 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
         >
           {playing ? (
-            <VolumeX className="w-5 h-5" style={{ color }} />
-          ) : (
             <Volume2 className="w-5 h-5" style={{ color }} />
+          ) : (
+            <VolumeX className="w-5 h-5" style={{ color }} />
           )}
           <span className="font-body text-sm text-foreground">{label}</span>
           <div className="flex gap-0.5 items-end h-4">
