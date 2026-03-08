@@ -143,19 +143,31 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
                 ))}
               </div>
 
-              {/* Scanning line */}
+              {/* NFC pulse rings during scanning */}
               <AnimatePresence>
                 {phase === "scanning" && (
-                  <motion.div
-                    className="absolute left-0 right-0 h-[2px] z-20"
-                    style={{
-                      background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
-                      boxShadow: `0 0 20px ${accent}80, 0 0 40px ${accent}40`,
-                    }}
-                    initial={{ top: "10%" }}
-                    animate={{ top: ["10%", "90%", "10%"] }}
-                    transition={{ duration: 1.2, ease: "easeInOut" }}
-                  />
+                  <>
+                    {[0, 0.3, 0.6].map((delay, i) => (
+                      <motion.div
+                        key={`ring-${i}`}
+                        className="absolute inset-0 rounded-xl z-20 pointer-events-none"
+                        style={{ border: `2px solid ${accent}` }}
+                        initial={{ opacity: 0.6, scale: 1 }}
+                        animate={{ opacity: 0, scale: 1.25 }}
+                        transition={{ duration: 1, delay, repeat: 1, ease: "easeOut" }}
+                      />
+                    ))}
+                    {/* Border glow trace */}
+                    <motion.div
+                      className="absolute inset-0 rounded-xl z-20 pointer-events-none"
+                      style={{
+                        boxShadow: `inset 0 0 20px ${accent}30, 0 0 30px ${accent}25`,
+                      }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: [0, 0.8, 0.4, 0.8, 0] }}
+                      transition={{ duration: 1.4, ease: "easeInOut" }}
+                    />
+                  </>
                 )}
               </AnimatePresence>
 
