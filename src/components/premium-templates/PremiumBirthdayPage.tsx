@@ -136,7 +136,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true }: { event: 
                     <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${accent}15` }}>
                       <Clock className="w-6 h-6" style={{ color: accent }} />
                     </div>
-                    <h2 className="font-display text-2xl text-foreground">{t("event.timeline")}</h2>
+                    <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
                     <PartyDivider color={accent} />
                   </div>
                   <ScheduleTimeline schedule={event.schedule} />
