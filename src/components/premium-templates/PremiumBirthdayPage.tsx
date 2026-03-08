@@ -46,10 +46,10 @@ const PartyDivider = ({ color }: { color: string }) => (
   </div>
 );
 
-const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang }) => {
+const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean }) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
-  const [showContent, setShowContent] = useState(false);
+  const [showContent, setShowContent] = useState(!showIntro);
 
   const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", { day: "numeric", month: "long", year: "numeric" });
 
@@ -62,7 +62,7 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
     <div className="min-h-screen overflow-hidden" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
       <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
 
-      {!showContent && <GiftBoxIntro title={event.title} onOpen={() => setShowContent(true)} accentColor={accent} />}
+      {showIntro && !showContent && <GiftBoxIntro title={event.title} onOpen={() => setShowContent(true)} accentColor={accent} />}
 
       <AnimatePresence>
         {showContent && (

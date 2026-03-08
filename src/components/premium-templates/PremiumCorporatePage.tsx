@@ -25,10 +25,10 @@ const CorpDivider = ({ color }: { color: string }) => (
   </div>
 );
 
-const PremiumCorporatePage = ({ event, theme, lang }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang }) => {
+const PremiumCorporatePage = ({ event, theme, lang, showIntro = true }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean }) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
-  const [showContent, setShowContent] = useState(false);
+  const [showContent, setShowContent] = useState(!showIntro);
 
   const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", { day: "numeric", month: "long", year: "numeric" });
 
@@ -42,7 +42,7 @@ const PremiumCorporatePage = ({ event, theme, lang }: { event: PremiumEventData;
     <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
       <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
 
-      {!showContent && <BadgeScanIntro title={event.title} onOpen={() => setShowContent(true)} accentColor={accent} />}
+      {showIntro && !showContent && <BadgeScanIntro title={event.title} onOpen={() => setShowContent(true)} accentColor={accent} />}
 
       {showContent && (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>

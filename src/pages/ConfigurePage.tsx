@@ -68,6 +68,7 @@ const ConfigurePage = () => {
     dressCode: "",
     childrenWelcome: "" as "" | "yes" | "no",
     hotels: [] as { name: string; address: string; url: string }[],
+    showIntro: true,
   });
 
   const [dragActive, setDragActive] = useState(false);
@@ -278,11 +279,11 @@ const ConfigurePage = () => {
                     };
                     switch (template.eventType) {
                       case "wedding":
-                        return <PremiumWeddingPage event={previewEvent} theme={previewTheme} />;
+                        return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
                       case "birthday":
-                        return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} />;
+                        return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
                       case "corporate":
-                        return <PremiumCorporatePage event={previewEvent} theme={previewTheme} />;
+                        return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
                     }
                   })()}
                 </div>
@@ -393,6 +394,14 @@ const ConfigurePage = () => {
               {isPremium && (
                 <div className="border border-primary/30 rounded-lg p-5 space-y-4 bg-primary/5">
                   <h4 className="font-display text-base font-semibold text-foreground">Premium-Details</h4>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="font-body text-sm">Intro-Animation</Label>
+                      <p className="text-xs text-muted-foreground font-body">Öffnungsanimation vor der Einladung</p>
+                    </div>
+                    <Switch checked={form.showIntro} onCheckedChange={(v) => updateField("showIntro", v)} />
+                  </div>
 
                   <div>
                     <Label className="font-body text-sm">{t("configure.storyText")}</Label>
