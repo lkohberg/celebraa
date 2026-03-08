@@ -11,6 +11,7 @@ import HotelRecommendations from "./HotelRecommendations";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 import { PremiumEventData, PremiumTheme } from "./PremiumWeddingPage";
+import { colorWithAlpha } from "@/lib/color-utils";
 
 import FoodMenuSection from "@/components/blocks/FoodMenuSection";
 import AgendaSection from "@/components/blocks/AgendaSection";
@@ -111,7 +112,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
           <div className="absolute inset-0 opacity-[0.01]" style={{ backgroundImage: `linear-gradient(${accent} 1px, transparent 1px), linear-gradient(90deg, ${accent} 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
           <div className="relative max-w-3xl mx-auto px-4">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${accent}15` }}>
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                 <Clock className="w-6 h-6" style={{ color: accent }} />
               </div>
               <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
@@ -135,7 +136,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
           </div>
           <div className={`grid gap-12 max-w-2xl mx-auto ${event.dress_code ? "md:grid-cols-2" : "md:grid-cols-1 max-w-lg"}`}>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                 <MapPin className="w-6 h-6" style={{ color: accent }} />
               </div>
               <h3 className="font-display text-xl text-foreground mb-3">{el?.location || t("event.location")}</h3>
@@ -144,7 +145,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
             </motion.div>
             {event.dress_code && (
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
-                <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                   <Shirt className="w-6 h-6" style={{ color: accent }} />
                 </div>
                 <h3 className="font-display text-xl text-foreground mb-3">{el?.dressCode || t("event.dressCode")}</h3>

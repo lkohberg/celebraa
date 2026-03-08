@@ -91,28 +91,36 @@ const EventPage = () => {
     hero_image_url?: string;
   };
 
+  // Build theme from event's primary_color
+  const eventTheme = eventData.primary_color ? {
+    primary: eventData.primary_color,
+    secondary: "hsl(30, 33%, 96%)",
+    accent: "hsl(30, 10%, 25%)",
+    font: eventData.font || "Playfair Display",
+  } : undefined;
+
   // Premium templates
   if (eventData.tier === "premium") {
     const templateId = eventData.template_id;
     if (templateId.startsWith("wedding-premium") || templateId.startsWith("wedding-")) {
       if (templateId.includes("premium")) {
-        return <PremiumWeddingPage event={eventData} lang={eventLang} />;
+        return <PremiumWeddingPage event={eventData} theme={eventTheme} lang={eventLang} />;
       }
     }
     if (templateId.startsWith("birthday-premium") || templateId.startsWith("birthday-")) {
       if (templateId.includes("premium")) {
-        return <PremiumBirthdayPage event={eventData} lang={eventLang} />;
+        return <PremiumBirthdayPage event={eventData} theme={eventTheme} lang={eventLang} />;
       }
     }
     if (templateId.startsWith("corporate-premium") || templateId.startsWith("corporate-")) {
       if (templateId.includes("premium")) {
-        return <PremiumCorporatePage event={eventData} lang={eventLang} />;
+        return <PremiumCorporatePage event={eventData} theme={eventTheme} lang={eventLang} />;
       }
     }
     // Fallback: detect by template prefix for premium tier
-    if (templateId.startsWith("wedding")) return <PremiumWeddingPage event={eventData} lang={eventLang} />;
-    if (templateId.startsWith("birthday")) return <PremiumBirthdayPage event={eventData} lang={eventLang} />;
-    if (templateId.startsWith("corporate")) return <PremiumCorporatePage event={eventData} lang={eventLang} />;
+    if (templateId.startsWith("wedding")) return <PremiumWeddingPage event={eventData} theme={eventTheme} lang={eventLang} />;
+    if (templateId.startsWith("birthday")) return <PremiumBirthdayPage event={eventData} theme={eventTheme} lang={eventLang} />;
+    if (templateId.startsWith("corporate")) return <PremiumCorporatePage event={eventData} theme={eventTheme} lang={eventLang} />;
   }
 
   // Basis template - simple styled page

@@ -11,6 +11,7 @@ import HotelRecommendations from "./HotelRecommendations";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 import { PremiumEventData, PremiumTheme } from "./PremiumWeddingPage";
+import { colorWithAlpha } from "@/lib/color-utils";
 
 import MusicWishSection from "@/components/blocks/MusicWishSection";
 import WishlistSection from "@/components/blocks/WishlistSection";
@@ -117,7 +118,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
               <section className="py-28 relative overflow-hidden bg-background">
                 <div className="absolute top-10 right-10 w-64 h-64 rounded-full opacity-[0.04]" style={{ background: `radial-gradient(circle, ${accent}, transparent)` }} />
                 <div className="relative max-w-2xl mx-auto px-4 text-center">
-                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${accent}15` }}>
+                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                     <Music className="w-6 h-6" style={{ color: accent }} />
                   </div>
                   <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{el?.party || t("event.party")}</h2>
@@ -133,7 +134,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
                 <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "24px 24px" }} />
                 <div className="relative max-w-3xl mx-auto px-4">
                   <div className="text-center mb-12">
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${accent}15` }}>
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                       <Clock className="w-6 h-6" style={{ color: accent }} />
                     </div>
                     <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
@@ -159,7 +160,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
                 </div>
                 <div className="grid md:grid-cols-1 gap-12 max-w-lg mx-auto">
                   <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
-                    <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                       <MapPin className="w-6 h-6" style={{ color: accent }} />
                     </div>
                     <h3 className="font-display text-xl text-foreground mb-3">{el?.venue || t("event.venue")}</h3>
