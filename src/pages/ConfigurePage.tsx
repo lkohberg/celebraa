@@ -199,7 +199,7 @@ const ConfigurePage = () => {
       });
 
       if (checkoutError || !checkoutData?.url) {
-        toast.error("Fehler beim Erstellen der Zahlung");
+        toast.error(t("order.paymentError"));
         return;
       }
 
