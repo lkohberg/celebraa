@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
 
 interface AuthDialogProps {
@@ -13,6 +14,7 @@ interface AuthDialogProps {
 
 const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const { signIn, signUp } = useAuth();
+  const { t } = useTranslation();
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +23,6 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Map "admin" shortcut to full email
     const loginEmail = email.includes("@") ? email : `${email}@celebra.at`;
     const fn = mode === "login" ? signIn : signUp;
     const { error } = await fn(loginEmail, password);
@@ -29,7 +30,7 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success(mode === "login" ? "Erfolgreich angemeldet!" : "Registrierung erfolgreich! Bitte bestätige deine E-Mail.");
+      toast.success(mode === "login" ? t("auth.loginSuccess") : t("auth.registerSuccess"));
       onOpenChange(false);
     }
   };
@@ -39,25 +40,25 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       <DialogContent className="max-w-sm">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl">
-            {mode === "login" ? "Anmelden" : "Registrieren"}
+            {mode === "login" ? t("auth.login") : t("auth.register")}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label className="font-body">E-Mail</Label>
-            <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} required className="font-body mt-1" placeholder="E-Mail oder Benutzername" />
+            <Label className="font-body">{t("auth.email")}</Label>
+            <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} required className="font-body mt-1" placeholder={t("auth.emailPlaceholder")} />
           </div>
           <div>
-            <Label className="font-body">Passwort</Label>
+            <Label className="font-body">{t("auth.password")}</Label>
             <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="font-body mt-1" />
           </div>
           <Button type="submit" className="w-full font-body" disabled={loading}>
-            {loading ? "Wird geladen..." : mode === "login" ? "Anmelden" : "Registrieren"}
+            {loading ? t("auth.loading") : mode === "login" ? t("auth.login") : t("auth.register")}
           </Button>
           <p className="text-center text-sm text-muted-foreground font-body">
-            {mode === "login" ? "Noch kein Konto?" : "Bereits registriert?"}{" "}
+            {mode === "login" ? t("auth.noAccount") : t("auth.hasAccount")}{" "}
             <button type="button" className="text-primary underline" onClick={() => setMode(mode === "login" ? "register" : "login")}>
-              {mode === "login" ? "Registrieren" : "Anmelden"}
+              {mode === "login" ? t("auth.register") : t("auth.login")}
             </button>
           </p>
         </form>

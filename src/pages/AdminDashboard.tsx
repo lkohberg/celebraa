@@ -27,8 +27,8 @@ const AdminDashboard = () => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <p className="font-body text-muted-foreground mb-4">Du musst eingeloggt sein, um dein Dashboard zu sehen.</p>
-          <Button onClick={() => navigate("/")} className="font-body">Zur Startseite</Button>
+          <p className="font-body text-muted-foreground mb-4">{t("admin.loginRequired")}</p>
+          <Button onClick={() => navigate("/")} className="font-body">{t("admin.backHome")}</Button>
         </div>
       </div>
     );
@@ -69,7 +69,7 @@ const AdminDashboard = () => {
         {isAdmin && pendingEvents.length > 0 && (
           <div className="mb-8">
             <h2 className="font-display text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-amber-500" /> Wartend auf Bearbeitung ({pendingEvents.length})
+              <AlertTriangle className="w-5 h-5 text-amber-500" /> {t("admin.pendingReview")} ({pendingEvents.length})
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {pendingEvents.map((event) => (<PendingEventCard key={event.id} event={event} />))}
@@ -92,7 +92,7 @@ const AdminDashboard = () => {
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-display font-semibold text-foreground text-sm sm:text-base truncate mr-2">{event.title}</h3>
                       <Badge variant={event.status === "paid" || event.status === "live" ? "default" : event.status === "pending_review" ? "secondary" : "outline"} className={event.status === "draft" ? "border-amber-500 text-amber-600" : event.status === "pending_review" ? "bg-amber-100 text-amber-700" : ""}>
-                        {event.status === "draft" ? t("dashboard.status.unpaid") : event.status === "pending_review" ? "In Bearbeitung" : t(`dashboard.status.${event.status}`)}
+                        {event.status === "draft" ? t("dashboard.status.unpaid") : event.status === "pending_review" ? t("admin.inProgress") : t(`dashboard.status.${event.status}`)}
                       </Badge>
                     </div>
                     <p className="font-body text-xs sm:text-sm text-muted-foreground">
@@ -119,6 +119,7 @@ const AdminDashboard = () => {
 };
 
 const PendingEventCard = ({ event }: { event: any }) => {
+  const { t } = useTranslation();
   const [publishing, setPublishing] = useState(false);
   const selectedBlocks = (event.selected_blocks || []) as string[];
   const manualBlocksList = selectedBlocks.filter(id => isManualBlock(id));
@@ -128,9 +129,9 @@ const PendingEventCard = ({ event }: { event: any }) => {
     try {
       const { error } = await supabase.from("events").update({ status: "live" } as any).eq("id", event.id);
       if (error) throw error;
-      toast.success(`Event "${event.title}" ist jetzt live!`);
+      toast.success(`Event "${event.title}" ${t("admin.publishSuccess")}`);
       window.location.reload();
-    } catch { toast.error("Fehler beim Veröffentlichen"); }
+    } catch { toast.error(t("admin.publishError")); }
     setPublishing(false);
   };
 
@@ -139,12 +140,12 @@ const PendingEventCard = ({ event }: { event: any }) => {
       <CardContent className="p-4 space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="font-display font-semibold text-foreground text-sm truncate mr-2">{event.title}</h3>
-          <Badge className="bg-amber-100 text-amber-700 text-[10px]">Wartend</Badge>
+          <Badge className="bg-amber-100 text-amber-700 text-[10px]">{t("admin.pending")}</Badge>
         </div>
         <p className="font-body text-xs text-muted-foreground">{event.contact_first_name} {event.contact_last_name} · {event.contact_email}</p>
         <p className="font-body text-xs text-muted-foreground">{new Date(event.event_date).toLocaleDateString("de-AT")} · /{event.event_link}</p>
         <div className="space-y-1">
-          <p className="font-body text-xs font-semibold text-foreground">Manuelle Blöcke:</p>
+          <p className="font-body text-xs font-semibold text-foreground">{t("admin.manualBlocks")}:</p>
           {manualBlocksList.map(id => {
             const block = blocks.find(b => b.id === id);
             return block ? (
@@ -156,7 +157,7 @@ const PendingEventCard = ({ event }: { event: any }) => {
           })}
         </div>
         <Button className="w-full font-body font-semibold" size="sm" disabled={publishing} onClick={handlePublish}>
-          <Rocket className="w-4 h-4 mr-2" /> {publishing ? "Wird veröffentlicht..." : "Jetzt freischalten"}
+          <Rocket className="w-4 h-4 mr-2" /> {publishing ? t("admin.publishing") : t("admin.publishNow")}
         </Button>
       </CardContent>
     </Card>
@@ -179,14 +180,14 @@ const EventDetail = ({ event, isAdmin }: { event: any; isAdmin?: boolean }) => {
     try {
       const { error } = await supabase.from("events").update({ status: "live" } as any).eq("id", event.id);
       if (error) throw error;
-      toast.success("Event ist jetzt live!");
+      toast.success(t("admin.eventLive"));
       window.location.reload();
-    } catch { toast.error("Fehler beim Veröffentlichen"); }
+    } catch { toast.error(t("admin.eventLiveError")); }
   };
 
   const exportMusicWishesCSV = () => {
     if (!musicWishes?.length) return;
-    const headers = ["Song", "Künstler", "Gast", "Datum"];
+    const headers = [t("admin.csvSong"), t("admin.csvArtist"), t("admin.csvGuest"), t("admin.csvDate")];
     const rows = musicWishes.map((w: any) => [
       w.song_title || "",
       w.artist || "",
@@ -215,7 +216,7 @@ const EventDetail = ({ event, isAdmin }: { event: any; isAdmin?: boolean }) => {
         </TabsTrigger>
         {hasMusicBlock && (
           <TabsTrigger value="music" className="font-body text-xs sm:text-sm">
-            <Music className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Musikwünsche</span>
+            <Music className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">{t("admin.musicWishes")}</span>
           </TabsTrigger>
         )}
         <TabsTrigger value="payment" className="font-body text-xs sm:text-sm">
@@ -233,9 +234,9 @@ const EventDetail = ({ event, isAdmin }: { event: any; isAdmin?: boolean }) => {
 
         {isAdmin && event.status === "pending_review" && (
           <div className="mb-4 p-4 border border-amber-300 bg-amber-50 dark:bg-amber-950/20 rounded-lg">
-            <p className="font-body text-sm text-amber-700 mb-3">Dieses Event wartet auf manuelle Bearbeitung.</p>
+            <p className="font-body text-sm text-amber-700 mb-3">{t("admin.pendingManual")}</p>
             <Button size="sm" className="font-body" onClick={handlePublish}>
-              <Rocket className="w-4 h-4 mr-2" /> Jetzt freischalten
+              <Rocket className="w-4 h-4 mr-2" /> {t("admin.publishNow")}
             </Button>
           </div>
         )}
@@ -302,15 +303,15 @@ const EventDetail = ({ event, isAdmin }: { event: any; isAdmin?: boolean }) => {
       {hasMusicBlock && (
         <TabsContent value="music">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-display text-lg font-semibold text-foreground">Musikwünsche ({musicWishes?.length || 0})</h3>
+            <h3 className="font-display text-lg font-semibold text-foreground">{t("admin.musicWishes")} ({musicWishes?.length || 0})</h3>
             {musicWishes && musicWishes.length > 0 && (
               <Button variant="outline" size="sm" className="font-body" onClick={exportMusicWishesCSV}>
-                <Download className="w-4 h-4 mr-2" /> CSV Export
+                <Download className="w-4 h-4 mr-2" /> {t("admin.csvExport")}
               </Button>
             )}
           </div>
           {!musicWishes?.length ? (
-            <p className="font-body text-muted-foreground">Noch keine Musikwünsche eingegangen.</p>
+            <p className="font-body text-muted-foreground">{t("admin.noMusicWishes")}</p>
           ) : (
             <div className="space-y-2">
               {musicWishes.map((wish: any) => (
@@ -334,7 +335,7 @@ const EventDetail = ({ event, isAdmin }: { event: any; isAdmin?: boolean }) => {
 
       <TabsContent value="payment">
         <Card><CardContent className="p-4 sm:p-6 space-y-3">
-          <div className="flex justify-between font-body"><span className="text-muted-foreground">{t("dashboard.status")}</span><Badge>{event.status === "pending_review" ? "In Bearbeitung" : t(`dashboard.status.${event.status}`)}</Badge></div>
+          <div className="flex justify-between font-body"><span className="text-muted-foreground">{t("dashboard.status")}</span><Badge>{event.status === "pending_review" ? t("admin.inProgress") : t(`dashboard.status.${event.status}`)}</Badge></div>
           <div className="flex justify-between font-body"><span className="text-muted-foreground">{t("dashboard.paid")}</span><span className="text-foreground font-semibold">{event.price_paid ? `€${(event.price_paid / 100).toFixed(2)}` : "–"}</span></div>
           {event.stripe_payment_id && <div className="flex justify-between font-body"><span className="text-muted-foreground">Stripe ID</span><span className="text-foreground text-sm font-mono truncate max-w-[200px]">{event.stripe_payment_id}</span></div>}
         </CardContent></Card>

@@ -34,27 +34,26 @@ const fontOptions = [
   { value: "Georgia", label: "Georgia (Klassisch)" },
 ];
 
-// New flow: Blocks first → Configure → Preview → Contact
-const STEPS = [
-  { key: "blocks", icon: Package, label: "Blöcke" },
-  { key: "configure", icon: Calendar, label: "Event" },
-  { key: "preview", icon: Eye, label: "Vorschau" },
-  { key: "contact", icon: User, label: "Kontakt" },
-];
-
 const RESERVED_ROUTES = ["templates", "configure", "success", "dashboard", "admin", "login", "signup", "settings", "api", "auth", "order"];
 
 const OrderFlow = () => {
   const { templateId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const template = templates.find((t) => t.id === templateId);
+  const template = templates.find((tpl) => tpl.id === templateId);
   const { user } = useAuth();
   const checkLink = useCheckEventLink();
   const [authOpen, setAuthOpen] = useState(false);
   const [linkAvailable, setLinkAvailable] = useState<boolean | null>(null);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  const STEPS = [
+    { key: "blocks", icon: Package, label: t("order.step.blocks") },
+    { key: "configure", icon: Calendar, label: t("order.step.configure") },
+    { key: "preview", icon: Eye, label: t("order.step.preview") },
+    { key: "contact", icon: User, label: t("order.step.contact") },
+  ];
 
   // Event config
   const [form, setForm] = useState({
@@ -171,7 +170,7 @@ const OrderFlow = () => {
 
     return {
       id: "preview",
-      title: form.title || "Dein Event-Titel",
+      title: form.title || t("configure.yourTitle"),
       event_date: form.date || "2026-06-20",
       event_time: form.time || "18:00",
       description: form.description || null,
@@ -257,7 +256,6 @@ const OrderFlow = () => {
       // Admin bypass
       const isAdmin = user.email === "admin@celebra.at";
       if (isAdmin) {
-        // If manual blocks selected, set status to pending_review instead of live
         const newStatus = needsManualWork ? "pending_review" : "live";
         await supabase
           .from("events")
@@ -283,7 +281,7 @@ const OrderFlow = () => {
       });
 
       if (checkoutError || !checkoutData?.url) {
-        toast.error("Fehler beim Erstellen der Zahlung");
+        toast.error(t("order.paymentError"));
         setLoading(false);
         return;
       }
@@ -298,7 +296,7 @@ const OrderFlow = () => {
         window.open(checkoutData.url, "_blank");
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Fehler beim Erstellen";
+      const message = err instanceof Error ? err.message : t("order.createError");
       toast.error(message);
       setLoading(false);
     }
@@ -320,7 +318,7 @@ const OrderFlow = () => {
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="sm" onClick={() => step > 0 ? setStep(step - 1) : navigate("/templates")}>
-              <ArrowLeft className="w-4 h-4 mr-1" /> {step > 0 ? "Zurück" : t("nav.back")}
+              <ArrowLeft className="w-4 h-4 mr-1" /> {step > 0 ? t("order.back") : t("nav.back")}
             </Button>
             <span className="font-display text-lg font-bold text-foreground">
               celebra<span className="text-primary">.at</span>
@@ -357,19 +355,19 @@ const OrderFlow = () => {
 
       <div className="container mx-auto px-6 py-10">
         <AnimatePresence mode="wait">
-          {/* STEP 1: Block Selection (NOW FIRST) */}
+          {/* STEP 1: Block Selection */}
           {step === 0 && (
             <motion.div key="step-blocks" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="max-w-4xl mx-auto">
-              <h2 className="font-display text-2xl font-bold text-foreground mb-2">Blöcke & Pakete wählen</h2>
-              <p className="font-body text-muted-foreground mb-8">Stelle deine Event-Seite individuell zusammen oder wähle ein vorteilhaftes Paket.</p>
+              <h2 className="font-display text-2xl font-bold text-foreground mb-2">{t("order.blocksTitle")}</h2>
+              <p className="font-body text-muted-foreground mb-8">{t("order.blocksSubtitle")}</p>
 
               <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-8">
                   {/* Packages */}
                   <div>
                     <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-primary" /> Pakete
-                      <span className="text-xs font-body font-normal text-muted-foreground ml-2">Spare bis zu 30%</span>
+                      <Sparkles className="w-5 h-5 text-primary" /> {t("order.packages")}
+                      <span className="text-xs font-body font-normal text-muted-foreground ml-2">{t("order.packagesSave")}</span>
                     </h3>
                     <div className="grid sm:grid-cols-2 gap-4">
                       {categoryPackages.map((pkg) => {
@@ -390,7 +388,7 @@ const OrderFlow = () => {
                           >
                             {isTopPkg && (
                               <div className="absolute -top-3 right-4 bg-primary text-primary-foreground text-[10px] font-body font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-                                <Crown className="w-3 h-3" /> Beliebt
+                                <Crown className="w-3 h-3" /> {t("order.popular")}
                               </div>
                             )}
                             <div className="flex items-center justify-between mb-3">
@@ -398,7 +396,7 @@ const OrderFlow = () => {
                               <div className="text-right">
                                 <span className="font-display text-lg font-bold text-primary">€{pkg.price}</span>
                                 {savings > 0 && (
-                                  <p className="text-[10px] font-body text-green-600">Spare €{savings}</p>
+                                  <p className="text-[10px] font-body text-green-600">{t("order.save")} €{savings}</p>
                                 )}
                               </div>
                             </div>
@@ -411,7 +409,7 @@ const OrderFlow = () => {
                             </div>
                             {isSelected && (
                               <div className="mt-3 flex items-center gap-1 text-xs font-body text-primary">
-                                <Check className="w-3 h-3" /> Ausgewählt
+                                <Check className="w-3 h-3" /> {t("order.selected")}
                               </div>
                             )}
                           </button>
@@ -423,9 +421,9 @@ const OrderFlow = () => {
                   {/* Individual Blocks */}
                   <div>
                     <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                      <Package className="w-5 h-5 text-muted-foreground" /> Einzelne Blöcke
+                      <Package className="w-5 h-5 text-muted-foreground" /> {t("order.singleBlocks")}
                     </h3>
-                    <p className="font-body text-xs text-muted-foreground mb-4">Wähle einzelne Blöcke oder ergänze dein Paket.</p>
+                    <p className="font-body text-xs text-muted-foreground mb-4">{t("order.singleBlocksHint")}</p>
                     <div className="grid sm:grid-cols-2 gap-3">
                       {categoryBlocks.map((block) => {
                         const inPackage = selectedPackageId ? packages.find(p => p.id === selectedPackageId)?.blockIds.includes(block.id) : false;
@@ -463,10 +461,10 @@ const OrderFlow = () => {
                               </div>
                             </div>
                             {inPackage && (
-                              <p className="font-body text-[10px] text-primary mt-1">Im Paket enthalten</p>
+                              <p className="font-body text-[10px] text-primary mt-1">{t("order.inPackage")}</p>
                             )}
                             {block.requiresManualWork && (
-                              <p className="font-body text-[10px] text-amber-600 mt-1">✋ Wird individuell für dich erstellt</p>
+                              <p className="font-body text-[10px] text-amber-600 mt-1">✋ {t("order.manualCreated")}</p>
                             )}
                           </button>
                         );
@@ -478,17 +476,17 @@ const OrderFlow = () => {
                   {manualBlocks.length > 0 && (
                     <div className="border border-amber-300 bg-amber-50 dark:bg-amber-950/20 rounded-xl p-6 space-y-4">
                       <h3 className="font-display text-base font-semibold text-foreground flex items-center gap-2">
-                        ✋ Individuelle Anpassungen
+                        ✋ {t("order.manualTitle")}
                       </h3>
                       <p className="font-body text-xs text-muted-foreground">
-                        Für diese Blöcke benötigen wir zusätzliche Infos von dir. Deine Seite wird nach Bearbeitung durch unser Team freigeschaltet.
+                        {t("order.manualHint")}
                       </p>
                       {manualBlocks.map(block => (
                         <div key={block.id}>
                           <Label className="font-body text-sm">{block.icon} {block.name}</Label>
                           <p className="font-body text-xs text-muted-foreground mb-1">{block.manualWorkDescription}</p>
                           <Textarea
-                            placeholder="Deine Angaben hier..."
+                            placeholder={t("order.manualPlaceholder")}
                             value={manualInfo[block.id] || ""}
                             onChange={(e) => setManualInfo(prev => ({ ...prev, [block.id]: e.target.value }))}
                             className="font-body mt-1"
@@ -503,9 +501,9 @@ const OrderFlow = () => {
                 {/* Price Sidebar */}
                 <div className="lg:col-span-1">
                   <div className="sticky top-36 bg-secondary rounded-xl p-6 space-y-3">
-                    <h4 className="font-display text-lg font-semibold text-foreground">Preisübersicht</h4>
+                    <h4 className="font-display text-lg font-semibold text-foreground">{t("order.priceOverview")}</h4>
                     <div className="flex justify-between font-body text-sm">
-                      <span className="text-muted-foreground">Basis Event-Seite</span>
+                      <span className="text-muted-foreground">{t("order.basePage")}</span>
                       <span className="text-foreground">€{BASE_PRICE}</span>
                     </div>
                     {selectedPackageId && (() => {
@@ -527,16 +525,16 @@ const OrderFlow = () => {
                       ) : null;
                     })}
                     <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
-                      <span className="text-foreground">Gesamt</span>
+                      <span className="text-foreground">{t("order.total")}</span>
                       <span className="text-primary text-lg">€{totalPrice}</span>
                     </div>
                     {needsManualWork && (
                       <p className="text-[10px] font-body text-amber-600">
-                        ✋ Enthält individuelle Blöcke – Seite wird nach Bearbeitung freigeschaltet.
+                        ✋ {t("order.manualNote")}
                       </p>
                     )}
                     <Button className="w-full font-body font-semibold mt-3" onClick={() => setStep(1)}>
-                      Weiter zum Event <ArrowRight className="w-4 h-4 ml-2" />
+                      {t("order.continueEvent")} <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </div>
                 </div>
@@ -544,60 +542,60 @@ const OrderFlow = () => {
             </motion.div>
           )}
 
-          {/* STEP 2: Configure Event (NOW SECOND) */}
+          {/* STEP 2: Configure Event */}
           {step === 1 && (
             <motion.div key="step-configure" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="max-w-2xl mx-auto">
-              <h2 className="font-display text-2xl font-bold text-foreground mb-2">Dein Event konfigurieren</h2>
-              <p className="font-body text-muted-foreground mb-8">Gib die grundlegenden Informationen zu deinem Event ein.</p>
+              <h2 className="font-display text-2xl font-bold text-foreground mb-2">{t("order.configureTitle")}</h2>
+              <p className="font-body text-muted-foreground mb-8">{t("order.configureSubtitle")}</p>
 
               <div className="space-y-6">
                 <div>
-                  <Label className="font-body">Event-Titel *</Label>
-                  <Input placeholder="z.B. Sarahs 30. Geburtstag" value={form.title} onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))} className="font-body mt-1" />
+                  <Label className="font-body">{t("order.eventTitle")} *</Label>
+                  <Input placeholder={t("configure.eventTitlePlaceholder")} value={form.title} onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))} className="font-body mt-1" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="font-body">Datum *</Label>
+                    <Label className="font-body">{t("order.date")} *</Label>
                     <Input type="date" value={form.date} onChange={(e) => setForm(prev => ({ ...prev, date: e.target.value }))} className="font-body mt-1" />
                   </div>
                   <div>
-                    <Label className="font-body">Uhrzeit *</Label>
+                    <Label className="font-body">{t("order.time")} *</Label>
                     <Input type="time" value={form.time} onChange={(e) => setForm(prev => ({ ...prev, time: e.target.value }))} className="font-body mt-1 w-full min-w-0" />
                   </div>
                 </div>
                 <div>
-                  <Label className="font-body">Location</Label>
-                  <Input placeholder="z.B. Schloss Mirabell" value={form.locationName} onChange={(e) => setForm(prev => ({ ...prev, locationName: e.target.value }))} className="font-body mt-1" />
+                  <Label className="font-body">{t("order.location")}</Label>
+                  <Input placeholder={t("configure.locationPlaceholder")} value={form.locationName} onChange={(e) => setForm(prev => ({ ...prev, locationName: e.target.value }))} className="font-body mt-1" />
                 </div>
                 <div>
-                  <Label className="font-body">Adresse</Label>
-                  <Input placeholder="Straße, PLZ Ort" value={form.address} onChange={(e) => setForm(prev => ({ ...prev, address: e.target.value }))} className="font-body mt-1" />
+                  <Label className="font-body">{t("order.address")}</Label>
+                  <Input placeholder={t("configure.addressPlaceholder")} value={form.address} onChange={(e) => setForm(prev => ({ ...prev, address: e.target.value }))} className="font-body mt-1" />
                 </div>
                 <div>
-                  <Label className="font-body">Beschreibung</Label>
-                  <Textarea placeholder="Erzähle deinen Gästen mehr..." value={form.description} onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))} className="font-body mt-1" rows={3} />
+                  <Label className="font-body">{t("order.description")}</Label>
+                  <Textarea placeholder={t("order.descriptionPlaceholder")} value={form.description} onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))} className="font-body mt-1" rows={3} />
                 </div>
 
                 {category === "wedding" && (
                   <div className="border border-border rounded-lg p-5 space-y-4">
-                    <h4 className="font-display text-base font-semibold text-foreground">Hochzeitsdetails</h4>
+                    <h4 className="font-display text-base font-semibold text-foreground">{t("order.weddingDetails")}</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="font-body text-sm">Trauungsort</Label>
+                        <Label className="font-body text-sm">{t("order.ceremonyVenue")}</Label>
                         <Input value={form.ceremonyLocation} onChange={(e) => setForm(prev => ({ ...prev, ceremonyLocation: e.target.value }))} className="font-body mt-1" />
                       </div>
                       <div>
-                        <Label className="font-body text-sm">Adresse Trauung</Label>
+                        <Label className="font-body text-sm">{t("order.ceremonyAddress")}</Label>
                         <Input value={form.ceremonyAddress} onChange={(e) => setForm(prev => ({ ...prev, ceremonyAddress: e.target.value }))} className="font-body mt-1" />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="font-body text-sm">Feier-Location</Label>
+                        <Label className="font-body text-sm">{t("order.receptionVenue")}</Label>
                         <Input value={form.receptionLocation} onChange={(e) => setForm(prev => ({ ...prev, receptionLocation: e.target.value }))} className="font-body mt-1" />
                       </div>
                       <div>
-                        <Label className="font-body text-sm">Adresse Feier</Label>
+                        <Label className="font-body text-sm">{t("order.receptionAddress")}</Label>
                         <Input value={form.receptionAddress} onChange={(e) => setForm(prev => ({ ...prev, receptionAddress: e.target.value }))} className="font-body mt-1" />
                       </div>
                     </div>
@@ -606,7 +604,7 @@ const OrderFlow = () => {
 
                 {/* Hero Image */}
                 <div>
-                  <Label className="font-body">Hero-Bild</Label>
+                  <Label className="font-body">{t("order.heroImage")}</Label>
                   <div
                     className={`mt-1 relative rounded-lg border-2 border-dashed transition-colors cursor-pointer overflow-hidden ${
                       dragActive ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"
@@ -639,7 +637,7 @@ const OrderFlow = () => {
                     ) : (
                       <div className="flex flex-col items-center justify-center py-8 px-4">
                         <Upload className="w-8 h-8 text-muted-foreground mb-2" />
-                        <p className="text-sm font-body text-muted-foreground text-center">Bild hierher ziehen oder klicken</p>
+                        <p className="text-sm font-body text-muted-foreground text-center">{t("order.dragOrClick")}</p>
                       </div>
                     )}
                   </div>
@@ -648,17 +646,17 @@ const OrderFlow = () => {
                 {/* RSVP */}
                 <div className="border border-border rounded-lg p-5 space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label className="font-body">RSVP aktivieren</Label>
+                    <Label className="font-body">{t("order.rsvpEnable")}</Label>
                     <Switch checked={form.rsvpEnabled} onCheckedChange={(v) => setForm(prev => ({ ...prev, rsvpEnabled: v }))} />
                   </div>
                   {form.rsvpEnabled && (
                     <>
                       <div>
-                        <Label className="font-body text-sm">RSVP Frist</Label>
+                        <Label className="font-body text-sm">{t("order.rsvpDeadline")}</Label>
                         <Input type="date" value={form.rsvpDeadline} onChange={(e) => setForm(prev => ({ ...prev, rsvpDeadline: e.target.value }))} className="font-body mt-1" />
                       </div>
                       <div>
-                        <Label className="font-body text-sm">Max. Gäste (optional)</Label>
+                        <Label className="font-body text-sm">{t("order.maxGuests")}</Label>
                         <Input type="number" placeholder="z.B. 80" value={form.maxGuests} onChange={(e) => setForm(prev => ({ ...prev, maxGuests: e.target.value }))} className="font-body mt-1" />
                       </div>
                     </>
@@ -668,11 +666,11 @@ const OrderFlow = () => {
                 {/* Style */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="font-body">Hauptfarbe</Label>
+                    <Label className="font-body">{t("order.primaryColor")}</Label>
                     <Input type="color" value={form.primaryColor} onChange={(e) => setForm(prev => ({ ...prev, primaryColor: e.target.value }))} className="mt-1 h-12 cursor-pointer" />
                   </div>
                   <div>
-                    <Label className="font-body">Schriftart</Label>
+                    <Label className="font-body">{t("order.font")}</Label>
                     <Select value={form.font} onValueChange={(v) => setForm(prev => ({ ...prev, font: v }))}>
                       <SelectTrigger className="font-body mt-1"><SelectValue /></SelectTrigger>
                       <SelectContent>
@@ -686,27 +684,27 @@ const OrderFlow = () => {
 
                 {/* Event Link */}
                 <div>
-                  <Label className="font-body">Event-Link *</Label>
+                  <Label className="font-body">{t("order.eventLink")} *</Label>
                   <div className="flex items-center mt-1">
                     <span className="text-sm text-muted-foreground font-body bg-secondary px-3 py-2 rounded-l-md border border-r-0 border-input">celebra.at/</span>
                     <Input
-                      placeholder="mein-event"
+                      placeholder={t("configure.linkPlaceholder")}
                       value={form.eventLink}
                       onChange={(e) => handleLinkChange(e.target.value)}
                       className="font-body rounded-l-none"
                     />
                   </div>
-                  {form.eventLink && !linkValid && <p className="text-xs text-destructive font-body mt-1">Nur Kleinbuchstaben, Zahlen und Bindestriche.</p>}
-                  {form.eventLink && linkValid && isReservedLink && <p className="text-xs text-destructive font-body mt-1">Dieser Name ist reserviert.</p>}
-                  {form.eventLink && linkValid && !isReservedLink && linkAvailable === false && <p className="text-xs text-destructive font-body mt-1">Bereits vergeben.</p>}
-                  {form.eventLink && linkValid && !isReservedLink && linkAvailable === true && <p className="text-xs text-primary font-body mt-1">✓ Verfügbar!</p>}
+                  {form.eventLink && !linkValid && <p className="text-xs text-destructive font-body mt-1">{t("order.linkInvalid")}</p>}
+                  {form.eventLink && linkValid && isReservedLink && <p className="text-xs text-destructive font-body mt-1">{t("order.linkReserved")}</p>}
+                  {form.eventLink && linkValid && !isReservedLink && linkAvailable === false && <p className="text-xs text-destructive font-body mt-1">{t("order.linkTaken")}</p>}
+                  {form.eventLink && linkValid && !isReservedLink && linkAvailable === true && <p className="text-xs text-primary font-body mt-1">{t("order.linkAvailable")}</p>}
                 </div>
 
                 {/* Block Configuration */}
                 {allSelectedBlocks.length > 0 && (
                   <div>
-                    <h3 className="font-display text-lg font-semibold text-foreground mb-4">Blöcke konfigurieren</h3>
-                    <p className="font-body text-xs text-muted-foreground mb-4">Fülle die Details für deine ausgewählten Blöcke aus. Du kannst Einträge auch später ergänzen.</p>
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-4">{t("order.configureBlocks")}</h3>
+                    <p className="font-body text-xs text-muted-foreground mb-4">{t("order.configureBlocksHint")}</p>
                     <BlockConfigurator
                       selectedBlocks={allSelectedBlocks}
                       blockConfig={blockConfig}
@@ -717,7 +715,7 @@ const OrderFlow = () => {
                 )}
 
                 <Button className="w-full font-body font-semibold text-base py-5" disabled={!step2Valid} onClick={() => setStep(2)}>
-                  Weiter zur Vorschau <ArrowRight className="w-4 h-4 ml-2" />
+                  {t("order.continuePreview")} <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </div>
             </motion.div>
@@ -729,11 +727,11 @@ const OrderFlow = () => {
               <div className="max-w-5xl mx-auto">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="font-display text-2xl font-bold text-foreground">Vorschau</h2>
-                    <p className="font-body text-muted-foreground">So wird deine Event-Seite aussehen.</p>
+                    <h2 className="font-display text-2xl font-bold text-foreground">{t("order.previewTitle")}</h2>
+                    <p className="font-body text-muted-foreground">{t("order.previewSubtitle")}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-body text-sm text-muted-foreground">Gesamtpreis</p>
+                    <p className="font-body text-sm text-muted-foreground">{t("order.totalPrice")}</p>
                     <p className="font-display text-2xl font-bold text-primary">€{totalPrice}</p>
                   </div>
                 </div>
@@ -741,9 +739,9 @@ const OrderFlow = () => {
                 <div className="grid lg:grid-cols-4 gap-6">
                   <div className="lg:col-span-1">
                     <div className="bg-secondary rounded-xl p-4 space-y-2">
-                      <h4 className="font-display text-sm font-semibold text-foreground mb-2">Ausgewählte Blöcke</h4>
+                      <h4 className="font-display text-sm font-semibold text-foreground mb-2">{t("order.selectedBlocks")}</h4>
                       <div className="flex justify-between font-body text-xs">
-                        <span className="text-muted-foreground">Basis-Seite</span>
+                        <span className="text-muted-foreground">{t("order.basePage")}</span>
                         <span>€{BASE_PRICE}</span>
                       </div>
                       {allSelectedBlocks.map(id => {
@@ -756,12 +754,12 @@ const OrderFlow = () => {
                         ) : null;
                       })}
                       <div className="border-t border-border pt-2 flex justify-between font-body text-sm font-semibold">
-                        <span>Gesamt</span>
+                        <span>{t("order.total")}</span>
                         <span className="text-primary">€{totalPrice}</span>
                       </div>
                     </div>
                     <Button className="w-full mt-4 font-body font-semibold" onClick={() => setStep(3)}>
-                      Weiter zu Kontakt <ArrowRight className="w-4 h-4 ml-2" />
+                      {t("order.continueContact")} <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </div>
 
@@ -788,13 +786,13 @@ const OrderFlow = () => {
           {/* STEP 4: Contact Details */}
           {step === 3 && (
             <motion.div key="step-contact" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="max-w-lg mx-auto">
-              <h2 className="font-display text-2xl font-bold text-foreground mb-2">Kontaktdaten</h2>
-              <p className="font-body text-muted-foreground mb-8">Damit wir deine Event-Seite erstellen können.</p>
+              <h2 className="font-display text-2xl font-bold text-foreground mb-2">{t("order.contactTitle")}</h2>
+              <p className="font-body text-muted-foreground mb-8">{t("order.contactSubtitle")}</p>
 
               <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="font-body">Vorname *</Label>
+                    <Label className="font-body">{t("order.firstName")} *</Label>
                     <Input
                       placeholder="Max"
                       value={contact.firstName}
@@ -803,7 +801,7 @@ const OrderFlow = () => {
                     />
                   </div>
                   <div>
-                    <Label className="font-body">Nachname *</Label>
+                    <Label className="font-body">{t("order.lastName")} *</Label>
                     <Input
                       placeholder="Mustermann"
                       value={contact.lastName}
@@ -813,7 +811,7 @@ const OrderFlow = () => {
                   </div>
                 </div>
                 <div>
-                  <Label className="font-body">E-Mail-Adresse *</Label>
+                  <Label className="font-body">{t("order.emailAddress")} *</Label>
                   <Input
                     type="email"
                     placeholder="max@beispiel.at"
@@ -825,19 +823,19 @@ const OrderFlow = () => {
 
                 {/* Price Summary */}
                 <div className="bg-secondary rounded-xl p-6 space-y-3">
-                  <h4 className="font-display text-lg font-semibold text-foreground">Zusammenfassung</h4>
+                  <h4 className="font-display text-lg font-semibold text-foreground">{t("order.summary")}</h4>
                   <div className="flex justify-between font-body text-sm">
-                    <span className="text-muted-foreground">Template: {template.name}</span>
+                    <span className="text-muted-foreground">{t("order.template")}: {template.name}</span>
                   </div>
                   <div className="flex justify-between font-body text-sm">
-                    <span className="text-muted-foreground">Basis Event-Seite</span>
+                    <span className="text-muted-foreground">{t("order.basePage")}</span>
                     <span className="text-foreground">€{BASE_PRICE}</span>
                   </div>
                   {selectedPackageId && (() => {
                     const pkg = packages.find(p => p.id === selectedPackageId);
                     return pkg ? (
                       <div className="flex justify-between font-body text-sm">
-                        <span className="text-muted-foreground">Paket: {pkg.name}</span>
+                        <span className="text-muted-foreground">{t("order.package")}: {pkg.name}</span>
                         <span className="text-foreground">€{pkg.price}</span>
                       </div>
                     ) : null;
@@ -852,12 +850,12 @@ const OrderFlow = () => {
                     ) : null;
                   })}
                   <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
-                    <span className="text-foreground">Gesamt</span>
+                    <span className="text-foreground">{t("order.total")}</span>
                     <span className="text-primary text-lg">€{totalPrice}</span>
                   </div>
                   {needsManualWork && (
                     <p className="text-xs font-body text-amber-600">
-                      ✋ Deine Seite enthält individuelle Blöcke und wird nach Bearbeitung durch unser Team freigeschaltet.
+                      ✋ {t("order.manualWorkNote")}
                     </p>
                   )}
                 </div>
@@ -875,10 +873,10 @@ const OrderFlow = () => {
                       inline
                       renderTrigger={(openDialog) => (
                         <>
-                          Ich akzeptiere die{" "}
-                          <button type="button" onClick={() => openDialog("terms")} className="underline hover:text-foreground transition-colors">AGB</button>
-                          {" "}&{" "}
-                          <button type="button" onClick={() => openDialog("privacy")} className="underline hover:text-foreground transition-colors">Datenschutz</button>
+                          {t("order.acceptTerms")}{" "}
+                          <button type="button" onClick={() => openDialog("terms")} className="underline hover:text-foreground transition-colors">{t("footer.terms")}</button>
+                          {" "}{t("order.and")}{" "}
+                          <button type="button" onClick={() => openDialog("privacy")} className="underline hover:text-foreground transition-colors">{t("footer.privacy")}</button>
                         </>
                       )}
                     />
@@ -890,11 +888,11 @@ const OrderFlow = () => {
                   disabled={!step4Valid || loading}
                   onClick={handleSubmit}
                 >
-                  {loading ? "Wird verarbeitet..." : `Jetzt €${totalPrice} sicher bezahlen`}
+                  {loading ? t("order.processing") : `${t("order.payNow")} €${totalPrice}`}
                   {!loading && <CreditCard className="w-4 h-4 ml-2" />}
                 </Button>
                 <p className="text-xs text-muted-foreground text-center font-body">
-                  Zahlung via Stripe · Kreditkarte, Apple Pay, Google Pay
+                  {t("order.stripeNote")}
                 </p>
               </div>
             </motion.div>
