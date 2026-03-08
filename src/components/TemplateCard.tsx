@@ -34,7 +34,7 @@ export const templates: Template[] = [
     id: "birthday-premium-neon",
     name: "Neon Party",
     tagline: "Let's glow! 🌟",
-    description: "Lebhaft und farbenfroh — mit Konfetti-Regen, pulsierenden Neonfarben und einer Energie, die man sofort spürt. Perfekt für unvergessliche Partynächte.",
+    description: "Lebhaft und farbenfroh — mit Konfettiregen, pulsierenden Neonfarben und einer Energie, die man sofort spürt. Perfekt für unvergessliche Partynächte.",
     eventType: "birthday",
     colors: { primary: "#FF6B9D", secondary: "#FFF0F5", accent: "#4D96FF" },
     font: "DM Sans",
