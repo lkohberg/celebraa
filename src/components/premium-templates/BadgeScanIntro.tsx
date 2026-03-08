@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/i18n";
 
@@ -13,6 +13,11 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
   const { t } = useTranslation();
   const [phase, setPhase] = useState<"idle" | "scanning" | "verified" | "done">("idle");
   const accent = accentColor || "hsl(220, 50%, 45%)";
+
+  // Pre-compute random values so they don't change on re-render
+  const qrPattern = useMemo(() => Array.from({ length: 25 }, () => Math.random() > 0.4), []);
+  const barWidths = useMemo(() => Array.from({ length: 30 }, () => 2 + Math.random() * 3), []);
+  const barHeights = useMemo(() => Array.from({ length: 30 }, () => 16 + Math.random() * 16), []);
 
   const handleClick = () => {
     if (phase !== "idle") return;
@@ -112,12 +117,12 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
               {/* QR-code-style block pattern */}
               <div className="flex justify-center mt-6">
                 <div className="grid grid-cols-5 gap-1 opacity-20">
-                  {Array.from({ length: 25 }).map((_, i) => (
+                  {qrPattern.map((filled, i) => (
                     <div
                       key={i}
                       className="w-3 h-3 rounded-sm"
                       style={{
-                        backgroundColor: Math.random() > 0.4 ? "white" : "transparent",
+                        backgroundColor: filled ? "white" : "transparent",
                       }}
                     />
                   ))}
@@ -126,13 +131,13 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
 
               {/* Bottom bar code lines */}
               <div className="absolute bottom-6 left-6 right-6 flex gap-[2px] items-end justify-center opacity-15">
-                {Array.from({ length: 30 }).map((_, i) => (
+                {barWidths.map((w, i) => (
                   <div
                     key={i}
                     className="bg-white"
                     style={{
-                      width: 2 + Math.random() * 3,
-                      height: 16 + Math.random() * 16,
+                      width: w,
+                      height: barHeights[i],
                     }}
                   />
                 ))}
