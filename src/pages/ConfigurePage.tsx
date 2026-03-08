@@ -506,7 +506,7 @@ const ConfigurePage = () => {
                             <X className="w-4 h-4 text-foreground" />
                           </button>
                           <div className="absolute bottom-0 inset-x-0 bg-background/70 backdrop-blur text-center py-1">
-                            <p className="text-xs font-body text-muted-foreground">Klicken oder ziehen zum Ersetzen</p>
+                            <p className="text-xs font-body text-muted-foreground">{t("configure.clickOrDragReplace")}</p>
                           </div>
                         </div>
                       ) : (
