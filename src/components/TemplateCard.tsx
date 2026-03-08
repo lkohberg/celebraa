@@ -74,7 +74,7 @@ export const templates: Template[] = [
     id: "wedding-premium-floral",
     name: "Floral Romance",
     tagline: "Zeitlose Romantik 🌸",
-    description: "Romantisch und verträumt — zarte Blütenfarben, eine Envelope-Animation und jedes Detail liebevoll gestaltet. Für Hochzeiten wie aus dem Märchen.",
+    description: "Romantisch und verträumt — zarte Blütenfarben, eine elegante Briefumschlag Animation und jedes Detail liebevoll gestaltet. Für Hochzeiten wie aus dem Märchen.",
     eventType: "wedding",
     colors: { primary: "#5C7A5C", secondary: "#FFF8F0", accent: "#D4A0A0" },
     font: "Playfair Display",
