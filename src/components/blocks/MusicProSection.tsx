@@ -5,14 +5,16 @@ import { Input } from "@/components/ui/input";
 import { useSubmitMusicWish } from "@/hooks/useEvents";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 
-const MusicProSection = ({ accentColor, eventId, isPreview = false }: { accentColor?: string; eventId?: string; isPreview?: boolean }) => {
+const MusicProSection = ({ accentColor, eventId, isPreview = false, lang }: { accentColor?: string; eventId?: string; isPreview?: boolean; lang?: EventLang }) => {
   const [song, setSong] = useState("");
   const [artist, setArtist] = useState("");
   const [guestName, setGuestName] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const submitWish = useSubmitMusicWish();
   const color = accentColor || "hsl(38, 65%, 50%)";
+  const l = (key: string) => lang ? getEventLabel(lang, key) : getEventLabel("de", key);
 
   const handleSubmit = async () => {
     if (isPreview || !eventId || !song.trim()) return;
@@ -23,14 +25,14 @@ const MusicProSection = ({ accentColor, eventId, isPreview = false }: { accentCo
         artist: artist.trim() || undefined,
         guest_name: guestName.trim() || undefined,
       });
-      toast.success("Songwunsch gespeichert! 🎵");
+      toast.success(l("songSaved"));
       setSong("");
       setArtist("");
       setGuestName("");
       setSubmitted(true);
       setTimeout(() => setSubmitted(false), 3000);
     } catch {
-      toast.error("Fehler beim Speichern");
+      toast.error(l("saveError"));
     }
   };
 
@@ -40,53 +42,25 @@ const MusicProSection = ({ accentColor, eventId, isPreview = false }: { accentCo
       <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-[0.03]" style={{ background: `radial-gradient(circle, ${color}, transparent)` }} />
 
       <div className="relative max-w-xl mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-10"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${color}15` }}>
             <Music className="w-6 h-6" style={{ color }} />
           </div>
-          <h2 className="font-display text-2xl md:text-3xl text-foreground">Musikwünsche</h2>
+          <h2 className="font-display text-2xl md:text-3xl text-foreground">{l("musicWishes")}</h2>
           <div className="flex items-center justify-center gap-3 mt-3">
             <div className="w-12 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
             <Sparkles className="w-3 h-3" style={{ color, opacity: 0.4 }} />
             <div className="w-12 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
           </div>
-          <p className="font-body text-sm text-muted-foreground mt-3">Welcher Song bringt dich auf die Tanzfläche?</p>
+          <p className="font-body text-sm text-muted-foreground mt-3">{l("musicWishesSubtitle")}</p>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-border/50 shadow-sm space-y-4"
-        >
-          <Input
-            placeholder="Dein Name"
-            value={guestName}
-            onChange={(e) => setGuestName(e.target.value)}
-            className="font-body"
-            disabled={isPreview}
-          />
-          <Input
-            placeholder="Song-Titel"
-            value={song}
-            onChange={(e) => setSong(e.target.value)}
-            className="font-body"
-            disabled={isPreview}
-          />
-          <Input
-            placeholder="Künstler / Band"
-            value={artist}
-            onChange={(e) => setArtist(e.target.value)}
-            className="font-body"
-            disabled={isPreview}
-          />
+        <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-border/50 shadow-sm space-y-4">
+          <Input placeholder={l("yourName")} value={guestName} onChange={(e) => setGuestName(e.target.value)} className="font-body" disabled={isPreview} />
+          <Input placeholder={l("songTitle")} value={song} onChange={(e) => setSong(e.target.value)} className="font-body" disabled={isPreview} />
+          <Input placeholder={l("artistBand")} value={artist} onChange={(e) => setArtist(e.target.value)} className="font-body" disabled={isPreview} />
           <Button className="w-full font-body" onClick={handleSubmit} disabled={isPreview || submitWish.isPending || !song.trim()}>
-            {submitted ? <><Check className="w-4 h-4 mr-2" /> Gespeichert!</> : <><Send className="w-4 h-4 mr-2" /> Songwunsch senden</>}
+            {submitted ? <><Check className="w-4 h-4 mr-2" /> {l("saved")}</> : <><Send className="w-4 h-4 mr-2" /> {l("sendSongWish")}</>}
           </Button>
         </motion.div>
       </div>

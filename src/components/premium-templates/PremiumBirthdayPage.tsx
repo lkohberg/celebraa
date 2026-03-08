@@ -136,7 +136,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true }: { event: 
                     <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${accent}15` }}>
                       <Clock className="w-6 h-6" style={{ color: accent }} />
                     </div>
-                    <h2 className="font-display text-2xl text-foreground">{t("event.timeline")}</h2>
+                    <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
                     <PartyDivider color={accent} />
                   </div>
                   <ScheduleTimeline schedule={event.schedule} />
@@ -144,9 +144,9 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true }: { event: 
               </section>
             )}
 
-            {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} />}
+            {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} lang={lang} />}
             {hasBlock("-dresscode") && (
-              <DressCodeMFSection dressCode={{ male: blockCfg.dresscode_male, female: blockCfg.dresscode_female }} accentColor={accent} />
+              <DressCodeMFSection dressCode={{ male: blockCfg.dresscode_male, female: blockCfg.dresscode_female }} accentColor={accent} lang={lang} />
             )}
 
             {/* Details */}
@@ -177,11 +177,11 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true }: { event: 
               <HotelRecommendations hotels={event.hotel_recommendations} />
             )}
 
-            {hasBlock("-quiz") && <QuizSection questions={blockCfg.quiz} accentColor={accent} />}
-            {hasBlock("-games") && <GamesVoteSection games={blockCfg.games} accentColor={accent} />}
-            {hasBlock("-potluck") && <PotluckSection items={blockCfg.potluck} accentColor={accent} />}
-            {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} />}
-            {hasBlock("-musicwish") && <MusicWishSection accentColor={accent} eventId={event.id} />}
+            {hasBlock("-quiz") && <QuizSection questions={blockCfg.quiz} accentColor={accent} lang={lang} />}
+            {hasBlock("-games") && <GamesVoteSection games={blockCfg.games} accentColor={accent} lang={lang} />}
+            {hasBlock("-potluck") && <PotluckSection items={blockCfg.potluck} accentColor={accent} lang={lang} />}
+            {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} lang={lang} />}
+            {hasBlock("-musicwish") && <MusicWishSection accentColor={accent} eventId={event.id} lang={lang} />}
 
             {event.rsvp_enabled && (
               <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="birthday" lang={lang} />

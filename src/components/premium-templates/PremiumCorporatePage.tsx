@@ -114,7 +114,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true }: { event:
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${accent}15` }}>
                 <Clock className="w-6 h-6" style={{ color: accent }} />
               </div>
-              <h2 className="font-display text-2xl text-foreground">{t("event.timeline")}</h2>
+              <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
               <CorpDivider color={accent} />
             </div>
             <ScheduleTimeline schedule={event.schedule} accentColor={accent} />
@@ -122,8 +122,8 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true }: { event:
         </section>
       )}
 
-      {hasBlock("-agenda") && <AgendaSection agenda={blockCfg.agenda} accentColor={accent} />}
-      {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} />}
+      {hasBlock("-agenda") && <AgendaSection agenda={blockCfg.agenda} accentColor={accent} lang={lang} />}
+      {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} lang={lang} />}
 
       {/* Details */}
       <section className="py-28 relative overflow-hidden bg-card">
@@ -147,7 +147,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true }: { event:
                 <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
                   <Shirt className="w-6 h-6" style={{ color: accent }} />
                 </div>
-                <h3 className="font-display text-xl text-foreground mb-3">{t("event.dressCode")}</h3>
+                <h3 className="font-display text-xl text-foreground mb-3">{el?.dressCode || t("event.dressCode")}</h3>
                 <p className="font-body text-sm text-muted-foreground">{event.dress_code}</p>
               </motion.div>
             )}
@@ -162,8 +162,8 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true }: { event:
         <HotelRecommendations hotels={event.hotel_recommendations} accentColor={accent} />
       )}
 
-      {hasBlock("-products") && <ProductsSection products={blockCfg.products} accentColor={accent} />}
-      {hasBlock("-sponsors") && <SponsorsSection sponsors={blockCfg.sponsors} accentColor={accent} />}
+      {hasBlock("-products") && <ProductsSection products={blockCfg.products} accentColor={accent} lang={lang} />}
+      {hasBlock("-sponsors") && <SponsorsSection sponsors={blockCfg.sponsors} accentColor={accent} lang={lang} />}
 
       {event.rsvp_enabled && (
         <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="corporate" lang={lang} />

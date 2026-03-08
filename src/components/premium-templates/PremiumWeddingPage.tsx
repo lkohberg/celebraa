@@ -113,7 +113,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
             </button>
           </section>
 
-          {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} />}
+          {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} />}
 
           {/* Countdown */}
           <section id="countdown" className="py-24 relative overflow-hidden" style={{ backgroundColor: "hsl(30, 30%, 98%)" }}>
@@ -142,8 +142,8 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
             </section>
           )}
 
-          {hasBlock("-illustration") && <CustomIllustrationSection accentColor={accent} />}
-          {hasBlock("-slideshow") && <SlideshowSection accentColor={accent} />}
+          {hasBlock("-illustration") && <CustomIllustrationSection accentColor={accent} lang={lang} />}
+          {hasBlock("-slideshow") && <SlideshowSection accentColor={accent} lang={lang} />}
 
           {/* Schedule Timeline */}
           {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
@@ -152,7 +152,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
               <div className="relative max-w-3xl mx-auto px-4">
                 <div className="text-center mb-12">
                   <Clock className="w-6 h-6 mx-auto mb-3" style={{ color: accent }} />
-                  <h2 className="font-display text-2xl md:text-3xl text-foreground">{t("event.timeline")}</h2>
+                  <h2 className="font-display text-2xl md:text-3xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
                   <FloralDivider color={accent} />
                 </div>
                 <ScheduleTimeline schedule={event.schedule} accentColor={accent} />
@@ -160,9 +160,9 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
             </section>
           )}
 
-          {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} />}
+          {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} lang={lang} />}
           {hasBlock("-dresscode") && (
-            <DressCodeMFSection dressCode={{ male: blockCfg.dresscode_male, female: blockCfg.dresscode_female }} accentColor={accent} />
+            <DressCodeMFSection dressCode={{ male: blockCfg.dresscode_male, female: blockCfg.dresscode_female }} accentColor={accent} lang={lang} />
           )}
 
           {/* Details */}
@@ -196,7 +196,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
                   <div className="inline-flex items-center gap-2 px-4 py-2 bg-card/60 rounded-full border border-border/30">
                     <Baby className="w-4 h-4 text-muted-foreground" />
                     <p className="font-body text-sm text-muted-foreground italic">
-                      {event.children_welcome ? t("event.childrenWelcome") : t("event.adultsOnly")}
+                      {event.children_welcome ? (el?.childrenWelcome || t("event.childrenWelcome")) : (el?.adultsOnly || t("event.adultsOnly"))}
                     </p>
                   </div>
                 </motion.div>
@@ -213,9 +213,9 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
             <HotelRecommendations hotels={event.hotel_recommendations} accentColor={accent} />
           )}
 
-          {hasBlock("-shuttle") && <ShuttleSection routes={blockCfg.shuttle} accentColor={accent} />}
-          {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} />}
-          {hasBlock("-musicpro") && <MusicProSection accentColor={accent} eventId={event.id} />}
+          {hasBlock("-shuttle") && <ShuttleSection routes={blockCfg.shuttle} accentColor={accent} lang={lang} />}
+          {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} lang={lang} />}
+          {hasBlock("-musicpro") && <MusicProSection accentColor={accent} eventId={event.id} lang={lang} />}
 
           {event.rsvp_enabled && (
             <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="wedding" lang={lang} />
