@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Template } from "@/components/TemplateCard";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@/i18n";
 import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPage";
 import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
@@ -12,7 +13,7 @@ interface DemoPreviewProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const getDemoEvent = (template: Template) => {
+const getDemoEvent = (template: Template, t: (key: string) => string) => {
   const base = {
     id: "demo-preview",
     event_date: "2026-06-20",
@@ -26,26 +27,26 @@ const getDemoEvent = (template: Template) => {
   if (template.eventType === "wedding") {
     return {
       ...base,
-      title: "Anna & Thomas",
-      description: "Wir laden euch herzlich zu unserer Hochzeit ein!",
-      location_name: "Schloss Mirabell",
-      address: "Mirabellplatz 4, 5020 Salzburg",
-      story_text: "Wir haben uns an einem Frühlingsnachmittag kennengelernt, zwischen Lachen und Kaffee. Seitdem ist jeder Tag ein neues Abenteuer zusammen.",
-      ceremony_location: "Kirche St. Peter",
-      ceremony_address: "St. Peter Bezirk 1, 5020 Salzburg",
-      reception_location: "Schloss Mirabell",
-      reception_address: "Mirabellplatz 4, 5020 Salzburg",
-      dress_code: "Festlich / Semi-formal",
+      title: t("demo.wedding.title"),
+      description: t("demo.wedding.description"),
+      location_name: t("demo.wedding.location"),
+      address: t("demo.wedding.address"),
+      story_text: t("demo.wedding.story"),
+      ceremony_location: t("demo.wedding.ceremonyLocation"),
+      ceremony_address: t("demo.wedding.ceremonyAddress"),
+      reception_location: t("demo.wedding.location"),
+      reception_address: t("demo.wedding.address"),
+      dress_code: t("demo.wedding.dressCode"),
       children_welcome: true,
       hotel_recommendations: [
-        { name: "Hotel Sacher Salzburg", address: "Schwarzstraße 5-7, 5020 Salzburg", url: "https://www.sacher.com" },
-        { name: "Hotel Bristol", address: "Makartplatz 4, 5020 Salzburg", url: "https://www.bristol.at" },
+        { name: t("demo.wedding.hotel1.name"), address: "Schwarzstraße 5-7, 5020 Salzburg", url: "https://www.sacher.com" },
+        { name: t("demo.wedding.hotel2.name"), address: "Makartplatz 4, 5020 Salzburg", url: "https://www.bristol.at" },
       ],
       schedule: [
-        { time: "15:00", label: "Trauung" },
-        { time: "16:30", label: "Empfang & Sektempfang" },
-        { time: "18:00", label: "Abendessen" },
-        { time: "20:00", label: "Party & Tanz" },
+        { time: "15:00", label: t("demo.wedding.schedule.1") },
+        { time: "16:30", label: t("demo.wedding.schedule.2") },
+        { time: "18:00", label: t("demo.wedding.schedule.3") },
+        { time: "20:00", label: t("demo.wedding.schedule.4") },
       ],
       selected_blocks: [
         "wedding-timeline", "wedding-story", "wedding-wishlist", "wedding-dresscode",
@@ -54,21 +55,21 @@ const getDemoEvent = (template: Template) => {
       ],
       block_config: {
         menu: [
-          { name: "Vorspeise", description: "Lachstatar auf Avocadocreme" },
-          { name: "Hauptgang", description: "Filet vom Weiderind mit Trüffelrisotto" },
-          { name: "Dessert", description: "Marillenknödel mit Vanillesauce" },
+          { name: t("demo.wedding.menu.1.name"), description: t("demo.wedding.menu.1.desc") },
+          { name: t("demo.wedding.menu.2.name"), description: t("demo.wedding.menu.2.desc") },
+          { name: t("demo.wedding.menu.3.name"), description: t("demo.wedding.menu.3.desc") },
         ],
-        dresscode_male: "Anzug / Hemd mit Sakko",
-        dresscode_female: "Cocktailkleid / Elegantes Kleid",
+        dresscode_male: t("demo.wedding.dresscode.male"),
+        dresscode_female: t("demo.wedding.dresscode.female"),
         shuttle: [
-          { time: "14:30", from: "Hauptbahnhof", to: "Kirche St. Peter", note: "Abfahrt pünktlich" },
-          { time: "16:00", from: "Kirche St. Peter", to: "Schloss Mirabell" },
-          { time: "00:00", from: "Schloss Mirabell", to: "Hauptbahnhof", note: "Letzte Fahrt" },
+          { time: "14:30", from: "Hauptbahnhof", to: t("demo.wedding.ceremonyLocation"), note: t("demo.wedding.shuttle.1.note") },
+          { time: "16:00", from: t("demo.wedding.ceremonyLocation"), to: t("demo.wedding.location") },
+          { time: "00:00", from: t("demo.wedding.location"), to: "Hauptbahnhof", note: t("demo.wedding.shuttle.3.note") },
         ],
         wishlist: [
-          { name: "Beitrag zur Hochzeitsreise", hint: "Wir freuen uns über jeden Beitrag!" },
-          { name: "KitchenAid Artisan", hint: "In Creme, bitte 😊", url: "https://example.com" },
-          { name: "Gutschein für ein Abendessen", hint: "Zum Beispiel von einem Lieblingsrestaurant." },
+          { name: t("demo.wedding.wishlist.1.name"), hint: t("demo.wedding.wishlist.1.hint") },
+          { name: t("demo.wedding.wishlist.2.name"), hint: t("demo.wedding.wishlist.2.hint"), url: "https://example.com" },
+          { name: t("demo.wedding.wishlist.3.name"), hint: t("demo.wedding.wishlist.3.hint") },
         ],
       },
     };
@@ -77,17 +78,17 @@ const getDemoEvent = (template: Template) => {
   if (template.eventType === "birthday") {
     return {
       ...base,
-      title: "Sarahs 30. Geburtstag",
-      description: "Feiert mit mir meinen 30. Geburtstag!",
-      location_name: "Rooftop Bar Vienna",
+      title: t("demo.birthday.title"),
+      description: t("demo.birthday.description"),
+      location_name: t("demo.birthday.location"),
       address: "Herrengasse 10, 1010 Wien",
-      story_text: "30 Jahre voller Abenteuer, Freundschaft und unvergesslicher Momente!",
-      dress_code: "Schick & Bunt",
+      story_text: t("demo.birthday.story"),
+      dress_code: t("demo.birthday.dressCode"),
       schedule: [
-        { time: "18:00", label: "Ankommen & Begrüßung" },
-        { time: "19:00", label: "Buffet" },
-        { time: "20:30", label: "Torte & Überraschung" },
-        { time: "21:00", label: "Party!" },
+        { time: "18:00", label: t("demo.birthday.schedule.1") },
+        { time: "19:00", label: t("demo.birthday.schedule.2") },
+        { time: "20:30", label: t("demo.birthday.schedule.3") },
+        { time: "21:00", label: t("demo.birthday.schedule.4") },
       ],
       selected_blocks: [
         "party-timeline", "party-musicwish", "party-wishlist", "party-dresscode",
@@ -95,15 +96,15 @@ const getDemoEvent = (template: Template) => {
       ],
       block_config: {
         menu: [
-          { name: "Finger Food", description: "Mini-Burger, Bruschetta, Garnelen-Spieße" },
-          { name: "Hauptbuffet", description: "Pasta-Station, Grill & Salate" },
-          { name: "Süßes", description: "Candy Bar & Geburtstagstorte" },
+          { name: t("demo.birthday.menu.1.name"), description: t("demo.birthday.menu.1.desc") },
+          { name: t("demo.birthday.menu.2.name"), description: t("demo.birthday.menu.2.desc") },
+          { name: t("demo.birthday.menu.3.name"), description: t("demo.birthday.menu.3.desc") },
         ],
-        dresscode_male: "Smart Casual / Hemd",
-        dresscode_female: "Schick & Bunt – Hauptsache gute Laune!",
+        dresscode_male: t("demo.birthday.dresscode.male"),
+        dresscode_female: t("demo.birthday.dresscode.female"),
         quiz: [
-          { question: "Was ist Sarahs Lieblingssong?", options: ["Dancing Queen", "Bohemian Rhapsody", "Happy", "Shut Up and Dance"] },
-          { question: "Welches Land will Sarah als nächstes bereisen?", options: ["Japan", "Island", "Mexiko", "Neuseeland"] },
+          { question: t("demo.birthday.quiz.1.question"), options: ["Dancing Queen", "Bohemian Rhapsody", "Happy", "Shut Up and Dance"] },
+          { question: t("demo.birthday.quiz.2.question"), options: ["Japan", "Island", "Mexiko", "Neuseeland"] },
         ],
         games: [
           { name: "Beer Pong", emoji: "🍺" },
@@ -117,9 +118,9 @@ const getDemoEvent = (template: Template) => {
           { item: "Bluetooth-Lautsprecher", assignedTo: "" },
         ],
         wishlist: [
-          { name: "Konzertkarten", hint: "Egal welches Konzert – Hauptsache live Musik!" },
-          { name: "Reisegutschein", hint: "Für das nächste Abenteuer ✈️" },
-          { name: "Fotobuch", hint: "Mit gemeinsamen Erinnerungen 📸" },
+          { name: t("demo.birthday.wishlist.1.name"), hint: t("demo.birthday.wishlist.1.hint") },
+          { name: t("demo.birthday.wishlist.2.name"), hint: t("demo.birthday.wishlist.2.hint") },
+          { name: t("demo.birthday.wishlist.3.name"), hint: t("demo.birthday.wishlist.3.hint") },
         ],
       },
     };
@@ -127,21 +128,21 @@ const getDemoEvent = (template: Template) => {
 
   return {
     ...base,
-    title: "Jahreskonferenz 2026",
-    description: "Innovationen und Visionen für die Zukunft",
-    location_name: "Austria Center Vienna",
+    title: t("demo.corporate.title"),
+    description: t("demo.corporate.description"),
+    location_name: t("demo.corporate.location"),
     address: "Bruno-Kreisky-Platz 1, 1220 Wien",
-    story_text: "Treffen Sie Branchenführer und entdecken Sie neue Trends.",
-    dress_code: "Business Attire",
+    story_text: t("demo.corporate.story"),
+    dress_code: t("demo.corporate.dressCode"),
     hotel_recommendations: [
-      { name: "Melia Vienna", address: "Donau-City-Straße 7, 1220 Wien", url: "https://www.melia.com" },
-      { name: "Hilton Vienna Danube", address: "Handelskai 269, 1020 Wien", url: "https://www.hilton.com" },
+      { name: t("demo.corporate.hotel1.name"), address: "Donau-City-Straße 7, 1220 Wien", url: "https://www.melia.com" },
+      { name: t("demo.corporate.hotel2.name"), address: "Handelskai 269, 1020 Wien", url: "https://www.hilton.com" },
     ],
     schedule: [
-      { time: "09:00", label: "Registrierung & Kaffee" },
-      { time: "10:00", label: "Keynote" },
-      { time: "12:00", label: "Mittagspause" },
-      { time: "14:00", label: "Workshops" },
+      { time: "09:00", label: t("demo.corporate.schedule.1") },
+      { time: "10:00", label: t("demo.corporate.schedule.2") },
+      { time: "12:00", label: t("demo.corporate.schedule.3") },
+      { time: "14:00", label: t("demo.corporate.schedule.4") },
     ],
     selected_blocks: [
       "business-timeline", "business-dresscode", "business-hotels",
@@ -149,20 +150,20 @@ const getDemoEvent = (template: Template) => {
     ],
     block_config: {
       menu: [
-        { name: "Kaffeepause", description: "Kaffee, Tee, Gebäck & Obst" },
-        { name: "Business Lunch", description: "3-Gang Menü mit vegetarischer Option" },
-        { name: "Networking Dinner", description: "Flying Buffet mit Cocktailbar" },
+        { name: t("demo.corporate.menu.1.name"), description: t("demo.corporate.menu.1.desc") },
+        { name: t("demo.corporate.menu.2.name"), description: t("demo.corporate.menu.2.desc") },
+        { name: t("demo.corporate.menu.3.name"), description: t("demo.corporate.menu.3.desc") },
       ],
       agenda: [
-        { time: "10:00", title: "Keynote: KI im Unternehmen", speaker: "Dr. Maria Weber" },
-        { time: "11:30", title: "Panel: Zukunft der Arbeit", speaker: "Diverse Sprecher" },
-        { time: "14:00", title: "Workshop A: Digitale Transformation", speaker: "Thomas Richter" },
-        { time: "14:00", title: "Workshop B: Nachhaltige Innovation", speaker: "Lisa Berger" },
+        { time: "10:00", title: t("demo.corporate.agenda.1.title"), speaker: t("demo.corporate.agenda.1.speaker") },
+        { time: "11:30", title: t("demo.corporate.agenda.2.title"), speaker: t("demo.corporate.agenda.2.speaker") },
+        { time: "14:00", title: t("demo.corporate.agenda.3.title"), speaker: t("demo.corporate.agenda.3.speaker") },
+        { time: "14:00", title: t("demo.corporate.agenda.4.title"), speaker: t("demo.corporate.agenda.4.speaker") },
       ],
       products: [
-        { name: "CloudBase Pro", description: "Enterprise Cloud-Lösung für skalierbare Infrastruktur.", imageUrl: "" },
-        { name: "AI Assistant Suite", description: "KI-gestützter Assistent für Produktivität.", imageUrl: "" },
-        { name: "SecureNet VPN", description: "Hochsichere Netzwerklösung.", imageUrl: "" },
+        { name: t("demo.corporate.products.1.name"), description: t("demo.corporate.products.1.desc"), imageUrl: "" },
+        { name: t("demo.corporate.products.2.name"), description: t("demo.corporate.products.2.desc"), imageUrl: "" },
+        { name: t("demo.corporate.products.3.name"), description: t("demo.corporate.products.3.desc"), imageUrl: "" },
       ],
       sponsors: [
         { name: "TechCorp" },
@@ -176,10 +177,11 @@ const getDemoEvent = (template: Template) => {
 
 const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (!template) return null;
 
-  const demoEvent = getDemoEvent(template);
+  const demoEvent = getDemoEvent(template, t);
   const theme = {
     primary: template.colors.primary,
     secondary: template.colors.secondary,
@@ -215,7 +217,7 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
               navigate(`/order/${template.id}`);
             }}
           >
-            Dieses Design wählen
+            {t("demo.chooseDesign")}
           </Button>
         </div>
       </DialogContent>
