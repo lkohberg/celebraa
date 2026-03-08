@@ -183,7 +183,7 @@ const de = {
   "dashboard.deleteConfirm": "Möchtest du dieses Event wirklich unwiderruflich löschen?",
   "dashboard.deleteSuccess": "Event gelöscht",
   "dashboard.deleteError": "Fehler beim Löschen",
-  "dashboard.createdBy": "Erstellt von (User-ID)",
+  "dashboard.createdBy": "Erstellt von",
 
   // Footer
   "footer.tagline": "Digitale Event-Einladungen",

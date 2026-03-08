@@ -122,11 +122,7 @@ const AdminDashboard = () => {
                     <p className="font-body text-xs sm:text-sm text-muted-foreground">
                       {new Date(event.event_date).toLocaleDateString("de-AT")} · /{event.event_link}
                     </p>
-                    {isAdmin && (
-                      <p className="font-body text-[10px] text-muted-foreground/60 mt-1 truncate">
-                        {t("dashboard.createdBy")}: {event.user_id}
-                      </p>
-                    )}
+                    {isAdmin && <UserEmailBadge userId={event.user_id} isAdmin={true} />}
                   </CardContent>
                 </Card>
               ))}
