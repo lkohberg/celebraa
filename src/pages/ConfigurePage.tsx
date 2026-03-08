@@ -592,12 +592,21 @@ const ConfigurePage = () => {
               {/* Dress Code */}
               <div>
                 <Label className="font-body">{t("configure.dressCode")}</Label>
-                <Input
-                  placeholder={t("configure.dressCodePlaceholder")}
-                  value={form.dressCode}
-                  onChange={(e) => setForm((prev) => ({ ...prev, dressCode: e.target.value }))}
-                  className="font-body mt-1"
-                />
+                <Select value={form.dressCode || "none"} onValueChange={(v) => setForm((prev) => ({ ...prev, dressCode: v === "none" ? "" : v }))}>
+                  <SelectTrigger className="font-body mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none" className="font-body">{t("configure.dressCodeNone")}</SelectItem>
+                    <SelectItem value="Casual" className="font-body">Casual</SelectItem>
+                    <SelectItem value="Smart Casual" className="font-body">Smart Casual</SelectItem>
+                    <SelectItem value="Business Casual" className="font-body">Business Casual</SelectItem>
+                    <SelectItem value="Cocktail" className="font-body">Cocktail</SelectItem>
+                    <SelectItem value="Festlich / Formal" className="font-body">{t("configure.dressCodeFormal")}</SelectItem>
+                    <SelectItem value="Black Tie" className="font-body">Black Tie</SelectItem>
+                    <SelectItem value="White Tie" className="font-body">White Tie</SelectItem>
+                    <SelectItem value="Motto / Themed" className="font-body">{t("configure.dressCodeThemed")}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               </div>
 
               {/* Children Welcome (wedding only) */}
