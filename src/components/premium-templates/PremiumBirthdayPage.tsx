@@ -61,13 +61,12 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
   return (
     <div className="min-h-screen overflow-hidden" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
       <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
-      <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
-        {confetti.map((i) => (<ConfettiParticle key={i} delay={i * 0.07} />))}
-      </div>
+
+      {!showContent && <GiftBoxIntro title={event.title} onOpen={() => setShowContent(true)} accentColor={accent} />}
 
       <AnimatePresence>
         {showContent && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
             {/* Hero */}
             <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{
               background: event.hero_image_url ? undefined
