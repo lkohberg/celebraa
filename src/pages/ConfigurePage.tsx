@@ -134,13 +134,18 @@ const ConfigurePage = () => {
     if (!template) return;
 
     try {
+      const combineAddr = (street: string, zip: string, city: string) => {
+        const parts = [street, [zip, city].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+        return parts || null;
+      };
+
       const eventInsert: any = {
         user_id: user.id,
         title: form.title,
         event_date: form.date,
         event_time: form.time,
         location_name: form.locationName || null,
-        address: form.address || null,
+        address: combineAddr(form.street, form.zip, form.city),
         description: form.description || null,
         template_id: template.id,
         primary_color: form.primaryColor,
@@ -159,9 +164,9 @@ const ConfigurePage = () => {
       if (isPremium) {
         eventInsert.story_text = form.storyText || null;
         eventInsert.ceremony_location = form.ceremonyLocation || null;
-        eventInsert.ceremony_address = form.ceremonyAddress || null;
+        eventInsert.ceremony_address = combineAddr(form.ceremonyStreet, form.ceremonyZip, form.ceremonyCity);
         eventInsert.reception_location = form.receptionLocation || null;
-        eventInsert.reception_address = form.receptionAddress || null;
+        eventInsert.reception_address = combineAddr(form.receptionStreet, form.receptionZip, form.receptionCity);
         eventInsert.hero_image_url = form.heroImageUrl || null;
       }
 
