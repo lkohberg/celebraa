@@ -159,7 +159,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
                 </div>
                 <div className="grid md:grid-cols-1 gap-12 max-w-lg mx-auto">
                   <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
-                    <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                       <MapPin className="w-6 h-6" style={{ color: accent }} />
                     </div>
                     <h3 className="font-display text-xl text-foreground mb-3">{el?.venue || t("event.venue")}</h3>
