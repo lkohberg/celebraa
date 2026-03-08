@@ -47,7 +47,7 @@ export const templates: Template[] = [
     id: "birthday-premium-glamour",
     name: "Glamour Night",
     tagline: "Shine bright ✨",
-    description: "Opulent und glamourös — goldene Akzente auf dunklem Samt, für Geburtstagsfeiern mit dem gewissen Wow-Faktor. Eleganz trifft auf Party.",
+    description: "Opulent und glamourös — goldene Akzente auf dunklem Samt, für Geburtstagsfeiern mit dem gewissen Wow Faktor. Eleganz trifft auf Party.",
     eventType: "birthday",
     colors: { primary: "#D4AF37", secondary: "#0D0D0D", accent: "#F5F5DC" },
     font: "Playfair Display",
