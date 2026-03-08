@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe, Archive, Radio, AlertTriangle, Rocket, Music } from "lucide-react";
+import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe, Archive, Radio, AlertTriangle, Rocket, Music, Trash2 } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/i18n/eventLabels";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
