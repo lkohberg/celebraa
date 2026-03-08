@@ -81,7 +81,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
       title: t("demo.birthday.title"),
       description: t("demo.birthday.description"),
       location_name: t("demo.birthday.location"),
-      address: "Herrengasse 10, 1010 Wien",
+      address: t("demo.birthday.address"),
       story_text: t("demo.birthday.story"),
       dress_code: t("demo.birthday.dressCode"),
       schedule: [
