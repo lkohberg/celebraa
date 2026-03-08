@@ -127,7 +127,7 @@ export const templates: Template[] = [
     id: "corporate-premium-tech",
     name: "Tech Conference",
     tagline: "Innovation trifft Design 💡",
-    description: "Futuristisch und dynamisch — dunkle Basis mit leuchtenden Akzentfarben. Für Tech-Events, Hackathons und digitale Konferenzen.",
+    description: "Futuristisch und dynamisch — dunkle Basis mit leuchtenden Akzentfarben. Für Tech Events, Hackathons und digitale Konferenzen.",
     eventType: "corporate",
     colors: { primary: "#6C63FF", secondary: "#0F0E17", accent: "#FF6584" },
     font: "DM Sans",
