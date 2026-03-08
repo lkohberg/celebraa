@@ -50,6 +50,13 @@ export type Database = {
             referencedRelation: "events"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "event_analytics_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       event_logs: {
@@ -83,6 +90,13 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_logs_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
             referencedColumns: ["id"]
           },
         ]
@@ -255,6 +269,13 @@ export type Database = {
             referencedRelation: "events"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "guests_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       music_wishes: {
@@ -290,6 +311,13 @@ export type Database = {
             referencedRelation: "events"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "music_wishes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_roles: {
@@ -312,7 +340,105 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      events_public: {
+        Row: {
+          address: string | null
+          block_config: Json | null
+          ceremony_address: string | null
+          ceremony_location: string | null
+          children_welcome: boolean | null
+          description: string | null
+          dress_code: string | null
+          event_date: string | null
+          event_link: string | null
+          event_time: string | null
+          font: string | null
+          hero_image_url: string | null
+          hotel_recommendations: Json | null
+          id: string | null
+          languages: string[] | null
+          location_name: string | null
+          max_guests: number | null
+          menu_selection: boolean | null
+          primary_color: string | null
+          reception_address: string | null
+          reception_location: string | null
+          rsvp_deadline: string | null
+          rsvp_enabled: boolean | null
+          schedule: Json | null
+          selected_blocks: string[] | null
+          status: string | null
+          story_text: string | null
+          template_id: string | null
+          tier: string | null
+          title: string | null
+        }
+        Insert: {
+          address?: string | null
+          block_config?: Json | null
+          ceremony_address?: string | null
+          ceremony_location?: string | null
+          children_welcome?: boolean | null
+          description?: string | null
+          dress_code?: string | null
+          event_date?: string | null
+          event_link?: string | null
+          event_time?: string | null
+          font?: string | null
+          hero_image_url?: string | null
+          hotel_recommendations?: Json | null
+          id?: string | null
+          languages?: string[] | null
+          location_name?: string | null
+          max_guests?: number | null
+          menu_selection?: boolean | null
+          primary_color?: string | null
+          reception_address?: string | null
+          reception_location?: string | null
+          rsvp_deadline?: string | null
+          rsvp_enabled?: boolean | null
+          schedule?: Json | null
+          selected_blocks?: string[] | null
+          status?: string | null
+          story_text?: string | null
+          template_id?: string | null
+          tier?: string | null
+          title?: string | null
+        }
+        Update: {
+          address?: string | null
+          block_config?: Json | null
+          ceremony_address?: string | null
+          ceremony_location?: string | null
+          children_welcome?: boolean | null
+          description?: string | null
+          dress_code?: string | null
+          event_date?: string | null
+          event_link?: string | null
+          event_time?: string | null
+          font?: string | null
+          hero_image_url?: string | null
+          hotel_recommendations?: Json | null
+          id?: string | null
+          languages?: string[] | null
+          location_name?: string | null
+          max_guests?: number | null
+          menu_selection?: boolean | null
+          primary_color?: string | null
+          reception_address?: string | null
+          reception_location?: string | null
+          rsvp_deadline?: string | null
+          rsvp_enabled?: boolean | null
+          schedule?: Json | null
+          selected_blocks?: string[] | null
+          status?: string | null
+          story_text?: string | null
+          template_id?: string | null
+          tier?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_user_email: { Args: { _user_id: string }; Returns: string }
