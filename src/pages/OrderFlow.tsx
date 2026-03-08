@@ -40,6 +40,13 @@ const OrderFlow = () => {
   const { templateId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  const fontOptions = [
+    { value: "Playfair Display", label: t("font.playfair") },
+    { value: "DM Sans", label: t("font.dmsans") },
+    { value: "Georgia", label: t("font.georgia") },
+  ];
+
   const template = templates.find((tpl) => tpl.id === templateId);
   const { user } = useAuth();
   const checkLink = useCheckEventLink();
