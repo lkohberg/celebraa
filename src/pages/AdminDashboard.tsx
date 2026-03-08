@@ -43,7 +43,7 @@ const AdminDashboard = () => {
     );
   }
 
-  const isAdmin = user?.email === "admin@celebra.at";
+  const { data: isAdmin } = useIsAdmin();
   const pendingEvents = events?.filter(e => (e as any).status === "pending_review") || [];
 
   return (
