@@ -50,7 +50,6 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
   const [showContent, setShowContent] = useState(false);
-  const [confetti, setConfetti] = useState<number[]>([]);
 
   const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", { day: "numeric", month: "long", year: "numeric" });
 
@@ -58,13 +57,6 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
   const blockCfg = (event as any).block_config || {};
   const hasBlock = (suffix: string) => selectedBlocks.some((id: string) => id.endsWith(suffix));
   const accent = theme?.primary || "hsl(340, 65%, 50%)";
-
-  useEffect(() => {
-    const particles = Array.from({ length: 40 }, (_, i) => i);
-    setConfetti(particles);
-    const timer = setTimeout(() => setShowContent(true), 800);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div className="min-h-screen overflow-hidden" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
