@@ -178,6 +178,8 @@ const PremiumCorporatePage = ({ event, theme, lang }: { event: PremiumEventData;
           <p className="font-body text-sm text-muted-foreground mt-3">{formattedDate}</p>
         </div>
       </footer>
+      </motion.div>
+      )}
     </div>
   );
 };
