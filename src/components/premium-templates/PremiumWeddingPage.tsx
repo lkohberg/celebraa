@@ -18,6 +18,7 @@ import MusicProSection from "@/components/blocks/MusicProSection";
 import BackgroundMusicSection from "@/components/blocks/BackgroundMusicSection";
 import CustomIllustrationSection from "@/components/blocks/CustomIllustrationSection";
 import DressCodeMFSection from "@/components/blocks/DressCodeMFSection";
+import { colorWithAlpha } from "@/lib/color-utils";
 
 export interface PremiumEventData {
   id: string;
