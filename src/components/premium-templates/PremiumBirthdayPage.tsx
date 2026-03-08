@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PartyPopper, MapPin, Clock, Music } from "lucide-react";
+import { PartyPopper, MapPin, Clock, Music, Sparkles, Star } from "lucide-react";
 import { useTranslation } from "@/i18n";
 import CountdownTimer from "./CountdownTimer";
 import RsvpForm from "./RsvpForm";
@@ -11,7 +11,6 @@ import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 import { PremiumEventData, PremiumTheme } from "./PremiumWeddingPage";
 
-// Block components
 import MusicWishSection from "@/components/blocks/MusicWishSection";
 import WishlistSection from "@/components/blocks/WishlistSection";
 import DressCodeMFSection from "@/components/blocks/DressCodeMFSection";
@@ -21,20 +20,30 @@ import GamesVoteSection from "@/components/blocks/GamesVoteSection";
 import PotluckSection from "@/components/blocks/PotluckSection";
 
 const ConfettiParticle = ({ delay }: { delay: number }) => {
-  const colors = ["#FF6B9D", "#C44DFF", "#FFD93D", "#6BCB77", "#4D96FF"];
+  const colors = ["#FF6B9D", "#C44DFF", "#FFD93D", "#6BCB77", "#4D96FF", "#FF8A65"];
   const color = colors[Math.floor(Math.random() * colors.length)];
   const left = Math.random() * 100;
-  const size = 6 + Math.random() * 8;
+  const size = 5 + Math.random() * 7;
+  const shapes = ["rounded-sm", "rounded-full"];
+  const shape = shapes[Math.floor(Math.random() * shapes.length)];
   return (
     <motion.div
-      className="absolute rounded-sm pointer-events-none"
-      style={{ left: `${left}%`, top: -20, width: size, height: size, backgroundColor: color }}
+      className={`absolute ${shape} pointer-events-none`}
+      style={{ left: `${left}%`, top: -20, width: size, height: size * (0.6 + Math.random() * 0.8), backgroundColor: color }}
       initial={{ y: -20, opacity: 1, rotate: 0 }}
       animate={{ y: "100vh", opacity: 0, rotate: 360 + Math.random() * 360 }}
-      transition={{ duration: 3 + Math.random() * 2, delay, ease: "easeIn" }}
+      transition={{ duration: 3 + Math.random() * 2.5, delay, ease: "easeIn" }}
     />
   );
 };
+
+const PartyDivider = ({ color }: { color: string }) => (
+  <div className="flex items-center justify-center gap-2 my-2">
+    <div className="w-8 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+    <Star className="w-3 h-3" style={{ color, opacity: 0.4 }} />
+    <div className="w-8 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+  </div>
+);
 
 const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang }) => {
   const { t } = useTranslation();
@@ -47,10 +56,10 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
   const selectedBlocks = event.selectedBlocks || (event as any).selected_blocks || [];
   const blockCfg = (event as any).block_config || {};
   const hasBlock = (suffix: string) => selectedBlocks.some((id: string) => id.endsWith(suffix));
-  const accent = "hsl(340, 65%, 50%)";
+  const accent = theme?.primary || "hsl(340, 65%, 50%)";
 
   useEffect(() => {
-    const particles = Array.from({ length: 30 }, (_, i) => i);
+    const particles = Array.from({ length: 40 }, (_, i) => i);
     setConfetti(particles);
     const timer = setTimeout(() => setShowContent(true), 800);
     return () => clearTimeout(timer);
@@ -60,14 +69,14 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
     <div className="min-h-screen overflow-hidden" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
       <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
       <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
-        {confetti.map((i) => (<ConfettiParticle key={i} delay={i * 0.08} />))}
+        {confetti.map((i) => (<ConfettiParticle key={i} delay={i * 0.07} />))}
       </div>
 
       <AnimatePresence>
         {showContent && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
             {/* Hero */}
-            <section className="relative min-h-screen flex items-center justify-center" style={{
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{
               background: event.hero_image_url ? undefined
                 : theme ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.accent} 50%, ${theme.primary} 100%)`
                 : "linear-gradient(135deg, hsl(340 65% 50%) 0%, hsl(280 60% 55%) 50%, hsl(340 70% 60%) 100%)",
@@ -75,7 +84,15 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
               {event.hero_image_url && (
                 <>
                   <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" /></div>
-                  <div className="absolute inset-0 bg-black/40" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/60" />
+                </>
+              )}
+              {/* Decorative floating shapes */}
+              {!event.hero_image_url && (
+                <>
+                  <div className="absolute top-[10%] left-[5%] w-32 h-32 rounded-full bg-white/5 blur-2xl" />
+                  <div className="absolute bottom-[15%] right-[8%] w-48 h-48 rounded-full bg-white/5 blur-3xl" />
+                  <div className="absolute top-[40%] right-[15%] w-20 h-20 rounded-full bg-white/5 blur-xl" />
                 </>
               )}
               <motion.div className="relative z-10 text-center px-4" initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }}>
@@ -84,66 +101,79 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
                 </motion.div>
                 <p className="font-body text-sm tracking-[0.3em] uppercase mb-4 text-white/70">{el?.letsCelebrate || t("event.letsCelebrate")}</p>
                 <h1 className="font-display text-5xl md:text-7xl font-bold text-white mb-4">{event.title}</h1>
-                <div className="w-24 h-px mx-auto mb-4 bg-white/40" />
-                <p className="font-display text-2xl md:text-3xl text-white/90 italic">{formattedDate}</p>
+                <PartyDivider color="rgba(255,255,255,0.5)" />
+                <p className="font-display text-2xl md:text-3xl text-white/90 italic mt-4">{formattedDate}</p>
                 {event.description && <p className="font-body text-white/70 mt-4 text-lg max-w-md mx-auto">{event.description}</p>}
               </motion.div>
             </section>
 
             {/* Countdown */}
-            <section className="py-20 bg-card">
-              <div className="max-w-3xl mx-auto px-4 text-center">
+            <section className="py-24 relative overflow-hidden bg-card">
+              <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(${accent} 1.5px, transparent 1.5px)`, backgroundSize: "28px 28px" }} />
+              <div className="relative max-w-3xl mx-auto px-4 text-center">
                 <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">{el?.countdown || t("event.countdown")}</p>
-                <h2 className="font-display text-2xl md:text-3xl text-foreground mb-12">{el?.countdownSub || t("event.countdownSub")}</h2>
-                <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} />
+                <h2 className="font-display text-2xl md:text-3xl text-foreground mb-4">{el?.countdownSub || t("event.countdownSub")}</h2>
+                <PartyDivider color={accent} />
+                <div className="mt-10">
+                  <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} />
+                </div>
               </div>
             </section>
 
             {/* Story / About */}
             {event.story_text && (
-              <section className="py-24 bg-background">
-                <div className="max-w-2xl mx-auto px-4 text-center">
-                  <Music className="w-6 h-6 mx-auto mb-4 text-primary" />
-                  <h2 className="font-display text-2xl md:text-3xl text-foreground mb-8">{el?.party || t("event.party")}</h2>
-                  <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line">{event.story_text}</p>
+              <section className="py-28 relative overflow-hidden bg-background">
+                <div className="absolute top-10 right-10 w-64 h-64 rounded-full opacity-[0.04]" style={{ background: `radial-gradient(circle, ${accent}, transparent)` }} />
+                <div className="relative max-w-2xl mx-auto px-4 text-center">
+                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${accent}15` }}>
+                    <Music className="w-6 h-6" style={{ color: accent }} />
+                  </div>
+                  <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{el?.party || t("event.party")}</h2>
+                  <PartyDivider color={accent} />
+                  <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line mt-8">{event.story_text}</p>
                 </div>
               </section>
             )}
 
             {/* Timeline */}
             {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
-              <section className="py-16 bg-background">
-                <div className="max-w-3xl mx-auto px-4">
-                  <div className="text-center mb-10">
-                    <Clock className="w-6 h-6 mx-auto mb-3 text-primary" />
+              <section className="py-20 relative overflow-hidden bg-background">
+                <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "24px 24px" }} />
+                <div className="relative max-w-3xl mx-auto px-4">
+                  <div className="text-center mb-12">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${accent}15` }}>
+                      <Clock className="w-6 h-6" style={{ color: accent }} />
+                    </div>
                     <h2 className="font-display text-2xl text-foreground">{t("event.timeline")}</h2>
+                    <PartyDivider color={accent} />
                   </div>
                   <ScheduleTimeline schedule={event.schedule} />
                 </div>
               </section>
             )}
 
-            {/* Food Menu */}
             {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} />}
-
-            {/* Dresscode M/F */}
             {hasBlock("-dresscode") && (
               <DressCodeMFSection dressCode={{ male: blockCfg.dresscode_male, female: blockCfg.dresscode_female }} accentColor={accent} />
             )}
 
             {/* Details */}
-            <section className="py-24 bg-card">
-              <div className="max-w-5xl mx-auto px-4">
+            <section className="py-28 relative overflow-hidden bg-card">
+              <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
+              <div className="relative max-w-5xl mx-auto px-4">
                 <div className="text-center mb-16">
                   <h2 className="font-display text-2xl md:text-3xl text-foreground">{el?.details || t("event.details")}</h2>
+                  <PartyDivider color={accent} />
                 </div>
                 <div className="grid md:grid-cols-1 gap-12 max-w-lg mx-auto">
-                  <div className="text-center">
-                    <MapPin className="w-8 h-8 mx-auto mb-4 text-primary" />
+                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
+                      <MapPin className="w-6 h-6" style={{ color: accent }} />
+                    </div>
                     <h3 className="font-display text-xl text-foreground mb-3">{el?.venue || t("event.venue")}</h3>
                     <p className="font-body text-sm text-muted-foreground">{event.location_name || "—"}</p>
                     <p className="font-body text-sm text-muted-foreground">{event.address || ""}</p>
-                  </div>
+                  </motion.div>
                 </div>
                 {event.address && (
                   <div className="mt-12 max-w-xl mx-auto"><GoogleMapsEmbed address={event.address} /></div>
@@ -151,35 +181,28 @@ const PremiumBirthdayPage = ({ event, theme, lang }: { event: PremiumEventData; 
               </div>
             </section>
 
-            {/* Hotels */}
             {event.hotel_recommendations && Array.isArray(event.hotel_recommendations) && event.hotel_recommendations.length > 0 && (
               <HotelRecommendations hotels={event.hotel_recommendations} />
             )}
 
-            {/* Quiz */}
             {hasBlock("-quiz") && <QuizSection questions={blockCfg.quiz} accentColor={accent} />}
-
-            {/* Games Vote */}
             {hasBlock("-games") && <GamesVoteSection games={blockCfg.games} accentColor={accent} />}
-
-            {/* Potluck */}
             {hasBlock("-potluck") && <PotluckSection items={blockCfg.potluck} accentColor={accent} />}
-
-            {/* Wishlist */}
             {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} />}
-
-            {/* Music Wish */}
             {hasBlock("-musicwish") && <MusicWishSection accentColor={accent} eventId={event.id} />}
 
-            {/* RSVP */}
             {event.rsvp_enabled && (
               <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="birthday" lang={lang} />
             )}
 
             {/* Footer */}
-            <footer className="py-16 text-center bg-card">
-              <h2 className="font-display text-3xl text-primary mb-2">{event.title}</h2>
-              <p className="font-body text-sm text-muted-foreground tracking-[0.15em] uppercase">{formattedDate}</p>
+            <footer className="py-20 text-center relative overflow-hidden bg-card">
+              <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "18px 18px" }} />
+              <div className="relative">
+                <h2 className="font-display text-3xl mb-2" style={{ color: accent }}>{event.title}</h2>
+                <PartyDivider color={accent} />
+                <p className="font-body text-sm text-muted-foreground tracking-[0.15em] uppercase mt-3">{formattedDate}</p>
+              </div>
             </footer>
           </motion.div>
         )}
