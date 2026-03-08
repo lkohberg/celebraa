@@ -191,6 +191,7 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
                 </div>
               </div>
             </motion.div>
+            </div>
 
             {/* Seal break particles */}
             <AnimatePresence>
