@@ -142,8 +142,8 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
             </section>
           )}
 
-          {hasBlock("-illustration") && <CustomIllustrationSection accentColor={accent} />}
-          {hasBlock("-slideshow") && <SlideshowSection accentColor={accent} />}
+          {hasBlock("-illustration") && <CustomIllustrationSection accentColor={accent} lang={lang} />}
+          {hasBlock("-slideshow") && <SlideshowSection accentColor={accent} lang={lang} />}
 
           {/* Schedule Timeline */}
           {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
