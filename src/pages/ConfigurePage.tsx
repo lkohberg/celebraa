@@ -575,7 +575,6 @@ const ConfigurePage = () => {
                   </SelectContent>
                 </Select>
               </div>
-              </div>
 
               {/* Children Welcome (wedding only) */}
               {template?.eventType === "wedding" && (
