@@ -81,9 +81,14 @@ const Index = () => {
             <a href="#templates" className="block font-body text-sm text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>{t("nav.templates")}</a>
             <a href="#features" className="block font-body text-sm text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>{t("nav.features")}</a>
             {user ? (
-              <Button size="sm" variant="outline" className="w-full font-body" onClick={() => { navigate("/dashboard"); setMobileMenuOpen(false); }}>
-                <LayoutDashboard className="w-4 h-4 mr-1" /> {t("nav.dashboard")}
-              </Button>
+              <>
+                <Button size="sm" variant="outline" className="w-full font-body" onClick={() => { navigate("/dashboard"); setMobileMenuOpen(false); }}>
+                  <LayoutDashboard className="w-4 h-4 mr-1" /> {t("nav.dashboard")}
+                </Button>
+                <Button size="sm" variant="ghost" className="w-full font-body text-muted-foreground" onClick={() => { signOut(); setMobileMenuOpen(false); }}>
+                  <LogOut className="w-4 h-4 mr-1" /> {t("nav.logout")}
+                </Button>
+              </>
             ) : (
               <Button size="sm" variant="outline" className="w-full font-body" onClick={() => { setAuthOpen(true); setMobileMenuOpen(false); }}>
                 <LogIn className="w-4 h-4 mr-1" /> {t("nav.login")}
