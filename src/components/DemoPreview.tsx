@@ -107,15 +107,15 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
           { question: t("demo.birthday.quiz.2.question"), options: ["Japan", "Island", "Mexiko", "Neuseeland"] },
         ],
         games: [
-          { name: "Beer Pong", emoji: "🍺" },
-          { name: "Karaoke Battle", emoji: "🎤" },
-          { name: "Wer bin ich?", emoji: "🤔" },
-          { name: "Flunkyball", emoji: "⚽" },
+          { name: t("demo.birthday.games.1"), emoji: "🍺" },
+          { name: t("demo.birthday.games.2"), emoji: "🎤" },
+          { name: t("demo.birthday.games.3"), emoji: "🤔" },
+          { name: t("demo.birthday.games.4"), emoji: "⚽" },
         ],
         potluck: [
-          { item: "Chips & Dips", assignedTo: "" },
-          { item: "Cocktail-Zutaten", assignedTo: "" },
-          { item: "Bluetooth-Lautsprecher", assignedTo: "" },
+          { item: t("demo.birthday.potluck.1"), assignedTo: "" },
+          { item: t("demo.birthday.potluck.2"), assignedTo: "" },
+          { item: t("demo.birthday.potluck.3"), assignedTo: "" },
         ],
         wishlist: [
           { name: t("demo.birthday.wishlist.1.name"), hint: t("demo.birthday.wishlist.1.hint") },
