@@ -245,7 +245,7 @@ const OrderFlow = () => {
         ceremony_address: form.ceremonyAddress || null,
         reception_location: form.receptionLocation || null,
         reception_address: form.receptionAddress || null,
-        dress_code: allSelectedBlocks.some(id => id.endsWith("-dresscode")) ? (blockConfig.dresscode_male ? `Herren: ${blockConfig.dresscode_male} | Damen: ${blockConfig.dresscode_female}` : "Elegant") : null,
+        dress_code: allSelectedBlocks.some(id => id.endsWith("-dresscode")) ? (blockConfig.dresscode_male ? `${t("preview.fallback.dressMale")}: ${blockConfig.dresscode_male} | ${t("preview.fallback.dressFemale")}: ${blockConfig.dresscode_female}` : "Elegant") : null,
         schedule: blockConfig.schedule?.length > 0 ? blockConfig.schedule : null,
         hotel_recommendations: blockConfig.hotels?.length > 0 ? blockConfig.hotels : null,
         block_config: blockConfig,
