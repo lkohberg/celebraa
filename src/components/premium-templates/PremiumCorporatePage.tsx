@@ -122,8 +122,8 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true }: { event:
         </section>
       )}
 
-      {hasBlock("-agenda") && <AgendaSection agenda={blockCfg.agenda} accentColor={accent} />}
-      {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} />}
+      {hasBlock("-agenda") && <AgendaSection agenda={blockCfg.agenda} accentColor={accent} lang={lang} />}
+      {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} lang={lang} />}
 
       {/* Details */}
       <section className="py-28 relative overflow-hidden bg-card">
