@@ -131,13 +131,13 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
 
               {/* Bottom bar code lines */}
               <div className="absolute bottom-6 left-6 right-6 flex gap-[2px] items-end justify-center opacity-15">
-                {Array.from({ length: 30 }).map((_, i) => (
+                {barWidths.map((w, i) => (
                   <div
                     key={i}
                     className="bg-white"
                     style={{
-                      width: 2 + Math.random() * 3,
-                      height: 16 + Math.random() * 16,
+                      width: w,
+                      height: barHeights[i],
                     }}
                   />
                 ))}
