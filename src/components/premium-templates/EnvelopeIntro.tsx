@@ -8,7 +8,7 @@ interface EnvelopeIntroProps {
   tapLabel?: string;
 }
 
-/* Celebraa logo as SVG seal motif */
+/* Celebraa logo as SVG seal motif – 4-point star with radiating accents */
 const SealLogo = () => (
   <svg viewBox="0 0 80 80" className="w-full h-full" fill="none">
     <circle cx="40" cy="40" r="36" stroke="hsl(30, 50%, 92%)" strokeWidth="1.2" opacity="0.5" />
@@ -40,12 +40,10 @@ const SealLogo = () => (
 
 const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
   const { t } = useTranslation();
-  // phases: sealed → breaking → opening → letter → done
-  const [phase, setPhase] = useState<"sealed" | "breaking" | "opening" | "letter" | "done">("sealed");
+  const [phase, setPhase] = useState<"sealed" | "breaking" | "opening" | "done">("sealed");
 
   const initials = names.split("&").map((n) => n.trim()[0] || "").filter(Boolean);
 
-  // Pre-compute particle data
   const particles = useMemo(
     () =>
       Array.from({ length: 12 }, (_, i) => ({
@@ -63,11 +61,10 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
     if (phase !== "sealed") return;
     setPhase("breaking");
     setTimeout(() => setPhase("opening"), 800);
-    setTimeout(() => setPhase("letter"), 1800);
     setTimeout(() => {
       setPhase("done");
       onOpen();
-    }, 3200);
+    }, 2200);
   };
 
   return (
@@ -83,7 +80,7 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8 }}
         >
-          {/* Subtle texture */}
+          {/* Subtle texture overlay */}
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -91,55 +88,18 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
             }}
           />
 
-          {/* Tap hint – hidden after tap */}
-          {phase === "sealed" && (
-            <motion.p
-              className="font-body text-[10px] tracking-[0.4em] uppercase mb-10 relative z-10"
-              style={{ color: "hsl(340 20% 55%)" }}
-              animate={{ opacity: [0.4, 0.8, 0.4] }}
-              transition={{ duration: 2.5, repeat: Infinity }}
-            >
-              {tapLabel || t("event.tapToOpen")}
-            </motion.p>
-          )}
+          {/* Tap hint */}
+          <motion.p
+            className="font-body text-[10px] tracking-[0.4em] uppercase mb-10 relative z-10"
+            style={{ color: "hsl(340 20% 55%)" }}
+            animate={{ opacity: [0.4, 0.8, 0.4] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+          >
+            {tapLabel || t("event.tapToOpen")}
+          </motion.p>
 
-          {/* Envelope + letter container */}
+          {/* Envelope container */}
           <div className="relative w-[300px] h-[210px] sm:w-[360px] sm:h-[250px] md:w-[420px] md:h-[290px]">
-
-            {/* Letter that slides out */}
-            <motion.div
-              className="absolute inset-x-4 top-4 bottom-4 rounded-sm z-5 flex flex-col items-center justify-center"
-              style={{
-                background: "hsl(30 30% 97%)",
-                boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-              }}
-              initial={{ y: 0, opacity: 0 }}
-              animate={
-                phase === "letter"
-                  ? { y: -180, opacity: 1 }
-                  : phase === "opening"
-                  ? { y: 0, opacity: 1 }
-                  : { y: 0, opacity: 0 }
-              }
-              transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
-            >
-              {/* Letter content */}
-              <motion.div
-                className="text-center px-6"
-                initial={{ opacity: 0 }}
-                animate={phase === "letter" ? { opacity: 1 } : {}}
-                transition={{ delay: 0.4, duration: 0.5 }}
-              >
-                <p
-                  className="text-[2rem] sm:text-[2.5rem] mb-2"
-                  style={{ fontFamily: "'Great Vibes', cursive", color: "hsl(340 30% 45%)" }}
-                >
-                  {names}
-                </p>
-                <div className="w-16 h-px mx-auto" style={{ background: "hsl(340 30% 75%)" }} />
-              </motion.div>
-            </motion.div>
-
             {/* Envelope body */}
             <motion.div
               className="absolute inset-0 rounded-sm overflow-hidden"
@@ -147,21 +107,10 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
                 background: "linear-gradient(170deg, hsl(30 30% 94%) 0%, hsl(30 25% 90%) 100%)",
                 boxShadow: "0 12px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)",
               }}
-              // Gentle float when sealed
-              animate={
-                phase === "sealed"
-                  ? { y: [0, -6, 0] }
-                  : phase === "letter" || phase === "opening"
-                  ? {}
-                  : {}
-              }
-              transition={
-                phase === "sealed"
-                  ? { duration: 3, repeat: Infinity, ease: "easeInOut" }
-                  : { duration: 0.8 }
-              }
+              animate={phase === "opening" ? { scaleY: 0.95, y: 40, opacity: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.3, ease: "easeIn" }}
             >
-              {/* Fold lines */}
+              {/* Inner fold lines */}
               <div className="absolute inset-0">
                 <svg className="w-full h-full" viewBox="0 0 420 290" fill="none" preserveAspectRatio="none">
                   <line x1="0" y1="0" x2="210" y2="145" stroke="hsl(30, 20%, 82%)" strokeWidth="0.5" />
@@ -169,7 +118,7 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
                 </svg>
               </div>
 
-              {/* Initials */}
+              {/* Initials at bottom center */}
               <div className="absolute bottom-6 sm:bottom-8 left-0 right-0 flex items-center justify-center gap-2 z-10">
                 {initials[0] && (
                   <span className="text-[2.2rem] sm:text-[2.6rem] md:text-[3rem]" style={{ fontFamily: "'Great Vibes', cursive", color: "hsl(340 30% 45%)", textShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
@@ -191,7 +140,7 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
             <motion.div
               className="absolute top-0 left-0 w-full z-10"
               style={{ transformOrigin: "top center", perspective: 800 }}
-              animate={phase === "opening" || phase === "letter" ? { rotateX: -180, opacity: 0 } : {}}
+              animate={phase === "opening" ? { rotateX: -180, opacity: 0 } : {}}
               transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
             >
               <svg viewBox="0 0 420 170" className="w-full" style={{ filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.06))" }}>
@@ -226,7 +175,6 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
                     fill="hsl(5, 50%, 38%)"
                   />
                 </svg>
-                {/* Inner seal */}
                 <div
                   className="w-[64px] h-[64px] rounded-full flex items-center justify-center relative z-10"
                   style={{
