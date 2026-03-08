@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar, Clock, MapPin, Users, ArrowLeft, Upload, X, Globe, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { SUPPORTED_LANGUAGES, type EventLang } from "@/i18n/eventLabels";
 import { useCreateEvent, useCheckEventLink } from "@/hooks/useEvents";
 import { supabase } from "@/integrations/supabase/client";
@@ -35,6 +36,7 @@ const ConfigurePage = () => {
 
   const template = templates.find((tp) => tp.id === templateId);
   const { user } = useAuth();
+  const { data: isAdmin } = useIsAdmin();
   const createEvent = useCreateEvent();
   const checkLink = useCheckEventLink();
   const [authOpen, setAuthOpen] = useState(false);
@@ -175,7 +177,6 @@ const ConfigurePage = () => {
       if (createError) throw createError;
 
       // Admin bypass: skip payment for admin user
-      const isAdmin = user.email === "admin@celebra.at";
       if (isAdmin) {
         await supabase
           .from("events")

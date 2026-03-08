@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { useMyEvents, useEventGuests, useEventAnalytics, useUpdateEvent, useMusicWishes } from "@/hooks/useEvents";
 import { useTranslation } from "@/i18n";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,7 @@ const AdminDashboard = () => {
     );
   }
 
-  const isAdmin = user?.email === "admin@celebra.at";
+  const { data: isAdmin } = useIsAdmin();
   const pendingEvents = events?.filter(e => (e as any).status === "pending_review") || [];
 
   return (

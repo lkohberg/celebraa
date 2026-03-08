@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar, Clock, MapPin, ArrowLeft, ArrowRight, Upload, X, Check, Package, Sparkles, User, CreditCard, Eye, Crown, Star } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { useCheckEventLink } from "@/hooks/useEvents";
 import { supabase } from "@/integrations/supabase/client";
 import AuthDialog from "@/components/AuthDialog";
@@ -45,6 +46,7 @@ const OrderFlow = () => {
 
   const template = templates.find((tpl) => tpl.id === templateId);
   const { user } = useAuth();
+  const { data: isAdmin } = useIsAdmin();
   const checkLink = useCheckEventLink();
   const [authOpen, setAuthOpen] = useState(false);
   const [linkAvailable, setLinkAvailable] = useState<boolean | null>(null);
@@ -257,7 +259,6 @@ const OrderFlow = () => {
       if (createError) throw createError;
 
       // Admin bypass
-      const isAdmin = user.email === "admin@celebra.at";
       if (isAdmin) {
         const newStatus = needsManualWork ? "pending_review" : "live";
         await supabase
