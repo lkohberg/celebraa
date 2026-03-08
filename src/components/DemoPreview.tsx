@@ -131,7 +131,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
     title: t("demo.corporate.title"),
     description: t("demo.corporate.description"),
     location_name: t("demo.corporate.location"),
-    address: "Bruno-Kreisky-Platz 1, 1220 Wien",
+    address: t("demo.corporate.address"),
     story_text: t("demo.corporate.story"),
     dress_code: t("demo.corporate.dressCode"),
     hotel_recommendations: [
