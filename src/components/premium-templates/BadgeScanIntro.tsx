@@ -76,17 +76,13 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
             }}
           />
 
-          {/* Tap hint */}
-          {phase === "idle" && (
-            <motion.p
-              className="font-body text-[10px] tracking-[0.5em] uppercase mb-10 relative z-10"
-              style={{ color: accent }}
-              animate={{ opacity: [0.3, 0.7, 0.3] }}
-              transition={{ duration: 2.5, repeat: Infinity }}
-            >
-              {tapLabel || t("event.tapToOpen")}
-            </motion.p>
-          )}
+          {/* Tap hint – always takes space, invisible when not idle */}
+          <p
+            className={`font-body text-[10px] tracking-[0.5em] uppercase mb-10 relative z-10 transition-opacity duration-300 ${phase === "idle" ? "opacity-70" : "opacity-0"}`}
+            style={{ color: accent }}
+          >
+            {tapLabel || t("event.tapToOpen")}
+          </p>
 
           {/* Badge card – slides in from bottom */}
           <motion.div

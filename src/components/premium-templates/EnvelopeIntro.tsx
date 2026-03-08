@@ -152,8 +152,8 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
 
             {/* Wax seal with irregular edge */}
             <motion.div
-              className="absolute z-20"
-              style={{ width: 76, height: 76, top: "calc(50% - 22px)", left: "calc(50% - 38px)" }}
+              className="absolute z-20 w-[56px] h-[56px] sm:w-[68px] sm:h-[68px] md:w-[76px] md:h-[76px]"
+              style={{ top: "calc(50% - 22px)", left: "50%", transform: "translateX(-50%)" }}
               animate={
                 phase === "breaking"
                   ? { scale: [1, 1.2, 0], rotate: [0, 15, -180], opacity: [1, 1, 0] }
