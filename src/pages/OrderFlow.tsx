@@ -410,7 +410,7 @@ const OrderFlow = () => {
                             <div className="flex flex-wrap gap-1">
                               {pkgBlocks.map(b => (
                                 <span key={b.id} className="text-[10px] font-body bg-secondary text-muted-foreground px-2 py-0.5 rounded-full">
-                                  {b.icon} {b.name}
+                                  {b.icon} {t(b.nameKey)}
                                 </span>
                               ))}
                             </div>
