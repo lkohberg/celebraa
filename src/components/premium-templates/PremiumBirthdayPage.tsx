@@ -181,7 +181,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
             {hasBlock("-games") && <GamesVoteSection games={blockCfg.games} accentColor={accent} lang={lang} />}
             {hasBlock("-potluck") && <PotluckSection items={blockCfg.potluck} accentColor={accent} lang={lang} />}
             {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} lang={lang} />}
-            {hasBlock("-musicwish") && <MusicWishSection accentColor={accent} eventId={event.id} lang={lang} />}
+            {hasBlock("-musicwish") && <MusicWishSection accentColor={accent} eventId={event.id} lang={lang} isPreview={isDemo} />}
 
             {event.rsvp_enabled && (
               <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="birthday" lang={lang} />

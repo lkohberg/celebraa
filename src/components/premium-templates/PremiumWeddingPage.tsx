@@ -215,7 +215,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
 
           {hasBlock("-shuttle") && <ShuttleSection routes={blockCfg.shuttle} accentColor={accent} lang={lang} />}
           {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} lang={lang} />}
-          {hasBlock("-musicpro") && <MusicProSection accentColor={accent} eventId={event.id} lang={lang} />}
+          {hasBlock("-musicpro") && <MusicProSection accentColor={accent} eventId={event.id} lang={lang} isPreview={isDemo} />}
 
           {event.rsvp_enabled && (
             <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="wedding" lang={lang} />
