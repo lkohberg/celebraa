@@ -46,6 +46,7 @@ const OrderFlow = () => {
 
   const template = templates.find((tpl) => tpl.id === templateId);
   const { user } = useAuth();
+  const { data: isAdmin } = useIsAdmin();
   const checkLink = useCheckEventLink();
   const [authOpen, setAuthOpen] = useState(false);
   const [linkAvailable, setLinkAvailable] = useState<boolean | null>(null);
