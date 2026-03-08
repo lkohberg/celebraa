@@ -147,7 +147,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true }: { event:
                 <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
                   <Shirt className="w-6 h-6" style={{ color: accent }} />
                 </div>
-                <h3 className="font-display text-xl text-foreground mb-3">{t("event.dressCode")}</h3>
+                <h3 className="font-display text-xl text-foreground mb-3">{el?.dressCode || t("event.dressCode")}</h3>
                 <p className="font-body text-sm text-muted-foreground">{event.dress_code}</p>
               </motion.div>
             )}
