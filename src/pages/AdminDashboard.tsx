@@ -16,6 +16,29 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { blocks, isManualBlock } from "@/data/blocks";
 
+const useUserEmail = (userId: string | undefined, enabled: boolean) =>
+  useQuery({
+    queryKey: ["user-email", userId],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("get_user_email", { _user_id: userId! });
+      if (error) throw error;
+      return data as string | null;
+    },
+    enabled: !!userId && enabled,
+    staleTime: 1000 * 60 * 10,
+  });
+
+const UserEmailBadge = ({ userId, isAdmin }: { userId: string; isAdmin: boolean }) => {
+  const { t } = useTranslation();
+  const { data: email } = useUserEmail(userId, isAdmin);
+  if (!isAdmin) return null;
+  return (
+    <p className="font-body text-[10px] text-muted-foreground/60 mt-1 truncate">
+      {t("dashboard.createdBy")}: {email || userId}
+    </p>
+  );
+};
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading, signOut } = useAuth();
