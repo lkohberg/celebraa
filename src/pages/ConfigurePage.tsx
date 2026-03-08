@@ -435,12 +435,12 @@ const ConfigurePage = () => {
               {/* Premium-specific fields */}
               {isPremium && (
                 <div className="border border-primary/30 rounded-lg p-5 space-y-4 bg-primary/5">
-                  <h4 className="font-display text-base font-semibold text-foreground">Premium-Details</h4>
+                   <h4 className="font-display text-base font-semibold text-foreground">{t("configure.premiumDetails")}</h4>
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label className="font-body text-sm">Intro-Animation</Label>
-                      <p className="text-xs text-muted-foreground font-body">Öffnungsanimation vor der Einladung</p>
+                      <Label className="font-body text-sm">{t("configure.introAnimation")}</Label>
+                      <p className="text-xs text-muted-foreground font-body">{t("configure.introAnimationDesc")}</p>
                     </div>
                     <Switch checked={form.showIntro} onCheckedChange={(v) => updateField("showIntro", v)} />
                   </div>
