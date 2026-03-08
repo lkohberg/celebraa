@@ -177,11 +177,11 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true }: { event: 
               <HotelRecommendations hotels={event.hotel_recommendations} />
             )}
 
-            {hasBlock("-quiz") && <QuizSection questions={blockCfg.quiz} accentColor={accent} />}
-            {hasBlock("-games") && <GamesVoteSection games={blockCfg.games} accentColor={accent} />}
-            {hasBlock("-potluck") && <PotluckSection items={blockCfg.potluck} accentColor={accent} />}
-            {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} />}
-            {hasBlock("-musicwish") && <MusicWishSection accentColor={accent} eventId={event.id} />}
+            {hasBlock("-quiz") && <QuizSection questions={blockCfg.quiz} accentColor={accent} lang={lang} />}
+            {hasBlock("-games") && <GamesVoteSection games={blockCfg.games} accentColor={accent} lang={lang} />}
+            {hasBlock("-potluck") && <PotluckSection items={blockCfg.potluck} accentColor={accent} lang={lang} />}
+            {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} lang={lang} />}
+            {hasBlock("-musicwish") && <MusicWishSection accentColor={accent} eventId={event.id} lang={lang} />}
 
             {event.rsvp_enabled && (
               <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="birthday" lang={lang} />

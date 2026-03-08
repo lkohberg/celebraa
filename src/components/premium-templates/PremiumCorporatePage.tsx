@@ -162,8 +162,8 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true }: { event:
         <HotelRecommendations hotels={event.hotel_recommendations} accentColor={accent} />
       )}
 
-      {hasBlock("-products") && <ProductsSection products={blockCfg.products} accentColor={accent} />}
-      {hasBlock("-sponsors") && <SponsorsSection sponsors={blockCfg.sponsors} accentColor={accent} />}
+      {hasBlock("-products") && <ProductsSection products={blockCfg.products} accentColor={accent} lang={lang} />}
+      {hasBlock("-sponsors") && <SponsorsSection sponsors={blockCfg.sponsors} accentColor={accent} lang={lang} />}
 
       {event.rsvp_enabled && (
         <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="corporate" lang={lang} />
