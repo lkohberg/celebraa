@@ -17,6 +17,7 @@ import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPag
 import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import LegalDialogs from "@/components/LegalDialogs";
+import BlockConfigurator from "@/components/BlockConfigurator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
