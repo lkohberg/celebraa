@@ -259,7 +259,7 @@ const OrderFlow = () => {
       if (createError) throw createError;
 
       // Admin bypass
-      const isAdmin = user.email === "admin@celebra.at";
+      if (isAdmin) {
       if (isAdmin) {
         const newStatus = needsManualWork ? "pending_review" : "live";
         await supabase
