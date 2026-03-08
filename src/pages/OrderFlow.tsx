@@ -186,13 +186,13 @@ const OrderFlow = () => {
       rsvp_enabled: form.rsvpEnabled,
       rsvp_deadline: form.rsvpDeadline || null,
       menu_selection: hasBlock("-menu"),
-      schedule: hasBlock("-timeline") ? [
+      schedule: hasBlock("-timeline") ? (blockConfig.schedule?.length > 0 ? blockConfig.schedule : [
         { time: "15:00", label: "Empfang" },
         { time: "16:00", label: "Zeremonie" },
         { time: "18:00", label: "Abendessen" },
         { time: "20:00", label: "Party" },
-      ] : null,
-      dress_code: hasBlock("-dresscode") ? "Elegant / Semi-formal" : null,
+      ]) : null,
+      dress_code: hasBlock("-dresscode") ? (blockConfig.dresscode_male ? `Herren: ${blockConfig.dresscode_male} | Damen: ${blockConfig.dresscode_female}` : "Elegant / Semi-formal") : null,
       children_welcome: null,
       hotel_recommendations: hasBlock("-hotels") ? [
         { name: "Hotel Beispiel", address: "Musterstraße 1", url: "https://example.com" },
