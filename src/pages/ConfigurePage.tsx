@@ -68,6 +68,7 @@ const ConfigurePage = () => {
     dressCode: "",
     childrenWelcome: "" as "" | "yes" | "no",
     hotels: [] as { name: string; address: string; url: string }[],
+    showIntro: true,
   });
 
   const [dragActive, setDragActive] = useState(false);
