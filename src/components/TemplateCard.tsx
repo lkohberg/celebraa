@@ -114,7 +114,7 @@ export const templates: Template[] = [
     id: "corporate-premium-executive",
     name: "Executive Summit",
     tagline: "Business Excellence 📊",
-    description: "Professionell und repräsentativ — Navy-Blau trifft auf goldene Akzente. Ideal für Konferenzen, Summits und hochkarätige Business-Events.",
+    description: "Professionell und repräsentativ — Navy Blau trifft auf goldene Akzente. Ideal für Konferenzen, Summits und hochkarätige Events.",
     eventType: "corporate",
     colors: { primary: "#1E3A5F", secondary: "#F8F9FA", accent: "#C8A951" },
     font: "DM Sans",
