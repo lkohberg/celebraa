@@ -196,7 +196,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
                   <div className="inline-flex items-center gap-2 px-4 py-2 bg-card/60 rounded-full border border-border/30">
                     <Baby className="w-4 h-4 text-muted-foreground" />
                     <p className="font-body text-sm text-muted-foreground italic">
-                      {event.children_welcome ? t("event.childrenWelcome") : t("event.adultsOnly")}
+                      {event.children_welcome ? (el?.childrenWelcome || t("event.childrenWelcome")) : (el?.adultsOnly || t("event.adultsOnly"))}
                     </p>
                   </div>
                 </motion.div>
