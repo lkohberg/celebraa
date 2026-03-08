@@ -12,6 +12,15 @@ interface BlockConfiguratorProps {
   category: "wedding" | "birthday" | "corporate";
 }
 
+const Section = ({ title, icon, children }: { title: string; icon: string; children: React.ReactNode }) => (
+  <div className="border border-border rounded-lg p-5 space-y-4">
+    <h4 className="font-display text-base font-semibold text-foreground flex items-center gap-2">
+      <span>{icon}</span> {title}
+    </h4>
+    {children}
+  </div>
+);
+
 const BlockConfigurator = ({ selectedBlocks, blockConfig, setBlockConfig, category }: BlockConfiguratorProps) => {
   const { t } = useTranslation();
   const hasBlock = (suffix: string) => selectedBlocks.some(id => id.endsWith(suffix));
@@ -31,15 +40,6 @@ const BlockConfigurator = ({ selectedBlocks, blockConfig, setBlockConfig, catego
       arr[index] = { ...arr[index], [field]: value };
       return { ...prev, [key]: arr };
     });
-
-  const Section = ({ title, icon, children }: { title: string; icon: string; children: React.ReactNode }) => (
-    <div className="border border-border rounded-lg p-5 space-y-4">
-      <h4 className="font-display text-base font-semibold text-foreground flex items-center gap-2">
-        <span>{icon}</span> {title}
-      </h4>
-      {children}
-    </div>
-  );
 
   return (
     <div className="space-y-6">
