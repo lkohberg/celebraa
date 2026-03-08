@@ -323,7 +323,7 @@ const ConfigurePage = () => {
                       )}
                       {form.time && (
                         <div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}>
-                          <Clock className="w-4 h-4" /><span>{form.time} Uhr</span>
+                          <Clock className="w-4 h-4" /><span>{form.time} {t("configure.timeUnit")}</span>
                         </div>
                       )}
                       {form.locationName && (
