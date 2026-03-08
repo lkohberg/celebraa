@@ -18,8 +18,7 @@ const I18nContext = createContext<I18nContextType | undefined>(undefined);
 function detectLocale(): Locale {
   const stored = localStorage.getItem("celebra-lang");
   if (stored === "de" || stored === "en") return stored;
-  const browserLang = navigator.language.slice(0, 2);
-  return browserLang === "de" ? "de" : "en";
+  return "en";
 }
 
 export const I18nProvider = ({ children }: { children: React.ReactNode }) => {
