@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/i18n";
+import { colorWithAlpha } from "@/lib/color-utils";
 
 interface BadgeScanIntroProps {
   title: string;
