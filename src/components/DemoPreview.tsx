@@ -200,18 +200,14 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="font-display text-2xl">
-            Demo: {template.name}
-          </DialogTitle>
-        </DialogHeader>
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto p-0">
+        <DialogTitle className="sr-only">Demo: {template.name}</DialogTitle>
 
-        <div className="rounded-xl overflow-hidden -mx-6 -mb-6">
+        <div className="rounded-xl overflow-hidden">
           {renderPreview()}
         </div>
 
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center py-4">
           <Button
             className="font-body"
             onClick={() => {
