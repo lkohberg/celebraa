@@ -664,7 +664,7 @@ const OrderFlow = () => {
                       </div>
                       <div>
                         <Label className="font-body text-sm">{t("order.maxGuests")}</Label>
-                        <Input type="number" placeholder="z.B. 80" value={form.maxGuests} onChange={(e) => setForm(prev => ({ ...prev, maxGuests: e.target.value }))} className="font-body mt-1" />
+                        <Input type="number" placeholder={t("order.maxGuestsPlaceholder")} value={form.maxGuests} onChange={(e) => setForm(prev => ({ ...prev, maxGuests: e.target.value }))} className="font-body mt-1" />
                       </div>
                     </>
                   )}
