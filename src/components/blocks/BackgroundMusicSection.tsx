@@ -3,61 +3,33 @@ import { Volume2, VolumeX } from "lucide-react";
 import { motion } from "framer-motion";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 
-const BackgroundMusicSection = ({ accentColor, lang, isDemo = false }: { accentColor?: string; lang?: EventLang; isDemo?: boolean }) => {
+const BackgroundMusicSection = ({ accentColor, lang, isDemo = false, musicUrl }: { accentColor?: string; lang?: EventLang; isDemo?: boolean; musicUrl?: string }) => {
   const color = accentColor || "hsl(38, 65%, 50%)";
   const label = lang ? getEventLabel(lang, "bgMusicActive") : "♪ Hintergrundmusik aktiv";
   const [playing, setPlaying] = useState(false);
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const gainRef = useRef<GainNode | null>(null);
-  const intervalRef = useRef<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const autoStarted = useRef(false);
 
+  const src = musicUrl || "/demo.mp3";
+
   const startMusic = useCallback(() => {
-    if (audioCtxRef.current) return;
-    const ctx = new AudioContext();
-    audioCtxRef.current = ctx;
-    const gain = ctx.createGain();
-    gain.gain.value = 0.08;
-    gain.connect(ctx.destination);
-    gainRef.current = gain;
-
-    const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63, 293.66, 349.23, 440.00, 523.25, 440.00, 349.23];
-    let noteIdx = 0;
-
-    const playNote = () => {
-      const osc = ctx.createOscillator();
-      osc.type = "sine";
-      osc.frequency.value = notes[noteIdx % notes.length];
-
-      const noteGain = ctx.createGain();
-      noteGain.gain.setValueAtTime(0, ctx.currentTime);
-      noteGain.gain.linearRampToValueAtTime(1, ctx.currentTime + 0.1);
-      noteGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.9);
-
-      osc.connect(noteGain);
-      noteGain.connect(gain);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 1);
-      noteIdx++;
-    };
-
-    playNote();
-    intervalRef.current = window.setInterval(playNote, 1000);
-    setPlaying(true);
-  }, []);
+    if (!audioRef.current) {
+      const audio = new Audio(src);
+      audio.loop = true;
+      audio.volume = 0.3;
+      audioRef.current = audio;
+    }
+    audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+  }, [src]);
 
   const stopMusic = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    if (audioCtxRef.current) {
-      audioCtxRef.current.close();
-      audioCtxRef.current = null;
+    if (audioRef.current) {
+      audioRef.current.pause();
     }
-    gainRef.current = null;
-    intervalRef.current = null;
     setPlaying(false);
   }, []);
 
-  // Auto-start on first user interaction with the page
+  // Auto-start on first user interaction
   useEffect(() => {
     if (autoStarted.current) return;
     const handleInteraction = () => {
@@ -65,9 +37,6 @@ const BackgroundMusicSection = ({ accentColor, lang, isDemo = false }: { accentC
         autoStarted.current = true;
         startMusic();
       }
-      document.removeEventListener("click", handleInteraction);
-      document.removeEventListener("touchstart", handleInteraction);
-      document.removeEventListener("scroll", handleInteraction);
     };
     document.addEventListener("click", handleInteraction, { once: true });
     document.addEventListener("touchstart", handleInteraction, { once: true });
@@ -76,9 +45,12 @@ const BackgroundMusicSection = ({ accentColor, lang, isDemo = false }: { accentC
       document.removeEventListener("click", handleInteraction);
       document.removeEventListener("touchstart", handleInteraction);
       document.removeEventListener("scroll", handleInteraction);
-      stopMusic();
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
     };
-  }, [startMusic, stopMusic]);
+  }, [startMusic]);
 
   return (
     <section className="py-8 relative overflow-hidden">
