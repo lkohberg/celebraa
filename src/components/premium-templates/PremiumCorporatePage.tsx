@@ -25,10 +25,10 @@ const CorpDivider = ({ color }: { color: string }) => (
   </div>
 );
 
-const PremiumCorporatePage = ({ event, theme, lang }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang }) => {
+const PremiumCorporatePage = ({ event, theme, lang, showIntro = true }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean }) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
-  const [showContent, setShowContent] = useState(false);
+  const [showContent, setShowContent] = useState(!showIntro);
 
   const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", { day: "numeric", month: "long", year: "numeric" });
 

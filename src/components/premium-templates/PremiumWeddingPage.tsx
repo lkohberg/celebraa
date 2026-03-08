@@ -62,10 +62,10 @@ const FloralDivider = ({ color }: { color: string }) => (
   </div>
 );
 
-const PremiumWeddingPage = ({ event, theme, lang }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang }) => {
+const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean }) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
-  const [showContent, setShowContent] = useState(false);
+  const [showContent, setShowContent] = useState(!showIntro);
 
   const names = event.title;
   const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", {
