@@ -67,13 +67,7 @@ export default InviteEmail
 const main = { backgroundColor: '#ffffff', fontFamily: "'DM Sans', Arial, sans-serif" }
 const container = { padding: '40px 30px', maxWidth: '480px', margin: '0 auto' }
 const logoSection = { textAlign: 'center' as const, marginBottom: '8px' }
-const logoText = {
-  fontFamily: "'Playfair Display', Georgia, serif",
-  fontSize: '24px',
-  fontWeight: 'bold' as const,
-  color: '#c8922a',
-  margin: '0',
-}
+const logoImg = { margin: '0 auto', borderRadius: '50%' }
 const divider = { borderColor: '#e8e0d4', margin: '20px 0' }
 const h1 = {
   fontFamily: "'Playfair Display', Georgia, serif",
