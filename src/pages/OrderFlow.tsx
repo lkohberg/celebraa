@@ -30,7 +30,7 @@ import {
 
 const RESERVED_ROUTES_CONST = ["templates", "configure", "success", "dashboard", "admin", "login", "signup", "settings", "api", "auth", "order"];
 
-const RESERVED_ROUTES = ["templates", "configure", "success", "dashboard", "admin", "login", "signup", "settings", "api", "auth", "order"];
+
 
 const OrderFlow = () => {
   const { templateId } = useParams();
