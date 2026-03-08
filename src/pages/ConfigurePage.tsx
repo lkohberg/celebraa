@@ -36,6 +36,7 @@ const ConfigurePage = () => {
 
   const template = templates.find((tp) => tp.id === templateId);
   const { user } = useAuth();
+  const { data: isAdmin } = useIsAdmin();
   const createEvent = useCreateEvent();
   const checkLink = useCheckEventLink();
   const [authOpen, setAuthOpen] = useState(false);
