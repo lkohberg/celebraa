@@ -14,10 +14,10 @@ const eventTypes = [
   { value: "corporate", labelKey: "templates.corporate", icon: Building2, color: "hsl(220, 50%, 35%)" },
 ] as const;
 
-const categoryDescriptions: Record<string, string> = {
-  birthday: "Feiere deinen besonderen Tag mit Stil — von wild und bunt bis elegant und glamourös.",
-  wedding: "Euer großer Tag verdient eine Einladung, die genauso schön ist wie eure Liebe.",
-  corporate: "Professionelle Event-Seiten, die beeindrucken — von Konferenzen bis Gala-Abende.",
+const categoryDescriptionKeys: Record<string, string> = {
+  birthday: "templates.cat.birthday",
+  wedding: "templates.cat.wedding",
+  corporate: "templates.cat.corporate",
 };
 
 const TemplatesPage = () => {
@@ -55,7 +55,7 @@ const TemplatesPage = () => {
           >
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full text-primary font-body text-xs tracking-wide mb-6">
               <Sparkles className="w-3 h-3" />
-              9 handverlesene Designs
+              {t("templates.handpicked")}
             </div>
             <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
               {t("templates.title")}
@@ -85,7 +85,7 @@ const TemplatesPage = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center font-body text-sm text-muted-foreground mb-10 max-w-lg mx-auto"
           >
-            {categoryDescriptions[activeTab]}
+            {t(categoryDescriptionKeys[activeTab])}
           </motion.p>
 
           {eventTypes.map((type) => (
