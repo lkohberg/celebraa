@@ -9,6 +9,7 @@ import {
   Head,
   Heading,
   Html,
+  Img,
   Link,
   Preview,
   Section,
@@ -35,7 +36,7 @@ export const SignupEmail = ({
     <Body style={main}>
       <Container style={container}>
         <Section style={logoSection}>
-          <Text style={logoText}>✦ Celebra</Text>
+          <Img src="https://nycaurobmnnrskwlzgym.supabase.co/storage/v1/object/public/email-assets/celebra-logo.ico" width="80" height="80" alt="Celebra" style={logoImg} />
         </Section>
         <Hr style={divider} />
         <Heading style={h1}>Willkommen bei Celebra!</Heading>
@@ -68,13 +69,7 @@ export default SignupEmail
 const main = { backgroundColor: '#ffffff', fontFamily: "'DM Sans', Arial, sans-serif" }
 const container = { padding: '40px 30px', maxWidth: '480px', margin: '0 auto' }
 const logoSection = { textAlign: 'center' as const, marginBottom: '8px' }
-const logoText = {
-  fontFamily: "'Playfair Display', Georgia, serif",
-  fontSize: '24px',
-  fontWeight: 'bold' as const,
-  color: '#c8922a',
-  margin: '0',
-}
+const logoImg = { margin: '0 auto', borderRadius: '50%' }
 const divider = { borderColor: '#e8e0d4', margin: '20px 0' }
 const h1 = {
   fontFamily: "'Playfair Display', Georgia, serif",
