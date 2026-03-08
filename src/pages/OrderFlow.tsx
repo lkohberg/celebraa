@@ -702,6 +702,20 @@ const OrderFlow = () => {
                   {form.eventLink && linkValid && !isReservedLink && linkAvailable === true && <p className="text-xs text-primary font-body mt-1">✓ Verfügbar!</p>}
                 </div>
 
+                {/* Block Configuration */}
+                {allSelectedBlocks.length > 0 && (
+                  <div>
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-4">Blöcke konfigurieren</h3>
+                    <p className="font-body text-xs text-muted-foreground mb-4">Fülle die Details für deine ausgewählten Blöcke aus. Du kannst Einträge auch später ergänzen.</p>
+                    <BlockConfigurator
+                      selectedBlocks={allSelectedBlocks}
+                      blockConfig={blockConfig}
+                      setBlockConfig={setBlockConfig}
+                      category={category}
+                    />
+                  </div>
+                )}
+
                 <Button className="w-full font-body font-semibold text-base py-5" disabled={!step2Valid} onClick={() => setStep(2)}>
                   Weiter zur Vorschau <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
