@@ -104,7 +104,7 @@ const AdminDashboard = () => {
             </div>
             <div className="lg:col-span-2">
               {selectedEvent ? (
-                <EventDetail event={selectedEvent} isAdmin={isAdmin} />
+                <EventDetail event={selectedEvent} isAdmin={isAdmin} onDeleted={() => setSelectedEventId(null)} />
               ) : (
                 <Card><CardContent className="py-16 text-center">
                   <p className="font-body text-muted-foreground">{t("dashboard.selectEvent")}</p>
