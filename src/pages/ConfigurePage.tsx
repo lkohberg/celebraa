@@ -21,17 +21,19 @@ import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporat
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
 
-const fontOptions = [
-  { value: "Playfair Display", label: "Playfair Display (Elegant)" },
-  { value: "DM Sans", label: "DM Sans (Modern)" },
-  { value: "Georgia", label: "Georgia (Klassisch)" },
-];
 
 const ConfigurePage = () => {
   const { templateId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const template = templates.find((t) => t.id === templateId);
+
+  const fontOptions = [
+    { value: "Playfair Display", label: t("font.playfair") },
+    { value: "DM Sans", label: t("font.dmsans") },
+    { value: "Georgia", label: t("font.georgia") },
+  ];
+
+  const template = templates.find((tp) => tp.id === templateId);
   const { user } = useAuth();
   const createEvent = useCreateEvent();
   const checkLink = useCheckEventLink();
@@ -192,7 +194,7 @@ const ConfigurePage = () => {
       });
 
       if (checkoutError || !checkoutData?.url) {
-        toast.error("Fehler beim Erstellen der Zahlung");
+        toast.error(t("order.paymentError"));
         return;
       }
 
@@ -208,7 +210,7 @@ const ConfigurePage = () => {
         window.open(checkoutData.url, "_blank");
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Fehler beim Erstellen";
+      const message = err instanceof Error ? err.message : t("order.createError");
       toast.error(message);
     }
   };
@@ -316,7 +318,7 @@ const ConfigurePage = () => {
                       )}
                       {form.time && (
                         <div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}>
-                          <Clock className="w-4 h-4" /><span>{form.time} Uhr</span>
+                          <Clock className="w-4 h-4" /><span>{form.time} {t("configure.timeUnit")}</span>
                         </div>
                       )}
                       {form.locationName && (
@@ -344,12 +346,44 @@ const ConfigurePage = () => {
                         </div>
                         {form.menuSelection && (
                           <p className="text-xs font-body text-muted-foreground mt-3 opacity-70">
-                            inkl. Essenspräferenzen (Vegetarisch, Vegan, …)
+                            {t("configure.menuDietaryPreview")}
                           </p>
                         )}
                       </div>
                     )}
                   </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="rounded-xl overflow-hidden shadow-card" style={{ background: template.previewGradient, fontFamily: `'${form.font}', sans-serif` }}>
+            <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(form.font)}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
+            <div className="p-8 text-center">
+              <p className="text-xs font-body uppercase tracking-widest mb-3 opacity-50" style={{ color: template.colors.accent }}>
+                {t("configure.invitation")}
+              </p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ fontFamily: form.font, color: template.colors.primary === "#FFFFFF" ? template.colors.accent : template.colors.primary }}>{form.title || t("configure.yourTitle")}</h2>
+              {form.description && (<p className="font-body text-sm opacity-70 mt-2 max-w-xs mx-auto" style={{ color: template.colors.accent }}>{form.description}</p>)}
+              <div className="mt-6 space-y-2 max-w-xs mx-auto text-left">
+                {form.date && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><Calendar className="w-4 h-4" /><span>{form.date}</span></div>)}
+                {form.time && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><Clock className="w-4 h-4" /><span>{form.time} {t("configure.timeUnit")}</span></div>)}
+                {form.locationName && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><MapPin className="w-4 h-4" /><span>{form.locationName}</span></div>)}
+                {form.maxGuests && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><Users className="w-4 h-4" /><span>max. {form.maxGuests} {t("dashboard.guests")}</span></div>)}
+                {form.dressCode && (<div className="flex items-center gap-2 opacity-60 text-sm font-body" style={{ color: template.colors.accent }}><span className="w-4 h-4 text-center">👔</span><span>{form.dressCode}</span></div>)}
+              </div>
+              {form.rsvpEnabled && (
+                <div className="mt-8 bg-background/80 backdrop-blur rounded-lg p-5">
+                  <p className="font-display text-base font-semibold text-foreground mb-2">{t("configure.rsvpQuestion")}</p>
+                  <div className="flex gap-3 justify-center">
+                    <Button size="sm" className="font-body">{t("configure.rsvpYes")}</Button>
+                    <Button size="sm" variant="outline" className="font-body">{t("configure.rsvpNo")}</Button>
+                  </div>
+                  {form.menuSelection && (
+                    <p className="text-xs font-body text-muted-foreground mt-3 opacity-70">
+                      {t("configure.menuDietaryPreview")}
+                    </p>
+                  )}
                 </div>
               )}
             </div>
@@ -393,12 +427,12 @@ const ConfigurePage = () => {
               {/* Premium-specific fields */}
               {isPremium && (
                 <div className="border border-primary/30 rounded-lg p-5 space-y-4 bg-primary/5">
-                  <h4 className="font-display text-base font-semibold text-foreground">Premium-Details</h4>
+                   <h4 className="font-display text-base font-semibold text-foreground">{t("configure.premiumDetails")}</h4>
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label className="font-body text-sm">Intro-Animation</Label>
-                      <p className="text-xs text-muted-foreground font-body">Öffnungsanimation vor der Einladung</p>
+                      <Label className="font-body text-sm">{t("configure.introAnimation")}</Label>
+                      <p className="text-xs text-muted-foreground font-body">{t("configure.introAnimationDesc")}</p>
                     </div>
                     <Switch checked={form.showIntro} onCheckedChange={(v) => updateField("showIntro", v)} />
                   </div>
@@ -464,14 +498,14 @@ const ConfigurePage = () => {
                             <X className="w-4 h-4 text-foreground" />
                           </button>
                           <div className="absolute bottom-0 inset-x-0 bg-background/70 backdrop-blur text-center py-1">
-                            <p className="text-xs font-body text-muted-foreground">Klicken oder ziehen zum Ersetzen</p>
+                            <p className="text-xs font-body text-muted-foreground">{t("configure.clickOrDragReplace")}</p>
                           </div>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center justify-center py-8 px-4">
                           <Upload className="w-8 h-8 text-muted-foreground mb-2" />
                           <p className="text-sm font-body text-muted-foreground text-center">
-                            Bild hierher ziehen oder klicken
+                            {t("configure.dragOrClickUpload")}
                           </p>
                         </div>
                       )}

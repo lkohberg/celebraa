@@ -16,11 +16,11 @@ import HowItWorksDialog from "@/components/HowItWorksDialog";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "@/i18n";
-import { LayoutDashboard, LogIn, Menu, X } from "lucide-react";
+import { LayoutDashboard, LogIn, LogOut, Menu, X } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { t } = useTranslation();
   const [demoTemplate, setDemoTemplate] = useState<Template | null>(null);
   const [demoOpen, setDemoOpen] = useState(false);
@@ -81,9 +81,14 @@ const Index = () => {
             <a href="#templates" className="block font-body text-sm text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>{t("nav.templates")}</a>
             <a href="#features" className="block font-body text-sm text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>{t("nav.features")}</a>
             {user ? (
-              <Button size="sm" variant="outline" className="w-full font-body" onClick={() => { navigate("/dashboard"); setMobileMenuOpen(false); }}>
-                <LayoutDashboard className="w-4 h-4 mr-1" /> {t("nav.dashboard")}
-              </Button>
+              <>
+                <Button size="sm" variant="outline" className="w-full font-body" onClick={() => { navigate("/dashboard"); setMobileMenuOpen(false); }}>
+                  <LayoutDashboard className="w-4 h-4 mr-1" /> {t("nav.dashboard")}
+                </Button>
+                <Button size="sm" variant="ghost" className="w-full font-body text-muted-foreground" onClick={() => { signOut(); setMobileMenuOpen(false); }}>
+                  <LogOut className="w-4 h-4 mr-1" /> {t("nav.logout")}
+                </Button>
+              </>
             ) : (
               <Button size="sm" variant="outline" className="w-full font-body" onClick={() => { setAuthOpen(true); setMobileMenuOpen(false); }}>
                 <LogIn className="w-4 h-4 mr-1" /> {t("nav.login")}
@@ -156,7 +161,7 @@ const Index = () => {
               onClick={() => navigate("/templates")}
               className="group inline-flex items-center gap-3 font-display text-sm md:text-base tracking-wide px-10 py-4 rounded-full bg-primary text-primary-foreground shadow-md transition-all duration-300 hover:shadow-lg hover:brightness-110 active:scale-[0.97]"
             >
-              <span>Alle Designs entdecken</span>
+              <span>{t("index.discoverAll")}</span>
               <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
             </button>
           </motion.div>

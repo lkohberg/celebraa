@@ -28,18 +28,21 @@ import {
   type Block, type Package as PackageType
 } from "@/data/blocks";
 
-const fontOptions = [
-  { value: "Playfair Display", label: "Playfair Display (Elegant)" },
-  { value: "DM Sans", label: "DM Sans (Modern)" },
-  { value: "Georgia", label: "Georgia (Klassisch)" },
-];
-
 const RESERVED_ROUTES = ["templates", "configure", "success", "dashboard", "admin", "login", "signup", "settings", "api", "auth", "order"];
+
+
 
 const OrderFlow = () => {
   const { templateId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  const fontOptions = [
+    { value: "Playfair Display", label: t("font.playfair") },
+    { value: "DM Sans", label: t("font.dmsans") },
+    { value: "Georgia", label: t("font.georgia") },
+  ];
+
   const template = templates.find((tpl) => tpl.id === templateId);
   const { user } = useAuth();
   const checkLink = useCheckEventLink();
@@ -176,7 +179,7 @@ const OrderFlow = () => {
       description: form.description || null,
       location_name: form.locationName || null,
       address: form.address || null,
-      story_text: hasBlock("-story") ? (blockConfig.story_text || "Eure Geschichte wird hier erzählt. Ein wunderschöner Text über euch als Paar.") : null,
+      story_text: hasBlock("-story") ? (blockConfig.story_text || t("preview.fallback.storyText")) : null,
       ceremony_location: form.ceremonyLocation || null,
       ceremony_address: form.ceremonyAddress || null,
       reception_location: form.receptionLocation || null,
@@ -186,15 +189,15 @@ const OrderFlow = () => {
       rsvp_deadline: form.rsvpDeadline || null,
       menu_selection: hasBlock("-menu"),
       schedule: hasBlock("-timeline") ? (blockConfig.schedule?.length > 0 ? blockConfig.schedule : [
-        { time: "15:00", label: "Empfang" },
-        { time: "16:00", label: "Zeremonie" },
-        { time: "18:00", label: "Abendessen" },
-        { time: "20:00", label: "Party" },
+        { time: "15:00", label: t("preview.fallback.reception") },
+        { time: "16:00", label: t("preview.fallback.ceremony") },
+        { time: "18:00", label: t("preview.fallback.dinner") },
+        { time: "20:00", label: t("preview.fallback.party") },
       ]) : null,
-      dress_code: hasBlock("-dresscode") ? (blockConfig.dresscode_male ? `Herren: ${blockConfig.dresscode_male} | Damen: ${blockConfig.dresscode_female}` : "Elegant / Semi-formal") : null,
+      dress_code: hasBlock("-dresscode") ? (blockConfig.dresscode_male ? `${t("preview.fallback.dressMale")}: ${blockConfig.dresscode_male} | ${t("preview.fallback.dressFemale")}: ${blockConfig.dresscode_female}` : "Elegant / Semi-formal") : null,
       children_welcome: null,
       hotel_recommendations: hasBlock("-hotels") ? (blockConfig.hotels?.length > 0 ? blockConfig.hotels : [
-        { name: "Hotel Beispiel", address: "Musterstraße 1", url: "https://example.com" },
+        { name: t("preview.fallback.hotelName"), address: t("preview.fallback.hotelAddress"), url: "https://example.com" },
       ]) : null,
       selectedBlocks: selected,
       block_config: blockConfig,
@@ -238,7 +241,7 @@ const OrderFlow = () => {
         ceremony_address: form.ceremonyAddress || null,
         reception_location: form.receptionLocation || null,
         reception_address: form.receptionAddress || null,
-        dress_code: allSelectedBlocks.some(id => id.endsWith("-dresscode")) ? (blockConfig.dresscode_male ? `Herren: ${blockConfig.dresscode_male} | Damen: ${blockConfig.dresscode_female}` : "Elegant") : null,
+        dress_code: allSelectedBlocks.some(id => id.endsWith("-dresscode")) ? (blockConfig.dresscode_male ? `${t("preview.fallback.dressMale")}: ${blockConfig.dresscode_male} | ${t("preview.fallback.dressFemale")}: ${blockConfig.dresscode_female}` : "Elegant") : null,
         schedule: blockConfig.schedule?.length > 0 ? blockConfig.schedule : null,
         hotel_recommendations: blockConfig.hotels?.length > 0 ? blockConfig.hotels : null,
         block_config: blockConfig,
@@ -392,7 +395,7 @@ const OrderFlow = () => {
                               </div>
                             )}
                             <div className="flex items-center justify-between mb-3">
-                              <h4 className="font-display font-semibold text-foreground">{pkg.name}</h4>
+                              <h4 className="font-display font-semibold text-foreground">{t(pkg.nameKey)}</h4>
                               <div className="text-right">
                                 <span className="font-display text-lg font-bold text-primary">€{pkg.price}</span>
                                 {savings > 0 && (
@@ -403,7 +406,7 @@ const OrderFlow = () => {
                             <div className="flex flex-wrap gap-1">
                               {pkgBlocks.map(b => (
                                 <span key={b.id} className="text-[10px] font-body bg-secondary text-muted-foreground px-2 py-0.5 rounded-full">
-                                  {b.icon} {b.name}
+                                  {b.icon} {t(b.nameKey)}
                                 </span>
                               ))}
                             </div>
@@ -451,8 +454,8 @@ const OrderFlow = () => {
                               <div className="flex items-center gap-2">
                                 <span className="text-lg">{block.icon}</span>
                                 <div>
-                                  <p className="font-body text-sm font-medium text-foreground">{block.name}</p>
-                                  <p className="font-body text-[11px] text-muted-foreground">{block.description}</p>
+                                  <p className="font-body text-sm font-medium text-foreground">{t(block.nameKey)}</p>
+                                  <p className="font-body text-[11px] text-muted-foreground">{t(block.descriptionKey)}</p>
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
@@ -483,8 +486,8 @@ const OrderFlow = () => {
                       </p>
                       {manualBlocks.map(block => (
                         <div key={block.id}>
-                          <Label className="font-body text-sm">{block.icon} {block.name}</Label>
-                          <p className="font-body text-xs text-muted-foreground mb-1">{block.manualWorkDescription}</p>
+                          <Label className="font-body text-sm">{block.icon} {t(block.nameKey)}</Label>
+                          <p className="font-body text-xs text-muted-foreground mb-1">{block.manualWorkDescriptionKey ? t(block.manualWorkDescriptionKey) : ""}</p>
                           <Textarea
                             placeholder={t("order.manualPlaceholder")}
                             value={manualInfo[block.id] || ""}
@@ -510,7 +513,7 @@ const OrderFlow = () => {
                       const pkg = packages.find(p => p.id === selectedPackageId);
                       return pkg ? (
                         <div className="flex justify-between font-body text-sm">
-                          <span className="text-muted-foreground">{pkg.name}</span>
+                          <span className="text-muted-foreground">{t(pkg.nameKey)}</span>
                           <span className="text-foreground">€{pkg.price}</span>
                         </div>
                       ) : null;
@@ -519,7 +522,7 @@ const OrderFlow = () => {
                       const block = blocks.find(b => b.id === id);
                       return block ? (
                         <div key={id} className="flex justify-between font-body text-sm">
-                          <span className="text-muted-foreground">{block.icon} {block.name}</span>
+                           <span className="text-muted-foreground">{block.icon} {t(block.nameKey)}</span>
                           <span className="text-foreground">€{block.price}</span>
                         </div>
                       ) : null;
@@ -657,7 +660,7 @@ const OrderFlow = () => {
                       </div>
                       <div>
                         <Label className="font-body text-sm">{t("order.maxGuests")}</Label>
-                        <Input type="number" placeholder="z.B. 80" value={form.maxGuests} onChange={(e) => setForm(prev => ({ ...prev, maxGuests: e.target.value }))} className="font-body mt-1" />
+                        <Input type="number" placeholder={t("order.maxGuestsPlaceholder")} value={form.maxGuests} onChange={(e) => setForm(prev => ({ ...prev, maxGuests: e.target.value }))} className="font-body mt-1" />
                       </div>
                     </>
                   )}
@@ -748,7 +751,7 @@ const OrderFlow = () => {
                         const block = blocks.find(b => b.id === id);
                         return block ? (
                           <div key={id} className="flex justify-between font-body text-xs">
-                            <span className="text-muted-foreground">{block.icon} {block.name}</span>
+                            <span className="text-muted-foreground">{block.icon} {t(block.nameKey)}</span>
                             <span>€{block.price}</span>
                           </div>
                         ) : null;
@@ -814,7 +817,7 @@ const OrderFlow = () => {
                   <Label className="font-body">{t("order.emailAddress")} *</Label>
                   <Input
                     type="email"
-                    placeholder="max@beispiel.at"
+                    placeholder={t("order.emailPlaceholder")}
                     value={contact.email}
                     onChange={(e) => setContact(prev => ({ ...prev, email: e.target.value }))}
                     className="font-body mt-1"
@@ -835,7 +838,7 @@ const OrderFlow = () => {
                     const pkg = packages.find(p => p.id === selectedPackageId);
                     return pkg ? (
                       <div className="flex justify-between font-body text-sm">
-                        <span className="text-muted-foreground">{t("order.package")}: {pkg.name}</span>
+                        <span className="text-muted-foreground">{t("order.package")}: {t(pkg.nameKey)}</span>
                         <span className="text-foreground">€{pkg.price}</span>
                       </div>
                     ) : null;
@@ -844,7 +847,7 @@ const OrderFlow = () => {
                     const block = blocks.find(b => b.id === id);
                     return block ? (
                       <div key={id} className="flex justify-between font-body text-sm">
-                        <span className="text-muted-foreground">{block.icon} {block.name}</span>
+                        <span className="text-muted-foreground">{block.icon} {t(block.nameKey)}</span>
                         <span className="text-foreground">€{block.price}</span>
                       </div>
                     ) : null;
