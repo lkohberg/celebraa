@@ -3,6 +3,7 @@ import { ShoppingBasket, Check, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
+import { colorWithAlpha } from "@/lib/color-utils";
 
 interface PotluckItem {
   name?: string;
@@ -27,7 +28,7 @@ const PotluckSection = ({ items, accentColor, isPreview = false, lang }: { items
       <div className="absolute inset-0 bg-gradient-to-b from-card via-card/80 to-card" />
       <div className="relative max-w-xl mx-auto px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${color}15` }}>
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(color, 0.15) }}>
             <ShoppingBasket className="w-6 h-6" style={{ color }} />
           </div>
           <h2 className="font-display text-2xl md:text-3xl text-foreground">{l("potluck")}</h2>

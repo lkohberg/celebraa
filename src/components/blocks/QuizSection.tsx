@@ -3,6 +3,7 @@ import { HelpCircle, CheckCircle, Sparkles, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
+import { colorWithAlpha } from "@/lib/color-utils";
 
 interface QuizQuestion {
   question: string;
@@ -30,7 +31,7 @@ const QuizSection = ({ questions, accentColor, isPreview = false, lang }: { ques
 
       <div className="relative max-w-xl mx-auto px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${color}15` }}>
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(color, 0.15) }}>
             <HelpCircle className="w-6 h-6" style={{ color }} />
           </div>
           <h2 className="font-display text-2xl md:text-3xl text-foreground">{l("quiz")}</h2>
@@ -74,7 +75,7 @@ const QuizSection = ({ questions, accentColor, isPreview = false, lang }: { ques
               >
                 <span className="flex items-center gap-3">
                   <span className="w-7 h-7 rounded-full border flex items-center justify-center text-xs font-medium shrink-0" style={{
-                    borderColor: selected === i ? (i === question.correctIndex ? "#4ade80" : "#f87171") : `${color}30`,
+                    borderColor: selected === i ? (i === question.correctIndex ? "#4ade80" : "#f87171") : colorWithAlpha(color, 0.3),
                     color: selected === i ? (i === question.correctIndex ? "#16a34a" : "#dc2626") : color,
                   }}>
                     {String.fromCharCode(65 + i)}
@@ -93,7 +94,7 @@ const QuizSection = ({ questions, accentColor, isPreview = false, lang }: { ques
             </motion.div>
           )}
           {finished && (
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mt-6 text-center p-4 rounded-xl" style={{ backgroundColor: `${color}10` }}>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mt-6 text-center p-4 rounded-xl" style={{ backgroundColor: colorWithAlpha(color, 0.1) }}>
               <Trophy className="w-8 h-8 mx-auto mb-2" style={{ color }} />
               <p className="font-display text-lg text-foreground">
                 {l("correctCount").replace("{score}", String(score)).replace("{total}", String(displayQuestions.length))}

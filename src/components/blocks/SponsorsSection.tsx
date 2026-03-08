@@ -1,6 +1,7 @@
 import { Handshake, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
+import { colorWithAlpha } from "@/lib/color-utils";
 
 interface Sponsor {
   name: string;
@@ -20,7 +21,7 @@ const SponsorsSection = ({ sponsors, accentColor, isPreview = false, lang }: { s
       <div className="absolute inset-0 bg-gradient-to-b from-card to-card/80" />
       <div className="relative max-w-4xl mx-auto px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${color}15` }}>
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(color, 0.15) }}>
             <Handshake className="w-6 h-6" style={{ color }} />
           </div>
           <h2 className="font-display text-2xl md:text-3xl text-foreground">{l("sponsors")}</h2>
