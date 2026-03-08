@@ -387,11 +387,8 @@ const ConfigurePage = () => {
                   {form.menuSelection && (
                     <p className="text-xs font-body text-muted-foreground mt-3 opacity-70">
                       {t("configure.menuDietaryPreview")}
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                    </p>
+                  )}
                 </div>
               )}
             </div>
