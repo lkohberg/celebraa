@@ -46,7 +46,7 @@ const PartyDivider = ({ color }: { color: string }) => (
   </div>
 );
 
-const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean }) => {
+const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = false }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean; isDemo?: boolean }) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
   const [showContent, setShowContent] = useState(!showIntro);

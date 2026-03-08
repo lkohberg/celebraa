@@ -25,7 +25,7 @@ const CorpDivider = ({ color }: { color: string }) => (
   </div>
 );
 
-const PremiumCorporatePage = ({ event, theme, lang, showIntro = true }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean }) => {
+const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = false }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean; isDemo?: boolean }) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
   const [showContent, setShowContent] = useState(!showIntro);
