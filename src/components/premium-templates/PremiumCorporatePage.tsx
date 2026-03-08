@@ -11,6 +11,7 @@ import HotelRecommendations from "./HotelRecommendations";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 import { PremiumEventData, PremiumTheme } from "./PremiumWeddingPage";
+import { colorWithAlpha } from "@/lib/color-utils";
 
 import FoodMenuSection from "@/components/blocks/FoodMenuSection";
 import AgendaSection from "@/components/blocks/AgendaSection";
