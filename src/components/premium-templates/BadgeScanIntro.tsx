@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/i18n";
 
@@ -13,6 +13,11 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
   const { t } = useTranslation();
   const [phase, setPhase] = useState<"idle" | "scanning" | "verified" | "done">("idle");
   const accent = accentColor || "hsl(220, 50%, 45%)";
+
+  // Pre-compute random values so they don't change on re-render
+  const qrPattern = useMemo(() => Array.from({ length: 25 }, () => Math.random() > 0.4), []);
+  const barWidths = useMemo(() => Array.from({ length: 30 }, () => 2 + Math.random() * 3), []);
+  const barHeights = useMemo(() => Array.from({ length: 30 }, () => 16 + Math.random() * 16), []);
 
   const handleClick = () => {
     if (phase !== "idle") return;
