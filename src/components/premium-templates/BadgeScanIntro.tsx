@@ -143,7 +143,23 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
                 ))}
               </div>
 
-              {/* NFC pulse rings during scanning */}
+              {/* Barcode scan line */}
+              <AnimatePresence>
+                {phase === "scanning" && (
+                  <motion.div
+                    className="absolute left-6 right-6 h-[2px] z-20"
+                    style={{
+                      background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
+                      boxShadow: `0 0 12px ${accent}80, 0 0 30px ${accent}40`,
+                    }}
+                    initial={{ bottom: "24px" }}
+                    animate={{ bottom: ["56px", "24px", "56px"] }}
+                    transition={{ duration: 1.2, ease: "easeInOut" }}
+                  />
+                )}
+              </AnimatePresence>
+
+              {/* NFC pulse rings */}
               <AnimatePresence>
                 {phase === "scanning" && (
                   <>
@@ -157,16 +173,6 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
                         transition={{ duration: 1, delay, repeat: 1, ease: "easeOut" }}
                       />
                     ))}
-                    {/* Border glow trace */}
-                    <motion.div
-                      className="absolute inset-0 rounded-xl z-20 pointer-events-none"
-                      style={{
-                        boxShadow: `inset 0 0 20px ${accent}30, 0 0 30px ${accent}25`,
-                      }}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: [0, 0.8, 0.4, 0.8, 0] }}
-                      transition={{ duration: 1.4, ease: "easeInOut" }}
-                    />
                   </>
                 )}
               </AnimatePresence>
