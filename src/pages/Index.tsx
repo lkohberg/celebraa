@@ -20,7 +20,7 @@ import { LayoutDashboard, LogIn, LogOut, Menu, X } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { t } = useTranslation();
   const [demoTemplate, setDemoTemplate] = useState<Template | null>(null);
   const [demoOpen, setDemoOpen] = useState(false);
