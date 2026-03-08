@@ -458,8 +458,8 @@ const OrderFlow = () => {
                               <div className="flex items-center gap-2">
                                 <span className="text-lg">{block.icon}</span>
                                 <div>
-                                  <p className="font-body text-sm font-medium text-foreground">{block.name}</p>
-                                  <p className="font-body text-[11px] text-muted-foreground">{block.description}</p>
+                                  <p className="font-body text-sm font-medium text-foreground">{t(block.nameKey)}</p>
+                                  <p className="font-body text-[11px] text-muted-foreground">{t(block.descriptionKey)}</p>
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
