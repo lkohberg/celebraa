@@ -160,9 +160,9 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true }: { event: P
             </section>
           )}
 
-          {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} />}
+          {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} lang={lang} />}
           {hasBlock("-dresscode") && (
-            <DressCodeMFSection dressCode={{ male: blockCfg.dresscode_male, female: blockCfg.dresscode_female }} accentColor={accent} />
+            <DressCodeMFSection dressCode={{ male: blockCfg.dresscode_male, female: blockCfg.dresscode_female }} accentColor={accent} lang={lang} />
           )}
 
           {/* Details */}
