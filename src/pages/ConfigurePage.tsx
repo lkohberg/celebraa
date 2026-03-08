@@ -215,7 +215,7 @@ const ConfigurePage = () => {
         window.open(checkoutData.url, "_blank");
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Fehler beim Erstellen";
+      const message = err instanceof Error ? err.message : t("order.createError");
       toast.error(message);
     }
   };
