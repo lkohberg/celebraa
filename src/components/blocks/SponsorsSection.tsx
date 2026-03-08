@@ -1,4 +1,4 @@
-import { Handshake } from "lucide-react";
+import { Handshake, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface Sponsor {
@@ -19,13 +19,28 @@ const SponsorsSection = ({ sponsors, accentColor, isPreview = false }: { sponsor
   const color = accentColor || "hsl(220, 50%, 35%)";
 
   return (
-    <section className="py-20 bg-card">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="text-center mb-12">
-          <Handshake className="w-6 h-6 mx-auto mb-3" style={{ color }} />
+    <section className="py-20 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-card to-card/80" />
+
+      <div className="relative max-w-4xl mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${color}15` }}>
+            <Handshake className="w-6 h-6" style={{ color }} />
+          </div>
           <h2 className="font-display text-2xl md:text-3xl text-foreground">Unsere Sponsoren</h2>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="flex items-center justify-center gap-3 mt-3">
+            <div className="w-12 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+            <Sparkles className="w-3 h-3" style={{ color, opacity: 0.4 }} />
+            <div className="w-12 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+          </div>
+        </motion.div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
           {displaySponsors.map((sponsor, i) => (
             <motion.a
               key={i}
@@ -34,9 +49,10 @@ const SponsorsSection = ({ sponsors, accentColor, isPreview = false }: { sponsor
               rel="noopener noreferrer"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
+              whileHover={{ scale: 1.05, y: -2 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="flex items-center justify-center p-6 bg-background rounded-xl border border-border hover:border-primary/30 transition-colors aspect-square"
+              className="flex items-center justify-center p-6 bg-background/80 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-border hover:shadow-md transition-all aspect-square"
             >
               {sponsor.logoUrl ? (
                 <img src={sponsor.logoUrl} alt={sponsor.name} className="max-w-full max-h-full object-contain" />

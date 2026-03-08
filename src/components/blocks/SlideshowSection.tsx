@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Camera } from "lucide-react";
+import { Camera, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const demoImages = [
@@ -21,32 +21,51 @@ const SlideshowSection = ({ images, accentColor }: { images?: string[]; accentCo
   }, [displayImages.length]);
 
   return (
-    <section className="py-20 bg-card">
-      <div className="max-w-3xl mx-auto px-4">
-        <div className="text-center mb-10">
-          <Camera className="w-6 h-6 mx-auto mb-3" style={{ color }} />
+    <section className="py-20 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-card to-background" />
+
+      <div className="relative max-w-3xl mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-10"
+        >
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: `${color}15` }}>
+            <Camera className="w-6 h-6" style={{ color }} />
+          </div>
           <h2 className="font-display text-2xl md:text-3xl text-foreground">Unsere Momente</h2>
-        </div>
-        <div className="relative aspect-[16/10] rounded-xl overflow-hidden shadow-lg">
+          <div className="flex items-center justify-center gap-3 mt-3">
+            <div className="w-12 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+            <Sparkles className="w-3 h-3" style={{ color, opacity: 0.4 }} />
+            <div className="w-12 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+          </div>
+        </motion.div>
+
+        <div className="relative aspect-[16/10] rounded-2xl overflow-hidden shadow-xl">
           <AnimatePresence mode="wait">
             <motion.img
               key={current}
               src={displayImages[current]}
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
-              initial={{ opacity: 0, scale: 1.05 }}
+              initial={{ opacity: 0, scale: 1.08 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8 }}
             />
           </AnimatePresence>
+          {/* Gradient overlay at bottom */}
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/30 to-transparent" />
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
             {displayImages.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`w-2 h-2 rounded-full transition-all ${i === current ? "bg-white scale-125" : "bg-white/50"}`}
-              />
+                className="transition-all duration-300"
+              >
+                <div className={`rounded-full transition-all duration-300 ${i === current ? "w-6 h-2 bg-white" : "w-2 h-2 bg-white/50"}`} />
+              </button>
             ))}
           </div>
         </div>

@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Eye } from "lucide-react";
+import { Eye, Sparkles, Star } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
-// Default hero images for templates
 import heroBirthdayNeon from "@/assets/hero-birthday-neon.jpg";
 import heroBirthdayGlamour from "@/assets/hero-birthday-glamour.jpg";
 import heroBirthdayGarden from "@/assets/hero-birthday-garden.jpg";
@@ -19,6 +18,7 @@ export interface Template {
   id: string;
   name: string;
   description: string;
+  tagline: string;
   eventType: "birthday" | "wedding" | "corporate";
   colors: { primary: string; secondary: string; accent: string };
   font: string;
@@ -33,7 +33,8 @@ export const templates: Template[] = [
   {
     id: "birthday-premium-neon",
     name: "Neon Party",
-    description: "Lebhaft und bunt mit Konfetti-Animation",
+    tagline: "Let's glow! 🌟",
+    description: "Lebhaft und farbenfroh — mit Konfetti-Regen, pulsierenden Neonfarben und einer Energie, die man sofort spürt. Perfekt für unvergessliche Partynächte.",
     eventType: "birthday",
     colors: { primary: "#FF6B9D", secondary: "#FFF0F5", accent: "#4D96FF" },
     font: "DM Sans",
@@ -45,7 +46,8 @@ export const templates: Template[] = [
   {
     id: "birthday-premium-glamour",
     name: "Glamour Night",
-    description: "Elegant und glamourös mit goldenen Akzenten",
+    tagline: "Shine bright ✨",
+    description: "Opulent und glamourös — goldene Akzente auf dunklem Samt, für Geburtstagsfeiern mit dem gewissen Wow-Faktor. Eleganz trifft auf Party.",
     eventType: "birthday",
     colors: { primary: "#D4AF37", secondary: "#0D0D0D", accent: "#F5F5DC" },
     font: "Playfair Display",
@@ -57,7 +59,8 @@ export const templates: Template[] = [
   {
     id: "birthday-premium-garden",
     name: "Garden Party",
-    description: "Frisch und natürlich für Outdoor-Feiern",
+    tagline: "Nature vibes 🌿",
+    description: "Frisch und natürlich — sanfte Grüntöne und organische Formen für entspannte Outdoor-Feiern im Grünen. Leichtigkeit pur.",
     eventType: "birthday",
     colors: { primary: "#6BCB77", secondary: "#F0F7F4", accent: "#2D6A4F" },
     font: "Playfair Display",
@@ -70,7 +73,8 @@ export const templates: Template[] = [
   {
     id: "wedding-premium-floral",
     name: "Floral Romance",
-    description: "Romantisch mit Envelope-Animation und Countdown",
+    tagline: "Zeitlose Romantik 🌸",
+    description: "Romantisch und verträumt — zarte Blütenfarben, eine Envelope-Animation und jedes Detail liebevoll gestaltet. Für Hochzeiten wie aus dem Märchen.",
     eventType: "wedding",
     colors: { primary: "#5C7A5C", secondary: "#FFF8F0", accent: "#D4A0A0" },
     font: "Playfair Display",
@@ -82,7 +86,8 @@ export const templates: Template[] = [
   {
     id: "wedding-premium-classic",
     name: "Classic Elegance",
-    description: "Zeitlos elegant mit allen Premium-Features",
+    tagline: "Ewige Schönheit 💍",
+    description: "Zeitlos und raffiniert — warme Crème- und Goldtöne, klassische Typografie und eine Eleganz, die nie aus der Mode kommt.",
     eventType: "wedding",
     colors: { primary: "#8B7355", secondary: "#FAF5EF", accent: "#1A1A1A" },
     font: "Playfair Display",
@@ -94,7 +99,8 @@ export const templates: Template[] = [
   {
     id: "wedding-premium-modern",
     name: "Modern Love",
-    description: "Modern und minimalistisch mit Premium-Features",
+    tagline: "Puristisch schön 🤍",
+    description: "Minimalistisch und modern — klare Linien, reduzierte Farbpalette und goldene Akzente. Für Paare, die Understatement lieben.",
     eventType: "wedding",
     colors: { primary: "#2C2C2C", secondary: "#FAFAFA", accent: "#C9A96E" },
     font: "DM Sans",
@@ -107,7 +113,8 @@ export const templates: Template[] = [
   {
     id: "corporate-premium-executive",
     name: "Executive Summit",
-    description: "Premium Business-Event mit Agenda und Speaker",
+    tagline: "Business Excellence 📊",
+    description: "Professionell und repräsentativ — Navy-Blau trifft auf goldene Akzente. Ideal für Konferenzen, Summits und hochkarätige Business-Events.",
     eventType: "corporate",
     colors: { primary: "#1E3A5F", secondary: "#F8F9FA", accent: "#C8A951" },
     font: "DM Sans",
@@ -119,7 +126,8 @@ export const templates: Template[] = [
   {
     id: "corporate-premium-tech",
     name: "Tech Conference",
-    description: "Modern und technisch für IT-Events",
+    tagline: "Innovation trifft Design 💡",
+    description: "Futuristisch und dynamisch — dunkle Basis mit leuchtenden Akzentfarben. Für Tech-Events, Hackathons und digitale Konferenzen.",
     eventType: "corporate",
     colors: { primary: "#6C63FF", secondary: "#0F0E17", accent: "#FF6584" },
     font: "DM Sans",
@@ -131,7 +139,8 @@ export const templates: Template[] = [
   {
     id: "corporate-premium-gala",
     name: "Gala Evening",
-    description: "Luxuriös und exklusiv für Gala-Abende",
+    tagline: "Black Tie Glamour 🥂",
+    description: "Luxuriös und exklusiv — Gold auf Schwarz, für Gala-Abende, Award-Ceremonies und Events, die beeindrucken sollen.",
     eventType: "corporate",
     colors: { primary: "#C8A951", secondary: "#0D0D0D", accent: "#F5F5DC" },
     font: "Playfair Display",
@@ -153,60 +162,65 @@ const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
 
   return (
     <motion.div
-      whileHover={{ y: -4, scale: 1.02 }}
+      whileHover={{ y: -6, scale: 1.02 }}
       transition={{ duration: 0.25 }}
-      className="group bg-card rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-300"
+      className="group bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 border border-border/30"
     >
+      {/* Image area */}
       <div
-        className="h-48 relative overflow-hidden"
+        className="h-52 relative overflow-hidden"
         style={{ background: template.previewGradient }}
       >
         {template.defaultHeroImage && (
           <img
             src={template.defaultHeroImage}
             alt={template.name}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         )}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center px-6">
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+
+        {/* Template name overlay */}
+        <div className="absolute inset-0 flex items-end justify-between p-5">
+          <div>
             <p
-              className="text-2xl font-bold opacity-80"
+              className="text-2xl font-bold text-white"
               style={{
                 fontFamily: template.font,
-                color: template.defaultHeroImage ? "#FFFFFF" : template.colors.primary,
-                textShadow: template.defaultHeroImage ? "0 2px 8px rgba(0,0,0,0.5)" : undefined,
+                textShadow: "0 2px 10px rgba(0,0,0,0.4)",
               }}
             >
               {template.name}
             </p>
+            <p className="text-white/70 text-xs font-body mt-0.5">{template.tagline}</p>
           </div>
-        </div>
-        <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/5 transition-colors duration-300" />
-      </div>
-
-      <div className="p-6">
-        <div className="flex items-center gap-2 mb-1">
-          <h3 className="font-display text-lg font-semibold text-foreground">
-            {template.name}
-          </h3>
-          <Badge variant="outline" className="font-body text-[10px] px-1.5 py-0">
+          <Badge className="bg-white/20 backdrop-blur-sm text-white border-white/20 font-body text-[10px]">
             ab €19
           </Badge>
         </div>
-        <p className="font-body text-sm text-muted-foreground mb-3">
+      </div>
+
+      {/* Content */}
+      <div className="p-5">
+        <p className="font-body text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-3">
           {template.description}
         </p>
+
+        {/* Feature chips */}
         {template.premiumFeatures && (
-          <div className="flex flex-wrap gap-1 mb-4">
-            {template.premiumFeatures.slice(0, 3).map((f) => (
-              <span key={f} className="text-[10px] font-body bg-secondary text-muted-foreground px-2 py-0.5 rounded-full">
+          <div className="flex flex-wrap gap-1.5 mb-5">
+            {template.premiumFeatures.slice(0, 4).map((f) => (
+              <span key={f} className="text-[10px] font-body bg-secondary/80 text-muted-foreground px-2 py-0.5 rounded-full flex items-center gap-1">
+                <Sparkles className="w-2.5 h-2.5" />
                 {f}
               </span>
             ))}
           </div>
         )}
-        <div className="flex gap-3">
+
+        {/* Actions */}
+        <div className="flex gap-2">
           <Button
             size="sm"
             className="flex-1 font-body"
@@ -217,9 +231,11 @@ const TemplateCard = ({ template, onSelect, onDemo }: TemplateCardProps) => {
           <Button
             size="sm"
             variant="outline"
+            className="gap-1.5"
             onClick={() => onDemo(template)}
           >
             <Eye className="w-4 h-4" />
+            <span className="font-body text-xs">Demo</span>
           </Button>
         </div>
       </div>
