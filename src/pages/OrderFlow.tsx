@@ -79,9 +79,13 @@ const OrderFlow = () => {
     heroImageUrl: template?.defaultHeroImage || "",
     storyText: "",
     ceremonyLocation: "",
-    ceremonyAddress: "",
+    ceremonyStreet: "",
+    ceremonyZip: "",
+    ceremonyCity: "",
     receptionLocation: "",
-    receptionAddress: "",
+    receptionStreet: "",
+    receptionZip: "",
+    receptionCity: "",
   });
 
   // Block selection
