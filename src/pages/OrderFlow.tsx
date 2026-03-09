@@ -231,7 +231,7 @@ const OrderFlow = () => {
         event_date: form.date,
         event_time: form.time,
         location_name: form.locationName || null,
-        address: form.address || null,
+        address: combineAddr(form.street, form.zip, form.city),
         description: form.description || null,
         template_id: template.id,
         primary_color: form.primaryColor,
