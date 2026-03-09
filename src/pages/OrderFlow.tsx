@@ -605,19 +605,29 @@ const OrderFlow = () => {
                         <Label className="font-body text-sm">{t("order.ceremonyVenue")}</Label>
                         <Input value={form.ceremonyLocation} onChange={(e) => setForm(prev => ({ ...prev, ceremonyLocation: e.target.value }))} className="font-body mt-1" />
                       </div>
-                      <div>
-                        <Label className="font-body text-sm">{t("order.ceremonyAddress")}</Label>
-                        <Input value={form.ceremonyAddress} onChange={(e) => setForm(prev => ({ ...prev, ceremonyAddress: e.target.value }))} className="font-body mt-1" />
+                    </div>
+                    <div>
+                      <Label className="font-body text-sm">{t("order.ceremonyAddress")}</Label>
+                      <div className="grid grid-cols-1 gap-2 mt-1">
+                        <Input placeholder={t("configure.streetPlaceholder")} value={form.ceremonyStreet} onChange={(e) => setForm(prev => ({ ...prev, ceremonyStreet: e.target.value }))} className="font-body" />
+                        <div className="grid grid-cols-3 gap-2">
+                          <Input placeholder={t("configure.zipPlaceholder")} value={form.ceremonyZip} onChange={(e) => setForm(prev => ({ ...prev, ceremonyZip: e.target.value }))} className="font-body" />
+                          <Input placeholder={t("configure.cityPlaceholder")} value={form.ceremonyCity} onChange={(e) => setForm(prev => ({ ...prev, ceremonyCity: e.target.value }))} className="font-body col-span-2" />
+                        </div>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label className="font-body text-sm">{t("order.receptionVenue")}</Label>
-                        <Input value={form.receptionLocation} onChange={(e) => setForm(prev => ({ ...prev, receptionLocation: e.target.value }))} className="font-body mt-1" />
-                      </div>
-                      <div>
-                        <Label className="font-body text-sm">{t("order.receptionAddress")}</Label>
-                        <Input value={form.receptionAddress} onChange={(e) => setForm(prev => ({ ...prev, receptionAddress: e.target.value }))} className="font-body mt-1" />
+                    <div>
+                      <Label className="font-body text-sm">{t("order.receptionVenue")}</Label>
+                      <Input value={form.receptionLocation} onChange={(e) => setForm(prev => ({ ...prev, receptionLocation: e.target.value }))} className="font-body mt-1" />
+                    </div>
+                    <div>
+                      <Label className="font-body text-sm">{t("order.receptionAddress")}</Label>
+                      <div className="grid grid-cols-1 gap-2 mt-1">
+                        <Input placeholder={t("configure.streetPlaceholder")} value={form.receptionStreet} onChange={(e) => setForm(prev => ({ ...prev, receptionStreet: e.target.value }))} className="font-body" />
+                        <div className="grid grid-cols-3 gap-2">
+                          <Input placeholder={t("configure.zipPlaceholder")} value={form.receptionZip} onChange={(e) => setForm(prev => ({ ...prev, receptionZip: e.target.value }))} className="font-body" />
+                          <Input placeholder={t("configure.cityPlaceholder")} value={form.receptionCity} onChange={(e) => setForm(prev => ({ ...prev, receptionCity: e.target.value }))} className="font-body col-span-2" />
+                        </div>
                       </div>
                     </div>
                   </div>
