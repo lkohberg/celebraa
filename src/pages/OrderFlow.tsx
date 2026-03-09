@@ -66,7 +66,9 @@ const OrderFlow = () => {
     date: "",
     time: "",
     locationName: "",
-    address: "",
+    street: "",
+    zip: "",
+    city: "",
     description: "",
     rsvpEnabled: true,
     rsvpDeadline: "",
@@ -77,9 +79,13 @@ const OrderFlow = () => {
     heroImageUrl: template?.defaultHeroImage || "",
     storyText: "",
     ceremonyLocation: "",
-    ceremonyAddress: "",
+    ceremonyStreet: "",
+    ceremonyZip: "",
+    ceremonyCity: "",
     receptionLocation: "",
-    receptionAddress: "",
+    receptionStreet: "",
+    receptionZip: "",
+    receptionCity: "",
   });
 
   // Block selection
@@ -169,6 +175,11 @@ const OrderFlow = () => {
     }
   };
 
+  const combineAddr = (street: string, zip: string, city: string) => {
+    const parts = [street, [zip, city].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+    return parts || null;
+  };
+
   const buildPreviewEvent = () => {
     const selected = allSelectedBlocks;
     const hasBlock = (suffix: string) => selected.some(id => id.endsWith(suffix));
@@ -180,12 +191,12 @@ const OrderFlow = () => {
       event_time: form.time || "18:00",
       description: form.description || null,
       location_name: form.locationName || null,
-      address: form.address || null,
+      address: combineAddr(form.street, form.zip, form.city),
       story_text: hasBlock("-story") ? (blockConfig.story_text || t("preview.fallback.storyText")) : null,
       ceremony_location: form.ceremonyLocation || null,
-      ceremony_address: form.ceremonyAddress || null,
+      ceremony_address: combineAddr(form.ceremonyStreet, form.ceremonyZip, form.ceremonyCity),
       reception_location: form.receptionLocation || null,
-      reception_address: form.receptionAddress || null,
+      reception_address: combineAddr(form.receptionStreet, form.receptionZip, form.receptionCity),
       hero_image_url: form.heroImageUrl || template.defaultHeroImage || null,
       rsvp_enabled: form.rsvpEnabled,
       rsvp_deadline: form.rsvpDeadline || null,
@@ -220,7 +231,7 @@ const OrderFlow = () => {
         event_date: form.date,
         event_time: form.time,
         location_name: form.locationName || null,
-        address: form.address || null,
+        address: combineAddr(form.street, form.zip, form.city),
         description: form.description || null,
         template_id: template.id,
         primary_color: form.primaryColor,
@@ -240,9 +251,9 @@ const OrderFlow = () => {
         hero_image_url: form.heroImageUrl || null,
         story_text: blockConfig.story_text || form.storyText || null,
         ceremony_location: form.ceremonyLocation || null,
-        ceremony_address: form.ceremonyAddress || null,
+        ceremony_address: combineAddr(form.ceremonyStreet, form.ceremonyZip, form.ceremonyCity),
         reception_location: form.receptionLocation || null,
-        reception_address: form.receptionAddress || null,
+        reception_address: combineAddr(form.receptionStreet, form.receptionZip, form.receptionCity),
         dress_code: allSelectedBlocks.some(id => id.endsWith("-dresscode")) ? (blockConfig.dresscode_male ? `${t("preview.fallback.dressMale")}: ${blockConfig.dresscode_male} | ${t("preview.fallback.dressFemale")}: ${blockConfig.dresscode_female}` : "Elegant") : null,
         schedule: blockConfig.schedule?.length > 0 ? blockConfig.schedule : null,
         hotel_recommendations: blockConfig.hotels?.length > 0 ? blockConfig.hotels : null,
@@ -573,7 +584,13 @@ const OrderFlow = () => {
                 </div>
                 <div>
                   <Label className="font-body">{t("order.address")}</Label>
-                  <Input placeholder={t("configure.addressPlaceholder")} value={form.address} onChange={(e) => setForm(prev => ({ ...prev, address: e.target.value }))} className="font-body mt-1" />
+                  <div className="grid grid-cols-1 gap-2 mt-1">
+                    <Input placeholder={t("configure.streetPlaceholder")} value={form.street} onChange={(e) => setForm(prev => ({ ...prev, street: e.target.value }))} className="font-body" />
+                    <div className="grid grid-cols-3 gap-2">
+                      <Input placeholder={t("configure.zipPlaceholder")} value={form.zip} onChange={(e) => setForm(prev => ({ ...prev, zip: e.target.value }))} className="font-body" />
+                      <Input placeholder={t("configure.cityPlaceholder")} value={form.city} onChange={(e) => setForm(prev => ({ ...prev, city: e.target.value }))} className="font-body col-span-2" />
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <Label className="font-body">{t("order.description")}</Label>
@@ -588,19 +605,29 @@ const OrderFlow = () => {
                         <Label className="font-body text-sm">{t("order.ceremonyVenue")}</Label>
                         <Input value={form.ceremonyLocation} onChange={(e) => setForm(prev => ({ ...prev, ceremonyLocation: e.target.value }))} className="font-body mt-1" />
                       </div>
-                      <div>
-                        <Label className="font-body text-sm">{t("order.ceremonyAddress")}</Label>
-                        <Input value={form.ceremonyAddress} onChange={(e) => setForm(prev => ({ ...prev, ceremonyAddress: e.target.value }))} className="font-body mt-1" />
+                    </div>
+                    <div>
+                      <Label className="font-body text-sm">{t("order.ceremonyAddress")}</Label>
+                      <div className="grid grid-cols-1 gap-2 mt-1">
+                        <Input placeholder={t("configure.streetPlaceholder")} value={form.ceremonyStreet} onChange={(e) => setForm(prev => ({ ...prev, ceremonyStreet: e.target.value }))} className="font-body" />
+                        <div className="grid grid-cols-3 gap-2">
+                          <Input placeholder={t("configure.zipPlaceholder")} value={form.ceremonyZip} onChange={(e) => setForm(prev => ({ ...prev, ceremonyZip: e.target.value }))} className="font-body" />
+                          <Input placeholder={t("configure.cityPlaceholder")} value={form.ceremonyCity} onChange={(e) => setForm(prev => ({ ...prev, ceremonyCity: e.target.value }))} className="font-body col-span-2" />
+                        </div>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label className="font-body text-sm">{t("order.receptionVenue")}</Label>
-                        <Input value={form.receptionLocation} onChange={(e) => setForm(prev => ({ ...prev, receptionLocation: e.target.value }))} className="font-body mt-1" />
-                      </div>
-                      <div>
-                        <Label className="font-body text-sm">{t("order.receptionAddress")}</Label>
-                        <Input value={form.receptionAddress} onChange={(e) => setForm(prev => ({ ...prev, receptionAddress: e.target.value }))} className="font-body mt-1" />
+                    <div>
+                      <Label className="font-body text-sm">{t("order.receptionVenue")}</Label>
+                      <Input value={form.receptionLocation} onChange={(e) => setForm(prev => ({ ...prev, receptionLocation: e.target.value }))} className="font-body mt-1" />
+                    </div>
+                    <div>
+                      <Label className="font-body text-sm">{t("order.receptionAddress")}</Label>
+                      <div className="grid grid-cols-1 gap-2 mt-1">
+                        <Input placeholder={t("configure.streetPlaceholder")} value={form.receptionStreet} onChange={(e) => setForm(prev => ({ ...prev, receptionStreet: e.target.value }))} className="font-body" />
+                        <div className="grid grid-cols-3 gap-2">
+                          <Input placeholder={t("configure.zipPlaceholder")} value={form.receptionZip} onChange={(e) => setForm(prev => ({ ...prev, receptionZip: e.target.value }))} className="font-body" />
+                          <Input placeholder={t("configure.cityPlaceholder")} value={form.receptionCity} onChange={(e) => setForm(prev => ({ ...prev, receptionCity: e.target.value }))} className="font-body col-span-2" />
+                        </div>
                       </div>
                     </div>
                   </div>
