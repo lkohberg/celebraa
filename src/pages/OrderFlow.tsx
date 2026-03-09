@@ -584,7 +584,13 @@ const OrderFlow = () => {
                 </div>
                 <div>
                   <Label className="font-body">{t("order.address")}</Label>
-                  <Input placeholder={t("configure.addressPlaceholder")} value={form.address} onChange={(e) => setForm(prev => ({ ...prev, address: e.target.value }))} className="font-body mt-1" />
+                  <div className="grid grid-cols-1 gap-2 mt-1">
+                    <Input placeholder={t("configure.streetPlaceholder")} value={form.street} onChange={(e) => setForm(prev => ({ ...prev, street: e.target.value }))} className="font-body" />
+                    <div className="grid grid-cols-3 gap-2">
+                      <Input placeholder={t("configure.zipPlaceholder")} value={form.zip} onChange={(e) => setForm(prev => ({ ...prev, zip: e.target.value }))} className="font-body" />
+                      <Input placeholder={t("configure.cityPlaceholder")} value={form.city} onChange={(e) => setForm(prev => ({ ...prev, city: e.target.value }))} className="font-body col-span-2" />
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <Label className="font-body">{t("order.description")}</Label>
