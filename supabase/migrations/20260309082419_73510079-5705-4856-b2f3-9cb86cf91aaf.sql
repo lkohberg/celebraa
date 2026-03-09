@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Guests can update their RSVP" ON public.guests;
