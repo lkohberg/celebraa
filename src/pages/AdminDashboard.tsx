@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe, Archive, Radio, AlertTriangle, Rocket, Music, Trash2 } from "lucide-react";
+import { ArrowLeft, BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Copy, Check, Globe, Archive, Radio, AlertTriangle, Rocket, Music, Trash2, Upload, FileText, X, Package } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/i18n/eventLabels";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -67,7 +67,8 @@ const AdminDashboard = () => {
       </div>
     );
   }
-  const pendingEvents = events?.filter(e => (e as any).status === "pending_review") || [];
+
+  const pendingEvents = events?.filter(e => e.status === "pending_review") || [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -96,7 +97,29 @@ const AdminDashboard = () => {
               <AlertTriangle className="w-5 h-5 text-amber-500" /> {t("admin.pendingReview")} ({pendingEvents.length})
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {pendingEvents.map((event) => (<PendingEventCard key={event.id} event={event} />))}
+              {pendingEvents.map((event) => (
+                <Card key={event.id} className="border-amber-300 bg-amber-50/50 dark:bg-amber-950/10 cursor-pointer hover:shadow-card-hover transition-all" onClick={() => setSelectedEventId(event.id)}>
+                  <CardContent className="p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-display font-semibold text-foreground text-sm truncate mr-2">{event.title}</h3>
+                      <Badge className="bg-amber-500 text-white text-[10px]">{t("admin.orderTag")}</Badge>
+                    </div>
+                    <p className="font-body text-xs text-muted-foreground">{event.contact_first_name} {event.contact_last_name} · {event.contact_email}</p>
+                    <p className="font-body text-xs text-muted-foreground">{new Date(event.event_date).toLocaleDateString("de-AT")} · /{event.event_link}</p>
+                    <div className="space-y-1">
+                      <p className="font-body text-xs font-semibold text-foreground">{t("admin.manualBlocks")}:</p>
+                      {((event.selected_blocks || []) as string[]).filter(id => isManualBlock(id)).map(id => {
+                        const block = blocks.find(b => b.id === id);
+                        return block ? (
+                          <div key={id} className="font-body text-xs text-muted-foreground flex items-center gap-1">
+                            <span>{block.icon}</span> {t(block.nameKey)}
+                          </div>
+                        ) : null;
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         )}
@@ -115,9 +138,14 @@ const AdminDashboard = () => {
                   <CardContent className="p-3 sm:p-4">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-display font-semibold text-foreground text-sm sm:text-base truncate mr-2">{event.title}</h3>
-                      <Badge variant={event.status === "paid" || event.status === "live" ? "default" : event.status === "pending_review" ? "secondary" : "outline"} className={event.status === "draft" ? "border-amber-500 text-amber-600" : event.status === "pending_review" ? "bg-amber-100 text-amber-700" : ""}>
-                        {event.status === "draft" ? t("dashboard.status.unpaid") : event.status === "pending_review" ? t("admin.inProgress") : t(`dashboard.status.${event.status}`)}
-                      </Badge>
+                      <div className="flex items-center gap-1">
+                        {event.status === "pending_review" && (
+                          <Badge className="bg-amber-500 text-white text-[10px]">{t("admin.orderTag")}</Badge>
+                        )}
+                        <Badge variant={event.status === "paid" || event.status === "live" ? "default" : event.status === "pending_review" ? "secondary" : "outline"} className={event.status === "draft" ? "border-amber-500 text-amber-600" : event.status === "pending_review" ? "bg-amber-100 text-amber-700" : ""}>
+                          {event.status === "draft" ? t("dashboard.status.unpaid") : event.status === "pending_review" ? t("admin.inProgress") : t(`dashboard.status.${event.status}`)}
+                        </Badge>
+                      </div>
                     </div>
                     <p className="font-body text-xs sm:text-sm text-muted-foreground">
                       {new Date(event.event_date).toLocaleDateString("de-AT")} · /{event.event_link}
@@ -143,52 +171,147 @@ const AdminDashboard = () => {
   );
 };
 
-const PendingEventCard = ({ event }: { event: any }) => {
+/* ─── Admin Fulfillment Panel ─── */
+const AdminFulfillmentPanel = ({ event }: { event: any }) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
   const [publishing, setPublishing] = useState(false);
+
   const selectedBlocks = (event.selected_blocks || []) as string[];
   const manualBlocksList = selectedBlocks.filter(id => isManualBlock(id));
+  const blockConfig = (event.block_config || {}) as Record<string, any>;
+  const uploadedFiles = (blockConfig._admin_files || []) as { name: string; url: string; blockId?: string; uploadedAt: string }[];
 
-  const handlePublish = async () => {
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `${event.id}/${Date.now()}-${file.name}`;
+      const { error: uploadError } = await supabase.storage.from("event-assets").upload(path, file);
+      if (uploadError) throw uploadError;
+      const { data: urlData } = supabase.storage.from("event-assets").getPublicUrl(path);
+
+      const newFiles = [...uploadedFiles, { name: file.name, url: urlData.publicUrl, uploadedAt: new Date().toISOString() }];
+      const newConfig = { ...blockConfig, _admin_files: newFiles };
+      const { error } = await supabase.from("events").update({ block_config: newConfig } as any).eq("id", event.id);
+      if (error) throw error;
+      toast.success(t("admin.fileUploaded"));
+      queryClient.invalidateQueries({ queryKey: ["my-events"] });
+    } catch {
+      toast.error(t("admin.fileUploadError"));
+    }
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleDeleteFile = async (index: number) => {
+    const file = uploadedFiles[index];
+    try {
+      // Extract path from URL
+      const urlParts = file.url.split("/event-assets/");
+      if (urlParts[1]) {
+        await supabase.storage.from("event-assets").remove([decodeURIComponent(urlParts[1])]);
+      }
+      const newFiles = uploadedFiles.filter((_, i) => i !== index);
+      const newConfig = { ...blockConfig, _admin_files: newFiles };
+      await supabase.from("events").update({ block_config: newConfig } as any).eq("id", event.id);
+      toast.success(t("admin.fileDeleted"));
+      queryClient.invalidateQueries({ queryKey: ["my-events"] });
+    } catch {
+      toast.error(t("admin.fileUploadError"));
+    }
+  };
+
+  const handleGoLive = async () => {
+    if (!confirm(t("admin.goLiveConfirm"))) return;
     setPublishing(true);
     try {
       const { error } = await supabase.from("events").update({ status: "live" } as any).eq("id", event.id);
       if (error) throw error;
-      toast.success(`Event "${event.title}" ${t("admin.publishSuccess")}`);
-      window.location.reload();
-    } catch { toast.error(t("admin.publishError")); }
+      toast.success(t("admin.eventLive"));
+      queryClient.invalidateQueries({ queryKey: ["my-events"] });
+    } catch {
+      toast.error(t("admin.eventLiveError"));
+    }
     setPublishing(false);
   };
 
   return (
-    <Card className="border-amber-300 bg-amber-50/50 dark:bg-amber-950/10">
-      <CardContent className="p-4 space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="font-display font-semibold text-foreground text-sm truncate mr-2">{event.title}</h3>
-          <Badge className="bg-amber-100 text-amber-700 text-[10px]">{t("admin.pending")}</Badge>
-        </div>
-        <p className="font-body text-xs text-muted-foreground">{event.contact_first_name} {event.contact_last_name} · {event.contact_email}</p>
-        <p className="font-body text-xs text-muted-foreground">{new Date(event.event_date).toLocaleDateString("de-AT")} · /{event.event_link}</p>
-        <div className="space-y-1">
-          <p className="font-body text-xs font-semibold text-foreground">{t("admin.manualBlocks")}:</p>
+    <div className="space-y-6">
+      {/* Manual blocks info */}
+      {manualBlocksList.length > 0 ? (
+        <div className="space-y-2">
+          <p className="font-body text-sm font-semibold text-foreground">{t("admin.manualBlocks")}:</p>
           {manualBlocksList.map(id => {
             const block = blocks.find(b => b.id === id);
             return block ? (
-              <div key={id} className="font-body text-xs text-muted-foreground flex items-center gap-1">
-                <span>{block.icon}</span> {t(block.nameKey)}
-                {block.requiresManualWork && <span className="text-amber-600">– {block.manualWorkDescriptionKey ? t(block.manualWorkDescriptionKey) : ""}</span>}
+              <div key={id} className="flex items-center gap-2 p-2 rounded-md bg-secondary/50">
+                <span className="text-lg">{block.icon}</span>
+                <span className="font-body text-sm text-foreground">{t(block.nameKey)}</span>
+                {block.manualWorkDescriptionKey && (
+                  <span className="font-body text-xs text-muted-foreground">– {t(block.manualWorkDescriptionKey)}</span>
+                )}
               </div>
             ) : null;
           })}
         </div>
-        <Button className="w-full font-body font-semibold" size="sm" disabled={publishing} onClick={handlePublish}>
-          <Rocket className="w-4 h-4 mr-2" /> {publishing ? t("admin.publishing") : t("admin.publishNow")}
+      ) : (
+        <p className="font-body text-sm text-muted-foreground">{t("admin.noManualBlocks")}</p>
+      )}
+
+      {/* File upload */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="font-body text-sm font-semibold text-foreground">{t("admin.uploadedFiles")}</p>
+          <div>
+            <input ref={fileInputRef} type="file" className="hidden" onChange={handleUpload} accept="image/*,audio/*,.pdf,.zip" />
+            <Button variant="outline" size="sm" className="font-body" disabled={uploading} onClick={() => fileInputRef.current?.click()}>
+              <Upload className="w-4 h-4 mr-2" /> {uploading ? "..." : t("admin.uploadFile")}
+            </Button>
+          </div>
+        </div>
+
+        {uploadedFiles.length === 0 ? (
+          <p className="font-body text-xs text-muted-foreground italic">{t("admin.noFilesYet")}</p>
+        ) : (
+          <div className="space-y-2">
+            {uploadedFiles.map((file, i) => (
+              <div key={i} className="flex items-center justify-between p-2 rounded-md border border-border bg-card">
+                <a href={file.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 min-w-0 hover:text-primary transition-colors">
+                  <FileText className="w-4 h-4 shrink-0 text-muted-foreground" />
+                  <span className="font-body text-sm truncate">{file.name}</span>
+                </a>
+                <Button variant="ghost" size="sm" className="h-7 w-7 p-0 shrink-0" onClick={() => handleDeleteFile(i)}>
+                  <X className="w-3 h-3 text-destructive" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Action buttons */}
+      <div className="flex items-center gap-3 pt-4 border-t border-border">
+        <Button variant="outline" className="font-body" asChild>
+          <a href={`/${event.event_link}`} target="_blank" rel="noopener noreferrer">
+            <Eye className="w-4 h-4 mr-2" /> {t("admin.preview")}
+          </a>
         </Button>
-      </CardContent>
-    </Card>
+        {event.status !== "live" && (
+          <Button className="font-body font-semibold" disabled={publishing} onClick={handleGoLive}>
+            <Rocket className="w-4 h-4 mr-2" /> {publishing ? t("admin.publishing") : t("admin.goLive")}
+          </Button>
+        )}
+      </div>
+    </div>
   );
 };
 
+/* ─── Event Detail ─── */
 const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: boolean; onDeleted?: () => void }) => {
   const { t } = useTranslation();
   const { data: guests } = useEventGuests(event.id);
@@ -219,11 +342,12 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
   const qrScans = analytics?.filter((a) => a.event_type === "qr_scan").length || 0;
 
   const handlePublish = async () => {
+    if (!confirm(t("admin.goLiveConfirm"))) return;
     try {
       const { error } = await supabase.from("events").update({ status: "live" } as any).eq("id", event.id);
       if (error) throw error;
       toast.success(t("admin.eventLive"));
-      window.location.reload();
+      queryClient.invalidateQueries({ queryKey: ["my-events"] });
     } catch { toast.error(t("admin.eventLiveError")); }
   };
 
@@ -248,8 +372,13 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
   const hasMusicBlock = selectedBlocks.some((id: string) => id.endsWith("-musicpro") || id.endsWith("-musicwish"));
 
   return (
-    <Tabs defaultValue="analytics">
+    <Tabs defaultValue={isAdmin ? "fulfillment" : "analytics"}>
       <TabsList className="mb-6 w-full sm:w-auto flex-wrap">
+        {isAdmin && (
+          <TabsTrigger value="fulfillment" className="font-body text-xs sm:text-sm">
+            <Package className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">{t("admin.fulfillmentTab")}</span>
+          </TabsTrigger>
+        )}
         <TabsTrigger value="analytics" className="font-body text-xs sm:text-sm">
           <BarChart3 className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">{t("dashboard.analytics")}</span>
         </TabsTrigger>
@@ -265,6 +394,23 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
           <CreditCard className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">{t("dashboard.payment")}</span>
         </TabsTrigger>
       </TabsList>
+
+      {/* Admin Fulfillment Tab */}
+      {isAdmin && (
+        <TabsContent value="fulfillment">
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-display text-lg flex items-center gap-2">
+                {event.status === "pending_review" && <Badge className="bg-amber-500 text-white">{t("admin.orderTag")}</Badge>}
+                {event.title}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AdminFulfillmentPanel event={event} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      )}
 
       <TabsContent value="analytics">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
