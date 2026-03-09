@@ -175,6 +175,11 @@ const OrderFlow = () => {
     }
   };
 
+  const combineAddr = (street: string, zip: string, city: string) => {
+    const parts = [street, [zip, city].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+    return parts || null;
+  };
+
   const buildPreviewEvent = () => {
     const selected = allSelectedBlocks;
     const hasBlock = (suffix: string) => selected.some(id => id.endsWith(suffix));
