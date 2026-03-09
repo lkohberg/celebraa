@@ -28,7 +28,6 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
   const barHeights = useMemo(() => Array.from({ length: 30 }, () => 16 + Math.random() * 16), []);
 
   // Typewriter text for "ACCESS GRANTED"
-  const grantedText = "ACCESS GRANTED";
   const [typedChars, setTypedChars] = useState(0);
 
   useEffect(() => {
@@ -94,14 +93,10 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
               phase === "entering"
                 ? { y: 400, opacity: 0 }
                 : phase === "verified"
-                ? { y: 0, opacity: 1, scale: [1, 1.03, 1] }
-                : { y: 0, opacity: 1 }
+                  ? { y: 0, opacity: 1, scale: [1, 1.03, 1] }
+                  : { y: 0, opacity: 1 }
             }
-            transition={
-              phase === "entering"
-                ? { duration: 0 }
-                : { duration: 0.7, ease: [0.2, 0.8, 0.3, 1] }
-            }
+            transition={phase === "entering" ? { duration: 0 } : { duration: 0.7, ease: [0.2, 0.8, 0.3, 1] }}
           >
             {/* Card */}
             <div
@@ -137,7 +132,10 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
               {/* Event title */}
               <div className="text-center px-6">
                 <p className="text-white/40 text-[9px] tracking-[0.3em] uppercase mb-2">Event Access</p>
-                <p className="text-white text-base font-semibold tracking-wide leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                <p
+                  className="text-white text-base font-semibold tracking-wide leading-tight"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                >
                   {title}
                 </p>
               </div>
@@ -146,7 +144,11 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
               <div className="flex justify-center mt-6">
                 <div className="grid grid-cols-5 gap-1 opacity-20">
                   {qrPattern.map((filled, i) => (
-                    <div key={i} className="w-3 h-3 rounded-sm" style={{ backgroundColor: filled ? "white" : "transparent" }} />
+                    <div
+                      key={i}
+                      className="w-3 h-3 rounded-sm"
+                      style={{ backgroundColor: filled ? "white" : "transparent" }}
+                    />
                   ))}
                 </div>
               </div>
@@ -209,7 +211,15 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
                       animate={{ scale: [0, 1.2, 1] }}
                       transition={{ duration: 0.4, ease: "easeOut" }}
                     >
-                      <motion.svg viewBox="0 0 24 24" className="w-8 h-8" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <motion.svg
+                        viewBox="0 0 24 24"
+                        className="w-8 h-8"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <motion.path
                           d="M5 13l4 4L19 7"
                           initial={{ pathLength: 0 }}
@@ -235,7 +245,8 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
               <motion.div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: "linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 60%, transparent 80%)",
+                  background:
+                    "linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 60%, transparent 80%)",
                   backgroundSize: "200% 100%",
                 }}
                 animate={{ backgroundPosition: ["-200% 0", "200% 0"] }}
@@ -247,16 +258,17 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
             <motion.div
               className="absolute -inset-4 rounded-2xl -z-10"
               style={{
-                background: phase === "verified"
-                   ? `radial-gradient(ellipse at center, hsla(140, 70%, 45%, 0.15), transparent 70%)`
-                   : `radial-gradient(ellipse at center, ${colorWithAlpha(accent, 0.15)}, transparent 70%)`,
+                background:
+                  phase === "verified"
+                    ? `radial-gradient(ellipse at center, hsla(140, 70%, 45%, 0.15), transparent 70%)`
+                    : `radial-gradient(ellipse at center, ${colorWithAlpha(accent, 0.15)}, transparent 70%)`,
               }}
               animate={
                 phase === "scanning"
                   ? { opacity: [0.5, 1, 0.5] }
                   : phase === "verified"
-                  ? { opacity: 1 }
-                  : { opacity: 0.3 }
+                    ? { opacity: 1 }
+                    : { opacity: 0.3 }
               }
               transition={{ duration: 1, repeat: phase === "scanning" ? Infinity : 0 }}
             />
