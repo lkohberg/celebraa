@@ -27,8 +27,8 @@ const CustomIllustrationSection = ({ imageUrl, accentColor, lang, blockConfig }:
         </motion.div>
 
         <motion.div initial={{ opacity: 0, scale: 0.98 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="rounded-2xl overflow-hidden shadow-xl">
-          {imageUrl ? (
-            <img src={imageUrl} alt="Custom Illustration" className="w-full h-72 object-cover" />
+          {finalImageUrl ? (
+            <img src={finalImageUrl} alt="Custom Illustration" className="w-full h-72 object-cover" />
           ) : (
             <div className="w-full h-72 bg-gradient-to-br from-secondary via-card to-secondary flex items-center justify-center relative">
               <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(${color} 1px, transparent 1px)`, backgroundSize: "16px 16px" }} />

@@ -257,7 +257,7 @@ const OrderFlow = () => {
         dress_code: allSelectedBlocks.some(id => id.endsWith("-dresscode")) ? (blockConfig.dresscode_male ? `${t("preview.fallback.dressMale")}: ${blockConfig.dresscode_male} | ${t("preview.fallback.dressFemale")}: ${blockConfig.dresscode_female}` : "Elegant") : null,
         schedule: blockConfig.schedule?.length > 0 ? blockConfig.schedule : null,
         hotel_recommendations: blockConfig.hotels?.length > 0 ? blockConfig.hotels : null,
-        block_config: blockConfig,
+        block_config: { ...blockConfig, _manual_info: manualInfo },
         languages: ["de"],
       };
 

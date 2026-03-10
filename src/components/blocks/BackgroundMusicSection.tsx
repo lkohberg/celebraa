@@ -3,14 +3,15 @@ import { Volume2, VolumeX } from "lucide-react";
 import { motion } from "framer-motion";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 
-const BackgroundMusicSection = ({ accentColor, lang, isDemo = false, musicUrl }: { accentColor?: string; lang?: EventLang; isDemo?: boolean; musicUrl?: string }) => {
+const BackgroundMusicSection = ({ accentColor, lang, isDemo = false, musicUrl, blockConfig }: { accentColor?: string; lang?: EventLang; isDemo?: boolean; musicUrl?: string; blockConfig?: any }) => {
   const color = accentColor || "hsl(38, 65%, 50%)";
   const label = lang ? getEventLabel(lang, "bgMusicActive") : "♪ Hintergrundmusik aktiv";
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const autoStarted = useRef(false);
 
-  const src = musicUrl || "/demo.mp3";
+  // Use admin-uploaded music if available
+  const src = blockConfig?.music_url || musicUrl || "/demo.mp3";
 
   const startMusic = useCallback(() => {
     if (!audioRef.current) {
