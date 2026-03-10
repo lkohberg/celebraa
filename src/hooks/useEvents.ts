@@ -4,17 +4,23 @@ import type { Tables, TablesInsert } from "@/integrations/supabase/types";
 
 type PublicEvent = Tables<"events">;
 
-export const useMyEvents = () =>
+export const useMyEvents = (userId?: string, isAdmin?: boolean) =>
   useQuery({
-    queryKey: ["my-events"],
+    queryKey: ["my-events", userId, isAdmin],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("events")
         .select("*")
         .order("created_at", { ascending: false });
+      // Non-admin users only see their own events
+      if (!isAdmin && userId) {
+        query = query.eq("user_id", userId);
+      }
+      const { data, error } = await query;
       if (error) throw error;
       return data;
     },
+    enabled: !!userId,
   });
 
 export const useEventByLink = (eventLink: string) =>
