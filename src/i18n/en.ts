@@ -418,6 +418,18 @@ const en = {
   "admin.editEvent": "Edit event",
   "admin.orderTag": "Order",
   "admin.noManualBlocks": "No manual blocks – event can go live directly.",
+  "admin.customerReference": "Customer reference image",
+  "admin.customerNote": "Customer note",
+  "admin.uploadIllustration": "Upload illustration",
+  "admin.replaceIllustration": "Replace illustration",
+  "admin.illustrationUploaded": "Illustration uploaded successfully",
+  "admin.noIllustrationYet": "No illustration uploaded yet.",
+  "admin.uploaded": "Uploaded",
+  "admin.uploadMusic": "Upload music",
+  "admin.replaceMusic": "Replace music",
+  "admin.musicUploaded": "Music uploaded successfully",
+  "admin.noMusicYet": "No music uploaded yet.",
+  "admin.musicReady": "Music ready",
 
   // Block Configurator
   "blockConfig.story": "Our Story / About Us",
