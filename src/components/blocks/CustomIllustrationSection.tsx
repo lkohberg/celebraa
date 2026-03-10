@@ -3,9 +3,11 @@ import { motion } from "framer-motion";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 import { colorWithAlpha } from "@/lib/color-utils";
 
-const CustomIllustrationSection = ({ imageUrl, accentColor, lang }: { imageUrl?: string; accentColor?: string; lang?: EventLang }) => {
+const CustomIllustrationSection = ({ imageUrl, accentColor, lang, blockConfig }: { imageUrl?: string; accentColor?: string; lang?: EventLang; blockConfig?: any }) => {
   const color = accentColor || "hsl(38, 65%, 50%)";
   const l = (key: string) => lang ? getEventLabel(lang, key) : getEventLabel("de", key);
+  // Use admin-uploaded illustration if available
+  const finalImageUrl = blockConfig?.illustration_url || imageUrl;
 
   return (
     <section className="py-20 relative overflow-hidden">
