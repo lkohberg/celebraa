@@ -176,27 +176,72 @@ const AdminDashboard = () => {
 const AdminFulfillmentPanel = ({ event }: { event: any }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState(false);
+  const illustrationInputRef = useRef<HTMLInputElement>(null);
+  const musicInputRef = useRef<HTMLInputElement>(null);
+  const genericInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState<string | null>(null);
   const [publishing, setPublishing] = useState(false);
 
   const selectedBlocks = (event.selected_blocks || []) as string[];
   const manualBlocksList = selectedBlocks.filter(id => isManualBlock(id));
   const blockConfig = (event.block_config || {}) as Record<string, any>;
+  const manualInfo = (blockConfig._manual_info || {}) as Record<string, string>;
   const uploadedFiles = (blockConfig._admin_files || []) as { name: string; url: string; blockId?: string; uploadedAt: string }[];
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const hasIllustration = manualBlocksList.some(id => id.endsWith("-illustration"));
+  const hasBgMusic = manualBlocksList.some(id => id.endsWith("-bgmusic"));
+
+  const uploadToStorage = async (file: File) => {
+    const path = `${event.id}/${Date.now()}-${file.name}`;
+    const { error: uploadError } = await supabase.storage.from("event-assets").upload(path, file);
+    if (uploadError) throw uploadError;
+    const { data: urlData } = supabase.storage.from("event-assets").getPublicUrl(path);
+    return urlData.publicUrl;
+  };
+
+  const handleIllustrationUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setUploading(true);
+    setUploading("illustration");
     try {
-      const ext = file.name.split(".").pop();
-      const path = `${event.id}/${Date.now()}-${file.name}`;
-      const { error: uploadError } = await supabase.storage.from("event-assets").upload(path, file);
-      if (uploadError) throw uploadError;
-      const { data: urlData } = supabase.storage.from("event-assets").getPublicUrl(path);
+      const url = await uploadToStorage(file);
+      const newConfig = { ...blockConfig, illustration_url: url };
+      const { error } = await supabase.from("events").update({ block_config: newConfig } as any).eq("id", event.id);
+      if (error) throw error;
+      toast.success(t("admin.illustrationUploaded"));
+      queryClient.invalidateQueries({ queryKey: ["my-events"] });
+    } catch {
+      toast.error(t("admin.fileUploadError"));
+    }
+    setUploading(null);
+    if (illustrationInputRef.current) illustrationInputRef.current.value = "";
+  };
 
-      const newFiles = [...uploadedFiles, { name: file.name, url: urlData.publicUrl, uploadedAt: new Date().toISOString() }];
+  const handleMusicUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading("music");
+    try {
+      const url = await uploadToStorage(file);
+      const newConfig = { ...blockConfig, music_url: url };
+      const { error } = await supabase.from("events").update({ block_config: newConfig } as any).eq("id", event.id);
+      if (error) throw error;
+      toast.success(t("admin.musicUploaded"));
+      queryClient.invalidateQueries({ queryKey: ["my-events"] });
+    } catch {
+      toast.error(t("admin.fileUploadError"));
+    }
+    setUploading(null);
+    if (musicInputRef.current) musicInputRef.current.value = "";
+  };
+
+  const handleGenericUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading("generic");
+    try {
+      const url = await uploadToStorage(file);
+      const newFiles = [...uploadedFiles, { name: file.name, url, uploadedAt: new Date().toISOString() }];
       const newConfig = { ...blockConfig, _admin_files: newFiles };
       const { error } = await supabase.from("events").update({ block_config: newConfig } as any).eq("id", event.id);
       if (error) throw error;
@@ -205,14 +250,13 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
     } catch {
       toast.error(t("admin.fileUploadError"));
     }
-    setUploading(false);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+    setUploading(null);
+    if (genericInputRef.current) genericInputRef.current.value = "";
   };
 
   const handleDeleteFile = async (index: number) => {
     const file = uploadedFiles[index];
     try {
-      // Extract path from URL
       const urlParts = file.url.split("/event-assets/");
       if (urlParts[1]) {
         await supabase.storage.from("event-assets").remove([decodeURIComponent(urlParts[1])]);
@@ -243,11 +287,90 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
 
   return (
     <div className="space-y-6">
-      {/* Manual blocks info */}
+      {/* Manual blocks with customer data */}
       {manualBlocksList.length > 0 ? (
-        <div className="space-y-2">
+        <div className="space-y-4">
           <p className="font-body text-sm font-semibold text-foreground">{t("admin.manualBlocks")}:</p>
-          {manualBlocksList.map(id => {
+
+          {/* Illustration Block */}
+          {hasIllustration && (
+            <div className="rounded-lg border border-border bg-card p-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🎨</span>
+                <span className="font-body text-sm font-semibold text-foreground">{t("block.illustration")}</span>
+              </div>
+
+              {/* Customer reference image */}
+              {blockConfig.illustration_reference && (
+                <div>
+                  <p className="font-body text-xs text-muted-foreground mb-1">{t("admin.customerReference")}:</p>
+                  <img src={blockConfig.illustration_reference} alt="Reference" className="w-full max-w-sm h-40 object-cover rounded-lg border border-border" />
+                </div>
+              )}
+              {manualInfo[selectedBlocks.find(id => id.endsWith("-illustration")) || ""] && (
+                <div>
+                  <p className="font-body text-xs text-muted-foreground mb-1">{t("admin.customerNote")}:</p>
+                  <p className="font-body text-sm text-foreground bg-secondary/50 rounded-md p-2">{manualInfo[selectedBlocks.find(id => id.endsWith("-illustration")) || ""]}</p>
+                </div>
+              )}
+
+              {/* Admin finished illustration upload */}
+              <div>
+                <p className="font-body text-xs font-semibold text-foreground mb-1">{t("admin.uploadIllustration")}:</p>
+                {blockConfig.illustration_url ? (
+                  <div className="relative max-w-sm">
+                    <img src={blockConfig.illustration_url} alt="Illustration" className="w-full h-40 object-cover rounded-lg border-2 border-primary" />
+                    <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px]">{t("admin.uploaded")}</Badge>
+                  </div>
+                ) : (
+                  <p className="font-body text-xs text-muted-foreground italic mb-1">{t("admin.noIllustrationYet")}</p>
+                )}
+                <input ref={illustrationInputRef} type="file" className="hidden" onChange={handleIllustrationUpload} accept="image/*" />
+                <Button variant="outline" size="sm" className="font-body mt-2" disabled={uploading === "illustration"} onClick={() => illustrationInputRef.current?.click()}>
+                  <Upload className="w-4 h-4 mr-2" /> {uploading === "illustration" ? "..." : blockConfig.illustration_url ? t("admin.replaceIllustration") : t("admin.uploadIllustration")}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Background Music Block */}
+          {hasBgMusic && (
+            <div className="rounded-lg border border-border bg-card p-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🎶</span>
+                <span className="font-body text-sm font-semibold text-foreground">{t("block.bgmusic")}</span>
+              </div>
+
+              {/* Customer music description */}
+              {manualInfo[selectedBlocks.find(id => id.endsWith("-bgmusic")) || ""] && (
+                <div>
+                  <p className="font-body text-xs text-muted-foreground mb-1">{t("admin.customerNote")}:</p>
+                  <p className="font-body text-sm text-foreground bg-secondary/50 rounded-md p-2">{manualInfo[selectedBlocks.find(id => id.endsWith("-bgmusic")) || ""]}</p>
+                </div>
+              )}
+
+              {/* Admin MP3 upload */}
+              <div>
+                <p className="font-body text-xs font-semibold text-foreground mb-1">{t("admin.uploadMusic")}:</p>
+                {blockConfig.music_url ? (
+                  <div className="flex items-center gap-2 p-2 bg-secondary/50 rounded-md">
+                    <Music className="w-4 h-4 text-primary" />
+                    <span className="font-body text-sm text-foreground truncate">{t("admin.musicReady")}</span>
+                    <audio controls src={blockConfig.music_url} className="h-8 ml-auto" />
+                  </div>
+                ) : (
+                  <p className="font-body text-xs text-muted-foreground italic mb-1">{t("admin.noMusicYet")}</p>
+                )}
+                <input ref={musicInputRef} type="file" className="hidden" onChange={handleMusicUpload} accept="audio/*" />
+                <Button variant="outline" size="sm" className="font-body mt-2" disabled={uploading === "music"} onClick={() => musicInputRef.current?.click()}>
+                  <Upload className="w-4 h-4 mr-2" /> {uploading === "music" ? "..." : blockConfig.music_url ? t("admin.replaceMusic") : t("admin.uploadMusic")}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Other manual blocks */}
+          {manualBlocksList.filter(id => !id.endsWith("-illustration") && !id.endsWith("-bgmusic")).map(id => {
             const block = blocks.find(b => b.id === id);
             return block ? (
               <div key={id} className="flex items-center gap-2 p-2 rounded-md bg-secondary/50">
@@ -255,6 +378,9 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
                 <span className="font-body text-sm text-foreground">{t(block.nameKey)}</span>
                 {block.manualWorkDescriptionKey && (
                   <span className="font-body text-xs text-muted-foreground">– {t(block.manualWorkDescriptionKey)}</span>
+                )}
+                {manualInfo[id] && (
+                  <span className="font-body text-xs text-muted-foreground ml-2">| {manualInfo[id]}</span>
                 )}
               </div>
             ) : null;
@@ -264,14 +390,14 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
         <p className="font-body text-sm text-muted-foreground">{t("admin.noManualBlocks")}</p>
       )}
 
-      {/* File upload */}
+      {/* Generic file upload */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <p className="font-body text-sm font-semibold text-foreground">{t("admin.uploadedFiles")}</p>
           <div>
-            <input ref={fileInputRef} type="file" className="hidden" onChange={handleUpload} accept="image/*,audio/*,.pdf,.zip" />
-            <Button variant="outline" size="sm" className="font-body" disabled={uploading} onClick={() => fileInputRef.current?.click()}>
-              <Upload className="w-4 h-4 mr-2" /> {uploading ? "..." : t("admin.uploadFile")}
+            <input ref={genericInputRef} type="file" className="hidden" onChange={handleGenericUpload} accept="image/*,audio/*,.pdf,.zip" />
+            <Button variant="outline" size="sm" className="font-body" disabled={uploading === "generic"} onClick={() => genericInputRef.current?.click()}>
+              <Upload className="w-4 h-4 mr-2" /> {uploading === "generic" ? "..." : t("admin.uploadFile")}
             </Button>
           </div>
         </div>

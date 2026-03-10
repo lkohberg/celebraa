@@ -114,7 +114,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
             </button>
           </section>
 
-          {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} />}
+          {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} />}
 
           {/* Countdown */}
           <section id="countdown" className="py-24 relative overflow-hidden" style={{ backgroundColor: "hsl(30, 30%, 98%)" }}>
@@ -143,7 +143,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
             </section>
           )}
 
-          {hasBlock("-illustration") && <CustomIllustrationSection accentColor={accent} lang={lang} />}
+          {hasBlock("-illustration") && <CustomIllustrationSection accentColor={accent} lang={lang} blockConfig={blockCfg} />}
           {hasBlock("-slideshow") && <SlideshowSection accentColor={accent} lang={lang} />}
 
           {/* Schedule Timeline */}

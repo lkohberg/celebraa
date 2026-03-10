@@ -418,6 +418,18 @@ const en = {
   "admin.editEvent": "Edit event",
   "admin.orderTag": "Order",
   "admin.noManualBlocks": "No manual blocks – event can go live directly.",
+  "admin.customerReference": "Customer reference image",
+  "admin.customerNote": "Customer note",
+  "admin.uploadIllustration": "Upload illustration",
+  "admin.replaceIllustration": "Replace illustration",
+  "admin.illustrationUploaded": "Illustration uploaded successfully",
+  "admin.noIllustrationYet": "No illustration uploaded yet.",
+  "admin.uploaded": "Uploaded",
+  "admin.uploadMusic": "Upload music",
+  "admin.replaceMusic": "Replace music",
+  "admin.musicUploaded": "Music uploaded successfully",
+  "admin.noMusicYet": "No music uploaded yet.",
+  "admin.musicReady": "Music ready",
 
   // Block Configurator
   "blockConfig.story": "Our Story / About Us",
@@ -693,9 +705,16 @@ const en = {
   "block.desc.dresscode.party": "Dress code separated men/women.",
   "block.desc.wishlist.party": "Things/links the host wishes for.",
 
-  "block.manual.bgmusic": "Please upload your desired song or share the title with us.",
+  "block.manual.bgmusic": "Describe the song or music style you'd like.",
   "block.manual.musicpro": "We'll set up the DJ export function for you.",
-  "block.manual.illustration": "Please share the name and address of your venue so we can create the illustration.",
+  "block.manual.illustration": "Upload a photo of what you'd like illustrated.",
+
+  // Order flow - manual block fields
+  "order.illustrationUploadHint": "Upload a photo of what you'd like us to illustrate.",
+  "order.illustrationUploadCta": "Upload photo (e.g. venue, couple, motif)",
+  "order.illustrationDescPlaceholder": "Briefly describe what should be illustrated...",
+  "order.bgMusicHint": "Describe what music should play when the page opens.",
+  "order.bgMusicPlaceholder": "e.g. 'Perfect' by Ed Sheeran, or calm piano music...",
 
   // Package names
   "pkg.wedding.starter": "Wedding Starter",

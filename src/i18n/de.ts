@@ -419,6 +419,18 @@ const de = {
   "admin.editEvent": "Event bearbeiten",
   "admin.orderTag": "Auftrag",
   "admin.noManualBlocks": "Keine manuellen Blöcke – Event kann direkt live gestellt werden.",
+  "admin.customerReference": "Referenzbild vom Kunden",
+  "admin.customerNote": "Notiz vom Kunden",
+  "admin.uploadIllustration": "Illustration hochladen",
+  "admin.replaceIllustration": "Illustration ersetzen",
+  "admin.illustrationUploaded": "Illustration erfolgreich hochgeladen",
+  "admin.noIllustrationYet": "Noch keine Illustration hochgeladen.",
+  "admin.uploaded": "Hochgeladen",
+  "admin.uploadMusic": "Musik hochladen",
+  "admin.replaceMusic": "Musik ersetzen",
+  "admin.musicUploaded": "Musik erfolgreich hochgeladen",
+  "admin.noMusicYet": "Noch keine Musik hochgeladen.",
+  "admin.musicReady": "Musik bereit",
 
   // Block Configurator
   "blockConfig.story": "Our Story / Über uns",
@@ -694,9 +706,16 @@ const de = {
   "block.desc.dresscode.party": "Dresscode getrennt Männer/Frauen.",
   "block.desc.wishlist.party": "Dinge/Links, die sich der Host wünscht.",
 
-  "block.manual.bgmusic": "Bitte lade deinen gewünschten Song hoch oder teile uns den Titel mit.",
+  "block.manual.bgmusic": "Beschreibe den gewünschten Song oder Musikstil.",
   "block.manual.musicpro": "Wir richten die DJ-Export-Funktion für dich ein.",
-  "block.manual.illustration": "Bitte teile uns den Namen und die Adresse deiner Location mit, damit wir die Illustration erstellen können.",
+  "block.manual.illustration": "Lade ein Foto deiner Location hoch, damit wir die Illustration erstellen können.",
+
+  // Order flow - manual block fields
+  "order.illustrationUploadHint": "Lade ein Foto hoch, von dem du eine Illustration haben möchtest.",
+  "order.illustrationUploadCta": "Foto hochladen (z.B. Location, Paar, Motiv)",
+  "order.illustrationDescPlaceholder": "Beschreibe kurz, was illustriert werden soll...",
+  "order.bgMusicHint": "Beschreibe welche Musik beim Öffnen der Seite spielen soll.",
+  "order.bgMusicPlaceholder": "z.B. 'Perfect' von Ed Sheeran, oder ruhige Klaviermusik...",
 
   // Package names
   "pkg.wedding.starter": "Hochzeit Starter",
