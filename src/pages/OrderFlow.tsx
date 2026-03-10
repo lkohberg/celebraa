@@ -496,19 +496,95 @@ const OrderFlow = () => {
                       <p className="font-body text-xs text-muted-foreground">
                         {t("order.manualHint")}
                       </p>
-                      {manualBlocks.map(block => (
-                        <div key={block.id}>
-                          <Label className="font-body text-sm">{block.icon} {t(block.nameKey)}</Label>
-                          <p className="font-body text-xs text-muted-foreground mb-1">{block.manualWorkDescriptionKey ? t(block.manualWorkDescriptionKey) : ""}</p>
-                          <Textarea
-                            placeholder={t("order.manualPlaceholder")}
-                            value={manualInfo[block.id] || ""}
-                            onChange={(e) => setManualInfo(prev => ({ ...prev, [block.id]: e.target.value }))}
-                            className="font-body mt-1"
-                            rows={2}
-                          />
-                        </div>
-                      ))}
+                      {manualBlocks.map(block => {
+                        const isIllustration = block.id.endsWith("-illustration");
+                        const isBgMusic = block.id.endsWith("-bgmusic");
+
+                        if (isIllustration) {
+                          return (
+                            <div key={block.id}>
+                              <Label className="font-body text-sm">{block.icon} {t(block.nameKey)}</Label>
+                              <p className="font-body text-xs text-muted-foreground mb-2">{t("order.illustrationUploadHint")}</p>
+                              <div
+                                className={`relative rounded-lg border-2 border-dashed transition-colors cursor-pointer overflow-hidden ${
+                                  blockConfig.illustration_reference ? "border-primary" : "border-border hover:border-primary/50"
+                                }`}
+                                onClick={() => {
+                                  const input = document.createElement("input");
+                                  input.type = "file";
+                                  input.accept = "image/*";
+                                  input.onchange = (e) => {
+                                    const file = (e.target as HTMLInputElement).files?.[0];
+                                    if (file && file.type.startsWith("image/")) {
+                                      const reader = new FileReader();
+                                      reader.onload = (ev) => {
+                                        setBlockConfig((prev: any) => ({ ...prev, illustration_reference: ev.target?.result as string }));
+                                      };
+                                      reader.readAsDataURL(file);
+                                    }
+                                  };
+                                  input.click();
+                                }}
+                              >
+                                {blockConfig.illustration_reference ? (
+                                  <div className="relative">
+                                    <img src={blockConfig.illustration_reference} alt="Reference" className="w-full h-40 object-cover rounded-md" />
+                                    <button
+                                      type="button"
+                                      className="absolute top-2 right-2 bg-background/80 backdrop-blur rounded-full p-1 hover:bg-background"
+                                      onClick={(e) => { e.stopPropagation(); setBlockConfig((prev: any) => ({ ...prev, illustration_reference: undefined })); }}
+                                    >
+                                      <X className="w-4 h-4 text-foreground" />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="flex flex-col items-center justify-center py-8 px-4">
+                                    <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+                                    <p className="text-sm font-body text-muted-foreground text-center">{t("order.illustrationUploadCta")}</p>
+                                  </div>
+                                )}
+                              </div>
+                              <Textarea
+                                placeholder={t("order.illustrationDescPlaceholder")}
+                                value={manualInfo[block.id] || ""}
+                                onChange={(e) => setManualInfo(prev => ({ ...prev, [block.id]: e.target.value }))}
+                                className="font-body mt-2"
+                                rows={2}
+                              />
+                            </div>
+                          );
+                        }
+
+                        if (isBgMusic) {
+                          return (
+                            <div key={block.id}>
+                              <Label className="font-body text-sm">{block.icon} {t(block.nameKey)}</Label>
+                              <p className="font-body text-xs text-muted-foreground mb-1">{t("order.bgMusicHint")}</p>
+                              <Textarea
+                                placeholder={t("order.bgMusicPlaceholder")}
+                                value={manualInfo[block.id] || ""}
+                                onChange={(e) => setManualInfo(prev => ({ ...prev, [block.id]: e.target.value }))}
+                                className="font-body mt-1"
+                                rows={2}
+                              />
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <div key={block.id}>
+                            <Label className="font-body text-sm">{block.icon} {t(block.nameKey)}</Label>
+                            <p className="font-body text-xs text-muted-foreground mb-1">{block.manualWorkDescriptionKey ? t(block.manualWorkDescriptionKey) : ""}</p>
+                            <Textarea
+                              placeholder={t("order.manualPlaceholder")}
+                              value={manualInfo[block.id] || ""}
+                              onChange={(e) => setManualInfo(prev => ({ ...prev, [block.id]: e.target.value }))}
+                              className="font-body mt-1"
+                              rows={2}
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
