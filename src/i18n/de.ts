@@ -419,6 +419,18 @@ const de = {
   "admin.editEvent": "Event bearbeiten",
   "admin.orderTag": "Auftrag",
   "admin.noManualBlocks": "Keine manuellen Blöcke – Event kann direkt live gestellt werden.",
+  "admin.customerReference": "Referenzbild vom Kunden",
+  "admin.customerNote": "Notiz vom Kunden",
+  "admin.uploadIllustration": "Illustration hochladen",
+  "admin.replaceIllustration": "Illustration ersetzen",
+  "admin.illustrationUploaded": "Illustration erfolgreich hochgeladen",
+  "admin.noIllustrationYet": "Noch keine Illustration hochgeladen.",
+  "admin.uploaded": "Hochgeladen",
+  "admin.uploadMusic": "Musik hochladen",
+  "admin.replaceMusic": "Musik ersetzen",
+  "admin.musicUploaded": "Musik erfolgreich hochgeladen",
+  "admin.noMusicYet": "Noch keine Musik hochgeladen.",
+  "admin.musicReady": "Musik bereit",
 
   // Block Configurator
   "blockConfig.story": "Our Story / Über uns",
