@@ -224,6 +224,45 @@ export type Database = {
         }
         Relationships: []
       }
+      guest_photos: {
+        Row: {
+          created_at: string
+          event_id: string
+          guest_name: string | null
+          id: string
+          photo_url: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          guest_name?: string | null
+          id?: string
+          photo_url: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          guest_name?: string | null
+          id?: string
+          photo_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guest_photos_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guest_photos_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guests: {
         Row: {
           created_at: string

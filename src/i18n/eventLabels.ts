@@ -104,6 +104,11 @@ const labels: Record<EventLang, Labels> = {
     hotels: "Hotelempfehlungen",
     hotelsSubtitle: "Für Gäste mit längerer Anreise haben wir einige Hotels in der Nähe zusammengestellt.",
     hotelWebsite: "Zur Website",
+    uploadYourPhotos: "Teile deine Fotos",
+    uploadPhotosHint: "Lade deine schönsten Momente hoch!",
+    uploadPhoto: "Fotos hochladen",
+    photoUploaded: "📸 Foto hochgeladen!",
+    photosShared: "Fotos geteilt",
   },
   en: {
     weMarry: "We're getting married",
@@ -189,6 +194,11 @@ const labels: Record<EventLang, Labels> = {
     hotels: "Hotel Recommendations",
     hotelsSubtitle: "We've put together a selection of nearby hotels for guests traveling from afar.",
     hotelWebsite: "Visit website",
+    uploadYourPhotos: "Share your photos",
+    uploadPhotosHint: "Upload your best moments!",
+    uploadPhoto: "Upload photos",
+    photoUploaded: "📸 Photo uploaded!",
+    photosShared: "photos shared",
   },
   es: {
     weMarry: "Nos casamos",

@@ -144,7 +144,7 @@ const AdminDashboard = () => {
                           <Badge className="bg-amber-500 text-white text-[10px]">{t("admin.orderTag")}</Badge>
                         )}
                         <Badge variant={event.status === "paid" || event.status === "live" ? "default" : event.status === "pending_review" ? "secondary" : "outline"} className={event.status === "draft" ? "border-amber-500 text-amber-600" : event.status === "pending_review" ? "bg-amber-100 text-amber-700" : ""}>
-                          {event.status === "draft" ? t("dashboard.status.unpaid") : event.status === "pending_review" ? t("admin.inProgress") : t(`dashboard.status.${event.status}`)}
+                          {event.status === "pending_review" ? t("admin.orderTag") : event.status === "draft" ? t("dashboard.status.unpaid") : t(`dashboard.status.${event.status}`)}
                         </Badge>
                       </div>
                     </div>

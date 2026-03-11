@@ -483,6 +483,9 @@ const de = {
   "blockConfig.productNamePlaceholder": "Produktname",
   "blockConfig.productDescPlaceholder": "Beschreibung",
   "blockConfig.addProduct": "Produkt hinzufügen",
+  "blockConfig.productImages": "Produktfotos",
+  "blockConfig.addPhoto": "Foto",
+  "blockConfig.sponsorLogo": "Logo",
 
   // Template Card
   "templateCard.demoView": "Demo ansehen",
