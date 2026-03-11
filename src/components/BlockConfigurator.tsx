@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Upload, X } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
 interface BlockConfiguratorProps {
@@ -20,6 +20,41 @@ const Section = ({ title, icon, children }: { title: string; icon: string; child
     {children}
   </div>
 );
+
+const ImageUploadButton = ({ value, onChange, onRemove, label }: { value?: string; onChange: (base64: string) => void; onRemove: () => void; label: string }) => {
+  const handleClick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (ev) => onChange(ev.target?.result as string);
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
+  if (value) {
+    return (
+      <div className="relative w-16 h-16 rounded-md overflow-hidden border border-border">
+        <img src={value} alt="" className="w-full h-full object-cover" />
+        <button type="button" className="absolute top-0 right-0 bg-background/80 rounded-bl p-0.5" onClick={onRemove}>
+          <X className="w-3 h-3 text-foreground" />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <Button type="button" variant="outline" size="sm" className="font-body h-16 w-16 flex-col gap-1" onClick={handleClick}>
+      <Upload className="w-4 h-4 text-muted-foreground" />
+      <span className="text-[9px] text-muted-foreground">Logo</span>
+    </Button>
+  );
+};
 
 const BlockConfigurator = ({ selectedBlocks, blockConfig, setBlockConfig, category }: BlockConfiguratorProps) => {
   const { t } = useTranslation();
@@ -40,6 +75,41 @@ const BlockConfigurator = ({ selectedBlocks, blockConfig, setBlockConfig, catego
       arr[index] = { ...arr[index], [field]: value };
       return { ...prev, [key]: arr };
     });
+
+  const handleProductImageUpload = (index: number) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.multiple = true;
+    input.onchange = (e) => {
+      const files = (e.target as HTMLInputElement).files;
+      if (!files) return;
+      const currentImages = blockConfig.products?.[index]?.images || [];
+      Array.from(files).forEach(file => {
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const newImg = ev.target?.result as string;
+            setBlockConfig((prev: any) => {
+              const arr = [...(prev.products || [])];
+              arr[index] = { ...arr[index], images: [...(arr[index].images || []), newImg] };
+              return { ...prev, products: arr };
+            });
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    };
+    input.click();
+  };
+
+  const removeProductImage = (productIndex: number, imageIndex: number) => {
+    setBlockConfig((prev: any) => {
+      const arr = [...(prev.products || [])];
+      arr[productIndex] = { ...arr[productIndex], images: (arr[productIndex].images || []).filter((_: any, i: number) => i !== imageIndex) };
+      return { ...prev, products: arr };
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -231,13 +301,21 @@ const BlockConfigurator = ({ selectedBlocks, blockConfig, setBlockConfig, catego
       {hasBlock("-sponsors") && (
         <Section title={t("blockConfig.sponsors")} icon="🤝">
           {(blockConfig.sponsors || []).map((item: any, i: number) => (
-            <div key={i} className="flex gap-2 items-start">
-              <Input placeholder={t("blockConfig.companyPlaceholder")} value={item.name || ""} onChange={(e) => updateItem("sponsors", i, "name", e.target.value)} className="font-body flex-1" />
-              <Input placeholder={t("blockConfig.websitePlaceholder")} value={item.url || ""} onChange={(e) => updateItem("sponsors", i, "url", e.target.value)} className="font-body flex-1" />
+            <div key={i} className="flex gap-2 items-center">
+              <ImageUploadButton
+                value={item.logoUrl}
+                onChange={(base64) => updateItem("sponsors", i, "logoUrl", base64)}
+                onRemove={() => updateItem("sponsors", i, "logoUrl", "")}
+                label="Logo"
+              />
+              <div className="flex-1 flex gap-2">
+                <Input placeholder={t("blockConfig.companyPlaceholder")} value={item.name || ""} onChange={(e) => updateItem("sponsors", i, "name", e.target.value)} className="font-body flex-1" />
+                <Input placeholder={t("blockConfig.websitePlaceholder")} value={item.url || ""} onChange={(e) => updateItem("sponsors", i, "url", e.target.value)} className="font-body flex-1" />
+              </div>
               <Button variant="ghost" size="sm" onClick={() => removeItem("sponsors", i)}><Trash2 className="w-4 h-4 text-muted-foreground" /></Button>
             </div>
           ))}
-          <Button variant="outline" size="sm" className="font-body" onClick={() => addItem("sponsors", { name: "", url: "" })}>
+          <Button variant="outline" size="sm" className="font-body" onClick={() => addItem("sponsors", { name: "", url: "", logoUrl: "" })}>
             <Plus className="w-4 h-4 mr-1" /> {t("blockConfig.addSponsor")}
           </Button>
         </Section>
@@ -246,13 +324,39 @@ const BlockConfigurator = ({ selectedBlocks, blockConfig, setBlockConfig, catego
       {hasBlock("-products") && (
         <Section title={t("blockConfig.products")} icon="📦">
           {(blockConfig.products || []).map((item: any, i: number) => (
-            <div key={i} className="flex gap-2 items-start">
-              <Input placeholder={t("blockConfig.productNamePlaceholder")} value={item.name || ""} onChange={(e) => updateItem("products", i, "name", e.target.value)} className="font-body flex-1" />
-              <Input placeholder={t("blockConfig.productDescPlaceholder")} value={item.description || ""} onChange={(e) => updateItem("products", i, "description", e.target.value)} className="font-body flex-1" />
-              <Button variant="ghost" size="sm" onClick={() => removeItem("products", i)}><Trash2 className="w-4 h-4 text-muted-foreground" /></Button>
+            <div key={i} className="border border-border/50 rounded-lg p-3 space-y-3">
+              <div className="flex gap-2 items-start">
+                <Input placeholder={t("blockConfig.productNamePlaceholder")} value={item.name || ""} onChange={(e) => updateItem("products", i, "name", e.target.value)} className="font-body flex-1" />
+                <Button variant="ghost" size="sm" onClick={() => removeItem("products", i)}><Trash2 className="w-4 h-4 text-muted-foreground" /></Button>
+              </div>
+              <Textarea
+                placeholder={t("blockConfig.productDescPlaceholder")}
+                value={item.description || ""}
+                onChange={(e) => updateItem("products", i, "description", e.target.value)}
+                className="font-body"
+                rows={2}
+              />
+              {/* Product images */}
+              <div>
+                <Label className="font-body text-xs text-muted-foreground">{t("blockConfig.productImages")}</Label>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {(item.images || []).map((img: string, imgIdx: number) => (
+                    <div key={imgIdx} className="relative w-16 h-16 rounded-md overflow-hidden border border-border">
+                      <img src={img} alt="" className="w-full h-full object-cover" />
+                      <button type="button" className="absolute top-0 right-0 bg-background/80 rounded-bl p-0.5" onClick={() => removeProductImage(i, imgIdx)}>
+                        <X className="w-3 h-3 text-foreground" />
+                      </button>
+                    </div>
+                  ))}
+                  <Button type="button" variant="outline" size="sm" className="font-body h-16 w-16 flex-col gap-1" onClick={() => handleProductImageUpload(i)}>
+                    <Upload className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-[9px] text-muted-foreground">{t("blockConfig.addPhoto")}</span>
+                  </Button>
+                </div>
+              </div>
             </div>
           ))}
-          <Button variant="outline" size="sm" className="font-body" onClick={() => addItem("products", { name: "", description: "" })}>
+          <Button variant="outline" size="sm" className="font-body" onClick={() => addItem("products", { name: "", description: "", images: [] })}>
             <Plus className="w-4 h-4 mr-1" /> {t("blockConfig.addProduct")}
           </Button>
         </Section>
