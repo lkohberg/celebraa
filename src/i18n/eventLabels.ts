@@ -104,6 +104,11 @@ const labels: Record<EventLang, Labels> = {
     hotels: "Hotelempfehlungen",
     hotelsSubtitle: "Für Gäste mit längerer Anreise haben wir einige Hotels in der Nähe zusammengestellt.",
     hotelWebsite: "Zur Website",
+    uploadYourPhotos: "Teile deine Fotos",
+    uploadPhotosHint: "Lade deine schönsten Momente hoch!",
+    uploadPhoto: "Fotos hochladen",
+    photoUploaded: "📸 Foto hochgeladen!",
+    photosShared: "Fotos geteilt",
   },
   en: {
     weMarry: "We're getting married",
