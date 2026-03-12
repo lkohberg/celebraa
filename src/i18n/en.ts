@@ -188,6 +188,11 @@ const en = {
   "dashboard.deleteSuccess": "Event deleted",
   "dashboard.deleteError": "Error deleting event",
   "dashboard.createdBy": "Created by",
+  "dashboard.editEvent": "Edit event",
+  "dashboard.editSuccess": "Changes saved!",
+  "dashboard.editError": "Error saving changes",
+  "dashboard.cancel": "Cancel",
+  "dashboard.saveChanges": "Save changes",
 
   // Footer
   "footer.tagline": "Digital Event Invitations",

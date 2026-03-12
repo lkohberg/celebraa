@@ -187,6 +187,11 @@ const de = {
   "dashboard.deleteSuccess": "Event gelöscht",
   "dashboard.deleteError": "Fehler beim Löschen",
   "dashboard.createdBy": "Erstellt von",
+  "dashboard.editEvent": "Event bearbeiten",
+  "dashboard.editSuccess": "Änderungen gespeichert!",
+  "dashboard.editError": "Fehler beim Speichern",
+  "dashboard.cancel": "Abbrechen",
+  "dashboard.saveChanges": "Speichern",
 
   // Footer
   "footer.tagline": "Digitale Event-Einladungen",
