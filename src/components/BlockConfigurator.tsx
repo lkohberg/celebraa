@@ -321,6 +321,47 @@ const BlockConfigurator = ({ selectedBlocks, blockConfig, setBlockConfig, catego
         </Section>
       )}
 
+      {hasBlock("-slideshow") && (
+        <Section title={t("blockConfig.slideshow") || "Slideshow"} icon="📸">
+          <p className="font-body text-sm text-muted-foreground">{t("blockConfig.slideshowHint") || "Lade deine eigenen Fotos für die Slideshow hoch."}</p>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {(blockConfig.slideshow_images || []).map((img: string, i: number) => (
+              <div key={i} className="relative w-20 h-20 rounded-md overflow-hidden border border-border">
+                <img src={img} alt="" className="w-full h-full object-cover" />
+                <button type="button" className="absolute top-0 right-0 bg-background/80 rounded-bl p-0.5" onClick={() => {
+                  setBlockConfig((prev: any) => ({ ...prev, slideshow_images: (prev.slideshow_images || []).filter((_: any, idx: number) => idx !== i) }));
+                }}>
+                  <X className="w-3 h-3 text-foreground" />
+                </button>
+              </div>
+            ))}
+            <Button type="button" variant="outline" size="sm" className="font-body h-20 w-20 flex-col gap-1" onClick={() => {
+              const input = document.createElement("input");
+              input.type = "file";
+              input.accept = "image/*";
+              input.multiple = true;
+              input.onchange = (e) => {
+                const files = (e.target as HTMLInputElement).files;
+                if (!files) return;
+                Array.from(files).forEach(file => {
+                  if (file.type.startsWith("image/")) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                      setBlockConfig((prev: any) => ({ ...prev, slideshow_images: [...(prev.slideshow_images || []), ev.target?.result as string] }));
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                });
+              };
+              input.click();
+            }}>
+              <Upload className="w-4 h-4 text-muted-foreground" />
+              <span className="text-[9px] text-muted-foreground">{t("blockConfig.addPhoto")}</span>
+            </Button>
+          </div>
+        </Section>
+      )}
+
       {hasBlock("-products") && (
         <Section title={t("blockConfig.products")} icon="📦">
           {(blockConfig.products || []).map((item: any, i: number) => (
