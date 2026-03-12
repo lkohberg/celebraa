@@ -102,6 +102,25 @@ const OrderFlow = () => {
   const [blockConfig, setBlockConfig] = useState<any>({});
   const [dragActive, setDragActive] = useState(false);
 
+  const linkCheckTimer = useRef<ReturnType<typeof setTimeout>>();
+  
+  const handleLinkChange = useCallback((value: string) => {
+    const lower = value.toLowerCase();
+    setForm(prev => ({ ...prev, eventLink: lower }));
+    if (linkCheckTimer.current) clearTimeout(linkCheckTimer.current);
+    if (RESERVED_ROUTES.includes(lower)) {
+      setLinkAvailable(null);
+      return;
+    }
+    if (lower.length >= 3) {
+      linkCheckTimer.current = setTimeout(() => {
+        checkLink.mutate(lower, { onSuccess: (res) => setLinkAvailable(res.available) });
+      }, 400);
+    } else {
+      setLinkAvailable(null);
+    }
+  }, [checkLink]);
+
   // Scroll to top on step change
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [step]);
 
@@ -129,25 +148,6 @@ const OrderFlow = () => {
   const isReservedLink = RESERVED_ROUTES.includes(form.eventLink.toLowerCase());
   const step2Valid = form.title && form.date && form.time && form.eventLink && linkValid && linkAvailable !== false && !isReservedLink && form.eventLink.length >= 3;
   const step4Valid = contact.firstName.trim() && contact.lastName.trim() && contact.email.trim() && /\S+@\S+\.\S+/.test(contact.email) && termsAccepted;
-
-  const linkCheckTimer = useRef<ReturnType<typeof setTimeout>>();
-  
-  const handleLinkChange = useCallback((value: string) => {
-    const lower = value.toLowerCase();
-    setForm(prev => ({ ...prev, eventLink: lower }));
-    if (linkCheckTimer.current) clearTimeout(linkCheckTimer.current);
-    if (RESERVED_ROUTES.includes(lower)) {
-      setLinkAvailable(null);
-      return;
-    }
-    if (lower.length >= 3) {
-      linkCheckTimer.current = setTimeout(() => {
-        checkLink.mutate(lower, { onSuccess: (res) => setLinkAvailable(res.available) });
-      }, 400);
-    } else {
-      setLinkAvailable(null);
-    }
-  }, [checkLink]);
 
   const handleHeroFile = (file: File) => {
     if (!file.type.startsWith("image/")) return;
