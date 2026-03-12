@@ -485,6 +485,8 @@ const en = {
   "blockConfig.productImages": "Product photos",
   "blockConfig.addPhoto": "Photo",
   "blockConfig.sponsorLogo": "Logo",
+  "blockConfig.slideshow": "Slideshow",
+  "blockConfig.slideshowHint": "Upload your own photos for the slideshow.",
 
   // Template Card
   "templateCard.demoView": "View demo",
