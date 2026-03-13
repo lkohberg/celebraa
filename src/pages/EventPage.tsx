@@ -1,15 +1,17 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { useEventByLink, useTrackAnalytics } from "@/hooks/useEvents";
 import { useTranslation } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPage";
-import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
-import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import RsvpForm from "@/components/premium-templates/RsvpForm";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
+
+// Lazy-load heavy premium templates – only the needed one gets downloaded
+const PremiumWeddingPage = lazy(() => import("@/components/premium-templates/PremiumWeddingPage"));
+const PremiumBirthdayPage = lazy(() => import("@/components/premium-templates/PremiumBirthdayPage"));
+const PremiumCorporatePage = lazy(() => import("@/components/premium-templates/PremiumCorporatePage"));
 
 const loadGoogleFont = (fontName: string) => {
   const id = `google-font-${fontName.replace(/\s+/g, "-")}`;
@@ -96,28 +98,28 @@ const EventPage = () => {
     font: eventData.font || "Playfair Display",
   } : undefined;
 
-  // Premium templates
+  const blankFallback = <div className="min-h-screen" style={{ backgroundColor: eventTheme?.primary ? undefined : undefined }} />;
+
+  // Premium templates – lazy loaded, only the needed chunk is downloaded
   if (eventData.tier === "premium") {
     const templateId = eventData.template_id;
-    if (templateId.startsWith("wedding-premium") || templateId.startsWith("wedding-")) {
-      if (templateId.includes("premium")) {
-        return <PremiumWeddingPage event={eventData} theme={eventTheme} lang={eventLang} />;
-      }
+    let PremiumComponent: React.LazyExoticComponent<React.ComponentType<any>> | null = null;
+
+    if (templateId.includes("wedding") || templateId.startsWith("wedding")) {
+      PremiumComponent = PremiumWeddingPage;
+    } else if (templateId.includes("birthday") || templateId.startsWith("birthday")) {
+      PremiumComponent = PremiumBirthdayPage;
+    } else if (templateId.includes("corporate") || templateId.startsWith("corporate")) {
+      PremiumComponent = PremiumCorporatePage;
     }
-    if (templateId.startsWith("birthday-premium") || templateId.startsWith("birthday-")) {
-      if (templateId.includes("premium")) {
-        return <PremiumBirthdayPage event={eventData} theme={eventTheme} lang={eventLang} />;
-      }
+
+    if (PremiumComponent) {
+      return (
+        <Suspense fallback={blankFallback}>
+          <PremiumComponent event={eventData} theme={eventTheme} lang={eventLang} />
+        </Suspense>
+      );
     }
-    if (templateId.startsWith("corporate-premium") || templateId.startsWith("corporate-")) {
-      if (templateId.includes("premium")) {
-        return <PremiumCorporatePage event={eventData} theme={eventTheme} lang={eventLang} />;
-      }
-    }
-    // Fallback: detect by template prefix for premium tier
-    if (templateId.startsWith("wedding")) return <PremiumWeddingPage event={eventData} theme={eventTheme} lang={eventLang} />;
-    if (templateId.startsWith("birthday")) return <PremiumBirthdayPage event={eventData} theme={eventTheme} lang={eventLang} />;
-    if (templateId.startsWith("corporate")) return <PremiumCorporatePage event={eventData} theme={eventTheme} lang={eventLang} />;
   }
 
   // Basis template - simple styled page
