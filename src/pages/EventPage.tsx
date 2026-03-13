@@ -103,7 +103,7 @@ const EventPage = () => {
   // Premium templates – lazy loaded, only the needed chunk is downloaded
   if (eventData.tier === "premium") {
     const templateId = eventData.template_id;
-    let PremiumComponent: React.LazyExoticComponent<any> | null = null;
+    let PremiumComponent: React.LazyExoticComponent<React.ComponentType<any>> | null = null;
 
     if (templateId.includes("wedding") || templateId.startsWith("wedding")) {
       PremiumComponent = PremiumWeddingPage;
