@@ -91,7 +91,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
           <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
             {event.hero_image_url ? (
               <>
-                <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" /></div>
+                <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
                 <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/50" />
               </>
             ) : (

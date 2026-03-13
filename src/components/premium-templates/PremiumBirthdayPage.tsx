@@ -76,7 +76,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
             }}>
               {event.hero_image_url && (
                 <>
-                  <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" /></div>
+                  <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
                   <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/60" />
                 </>
               )}
