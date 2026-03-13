@@ -41,6 +41,25 @@ const EventPage = () => {
   const trackAnalytics = useTrackAnalytics();
 
   const fontName = event?.font || "Playfair Display";
+  const heroImageUrl = (event as any)?.hero_image_url;
+
+  // Preload hero image so it's ready before rendering
+  const [heroReady, setHeroReady] = useState(!heroImageUrl);
+  useEffect(() => {
+    if (!heroImageUrl) { setHeroReady(true); return; }
+    const img = new Image();
+    img.src = heroImageUrl;
+    if (img.complete) { setHeroReady(true); return; }
+    img.onload = () => setHeroReady(true);
+    img.onerror = () => setHeroReady(true);
+    // Also inject a preload link for the browser
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = heroImageUrl;
+    document.head.appendChild(link);
+    return () => { document.head.removeChild(link); };
+  }, [heroImageUrl]);
 
   // Load Google Font for basis template
   useEffect(() => {
