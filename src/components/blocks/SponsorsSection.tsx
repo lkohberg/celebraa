@@ -32,9 +32,9 @@ const SponsorsSection = ({ sponsors, accentColor, isPreview = false, lang }: { s
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+        <div className={`grid gap-5 justify-items-center ${displaySponsors.length === 1 ? "max-w-[200px] mx-auto" : displaySponsors.length === 2 ? "grid-cols-2 max-w-md mx-auto" : displaySponsors.length === 3 ? "grid-cols-3 max-w-xl mx-auto" : "grid-cols-2 md:grid-cols-4"}`}>
           {displaySponsors.map((sponsor, i) => (
-            <motion.a key={i} href={isPreview ? "#" : sponsor.url || "#"} target="_blank" rel="noopener noreferrer" initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} whileHover={{ scale: 1.05, y: -2 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex items-center justify-center p-6 bg-background/80 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-border hover:shadow-md transition-all aspect-square">
+            <motion.a key={i} href={isPreview ? "#" : sponsor.url || "#"} target="_blank" rel="noopener noreferrer" initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} whileHover={{ scale: 1.05, y: -2 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex items-center justify-center p-6 bg-background/80 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-border hover:shadow-md transition-all aspect-square w-full">
               {sponsor.logoUrl ? (
                 <img src={sponsor.logoUrl} alt={sponsor.name} className="max-w-full max-h-full object-contain" />
               ) : (
