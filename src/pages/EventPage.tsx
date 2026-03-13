@@ -1,15 +1,17 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { useEventByLink, useTrackAnalytics } from "@/hooks/useEvents";
 import { useTranslation } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPage";
-import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
-import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import RsvpForm from "@/components/premium-templates/RsvpForm";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
+
+// Lazy-load heavy premium templates – only the needed one gets downloaded
+const PremiumWeddingPage = lazy(() => import("@/components/premium-templates/PremiumWeddingPage"));
+const PremiumBirthdayPage = lazy(() => import("@/components/premium-templates/PremiumBirthdayPage"));
+const PremiumCorporatePage = lazy(() => import("@/components/premium-templates/PremiumCorporatePage"));
 
 const loadGoogleFont = (fontName: string) => {
   const id = `google-font-${fontName.replace(/\s+/g, "-")}`;
