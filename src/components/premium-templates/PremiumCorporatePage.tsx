@@ -55,7 +55,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
       }}>
         {event.hero_image_url && (
           <>
-            <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" /></div>
+            <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/70" />
           </>
         )}

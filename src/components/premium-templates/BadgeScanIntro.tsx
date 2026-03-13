@@ -219,14 +219,6 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
                       </motion.svg>
                     </motion.div>
 
-                    {/* Typewriter text */}
-                    <p
-                      className="text-sm tracking-[0.4em] uppercase font-mono text-center w-full"
-                      style={{ color: "hsl(140, 70%, 55%)", textShadow: "0 0 10px hsla(140, 70%, 45%, 0.4)" }}
-                    >
-                      {grantedText.slice(0, typedChars)}
-                      <span className="animate-pulse">|</span>
-                    </p>
                   </motion.div>
                 )}
               </AnimatePresence>

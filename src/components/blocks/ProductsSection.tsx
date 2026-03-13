@@ -87,7 +87,7 @@ const ProductsSection = ({ products, accentColor, lang }: { products?: Product[]
           </div>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className={`grid gap-6 ${displayProducts.length === 1 ? "max-w-sm mx-auto" : displayProducts.length === 2 ? "grid-cols-2 max-w-2xl mx-auto" : "grid-cols-2 lg:grid-cols-3"} justify-items-center`}>
           {displayProducts.map((product, i) => {
             const allImages = product.images && product.images.length > 0
               ? product.images
