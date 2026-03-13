@@ -81,7 +81,7 @@ const EventPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event?.id]);
 
-  if (isLoading) {
+  if (isLoading || !heroReady) {
     // Show a blank screen while loading – no visible loading indicator for guests
     return <div className="min-h-screen bg-background" />;
   }
