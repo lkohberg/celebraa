@@ -41,9 +41,10 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading, signOut } = useAuth();
   const { t } = useTranslation();
-  const { data: isAdminReady } = useIsAdmin();
-  const { data: events, isLoading } = useMyEvents(user?.id, !!isAdminReady);
+  const { data: isAdminReady, isLoading: adminLoading } = useIsAdmin();
   const isAdmin = !!isAdminReady;
+  const { data: events, isLoading: eventsLoading } = useMyEvents(user?.id, isAdmin);
+  const isLoading = adminLoading || eventsLoading;
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   const selectedEvent = events?.find((e) => e.id === selectedEventId);
