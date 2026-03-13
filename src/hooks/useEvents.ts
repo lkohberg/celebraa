@@ -6,7 +6,7 @@ type PublicEvent = Tables<"events">;
 
 export const useMyEvents = (userId?: string, isAdmin?: boolean) =>
   useQuery({
-    queryKey: ["my-events", userId, isAdmin],
+    queryKey: ["my-events", userId, !!isAdmin],
     queryFn: async () => {
       let query = supabase
         .from("events")
