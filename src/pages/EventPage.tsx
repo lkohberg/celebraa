@@ -61,11 +61,8 @@ const EventPage = () => {
   }, [event?.id]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <p className="font-body text-muted-foreground">{t("event.loading")}</p>
-      </div>
-    );
+    // Show a blank screen while loading – no visible loading indicator for guests
+    return <div className="min-h-screen bg-background" />;
   }
 
   if (error || !event) {
