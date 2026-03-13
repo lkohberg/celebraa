@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useEventByLink, useTrackAnalytics } from "@/hooks/useEvents";
 import { useTranslation } from "@/i18n";
 import { Button } from "@/components/ui/button";
