@@ -168,8 +168,9 @@ const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: Template
       className="group bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 border border-border/30"
     >
       <div
-        className="h-52 relative overflow-hidden"
+        className="h-52 relative overflow-hidden cursor-pointer"
         style={{ background: template.previewGradient }}
+        onClick={() => onDemo(template)}
       >
         {template.defaultHeroImage && (
           <img src={template.defaultHeroImage} alt={template.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />

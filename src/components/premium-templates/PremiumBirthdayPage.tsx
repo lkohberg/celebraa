@@ -20,6 +20,8 @@ import QuizSection from "@/components/blocks/QuizSection";
 import FoodMenuSection from "@/components/blocks/FoodMenuSection";
 import GamesVoteSection from "@/components/blocks/GamesVoteSection";
 import PotluckSection from "@/components/blocks/PotluckSection";
+import BackgroundMusicSection from "@/components/blocks/BackgroundMusicSection";
+import VideoMessageSection from "@/components/blocks/VideoMessageSection";
 
 const ConfettiParticle = ({ delay }: { delay: number }) => {
   const colors = ["#FF6B9D", "#C44DFF", "#FFD93D", "#6BCB77", "#4D96FF", "#FF8A65"];
@@ -58,6 +60,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
   const blockCfg = (event as any).block_config || {};
   const hasBlock = (suffix: string) => selectedBlocks.some((id: string) => id.endsWith(suffix));
   const accent = theme?.primary || "hsl(340, 65%, 50%)";
+  const maxCompanions = blockCfg.max_companions ?? 5;
 
   return (
     <div className="min-h-screen overflow-hidden" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
@@ -80,7 +83,6 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
                   <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/60" />
                 </>
               )}
-              {/* Decorative floating shapes */}
               {!event.hero_image_url && (
                 <>
                   <div className="absolute top-[10%] left-[5%] w-32 h-32 rounded-full bg-white/5 blur-2xl" />
@@ -99,6 +101,8 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
                 {event.description && <p className="font-body text-white/70 mt-4 text-lg max-w-md mx-auto">{event.description}</p>}
               </motion.div>
             </section>
+
+            {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} />}
 
             {/* Countdown */}
             <section className="py-24 relative overflow-hidden bg-card">
@@ -178,6 +182,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
               <HotelRecommendations hotels={event.hotel_recommendations} />
             )}
 
+            {hasBlock("-videomsg") && <VideoMessageSection accentColor={accent} lang={lang} blockConfig={blockCfg} variant="birthday" />}
             {hasBlock("-quiz") && <QuizSection questions={blockCfg.quiz} accentColor={accent} lang={lang} />}
             {hasBlock("-games") && <GamesVoteSection games={blockCfg.games} accentColor={accent} lang={lang} />}
             {hasBlock("-potluck") && <PotluckSection items={blockCfg.potluck} accentColor={accent} lang={lang} />}
@@ -185,7 +190,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
             {hasBlock("-musicwish") && <MusicWishSection accentColor={accent} eventId={event.id} lang={lang} isPreview={isDemo} />}
 
             {event.rsvp_enabled && (
-              <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="birthday" lang={lang} />
+              <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="birthday" lang={lang} maxCompanions={maxCompanions} />
             )}
 
             {/* Footer */}

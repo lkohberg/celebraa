@@ -12,7 +12,6 @@ export const useMyEvents = (userId?: string, isAdmin?: boolean) =>
         .from("events")
         .select("*")
         .order("created_at", { ascending: false });
-      // Non-admin users only see their own events
       if (!isAdmin && userId) {
         query = query.eq("user_id", userId);
       }
@@ -107,11 +106,24 @@ export const useTrackAnalytics = () =>
 
 export const useSubmitRsvp = () =>
   useMutation({
-    mutationFn: async (guest: { event_id: string; name: string; email?: string; rsvp_status: string; plus_one?: boolean; menu_choice?: string; message?: string }) => {
+    mutationFn: async (guest: {
+      event_id: string;
+      name: string;
+      email?: string;
+      rsvp_status: string;
+      plus_one?: boolean;
+      companion_count?: number;
+      companion_names?: string[];
+      menu_choice?: string;
+      message?: string;
+    }) => {
+      const { companion_count, companion_names, ...rest } = guest;
       const { data, error } = await supabase.from("guests").insert({
-        ...guest,
+        ...rest,
         responded_at: new Date().toISOString(),
-      }).select().single();
+        companion_count: companion_count || 0,
+        companion_names: companion_names || [],
+      } as any).select().single();
       if (error) throw error;
       return data;
     },

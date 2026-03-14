@@ -265,6 +265,8 @@ export type Database = {
       }
       guests: {
         Row: {
+          companion_count: number | null
+          companion_names: string[] | null
           created_at: string
           email: string | null
           event_id: string
@@ -277,6 +279,8 @@ export type Database = {
           rsvp_status: string
         }
         Insert: {
+          companion_count?: number | null
+          companion_names?: string[] | null
           created_at?: string
           email?: string | null
           event_id: string
@@ -289,6 +293,8 @@ export type Database = {
           rsvp_status?: string
         }
         Update: {
+          companion_count?: number | null
+          companion_names?: string[] | null
           created_at?: string
           email?: string | null
           event_id?: string

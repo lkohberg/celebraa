@@ -769,6 +769,29 @@ const de = {
   "preview.fallback.storyText": "Eure Geschichte wird hier erzählt. Ein wunderschöner Text über euch als Paar.",
   "preview.fallback.hotelName": "Hotel Beispiel",
   "preview.fallback.hotelAddress": "Musterstraße 1",
+
+  // New: RSVP companions
+  "event.companions": "Begleitpersonen",
+  "event.companionName": "Name Begleitperson",
+
+  // New: Templates custom note
+  "templates.customNote": "Gefällt dir nicht ganz was du siehst? Keine Sorge – all unsere Templates sind vollständig anpassbar, vom Hero-Bild bis zu den Farben und Schriften!",
+
+  // New: Video/Voice message block
+  "block.videomsg": "Video / Sprachnachricht",
+  "block.desc.videomsg": "Hinterlasse eine persönliche Video- oder Sprachnachricht für deine Gäste.",
+  "block.videomsg.corporate": "Promo-Video / Sprachnachricht",
+  "block.desc.videomsg.corporate": "Binde ein Promo-Video oder eine Sprachnachricht ein.",
+  "blockConfig.videoMessage": "Video / Sprachnachricht",
+  "blockConfig.videoMessageHint": "Lade ein Video oder eine Sprachnachricht hoch (max. 1 Datei).",
+
+  // New: Max companions
+  "order.maxCompanions": "Max. Begleitpersonen pro Gast",
+  "order.maxCompanionsPlaceholder": "z.B. 3",
+
+  // New: Preview toggle
+  "order.previewMobile": "Handy",
+  "order.previewDesktop": "Desktop",
 };
 
 export default de;
