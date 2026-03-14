@@ -768,6 +768,29 @@ const en = {
   "preview.fallback.storyText": "Your story will be told here. A beautiful text about you as a couple.",
   "preview.fallback.hotelName": "Example Hotel",
   "preview.fallback.hotelAddress": "123 Example Street",
+
+  // New: RSVP companions
+  "event.companions": "Companions",
+  "event.companionName": "Companion name",
+
+  // New: Templates custom note
+  "templates.customNote": "Don't quite see what you're looking for? No worries – all our templates are fully customizable, from the hero image to colors and fonts!",
+
+  // New: Video/Voice message block
+  "block.videomsg": "Video / Voice Message",
+  "block.desc.videomsg": "Leave a personal video or voice message for your guests.",
+  "block.videomsg.corporate": "Promo Video / Voice Message",
+  "block.desc.videomsg.corporate": "Embed a promo video or voice message.",
+  "blockConfig.videoMessage": "Video / Voice Message",
+  "blockConfig.videoMessageHint": "Upload a video or voice message (max. 1 file).",
+
+  // New: Max companions
+  "order.maxCompanions": "Max. companions per guest",
+  "order.maxCompanionsPlaceholder": "e.g. 3",
+
+  // New: Preview toggle
+  "order.previewMobile": "Mobile",
+  "order.previewDesktop": "Desktop",
 };
 
 export default en;
