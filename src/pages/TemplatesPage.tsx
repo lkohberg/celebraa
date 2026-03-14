@@ -116,6 +116,18 @@ const TemplatesPage = () => {
             </TabsContent>
           ))}
         </Tabs>
+
+        {/* Customization note */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="text-center mt-12 max-w-lg mx-auto"
+        >
+          <p className="font-body text-sm text-muted-foreground leading-relaxed">
+            {t("templates.customNote")}
+          </p>
+        </motion.div>
       </div>
 
       <DemoPreview template={demoTemplate} open={demoOpen} onOpenChange={setDemoOpen} />
