@@ -10,16 +10,18 @@ interface RsvpFormProps {
   menuSelection?: boolean;
   variant?: "wedding" | "birthday" | "corporate";
   lang?: EventLang;
+  maxCompanions?: number;
 }
 
-const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", lang }: RsvpFormProps) => {
+const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", lang, maxCompanions = 5 }: RsvpFormProps) => {
   const { t } = useTranslation();
   const labels = lang ? getEventLabels(lang) : null;
   const submitRsvp = useSubmitRsvp();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [attendance, setAttendance] = useState<"accepted" | "declined" | null>(null);
-  const [plusOne, setPlusOne] = useState(false);
+  const [companionCount, setCompanionCount] = useState(0);
+  const [companionNames, setCompanionNames] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [menuChoice, setMenuChoice] = useState("");
 
@@ -28,6 +30,16 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
     : variant === "birthday"
     ? "hsl(340, 65%, 50%)"
     : "hsl(220, 50%, 35%)";
+
+  const handleCompanionCountChange = (value: number) => {
+    const clamped = Math.max(0, Math.min(value, maxCompanions));
+    setCompanionCount(clamped);
+    setCompanionNames(prev => {
+      const updated = [...prev];
+      while (updated.length < clamped) updated.push("");
+      return updated.slice(0, clamped);
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +55,9 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
         name: name.trim(),
         email: email || undefined,
         rsvp_status: attendance,
-        plus_one: plusOne,
+        plus_one: companionCount > 0,
+        companion_count: companionCount,
+        companion_names: companionNames.filter(n => n.trim()),
         message: message || undefined,
         menu_choice: menuChoice || undefined,
       });
@@ -51,7 +65,8 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
       setName("");
       setEmail("");
       setAttendance(null);
-      setPlusOne(false);
+      setCompanionCount(0);
+      setCompanionNames([]);
       setMessage("");
       setMenuChoice("");
     } catch {
@@ -61,6 +76,8 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
 
   const inputClass =
     "w-full px-4 py-3 font-body text-base bg-card border border-border rounded-md text-foreground focus:outline-none focus:border-primary transition-colors";
+
+  const companionLabel = labels?.companions || t("event.companions") || "Begleitpersonen";
 
   return (
     <section className="py-24" style={{ backgroundColor: "hsl(30, 33%, 96%)" }}>
@@ -124,15 +141,40 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
 
           {attendance === "accepted" && (
             <>
-              <label className="flex items-center gap-3 font-body text-sm text-foreground cursor-pointer">
+              {/* Companion count */}
+              <div>
+                <label className="block font-body text-sm text-foreground mb-2">
+                  {companionLabel} {maxCompanions > 0 && <span className="text-muted-foreground">(max. {maxCompanions})</span>}
+                </label>
                 <input
-                  type="checkbox"
-                  checked={plusOne}
-                  onChange={(e) => setPlusOne(e.target.checked)}
-                  className="w-4 h-4"
+                  type="number"
+                  min={0}
+                  max={maxCompanions}
+                  value={companionCount}
+                  onChange={(e) => handleCompanionCountChange(parseInt(e.target.value) || 0)}
+                  className={inputClass + " w-24"}
                 />
-                {labels?.plusOne || t("event.plusOne")}
-              </label>
+              </div>
+
+              {/* Companion name fields */}
+              {companionCount > 0 && (
+                <div className="space-y-3">
+                  {Array.from({ length: companionCount }).map((_, i) => (
+                    <input
+                      key={i}
+                      type="text"
+                      placeholder={`${labels?.companionName || t("event.companionName") || "Name Begleitperson"} ${i + 1}`}
+                      value={companionNames[i] || ""}
+                      onChange={(e) => {
+                        const updated = [...companionNames];
+                        updated[i] = e.target.value;
+                        setCompanionNames(updated);
+                      }}
+                      className={inputClass}
+                    />
+                  ))}
+                </div>
+              )}
 
               {menuSelection && (
                 <div>

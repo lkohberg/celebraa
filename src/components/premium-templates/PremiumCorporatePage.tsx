@@ -17,6 +17,8 @@ import FoodMenuSection from "@/components/blocks/FoodMenuSection";
 import AgendaSection from "@/components/blocks/AgendaSection";
 import ProductsSection from "@/components/blocks/ProductsSection";
 import SponsorsSection from "@/components/blocks/SponsorsSection";
+import BackgroundMusicSection from "@/components/blocks/BackgroundMusicSection";
+import VideoMessageSection from "@/components/blocks/VideoMessageSection";
 
 const CorpDivider = ({ color }: { color: string }) => (
   <div className="flex items-center justify-center gap-3 my-2">
@@ -38,6 +40,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
   const hasBlock = (suffix: string) => selectedBlocks.some((id: string) => id.endsWith(suffix));
   const accent = theme?.primary || "hsl(220, 50%, 35%)";
   const gold = theme?.accent || "hsl(43, 55%, 55%)";
+  const maxCompanions = blockCfg.max_companions ?? 5;
 
   return (
     <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
@@ -59,7 +62,6 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/70" />
           </>
         )}
-        {/* Geometric decorative elements */}
         {!event.hero_image_url && (
           <>
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`, backgroundSize: "60px 60px" }} />
@@ -81,6 +83,8 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
           {event.description && <p className="font-body text-white/60 mt-6 text-lg max-w-xl mx-auto">{event.description}</p>}
         </motion.div>
       </section>
+
+      {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} />}
 
       {/* Countdown */}
       <section className="py-24 relative overflow-hidden bg-card">
@@ -163,11 +167,12 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
         <HotelRecommendations hotels={event.hotel_recommendations} accentColor={accent} />
       )}
 
+      {hasBlock("-videomsg") && <VideoMessageSection accentColor={accent} lang={lang} blockConfig={blockCfg} variant="corporate" />}
       {hasBlock("-products") && <ProductsSection products={blockCfg.products} accentColor={accent} lang={lang} />}
       {hasBlock("-sponsors") && <SponsorsSection sponsors={blockCfg.sponsors} accentColor={accent} lang={lang} />}
 
       {event.rsvp_enabled && (
-        <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="corporate" lang={lang} />
+        <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="corporate" lang={lang} maxCompanions={maxCompanions} />
       )}
 
       {/* Footer */}

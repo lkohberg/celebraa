@@ -18,6 +18,7 @@ import MusicProSection from "@/components/blocks/MusicProSection";
 import BackgroundMusicSection from "@/components/blocks/BackgroundMusicSection";
 import CustomIllustrationSection from "@/components/blocks/CustomIllustrationSection";
 import DressCodeMFSection from "@/components/blocks/DressCodeMFSection";
+import VideoMessageSection from "@/components/blocks/VideoMessageSection";
 import { colorWithAlpha } from "@/lib/color-utils";
 
 export interface PremiumEventData {
@@ -78,6 +79,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
   const hasBlock = (suffix: string) => selectedBlocks.some((id: string) => id.endsWith(suffix));
   const accent = theme?.primary || "hsl(150, 18%, 38%)";
   const softPink = "hsl(10, 50%, 82%)";
+  const maxCompanions = blockCfg.max_companions ?? 5;
 
   return (
     <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'Lato', 'DM Sans', sans-serif", backgroundColor: theme?.secondary || "hsl(30, 33%, 96%)", color: theme?.accent || "hsl(30, 10%, 25%)" }}>
@@ -97,7 +99,6 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
             ) : (
               <>
                 <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, hsl(340 30% 90%) 0%, hsl(30 35% 93%) 50%, hsl(150 15% 88%) 100%)" }} />
-                {/* Decorative circles */}
                 <div className="absolute top-20 left-10 w-64 h-64 rounded-full opacity-[0.05]" style={{ background: `radial-gradient(circle, ${softPink}, transparent)` }} />
                 <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full opacity-[0.05]" style={{ background: `radial-gradient(circle, ${accent}, transparent)` }} />
               </>
@@ -214,12 +215,13 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
             <HotelRecommendations hotels={event.hotel_recommendations} accentColor={accent} />
           )}
 
+          {hasBlock("-videomsg") && <VideoMessageSection accentColor={accent} lang={lang} blockConfig={blockCfg} variant="wedding" />}
           {hasBlock("-shuttle") && <ShuttleSection routes={blockCfg.shuttle} accentColor={accent} lang={lang} />}
           {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} lang={lang} />}
           {hasBlock("-musicpro") && <MusicProSection accentColor={accent} eventId={event.id} lang={lang} isPreview={isDemo} />}
 
           {event.rsvp_enabled && (
-            <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="wedding" lang={lang} />
+            <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="wedding" lang={lang} maxCompanions={maxCompanions} />
           )}
 
           {/* Footer */}
