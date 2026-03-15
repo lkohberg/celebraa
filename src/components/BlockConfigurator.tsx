@@ -362,6 +362,55 @@ const BlockConfigurator = ({ selectedBlocks, blockConfig, setBlockConfig, catego
         </Section>
       )}
 
+      {hasBlock("-videomsg") && (
+        <Section title={t("blockConfig.videoMessage")} icon="🎬">
+          <p className="font-body text-sm text-muted-foreground">{t("blockConfig.videoMessageHint")}</p>
+          <div className="space-y-3 mt-2">
+            <div>
+              <Label className="font-body text-sm">{t("blockConfig.videoMessageType") || "Medientyp"}</Label>
+              <div className="flex gap-2 mt-1">
+                <Button type="button" variant={blockConfig.video_message_type !== "audio" ? "default" : "outline"} size="sm" className="font-body" onClick={() => updateField("video_message_type", "video")}>
+                  {t("blockConfig.videoMessageTypeVideo") || "Video"}
+                </Button>
+                <Button type="button" variant={blockConfig.video_message_type === "audio" ? "default" : "outline"} size="sm" className="font-body" onClick={() => updateField("video_message_type", "audio")}>
+                  {t("blockConfig.videoMessageTypeAudio") || "Sprachnachricht"}
+                </Button>
+              </div>
+            </div>
+            {blockConfig.video_message_url ? (
+              <div className="flex items-center gap-2 bg-secondary/50 rounded-lg p-3">
+                <span className="font-body text-sm text-foreground truncate flex-1">
+                  {blockConfig.video_message_type === "audio" ? "🎙️" : "🎬"} {t("blockConfig.videoMessage")}
+                </span>
+                <Button type="button" variant="ghost" size="sm" onClick={() => updateField("video_message_url", undefined)}>
+                  <X className="w-4 h-4 text-muted-foreground" />
+                </Button>
+              </div>
+            ) : (
+              <Button type="button" variant="outline" size="sm" className="font-body gap-2" onClick={() => {
+                const input = document.createElement("input");
+                input.type = "file";
+                input.accept = blockConfig.video_message_type === "audio" ? "audio/*" : "video/*,audio/*";
+                input.onchange = (e) => {
+                  const file = (e.target as HTMLInputElement).files?.[0];
+                  if (!file) return;
+                  const reader = new FileReader();
+                  reader.onload = (ev) => {
+                    updateField("video_message_url", ev.target?.result as string);
+                    if (file.type.startsWith("audio")) updateField("video_message_type", "audio");
+                  };
+                  reader.readAsDataURL(file);
+                };
+                input.click();
+              }}>
+                <Upload className="w-4 h-4" />
+                {t("blockConfig.videoMessageUpload") || "Datei hochladen"}
+              </Button>
+            )}
+          </div>
+        </Section>
+      )}
+
       {hasBlock("-products") && (
         <Section title={t("blockConfig.products")} icon="📦">
           {(blockConfig.products || []).map((item: any, i: number) => (
