@@ -1024,6 +1024,12 @@ const labels: Record<EventLang, Labels> = {
     hotels: "推荐酒店",
     hotelsSubtitle: "我们为远道而来的宾客准备了附近酒店推荐。",
     hotelWebsite: "访问网站",
+    companions: "同伴",
+    companionName: "同伴姓名",
+    personalMessage: "个人消息",
+    personalMessageSub: "给你们的一条消息",
+    promoVideo: "宣传视频",
+    promoVideoSub: "为您准备的视频或消息",
   },
 };
 
