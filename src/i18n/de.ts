@@ -792,6 +792,17 @@ const de = {
   // New: Preview toggle
   "order.previewMobile": "Handy",
   "order.previewDesktop": "Desktop",
+
+  // Hero image library
+  "order.imageLibrary": "Bilder-Bibliothek",
+  "order.orChooseFromLibrary": "oder aus der Bibliothek wählen",
+
+  // Video message config
+  "blockConfig.videoMessageType": "Medientyp",
+  "blockConfig.videoMessageTypeVideo": "Video",
+  "blockConfig.videoMessageTypeAudio": "Sprachnachricht",
+  "blockConfig.videoMessageUpload": "Datei hochladen",
+  "blockConfig.videoMessageRemove": "Entfernen",
 };
 
 export default de;

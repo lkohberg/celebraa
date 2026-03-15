@@ -50,7 +50,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
       ],
       selected_blocks: [
         "wedding-timeline", "wedding-story", "wedding-wishlist", "wedding-dresscode",
-        "wedding-bgmusic", "wedding-hotels", "wedding-slideshow", "wedding-menu",
+        "wedding-bgmusic", "wedding-videomsg", "wedding-hotels", "wedding-slideshow", "wedding-menu",
         "wedding-shuttle", "wedding-musicpro", "wedding-illustration",
       ],
       block_config: {
@@ -92,6 +92,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
       ],
       selected_blocks: [
         "party-timeline", "party-musicwish", "party-wishlist", "party-dresscode",
+        "party-bgmusic", "party-videomsg",
         "party-quiz", "party-menu", "party-games", "party-potluck",
       ],
       block_config: {
@@ -146,6 +147,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
     ],
     selected_blocks: [
       "business-timeline", "business-dresscode", "business-hotels",
+      "business-bgmusic", "business-videomsg",
       "business-menu", "business-agenda", "business-products", "business-sponsors",
     ],
     block_config: {
