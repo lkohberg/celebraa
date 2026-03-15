@@ -147,6 +147,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
     ],
     selected_blocks: [
       "business-timeline", "business-dresscode", "business-hotels",
+      "business-bgmusic", "business-videomsg",
       "business-menu", "business-agenda", "business-products", "business-sponsors",
     ],
     block_config: {
