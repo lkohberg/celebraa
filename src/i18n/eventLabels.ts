@@ -842,6 +842,12 @@ const labels: Record<EventLang, Labels> = {
     hotels: "Hotelaanbevelingen",
     hotelsSubtitle: "We hebben een selectie hotels in de buurt samengesteld voor gasten die van ver komen.",
     hotelWebsite: "Bezoek website",
+    companions: "Begeleiders",
+    companionName: "Naam begeleider",
+    personalMessage: "Persoonlijk bericht",
+    personalMessageSub: "Een bericht voor jullie",
+    promoVideo: "Promotievideo",
+    promoVideoSub: "Een video of bericht voor u",
   },
   tr: {
     weMarry: "Evleniyoruz",
