@@ -478,6 +478,12 @@ const labels: Record<EventLang, Labels> = {
     hotels: "Hôtels recommandés",
     hotelsSubtitle: "Nous avons sélectionné des hôtels à proximité pour les invités venant de loin.",
     hotelWebsite: "Visiter le site",
+    companions: "Accompagnants",
+    companionName: "Nom de l'accompagnant",
+    personalMessage: "Message personnel",
+    personalMessageSub: "Un message pour vous",
+    promoVideo: "Vidéo promotionnelle",
+    promoVideoSub: "Une vidéo ou un message pour vous",
   },
   it: {
     weMarry: "Ci sposiamo",
