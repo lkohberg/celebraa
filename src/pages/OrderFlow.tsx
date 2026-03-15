@@ -755,6 +755,14 @@ const OrderFlow = () => {
                       </div>
                     )}
                   </div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="font-body text-xs text-muted-foreground">{t("order.orChooseFromLibrary")}</span>
+                    <HeroImageLibrary
+                      category={category}
+                      currentImage={form.heroImageUrl}
+                      onSelect={(url) => setForm(prev => ({ ...prev, heroImageUrl: url }))}
+                    />
+                  </div>
                 </div>
 
                 {/* RSVP */}
