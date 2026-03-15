@@ -773,6 +773,18 @@ const OrderFlow = () => {
                         <Label className="font-body text-sm">{t("order.maxGuests")}</Label>
                         <Input type="number" placeholder={t("order.maxGuestsPlaceholder")} value={form.maxGuests} onChange={(e) => setForm(prev => ({ ...prev, maxGuests: e.target.value }))} className="font-body mt-1" />
                       </div>
+                      <div>
+                        <Label className="font-body text-sm">{t("order.maxCompanions")}</Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          max={20}
+                          placeholder={t("order.maxCompanionsPlaceholder")}
+                          value={blockConfig.max_companions ?? ""}
+                          onChange={(e) => setBlockConfig((prev: any) => ({ ...prev, max_companions: parseInt(e.target.value) || 0 }))}
+                          className="font-body mt-1 w-32"
+                        />
+                      </div>
                     </>
                   )}
                 </div>
