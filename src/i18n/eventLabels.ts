@@ -933,6 +933,12 @@ const labels: Record<EventLang, Labels> = {
     hotels: "Otel önerileri",
     hotelsSubtitle: "Uzaktan gelen misafirler için yakın oteller seçtik.",
     hotelWebsite: "Siteyi ziyaret et",
+    companions: "Eşlik edenler",
+    companionName: "Eşlik eden kişinin adı",
+    personalMessage: "Kişisel mesaj",
+    personalMessageSub: "Sizin için bir mesaj",
+    promoVideo: "Tanıtım videosu",
+    promoVideoSub: "Sizin için bir video veya mesaj",
   },
   zh: {
     weMarry: "我们结婚了",
