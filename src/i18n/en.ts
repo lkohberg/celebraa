@@ -791,6 +791,17 @@ const en = {
   // New: Preview toggle
   "order.previewMobile": "Mobile",
   "order.previewDesktop": "Desktop",
+
+  // Hero image library
+  "order.imageLibrary": "Image Library",
+  "order.orChooseFromLibrary": "or choose from library",
+
+  // Video message config
+  "blockConfig.videoMessageType": "Media type",
+  "blockConfig.videoMessageTypeVideo": "Video",
+  "blockConfig.videoMessageTypeAudio": "Voice message",
+  "blockConfig.videoMessageUpload": "Upload file",
+  "blockConfig.videoMessageRemove": "Remove",
 };
 
 export default en;
