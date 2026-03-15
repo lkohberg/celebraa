@@ -859,14 +859,35 @@ const OrderFlow = () => {
           {step === 2 && (
             <motion.div key="step-preview" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
               <div className="max-w-5xl mx-auto">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
                   <div>
                     <h2 className="font-display text-2xl font-bold text-foreground">{t("order.previewTitle")}</h2>
                     <p className="font-body text-muted-foreground">{t("order.previewSubtitle")}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="font-body text-sm text-muted-foreground">{t("order.totalPrice")}</p>
-                    <p className="font-display text-2xl font-bold text-primary">€{totalPrice}</p>
+                  <div className="flex items-center gap-4">
+                    {/* Mobile/Desktop toggle */}
+                    <div className="flex items-center gap-1 bg-secondary rounded-lg p-1">
+                      <button
+                        onClick={() => setPreviewMode("desktop")}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-body text-xs transition-all ${
+                          previewMode === "desktop" ? "bg-primary text-primary-foreground font-semibold" : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        <Monitor className="w-3.5 h-3.5" /> {t("order.previewDesktop")}
+                      </button>
+                      <button
+                        onClick={() => setPreviewMode("mobile")}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-body text-xs transition-all ${
+                          previewMode === "mobile" ? "bg-primary text-primary-foreground font-semibold" : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        <Smartphone className="w-3.5 h-3.5" /> {t("order.previewMobile")}
+                      </button>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-body text-sm text-muted-foreground">{t("order.totalPrice")}</p>
+                      <p className="font-display text-2xl font-bold text-primary">€{totalPrice}</p>
+                    </div>
                   </div>
                 </div>
 
@@ -897,8 +918,12 @@ const OrderFlow = () => {
                     </Button>
                   </div>
 
-                  <div className="lg:col-span-3">
-                    <div className="rounded-xl overflow-hidden shadow-card max-h-[75vh] overflow-y-auto">
+                  <div className="lg:col-span-3 flex justify-center">
+                    <div
+                      className={`rounded-xl overflow-hidden shadow-card max-h-[75vh] overflow-y-auto transition-all duration-300 ${
+                        previewMode === "mobile" ? "w-[375px] border-[8px] border-foreground/10 rounded-[2rem]" : "w-full"
+                      }`}
+                    >
                       {(() => {
                         const previewEvent = buildPreviewEvent();
                         switch (category) {
