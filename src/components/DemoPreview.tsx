@@ -50,7 +50,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
       ],
       selected_blocks: [
         "wedding-timeline", "wedding-story", "wedding-wishlist", "wedding-dresscode",
-        "wedding-bgmusic", "wedding-hotels", "wedding-slideshow", "wedding-menu",
+        "wedding-bgmusic", "wedding-videomsg", "wedding-hotels", "wedding-slideshow", "wedding-menu",
         "wedding-shuttle", "wedding-musicpro", "wedding-illustration",
       ],
       block_config: {
