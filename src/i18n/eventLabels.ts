@@ -109,6 +109,12 @@ const labels: Record<EventLang, Labels> = {
     uploadPhoto: "Fotos hochladen",
     photoUploaded: "📸 Foto hochgeladen!",
     photosShared: "Fotos geteilt",
+    companions: "Begleitpersonen",
+    companionName: "Name Begleitperson",
+    personalMessage: "Persönliche Nachricht",
+    personalMessageSub: "Eine Nachricht an euch",
+    promoVideo: "Promo-Video",
+    promoVideoSub: "Ein Video oder eine Nachricht für Sie",
   },
   en: {
     weMarry: "We're getting married",
