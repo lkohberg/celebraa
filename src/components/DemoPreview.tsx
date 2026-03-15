@@ -92,6 +92,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
       ],
       selected_blocks: [
         "party-timeline", "party-musicwish", "party-wishlist", "party-dresscode",
+        "party-bgmusic", "party-videomsg",
         "party-quiz", "party-menu", "party-games", "party-potluck",
       ],
       block_config: {
