@@ -102,6 +102,7 @@ const OrderFlow = () => {
 
   const [blockConfig, setBlockConfig] = useState<any>({});
   const [dragActive, setDragActive] = useState(false);
+  const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
 
   const linkCheckTimer = useRef<ReturnType<typeof setTimeout>>();
   
