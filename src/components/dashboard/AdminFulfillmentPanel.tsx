@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { blocks, isManualBlock } from "@/data/blocks";
-import { Upload, Music, FileText, X, Eye, Rocket } from "lucide-react";
+import { Upload, FileText, X, Eye, Rocket } from "lucide-react";
 
 const AdminFulfillmentPanel = ({ event }: { event: any }) => {
   const { t } = useTranslation();
