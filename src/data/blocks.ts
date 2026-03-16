@@ -37,7 +37,7 @@ export const blocks: Block[] = [
   { id: "wedding-story", nameKey: "block.story", descriptionKey: "block.desc.story", price: 9, category: "wedding", icon: "💕" },
   { id: "wedding-wishlist", nameKey: "block.wishlist", descriptionKey: "block.desc.wishlist", price: 9, category: "wedding", icon: "🎁" },
   { id: "wedding-dresscode", nameKey: "block.dresscode", descriptionKey: "block.desc.dresscode", price: 9, category: "wedding", icon: "👔" },
-  { id: "wedding-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 9, category: "wedding", icon: "🎶", requiresManualWork: true, manualWorkDescriptionKey: "block.manual.bgmusic" },
+  { id: "wedding-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 9, category: "wedding", icon: "🎶" },
   { id: "wedding-videomsg", nameKey: "block.videomsg", descriptionKey: "block.desc.videomsg", price: 9, category: "wedding", icon: "🎬" },
   { id: "wedding-hotels", nameKey: "block.hotels", descriptionKey: "block.desc.hotels", price: 19, category: "wedding", icon: "🏨" },
   { id: "wedding-slideshow", nameKey: "block.slideshow", descriptionKey: "block.desc.slideshow", price: 19, category: "wedding", icon: "📸" },
