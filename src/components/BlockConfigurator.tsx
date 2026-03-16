@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Upload, X } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Plus, Trash2, Upload, X, AlertTriangle, Music } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
 interface BlockConfiguratorProps {
