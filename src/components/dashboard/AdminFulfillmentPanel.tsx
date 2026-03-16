@@ -24,7 +24,6 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
   const uploadedFiles = (blockConfig._admin_files || []) as { name: string; url: string; blockId?: string; uploadedAt: string }[];
 
   const hasIllustration = manualBlocksList.some(id => id.endsWith("-illustration"));
-  const hasBgMusic = manualBlocksList.some(id => id.endsWith("-bgmusic"));
 
   const uploadToStorage = async (file: File) => {
     const path = `${event.id}/${Date.now()}-${file.name}`;
