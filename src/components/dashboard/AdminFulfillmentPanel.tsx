@@ -146,36 +146,8 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
             </div>
           )}
 
-          {hasBgMusic && (
-            <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="text-lg">🎶</span>
-                <span className="font-body text-sm font-semibold text-foreground">{t("block.bgmusic")}</span>
-              </div>
-              {manualInfo[selectedBlocks.find(id => id.endsWith("-bgmusic")) || ""] && (
-                <div>
-                  <p className="font-body text-xs text-muted-foreground mb-1">{t("admin.customerNote")}:</p>
-                  <p className="font-body text-sm text-foreground bg-secondary/50 rounded-md p-2">{manualInfo[selectedBlocks.find(id => id.endsWith("-bgmusic")) || ""]}</p>
-                </div>
-              )}
-              <div>
-                <p className="font-body text-xs font-semibold text-foreground mb-1">{t("admin.uploadMusic")}:</p>
-                {blockConfig.music_url ? (
-                  <div className="flex items-center gap-2 p-2 bg-secondary/50 rounded-md">
-                    <Music className="w-4 h-4 text-primary" />
-                    <span className="font-body text-sm text-foreground truncate">{t("admin.musicReady")}</span>
-                    <audio controls src={blockConfig.music_url} className="h-8 ml-auto" />
-                  </div>
-                ) : (
-                  <p className="font-body text-xs text-muted-foreground italic mb-1">{t("admin.noMusicYet")}</p>
-                )}
-                <input ref={musicInputRef} type="file" className="hidden" onChange={handleMusicUpload} accept="audio/*" />
-                <Button variant="outline" size="sm" className="font-body mt-2" disabled={uploading === "music"} onClick={() => musicInputRef.current?.click()}>
-                  <Upload className="w-4 h-4 mr-2" /> {uploading === "music" ? "..." : blockConfig.music_url ? t("admin.replaceMusic") : t("admin.uploadMusic")}
-                </Button>
-              </div>
-            </div>
-          )}
+
+
 
           {manualBlocksList.filter(id => !id.endsWith("-illustration") && !id.endsWith("-bgmusic")).map(id => {
             const block = blocks.find(b => b.id === id);
