@@ -12,7 +12,7 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const illustrationInputRef = useRef<HTMLInputElement>(null);
-  const musicInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState<string | null>(null);
   const genericInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState<string | null>(null);
   const [publishing, setPublishing] = useState(false);
