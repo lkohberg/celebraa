@@ -77,31 +77,14 @@ const BackgroundMusicSection = ({ accentColor, lang, isDemo = false, musicUrl, b
     if (!eventId) return;
     setSubmitting(true);
     try {
-      // Submit the report
       const { error } = await supabase.from("copyright_reports" as any).insert({
         event_id: eventId,
         reporter_email: reportEmail || null,
         reason: reportReason || null,
       });
       if (error) throw error;
-
-      // Auto-disable music immediately
-      const { data: eventData } = await supabase
-        .from("events")
-        .select("block_config")
-        .eq("id", eventId)
-        .single();
-      if (eventData) {
-        const config = (eventData as any)?.block_config || {};
-        await supabase
-          .from("events")
-          .update({ block_config: { ...config, music_disabled: true } } as any)
-          .eq("id", eventId);
-      }
-
-      // Stop music locally
       stopMusic();
-      toast.success("Meldung wurde erfolgreich eingereicht. Die Musik wurde deaktiviert.");
+      toast.success("Meldung wurde eingereicht. Die Musik wird überprüft.");
       setReportOpen(false);
       setReportEmail("");
       setReportReason("");
