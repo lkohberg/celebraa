@@ -365,6 +365,10 @@ const BlockConfigurator = ({ selectedBlocks, blockConfig, setBlockConfig, catego
         </Section>
       )}
 
+      {hasBlock("-bgmusic") && (
+        <BgMusicUploadSection blockConfig={blockConfig} updateField={updateField} />
+      )}
+
       {hasBlock("-videomsg") && (
         <Section title={t("blockConfig.videoMessage")} icon="🎬">
           <p className="font-body text-sm text-muted-foreground">{t("blockConfig.videoMessageHint")}</p>
