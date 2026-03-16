@@ -13,6 +13,7 @@ import { ArrowLeft, AlertTriangle, Package } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { blocks, isManualBlock } from "@/data/blocks";
 import EventDetail from "@/components/dashboard/EventDetail";
+import CopyrightReportsPanel from "@/components/dashboard/CopyrightReportsPanel";
 
 const useUserEmail = (userId: string | undefined, enabled: boolean) =>
   useQuery({
