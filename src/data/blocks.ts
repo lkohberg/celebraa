@@ -23,7 +23,7 @@ export interface Package {
 
 export const BASE_PRICE = 19;
 
-export const MANUAL_BLOCK_SUFFIXES = ["-illustration", "-musicpro", "-bgmusic"];
+export const MANUAL_BLOCK_SUFFIXES = ["-illustration", "-musicpro"];
 
 export const isManualBlock = (blockId: string) =>
   MANUAL_BLOCK_SUFFIXES.some(suffix => blockId.endsWith(suffix));
