@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Upload, X } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Plus, Trash2, Upload, X, AlertTriangle, Music } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
 interface BlockConfiguratorProps {
@@ -53,6 +56,105 @@ const ImageUploadButton = ({ value, onChange, onRemove, label }: { value?: strin
       <Upload className="w-4 h-4 text-muted-foreground" />
       <span className="text-[9px] text-muted-foreground">Logo</span>
     </Button>
+  );
+};
+
+const MAX_MUSIC_SIZE_MB = 10;
+
+const BgMusicUploadSection = ({ blockConfig, updateField }: { blockConfig: any; updateField: (key: string, value: any) => void }) => {
+  const { t } = useTranslation();
+  const [rightsConfirmed, setRightsConfirmed] = useState(!!blockConfig.music_url);
+
+  const handleMusicUpload = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".mp3";
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      if (file.size > MAX_MUSIC_SIZE_MB * 1024 * 1024) {
+        alert(`Die Datei darf maximal ${MAX_MUSIC_SIZE_MB} MB groß sein.`);
+        return;
+      }
+      if (!file.name.toLowerCase().endsWith(".mp3")) {
+        alert("Nur MP3-Dateien sind erlaubt.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        updateField("music_url", ev.target?.result as string);
+        updateField("music_filename", file.name);
+      };
+      reader.readAsDataURL(file);
+    };
+    input.click();
+  };
+
+  return (
+    <Section title={t("blockConfig.bgMusic") || "Hintergrundmusik"} icon="🎶">
+      {/* Warning section */}
+      <Alert variant="destructive" className="border-destructive/30 bg-destructive/5">
+        <AlertTriangle className="h-4 w-4" />
+        <AlertTitle className="font-display text-sm">Was du auf keinen Fall machen darfst</AlertTitle>
+        <AlertDescription className="font-body text-xs space-y-2 mt-1">
+          <p>Du darfst keine urheberrechtlich geschützte Musik hochladen, wenn du nicht die entsprechenden Rechte besitzt. Das Hochladen geschützter Musik ohne Lizenz kann rechtliche Konsequenzen haben.</p>
+          <a
+            href="https://www.youtube.com/watch?v=wAKKJWtJfj8"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block text-destructive underline hover:text-destructive/80 font-medium"
+          >
+            Beispiel für eine Methode, die du NICHT verwenden solltest.
+          </a>
+        </AlertDescription>
+      </Alert>
+
+      {/* Rights checkbox */}
+      <div className="flex items-start gap-3 mt-3">
+        <Checkbox
+          id="music-rights"
+          checked={rightsConfirmed}
+          onCheckedChange={(c) => setRightsConfirmed(!!c)}
+          className="mt-0.5"
+        />
+        <Label htmlFor="music-rights" className="font-body text-sm text-foreground leading-snug cursor-pointer">
+          Ich bestätige, dass ich die Rechte an dieser Musik besitze oder die Erlaubnis habe, sie zu verwenden.
+        </Label>
+      </div>
+
+      {/* Upload area */}
+      {blockConfig.music_url ? (
+        <div className="flex items-center gap-2 bg-secondary/50 rounded-lg p-3 mt-2">
+          <Music className="w-4 h-4 text-primary" />
+          <span className="font-body text-sm text-foreground truncate flex-1">
+            {blockConfig.music_filename || "Musik hochgeladen"}
+          </span>
+          <Button type="button" variant="ghost" size="sm" onClick={() => {
+            updateField("music_url", undefined);
+            updateField("music_filename", undefined);
+          }}>
+            <X className="w-4 h-4 text-muted-foreground" />
+          </Button>
+        </div>
+      ) : (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="font-body gap-2 mt-2"
+          disabled={!rightsConfirmed}
+          onClick={handleMusicUpload}
+        >
+          <Upload className="w-4 h-4" />
+          MP3 hochladen (max. {MAX_MUSIC_SIZE_MB} MB)
+        </Button>
+      )}
+      {!rightsConfirmed && !blockConfig.music_url && (
+        <p className="font-body text-xs text-muted-foreground mt-1">
+          Bitte bestätige zuerst die Rechte, um eine Datei hochladen zu können.
+        </p>
+      )}
+    </Section>
   );
 };
 
@@ -360,6 +462,10 @@ const BlockConfigurator = ({ selectedBlocks, blockConfig, setBlockConfig, catego
             </Button>
           </div>
         </Section>
+      )}
+
+      {hasBlock("-bgmusic") && (
+        <BgMusicUploadSection blockConfig={blockConfig} updateField={updateField} />
       )}
 
       {hasBlock("-videomsg") && (

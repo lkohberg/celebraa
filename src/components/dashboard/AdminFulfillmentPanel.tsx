@@ -6,15 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { blocks, isManualBlock } from "@/data/blocks";
-import { Upload, Music, FileText, X, Eye, Rocket } from "lucide-react";
+import { Upload, FileText, X, Eye, Rocket } from "lucide-react";
 
 const AdminFulfillmentPanel = ({ event }: { event: any }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const illustrationInputRef = useRef<HTMLInputElement>(null);
-  const musicInputRef = useRef<HTMLInputElement>(null);
-  const genericInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState<string | null>(null);
+  const genericInputRef = useRef<HTMLInputElement>(null);
   const [publishing, setPublishing] = useState(false);
 
   const selectedBlocks = (event.selected_blocks || []) as string[];
@@ -24,7 +23,6 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
   const uploadedFiles = (blockConfig._admin_files || []) as { name: string; url: string; blockId?: string; uploadedAt: string }[];
 
   const hasIllustration = manualBlocksList.some(id => id.endsWith("-illustration"));
-  const hasBgMusic = manualBlocksList.some(id => id.endsWith("-bgmusic"));
 
   const uploadToStorage = async (file: File) => {
     const path = `${event.id}/${Date.now()}-${file.name}`;
@@ -52,23 +50,8 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
     if (illustrationInputRef.current) illustrationInputRef.current.value = "";
   };
 
-  const handleMusicUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading("music");
-    try {
-      const url = await uploadToStorage(file);
-      const newConfig = { ...blockConfig, music_url: url };
-      const { error } = await supabase.from("events").update({ block_config: newConfig } as any).eq("id", event.id);
-      if (error) throw error;
-      toast.success(t("admin.musicUploaded"));
-      queryClient.invalidateQueries({ queryKey: ["my-events"] });
-    } catch {
-      toast.error(t("admin.fileUploadError"));
-    }
-    setUploading(null);
-    if (musicInputRef.current) musicInputRef.current.value = "";
-  };
+
+
 
   const handleGenericUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -162,36 +145,8 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
             </div>
           )}
 
-          {hasBgMusic && (
-            <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="text-lg">🎶</span>
-                <span className="font-body text-sm font-semibold text-foreground">{t("block.bgmusic")}</span>
-              </div>
-              {manualInfo[selectedBlocks.find(id => id.endsWith("-bgmusic")) || ""] && (
-                <div>
-                  <p className="font-body text-xs text-muted-foreground mb-1">{t("admin.customerNote")}:</p>
-                  <p className="font-body text-sm text-foreground bg-secondary/50 rounded-md p-2">{manualInfo[selectedBlocks.find(id => id.endsWith("-bgmusic")) || ""]}</p>
-                </div>
-              )}
-              <div>
-                <p className="font-body text-xs font-semibold text-foreground mb-1">{t("admin.uploadMusic")}:</p>
-                {blockConfig.music_url ? (
-                  <div className="flex items-center gap-2 p-2 bg-secondary/50 rounded-md">
-                    <Music className="w-4 h-4 text-primary" />
-                    <span className="font-body text-sm text-foreground truncate">{t("admin.musicReady")}</span>
-                    <audio controls src={blockConfig.music_url} className="h-8 ml-auto" />
-                  </div>
-                ) : (
-                  <p className="font-body text-xs text-muted-foreground italic mb-1">{t("admin.noMusicYet")}</p>
-                )}
-                <input ref={musicInputRef} type="file" className="hidden" onChange={handleMusicUpload} accept="audio/*" />
-                <Button variant="outline" size="sm" className="font-body mt-2" disabled={uploading === "music"} onClick={() => musicInputRef.current?.click()}>
-                  <Upload className="w-4 h-4 mr-2" /> {uploading === "music" ? "..." : blockConfig.music_url ? t("admin.replaceMusic") : t("admin.uploadMusic")}
-                </Button>
-              </div>
-            </div>
-          )}
+
+
 
           {manualBlocksList.filter(id => !id.endsWith("-illustration") && !id.endsWith("-bgmusic")).map(id => {
             const block = blocks.find(b => b.id === id);

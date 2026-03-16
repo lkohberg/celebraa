@@ -23,7 +23,7 @@ export interface Package {
 
 export const BASE_PRICE = 19;
 
-export const MANUAL_BLOCK_SUFFIXES = ["-illustration", "-musicpro", "-bgmusic"];
+export const MANUAL_BLOCK_SUFFIXES = ["-illustration", "-musicpro"];
 
 export const isManualBlock = (blockId: string) =>
   MANUAL_BLOCK_SUFFIXES.some(suffix => blockId.endsWith(suffix));
@@ -37,7 +37,7 @@ export const blocks: Block[] = [
   { id: "wedding-story", nameKey: "block.story", descriptionKey: "block.desc.story", price: 9, category: "wedding", icon: "💕" },
   { id: "wedding-wishlist", nameKey: "block.wishlist", descriptionKey: "block.desc.wishlist", price: 9, category: "wedding", icon: "🎁" },
   { id: "wedding-dresscode", nameKey: "block.dresscode", descriptionKey: "block.desc.dresscode", price: 9, category: "wedding", icon: "👔" },
-  { id: "wedding-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 9, category: "wedding", icon: "🎶", requiresManualWork: true, manualWorkDescriptionKey: "block.manual.bgmusic" },
+  { id: "wedding-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 9, category: "wedding", icon: "🎶" },
   { id: "wedding-videomsg", nameKey: "block.videomsg", descriptionKey: "block.desc.videomsg", price: 9, category: "wedding", icon: "🎬" },
   { id: "wedding-hotels", nameKey: "block.hotels", descriptionKey: "block.desc.hotels", price: 19, category: "wedding", icon: "🏨" },
   { id: "wedding-slideshow", nameKey: "block.slideshow", descriptionKey: "block.desc.slideshow", price: 19, category: "wedding", icon: "📸" },
@@ -49,7 +49,7 @@ export const blocks: Block[] = [
   // Corporate
   { id: "business-timeline", nameKey: "block.timeline", descriptionKey: "block.desc.timeline.business", price: 9, category: "corporate", icon: "🕐" },
   { id: "business-dresscode", nameKey: "block.dresscode.single", descriptionKey: "block.desc.dresscode.single", price: 9, category: "corporate", icon: "👔" },
-  { id: "business-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 9, category: "corporate", icon: "🎶", requiresManualWork: true, manualWorkDescriptionKey: "block.manual.bgmusic" },
+  { id: "business-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 9, category: "corporate", icon: "🎶" },
   { id: "business-videomsg", nameKey: "block.videomsg.corporate", descriptionKey: "block.desc.videomsg.corporate", price: 9, category: "corporate", icon: "🎬" },
   { id: "business-hotels", nameKey: "block.hotels", descriptionKey: "block.desc.hotels.business", price: 9, category: "corporate", icon: "🏨" },
   { id: "business-menu", nameKey: "block.menu", descriptionKey: "block.desc.menu.business", price: 9, category: "corporate", icon: "🍽️" },
@@ -62,7 +62,7 @@ export const blocks: Block[] = [
   { id: "party-musicwish", nameKey: "block.musicwish", descriptionKey: "block.desc.musicwish", price: 5, category: "birthday", icon: "🎵" },
   { id: "party-wishlist", nameKey: "block.wishlist", descriptionKey: "block.desc.wishlist.party", price: 5, category: "birthday", icon: "🎁" },
   { id: "party-dresscode", nameKey: "block.dresscode", descriptionKey: "block.desc.dresscode.party", price: 5, category: "birthday", icon: "👔" },
-  { id: "party-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 5, category: "birthday", icon: "🎶", requiresManualWork: true, manualWorkDescriptionKey: "block.manual.bgmusic" },
+  { id: "party-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 5, category: "birthday", icon: "🎶" },
   { id: "party-videomsg", nameKey: "block.videomsg", descriptionKey: "block.desc.videomsg", price: 5, category: "birthday", icon: "🎬" },
   { id: "party-quiz", nameKey: "block.quiz", descriptionKey: "block.desc.quiz", price: 9, category: "birthday", icon: "❓" },
   { id: "party-menu", nameKey: "block.menu", descriptionKey: "block.desc.menu.party", price: 9, category: "birthday", icon: "🍽️" },

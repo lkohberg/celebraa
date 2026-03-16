@@ -13,6 +13,7 @@ import { ArrowLeft, AlertTriangle, Package } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { blocks, isManualBlock } from "@/data/blocks";
 import EventDetail from "@/components/dashboard/EventDetail";
+import CopyrightReportsPanel from "@/components/dashboard/CopyrightReportsPanel";
 
 const useUserEmail = (userId: string | undefined, enabled: boolean) =>
   useQuery({
@@ -90,6 +91,7 @@ const AdminDashboard = () => {
 
       <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-10">
         <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8">{t("dashboard.title")}</h1>
+        {isAdmin && <CopyrightReportsPanel />}
 
         {isAdmin && pendingEvents.length > 0 && (
           <div className="mb-8">
