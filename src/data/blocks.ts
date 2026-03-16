@@ -62,7 +62,7 @@ export const blocks: Block[] = [
   { id: "party-musicwish", nameKey: "block.musicwish", descriptionKey: "block.desc.musicwish", price: 5, category: "birthday", icon: "🎵" },
   { id: "party-wishlist", nameKey: "block.wishlist", descriptionKey: "block.desc.wishlist.party", price: 5, category: "birthday", icon: "🎁" },
   { id: "party-dresscode", nameKey: "block.dresscode", descriptionKey: "block.desc.dresscode.party", price: 5, category: "birthday", icon: "👔" },
-  { id: "party-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 5, category: "birthday", icon: "🎶", requiresManualWork: true, manualWorkDescriptionKey: "block.manual.bgmusic" },
+  { id: "party-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 5, category: "birthday", icon: "🎶" },
   { id: "party-videomsg", nameKey: "block.videomsg", descriptionKey: "block.desc.videomsg", price: 5, category: "birthday", icon: "🎬" },
   { id: "party-quiz", nameKey: "block.quiz", descriptionKey: "block.desc.quiz", price: 9, category: "birthday", icon: "❓" },
   { id: "party-menu", nameKey: "block.menu", descriptionKey: "block.desc.menu.party", price: 9, category: "birthday", icon: "🍽️" },
