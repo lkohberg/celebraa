@@ -51,23 +51,8 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
     if (illustrationInputRef.current) illustrationInputRef.current.value = "";
   };
 
-  const handleMusicUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading("music");
-    try {
-      const url = await uploadToStorage(file);
-      const newConfig = { ...blockConfig, music_url: url };
-      const { error } = await supabase.from("events").update({ block_config: newConfig } as any).eq("id", event.id);
-      if (error) throw error;
-      toast.success(t("admin.musicUploaded"));
-      queryClient.invalidateQueries({ queryKey: ["my-events"] });
-    } catch {
-      toast.error(t("admin.fileUploadError"));
-    }
-    setUploading(null);
-    if (musicInputRef.current) musicInputRef.current.value = "";
-  };
+
+
 
   const handleGenericUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
