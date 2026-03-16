@@ -14,7 +14,6 @@ const AdminFulfillmentPanel = ({ event }: { event: any }) => {
   const illustrationInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState<string | null>(null);
   const genericInputRef = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState<string | null>(null);
   const [publishing, setPublishing] = useState(false);
 
   const selectedBlocks = (event.selected_blocks || []) as string[];
