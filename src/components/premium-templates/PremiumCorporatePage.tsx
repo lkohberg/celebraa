@@ -84,7 +84,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
         </motion.div>
       </section>
 
-      {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} />}
+      {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} eventId={event.id} />}
 
       {/* Countdown */}
       <section className="py-24 relative overflow-hidden bg-card">
