@@ -49,7 +49,7 @@ export const blocks: Block[] = [
   // Corporate
   { id: "business-timeline", nameKey: "block.timeline", descriptionKey: "block.desc.timeline.business", price: 9, category: "corporate", icon: "🕐" },
   { id: "business-dresscode", nameKey: "block.dresscode.single", descriptionKey: "block.desc.dresscode.single", price: 9, category: "corporate", icon: "👔" },
-  { id: "business-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 9, category: "corporate", icon: "🎶", requiresManualWork: true, manualWorkDescriptionKey: "block.manual.bgmusic" },
+  { id: "business-bgmusic", nameKey: "block.bgmusic", descriptionKey: "block.desc.bgmusic", price: 9, category: "corporate", icon: "🎶" },
   { id: "business-videomsg", nameKey: "block.videomsg.corporate", descriptionKey: "block.desc.videomsg.corporate", price: 9, category: "corporate", icon: "🎬" },
   { id: "business-hotels", nameKey: "block.hotels", descriptionKey: "block.desc.hotels.business", price: 9, category: "corporate", icon: "🏨" },
   { id: "business-menu", nameKey: "block.menu", descriptionKey: "block.desc.menu.business", price: 9, category: "corporate", icon: "🍽️" },
