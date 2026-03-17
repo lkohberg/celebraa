@@ -493,6 +493,7 @@ const de = {
   "blockConfig.sponsorLogo": "Logo",
   "blockConfig.slideshow": "Slideshow",
   "blockConfig.slideshowHint": "Lade deine eigenen Fotos für die Slideshow hoch.",
+  "blockConfig.bgMusic": "Hintergrundmusik",
 
   // Template Card
   "templateCard.demoView": "Demo ansehen",

@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Gamepad2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 import { colorWithAlpha } from "@/lib/color-utils";
+import { useGameVotes, useSubmitGameVote } from "@/hooks/useEvents";
+import { toast } from "sonner";
 
 interface GameOption {
   name: string;
@@ -11,14 +14,52 @@ interface GameOption {
   votes: number;
 }
 
-const GamesVoteSection = ({ games, accentColor, isPreview = false, lang }: { games?: GameOption[]; accentColor?: string; isPreview?: boolean; lang?: EventLang }) => {
-  const [displayGames, setDisplayGames] = useState(games && games.length > 0 ? games : []);
+const GamesVoteSection = ({ games, accentColor, isPreview = false, lang, eventId }: { games?: GameOption[]; accentColor?: string; isPreview?: boolean; lang?: EventLang; eventId?: string }) => {
+  const displayGames = games && games.length > 0 ? games : [];
   const [voted, setVoted] = useState(false);
+  const [voterName, setVoterName] = useState("");
+  const [showNameInput, setShowNameInput] = useState(false);
+  const [pendingGame, setPendingGame] = useState<string | null>(null);
   const color = accentColor || "hsl(340, 65%, 50%)";
   const l = (key: string) => lang ? getEventLabel(lang, key) : getEventLabel("de", key);
-  const maxVotes = Math.max(...displayGames.map(g => g.votes), 1);
+
+  const { data: dbVotes } = useGameVotes(eventId || "");
+  const submitVote = useSubmitGameVote();
 
   if (displayGames.length === 0) return null;
+
+  // Calculate votes from DB
+  const voteCountMap: Record<string, number> = {};
+  dbVotes?.forEach((v: any) => {
+    voteCountMap[v.game_name] = (voteCountMap[v.game_name] || 0) + 1;
+  });
+
+  const gamesWithVotes = displayGames.map(g => ({
+    ...g,
+    votes: (voteCountMap[g.name] || 0) + (g.votes || 0),
+  }));
+
+  const maxVotes = Math.max(...gamesWithVotes.map(g => g.votes), 1);
+
+  const handleVote = (gameName: string) => {
+    if (isPreview || !eventId || voted) return;
+    if (!showNameInput) {
+      setShowNameInput(true);
+      setPendingGame(gameName);
+      return;
+    }
+    if (pendingGame === gameName && voterName.trim()) {
+      submitVote.mutate(
+        { event_id: eventId, game_name: gameName, guest_name: voterName.trim() },
+        {
+          onSuccess: () => { setVoted(true); setShowNameInput(false); },
+          onError: () => toast.error("Du hast bereits abgestimmt."),
+        }
+      );
+    } else {
+      setPendingGame(gameName);
+    }
+  };
 
   return (
     <section className="py-20 relative overflow-hidden">
@@ -39,8 +80,19 @@ const GamesVoteSection = ({ games, accentColor, isPreview = false, lang }: { gam
           <p className="font-body text-sm text-muted-foreground mt-3">{l("gamesVoteSubtitle")}</p>
         </motion.div>
 
+        {showNameInput && !voted && (
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
+            <Input
+              placeholder={l("potluckYourName") || "Dein Name"}
+              value={voterName}
+              onChange={(e) => setVoterName(e.target.value)}
+              className="font-body text-sm"
+            />
+          </motion.div>
+        )}
+
         <div className="space-y-3">
-          {displayGames.map((game, i) => (
+          {gamesWithVotes.map((game, i) => (
             <motion.div key={i} initial={{ opacity: 0, x: -15 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="relative bg-background/80 backdrop-blur-sm rounded-xl border border-border/50 overflow-hidden hover:shadow-sm transition-shadow">
               <motion.div className="absolute inset-y-0 left-0 opacity-10" style={{ backgroundColor: color }} initial={{ width: 0 }} whileInView={{ width: `${(game.votes / maxVotes) * 100}%` }} viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.1 }} />
               <div className="relative flex items-center justify-between p-4">
@@ -51,7 +103,7 @@ const GamesVoteSection = ({ games, accentColor, isPreview = false, lang }: { gam
                 <div className="flex items-center gap-3">
                   <span className="font-body text-xs text-muted-foreground font-medium">{game.votes}</span>
                   {!voted && (
-                    <Button size="sm" variant="outline" className="font-body text-xs h-8 px-3 rounded-lg" onClick={() => { if (isPreview) return; const updated = [...displayGames]; updated[i] = { ...updated[i], votes: updated[i].votes + 1 }; setDisplayGames(updated); setVoted(true); }} disabled={isPreview}>
+                    <Button size="sm" variant="outline" className="font-body text-xs h-8 px-3 rounded-lg" onClick={() => handleVote(game.name)} disabled={isPreview || submitVote.isPending || (showNameInput && !voterName.trim())}>
                       👍 Vote
                     </Button>
                   )}
