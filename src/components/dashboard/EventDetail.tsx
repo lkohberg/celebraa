@@ -6,10 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
-import { useEventGuests, useEventAnalytics, useUpdateEvent, useMusicWishes } from "@/hooks/useEvents";
+import { useEventGuests, useEventAnalytics, useUpdateEvent, useMusicWishes, usePotluckClaims, useQuizResponses, useGameVotes } from "@/hooks/useEvents";
 import { toast } from "sonner";
 import { blocks } from "@/data/blocks";
-import { BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Archive, Radio, Rocket, Music, Trash2, Package, Pencil } from "lucide-react";
+import { BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Archive, Radio, Rocket, Music, Trash2, Package, Pencil, ShoppingBasket, HelpCircle, Gamepad2 } from "lucide-react";
 import AdminFulfillmentPanel from "./AdminFulfillmentPanel";
 import LanguageLinks from "./LanguageLinks";
 import StatCard from "./StatCard";
@@ -20,6 +20,9 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
   const { data: guests } = useEventGuests(event.id);
   const { data: analytics } = useEventAnalytics(event.id);
   const { data: musicWishes } = useMusicWishes(event.id);
+  const { data: potluckClaims } = usePotluckClaims(event.id);
+  const { data: quizResponses } = useQuizResponses(event.id);
+  const { data: gameVotes } = useGameVotes(event.id);
   const updateEvent = useUpdateEvent();
   const queryClient = useQueryClient();
   const [deleting, setDeleting] = useState(false);
@@ -74,7 +77,29 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
 
   const selectedBlocks = (event.selected_blocks || []) as string[];
   const hasMusicBlock = selectedBlocks.some((id: string) => id.endsWith("-musicpro") || id.endsWith("-musicwish"));
+  const hasPotluckBlock = selectedBlocks.some((id: string) => id.endsWith("-potluck"));
+  const hasQuizBlock = selectedBlocks.some((id: string) => id.endsWith("-quiz"));
+  const hasGamesBlock = selectedBlocks.some((id: string) => id.endsWith("-games"));
+  const hasInteractiveBlocks = hasPotluckBlock || hasQuizBlock || hasGamesBlock;
   const canEdit = event.status === "live" || event.status === "paid" || event.status === "draft";
+
+  // Quiz stats
+  const blockCfg = (event.block_config || {}) as any;
+  const quizQuestions = blockCfg.quiz || [];
+  const quizStats = quizQuestions.map((q: any, qi: number) => {
+    const responses = quizResponses?.filter((r: any) => r.question_index === qi) || [];
+    const optionCounts = (q.options || []).map((_: string, oi: number) =>
+      responses.filter((r: any) => r.selected_option === oi).length
+    );
+    return { question: q.question, options: q.options || [], correctIndex: q.correctIndex, optionCounts, total: responses.length };
+  });
+
+  // Game vote stats
+  const gameNames = (blockCfg.games || []).map((g: any) => g.name);
+  const gameVoteCounts: Record<string, number> = {};
+  gameVotes?.forEach((v: any) => {
+    gameVoteCounts[v.game_name] = (gameVoteCounts[v.game_name] || 0) + 1;
+  });
 
   return (
     <>
@@ -94,6 +119,11 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
           {hasMusicBlock && (
             <TabsTrigger value="music" className="font-body text-xs sm:text-sm">
               <Music className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">{t("admin.musicWishes")}</span>
+            </TabsTrigger>
+          )}
+          {hasInteractiveBlocks && (
+            <TabsTrigger value="interactive" className="font-body text-xs sm:text-sm">
+              <Gamepad2 className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Ergebnisse</span>
             </TabsTrigger>
           )}
           <TabsTrigger value="payment" className="font-body text-xs sm:text-sm">
@@ -134,7 +164,6 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
             </div>
           )}
 
-          {/* Edit button for customers */}
           {canEdit && (
             <div className="flex items-center gap-3 mb-4">
               <Button variant="outline" size="sm" className="font-body" onClick={() => setEditOpen(true)}>
@@ -191,6 +220,12 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
                       {guest.email && <p className="font-body text-sm text-muted-foreground truncate">{guest.email}</p>}
                       {guest.menu_choice && <Badge variant="outline" className="mt-1 text-xs">{guest.menu_choice}</Badge>}
                       {guest.message && <p className="font-body text-sm text-muted-foreground italic mt-1 truncate">"{guest.message}"</p>}
+                      {(guest.companion_count ?? 0) > 0 && (
+                        <p className="font-body text-xs text-muted-foreground mt-1">
+                          +{guest.companion_count} Begleitperson{(guest.companion_count ?? 0) > 1 ? "en" : ""}
+                          {guest.companion_names && (guest.companion_names as string[]).length > 0 && `: ${(guest.companion_names as string[]).join(", ")}`}
+                        </p>
+                      )}
                     </div>
                     <Badge className="ml-2 shrink-0" variant={guest.rsvp_status === "accepted" ? "default" : guest.rsvp_status === "declined" ? "destructive" : "secondary"}>
                       {t(`dashboard.rsvp.${guest.rsvp_status}`)}
@@ -232,6 +267,103 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
                 ))}
               </div>
             )}
+          </TabsContent>
+        )}
+
+        {hasInteractiveBlocks && (
+          <TabsContent value="interactive">
+            <div className="space-y-8">
+              {/* Potluck Claims */}
+              {hasPotluckBlock && (
+                <div>
+                  <h3 className="font-display text-lg font-semibold text-foreground flex items-center gap-2 mb-4">
+                    <ShoppingBasket className="w-5 h-5" /> Mitbringliste ({potluckClaims?.length || 0})
+                  </h3>
+                  {!potluckClaims?.length ? (
+                    <p className="font-body text-sm text-muted-foreground">Noch keine Einträge.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {potluckClaims.map((claim: any) => (
+                        <Card key={claim.id}><CardContent className="p-3 sm:p-4 flex items-center justify-between">
+                          <div>
+                            <p className="font-body font-medium text-foreground">🧺 {claim.item_name}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-body text-sm text-foreground font-medium">{claim.claimed_by}</p>
+                            <p className="font-body text-xs text-muted-foreground">{new Date(claim.created_at).toLocaleDateString("de-AT")}</p>
+                          </div>
+                        </CardContent></Card>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Quiz Results */}
+              {hasQuizBlock && quizQuestions.length > 0 && (
+                <div>
+                  <h3 className="font-display text-lg font-semibold text-foreground flex items-center gap-2 mb-4">
+                    <HelpCircle className="w-5 h-5" /> Quiz-Ergebnisse ({quizResponses?.length || 0} Antworten)
+                  </h3>
+                  {quizStats.map((stat: any, qi: number) => (
+                    <Card key={qi} className="mb-3"><CardContent className="p-4">
+                      <p className="font-body font-medium text-foreground mb-3">Frage {qi + 1}: {stat.question}</p>
+                      <div className="space-y-2">
+                        {stat.options.map((opt: string, oi: number) => {
+                          const count = stat.optionCounts[oi] || 0;
+                          const pct = stat.total > 0 ? Math.round((count / stat.total) * 100) : 0;
+                          const isCorrect = oi === stat.correctIndex;
+                          return (
+                            <div key={oi} className="flex items-center gap-3">
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className={`font-body text-sm ${isCorrect ? "font-semibold text-green-700" : "text-foreground"}`}>
+                                    {isCorrect ? "✓ " : ""}{opt}
+                                  </span>
+                                  <span className="font-body text-xs text-muted-foreground">{count} ({pct}%)</span>
+                                </div>
+                                <div className="h-2 rounded-full bg-secondary overflow-hidden">
+                                  <div className={`h-full rounded-full ${isCorrect ? "bg-green-500" : "bg-primary/50"}`} style={{ width: `${pct}%` }} />
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </CardContent></Card>
+                  ))}
+                </div>
+              )}
+
+              {/* Game Votes */}
+              {hasGamesBlock && gameNames.length > 0 && (
+                <div>
+                  <h3 className="font-display text-lg font-semibold text-foreground flex items-center gap-2 mb-4">
+                    <Gamepad2 className="w-5 h-5" /> Spiele-Abstimmung ({gameVotes?.length || 0} Stimmen)
+                  </h3>
+                  <div className="space-y-2">
+                    {gameNames
+                      .map((name: string) => ({ name, votes: gameVoteCounts[name] || 0 }))
+                      .sort((a: any, b: any) => b.votes - a.votes)
+                      .map((game: any) => {
+                        const maxV = Math.max(...gameNames.map((n: string) => gameVoteCounts[n] || 0), 1);
+                        const pct = Math.round((game.votes / maxV) * 100);
+                        return (
+                          <Card key={game.name}><CardContent className="p-3 sm:p-4">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="font-body font-medium text-foreground">🎮 {game.name}</span>
+                              <span className="font-body text-sm text-muted-foreground font-medium">{game.votes} Stimmen</span>
+                            </div>
+                            <div className="h-2 rounded-full bg-secondary overflow-hidden">
+                              <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
+                            </div>
+                          </CardContent></Card>
+                        );
+                      })}
+                  </div>
+                </div>
+              )}
+            </div>
           </TabsContent>
         )}
 
