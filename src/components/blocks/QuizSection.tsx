@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { HelpCircle, CheckCircle, Sparkles, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 import { colorWithAlpha } from "@/lib/color-utils";
+import { useSubmitQuizResponse } from "@/hooks/useEvents";
 
 interface QuizQuestion {
   question: string;
@@ -11,18 +12,34 @@ interface QuizQuestion {
   correctIndex: number;
 }
 
-const QuizSection = ({ questions, accentColor, isPreview = false, lang }: { questions?: QuizQuestion[]; accentColor?: string; isPreview?: boolean; lang?: EventLang }) => {
+const QuizSection = ({ questions, accentColor, isPreview = false, lang, eventId }: { questions?: QuizQuestion[]; accentColor?: string; isPreview?: boolean; lang?: EventLang; eventId?: string }) => {
   const displayQuestions = questions && questions.length > 0 ? questions : [];
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const color = accentColor || "hsl(340, 65%, 50%)";
   const l = (key: string) => lang ? getEventLabel(lang, key) : getEventLabel("de", key);
+  const submitResponse = useSubmitQuizResponse();
 
   if (displayQuestions.length === 0) return null;
 
   const finished = currentQ >= displayQuestions.length - 1 && selected !== null;
   const question = displayQuestions[currentQ];
+
+  const handleSelect = (optionIndex: number) => {
+    if (isPreview || selected !== null) return;
+    setSelected(optionIndex);
+    if (optionIndex === question.correctIndex) setScore(s => s + 1);
+
+    // Persist to DB
+    if (eventId) {
+      submitResponse.mutate({
+        event_id: eventId,
+        question_index: currentQ,
+        selected_option: optionIndex,
+      });
+    }
+  };
 
   return (
     <section className="py-20 relative overflow-hidden">
@@ -61,11 +78,7 @@ const QuizSection = ({ questions, accentColor, isPreview = false, lang }: { ques
               <motion.button
                 key={i}
                 whileTap={isPreview ? {} : { scale: 0.98 }}
-                onClick={() => {
-                  if (isPreview || selected !== null) return;
-                  setSelected(i);
-                  if (i === question.correctIndex) setScore(s => s + 1);
-                }}
+                onClick={() => handleSelect(i)}
                 className={`w-full text-left p-4 rounded-xl border font-body text-sm transition-all duration-200 ${
                   selected === i
                     ? i === question.correctIndex ? "border-green-400 bg-green-50 text-green-800 shadow-sm" : "border-red-300 bg-red-50 text-red-800"

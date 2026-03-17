@@ -272,6 +272,45 @@ export type Database = {
         }
         Relationships: []
       }
+      game_votes: {
+        Row: {
+          created_at: string
+          event_id: string
+          game_name: string
+          guest_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          game_name: string
+          guest_name?: string | null
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          game_name?: string
+          guest_name?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_votes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_votes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guest_photos: {
         Row: {
           created_at: string
@@ -406,6 +445,87 @@ export type Database = {
           },
           {
             foreignKeyName: "music_wishes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      potluck_claims: {
+        Row: {
+          claimed_by: string
+          created_at: string
+          event_id: string
+          id: string
+          item_name: string
+        }
+        Insert: {
+          claimed_by: string
+          created_at?: string
+          event_id: string
+          id?: string
+          item_name: string
+        }
+        Update: {
+          claimed_by?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          item_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "potluck_claims_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "potluck_claims_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_responses: {
+        Row: {
+          created_at: string
+          event_id: string
+          guest_name: string | null
+          id: string
+          question_index: number
+          selected_option: number
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          guest_name?: string | null
+          id?: string
+          question_index: number
+          selected_option: number
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          guest_name?: string | null
+          id?: string
+          question_index?: number
+          selected_option?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_responses_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_responses_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events_public"

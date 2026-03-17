@@ -93,6 +93,9 @@ const labels: Record<EventLang, Labels> = {
     potluckSubtitle: "Wer bringt was mit?",
     potluckClaim: "✋ Ich bringe mit!",
     potluckYou: "Du",
+    potluckYourName: "Dein Name",
+    potluckConfirm: "Bestätigen",
+    potluckAlreadyClaimed: "Dieses Item wurde bereits beansprucht.",
     // agenda already defined above
     products: "Produkte",
     sponsors: "Unsere Sponsoren",

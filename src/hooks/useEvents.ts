@@ -147,7 +147,36 @@ export const useMusicWishes = (eventId: string) =>
     queryKey: ["music-wishes", eventId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("music_wishes" as any)
+        .from("music_wishes")
+        .select("*")
+        .eq("event_id", eventId)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!eventId,
+  });
+
+export const useSubmitMusicWish = () =>
+  useMutation({
+    mutationFn: async (wish: { event_id: string; song_title: string; artist?: string; guest_name?: string }) => {
+      const { data, error } = await supabase
+        .from("music_wishes")
+        .insert(wish)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+  });
+
+// Potluck claims
+export const usePotluckClaims = (eventId: string) =>
+  useQuery({
+    queryKey: ["potluck-claims", eventId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("potluck_claims" as any)
         .select("*")
         .eq("event_id", eventId)
         .order("created_at", { ascending: false });
@@ -157,15 +186,83 @@ export const useMusicWishes = (eventId: string) =>
     enabled: !!eventId,
   });
 
-export const useSubmitMusicWish = () =>
-  useMutation({
-    mutationFn: async (wish: { event_id: string; song_title: string; artist?: string; guest_name?: string }) => {
+export const useClaimPotluckItem = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (claim: { event_id: string; item_name: string; claimed_by: string }) => {
       const { data, error } = await supabase
-        .from("music_wishes" as any)
-        .insert(wish)
+        .from("potluck_claims" as any)
+        .insert(claim)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (_data, variables) => {
+      qc.invalidateQueries({ queryKey: ["potluck-claims", variables.event_id] });
+    },
+  });
+};
+
+// Quiz responses
+export const useQuizResponses = (eventId: string) =>
+  useQuery({
+    queryKey: ["quiz-responses", eventId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("quiz_responses" as any)
+        .select("*")
+        .eq("event_id", eventId)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data as any[];
+    },
+    enabled: !!eventId,
+  });
+
+export const useSubmitQuizResponse = () =>
+  useMutation({
+    mutationFn: async (response: { event_id: string; question_index: number; selected_option: number; guest_name?: string }) => {
+      const { data, error } = await supabase
+        .from("quiz_responses" as any)
+        .insert(response)
         .select()
         .single();
       if (error) throw error;
       return data;
     },
   });
+
+// Game votes
+export const useGameVotes = (eventId: string) =>
+  useQuery({
+    queryKey: ["game-votes", eventId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("game_votes" as any)
+        .select("*")
+        .eq("event_id", eventId)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data as any[];
+    },
+    enabled: !!eventId,
+  });
+
+export const useSubmitGameVote = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vote: { event_id: string; game_name: string; guest_name?: string }) => {
+      const { data, error } = await supabase
+        .from("game_votes" as any)
+        .insert(vote)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (_data, variables) => {
+      qc.invalidateQueries({ queryKey: ["game-votes", variables.event_id] });
+    },
+  });
+};
