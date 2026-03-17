@@ -26,8 +26,9 @@ const de = {
   "features.1.desc": "Alle Gäste erhalten einen professionellen Link und Zusagen werden automatisch gesammelt.",
   "features.2.title": "Niemand schreibt gerne Einladungen.",
   "features.2.desc": "Spare dir Zeit, Nerven und danach dieses Gefühl, irgendwas Wichtiges vergessen zu haben.",
-  "features.3.title": "Spare kosten.",
-  "features.3.desc": "Unsere Recherchen zeigen das Einladungen für nur 50 Personen durschnitlich €200-€400 kosten",
+  "features.3.title": "Spare Kosten.",
+  "features.3.desc":
+    "Unsere Recherchen zeigen, dass Einladungen für etwa 50 Personen durchschnittlich zwischen 200 € und 400 € kosten.",
 
   // Comparison Table
   "comparison.title": "Warum celebra.at?",
@@ -291,7 +292,8 @@ const de = {
   "auth.loginSuccess": "Erfolgreich angemeldet!",
   "auth.registerSuccess": "Registrierung erfolgreich! Bitte bestätige deine E-Mail.",
   "auth.verifyTitle": "Prüfe dein Postfach",
-  "auth.verifyDesc": "Wir haben dir eine Bestätigungs-E-Mail gesendet. Bitte klicke auf den Link in der E-Mail, um dein Konto zu aktivieren.",
+  "auth.verifyDesc":
+    "Wir haben dir eine Bestätigungs-E-Mail gesendet. Bitte klicke auf den Link in der E-Mail, um dein Konto zu aktivieren.",
   "auth.noAccount": "Noch kein Konto?",
   "auth.hasAccount": "Bereits registriert?",
 
@@ -299,17 +301,23 @@ const de = {
   "howItWorks.title": "Wie funktioniert's?",
   "howItWorks.subtitle": "In 6 einfachen Schritten zu deiner perfekten Event-Seite",
   "howItWorks.step1.title": "1. Design wählen",
-  "howItWorks.step1.desc": "Wähle aus unseren Premium-Designs für Hochzeiten, Geburtstage oder Business-Events. Jedes Design ist individuell anpassbar.",
+  "howItWorks.step1.desc":
+    "Wähle aus unseren Premium-Designs für Hochzeiten, Geburtstage oder Business-Events. Jedes Design ist individuell anpassbar.",
   "howItWorks.step2.title": "2. Blöcke & Pakete",
-  "howItWorks.step2.desc": "Stelle deine Event-Seite individuell zusammen. Wähle ein vorteilhaftes Paket oder einzelne Blöcke wie Timeline, Essensmenü, Dresscode und mehr.",
+  "howItWorks.step2.desc":
+    "Stelle deine Event-Seite individuell zusammen. Wähle ein vorteilhaftes Paket oder einzelne Blöcke wie Timeline, Essensmenü, Dresscode und mehr.",
   "howItWorks.step3.title": "3. Live-Vorschau",
-  "howItWorks.step3.desc": "Sieh dir eine Vorschau deiner Event-Seite mit allen gewählten Blöcken an, bevor du bezahlst. So weißt du genau, was du bekommst.",
+  "howItWorks.step3.desc":
+    "Sieh dir eine Vorschau deiner Event-Seite mit allen gewählten Blöcken an, bevor du bezahlst. So weißt du genau, was du bekommst.",
   "howItWorks.step4.title": "4. Kontaktdaten",
-  "howItWorks.step4.desc": "Gib deinen Namen und deine E-Mail-Adresse an, damit wir dich über den Status informieren können.",
+  "howItWorks.step4.desc":
+    "Gib deinen Namen und deine E-Mail-Adresse an, damit wir dich über den Status informieren können.",
   "howItWorks.step5.title": "5. Sicher bezahlen",
-  "howItWorks.step5.desc": "Bezahle sicher über Stripe mit Kreditkarte, Apple Pay oder Google Pay. Einmalzahlung – kein Abo.",
+  "howItWorks.step5.desc":
+    "Bezahle sicher über Stripe mit Kreditkarte, Apple Pay oder Google Pay. Einmalzahlung – kein Abo.",
   "howItWorks.step6.title": "6. Fertig!",
-  "howItWorks.step6.desc": "Deine Event-Seite ist sofort verfügbar (oder nach kurzer Bearbeitung bei individuellen Blöcken). Teile den Link mit deinen Gästen!",
+  "howItWorks.step6.desc":
+    "Deine Event-Seite ist sofort verfügbar (oder nach kurzer Bearbeitung bei individuellen Blöcken). Teile den Link mit deinen Gästen!",
   "howItWorks.price": "Ab nur",
   "howItWorks.priceNote": "Einmalzahlung · Kein Abo",
 
@@ -331,7 +339,8 @@ const de = {
   "order.inPackage": "Im Paket enthalten",
   "order.manualCreated": "Wird individuell für dich erstellt",
   "order.manualTitle": "Individuelle Anpassungen",
-  "order.manualHint": "Für diese Blöcke benötigen wir zusätzliche Infos von dir. Deine Seite wird nach Bearbeitung durch unser Team freigeschaltet.",
+  "order.manualHint":
+    "Für diese Blöcke benötigen wir zusätzliche Infos von dir. Deine Seite wird nach Bearbeitung durch unser Team freigeschaltet.",
   "order.manualPlaceholder": "Deine Angaben hier...",
   "order.priceOverview": "Preisübersicht",
   "order.basePage": "Basis Event-Seite",
@@ -365,7 +374,8 @@ const de = {
   "order.linkTaken": "Bereits vergeben.",
   "order.linkAvailable": "✓ Verfügbar!",
   "order.configureBlocks": "Blöcke konfigurieren",
-  "order.configureBlocksHint": "Fülle die Details für deine ausgewählten Blöcke aus. Du kannst Einträge auch später ergänzen.",
+  "order.configureBlocksHint":
+    "Fülle die Details für deine ausgewählten Blöcke aus. Du kannst Einträge auch später ergänzen.",
   "order.continuePreview": "Weiter zur Vorschau",
   "order.previewTitle": "Vorschau",
   "order.previewSubtitle": "So wird deine Event-Seite aussehen.",
@@ -380,7 +390,8 @@ const de = {
   "order.summary": "Zusammenfassung",
   "order.template": "Template",
   "order.package": "Paket",
-  "order.manualWorkNote": "Deine Seite enthält individuelle Blöcke und wird nach Bearbeitung durch unser Team freigeschaltet.",
+  "order.manualWorkNote":
+    "Deine Seite enthält individuelle Blöcke und wird nach Bearbeitung durch unser Team freigeschaltet.",
   "order.acceptTerms": "Ich akzeptiere die",
   "order.and": "&",
   "order.processing": "Wird verarbeitet...",
@@ -517,23 +528,32 @@ const de = {
 
   // Template Descriptions
   "tpl.neonParty.tagline": "Let's glow! 🌟",
-  "tpl.neonParty.desc": "Lebhaft und farbenfroh — mit Konfettiregen, pulsierenden Neonfarben und einer Energie, die man sofort spürt. Perfekt für unvergessliche Partynächte.",
+  "tpl.neonParty.desc":
+    "Lebhaft und farbenfroh — mit Konfettiregen, pulsierenden Neonfarben und einer Energie, die man sofort spürt. Perfekt für unvergessliche Partynächte.",
   "tpl.glamourNight.tagline": "Shine bright ✨",
-  "tpl.glamourNight.desc": "Opulent und glamourös — goldene Akzente auf dunklem Samt, für Geburtstagsfeiern mit dem gewissen Wow Faktor. Eleganz trifft auf Party.",
+  "tpl.glamourNight.desc":
+    "Opulent und glamourös — goldene Akzente auf dunklem Samt, für Geburtstagsfeiern mit dem gewissen Wow Faktor. Eleganz trifft auf Party.",
   "tpl.gardenParty.tagline": "Nature vibes 🌿",
-  "tpl.gardenParty.desc": "Frisch und natürlich — sanfte Grüntöne und organische Formen für entspannte Feiern im Grünen. Leichtigkeit pur.",
+  "tpl.gardenParty.desc":
+    "Frisch und natürlich — sanfte Grüntöne und organische Formen für entspannte Feiern im Grünen. Leichtigkeit pur.",
   "tpl.floralRomance.tagline": "Zeitlose Romantik 🌸",
-  "tpl.floralRomance.desc": "Romantisch und verträumt — zarte Blütenfarben, eine elegante Briefumschlag Animation und jedes Detail liebevoll gestaltet. Für Hochzeiten wie aus dem Märchen.",
+  "tpl.floralRomance.desc":
+    "Romantisch und verträumt — zarte Blütenfarben, eine elegante Briefumschlag Animation und jedes Detail liebevoll gestaltet. Für Hochzeiten wie aus dem Märchen.",
   "tpl.classicElegance.tagline": "Ewige Schönheit 💍",
-  "tpl.classicElegance.desc": "Zeitlos und raffiniert — warme Crème und Goldtöne, klassische Typografie und eine Eleganz, die nie aus der Mode kommt.",
+  "tpl.classicElegance.desc":
+    "Zeitlos und raffiniert — warme Crème und Goldtöne, klassische Typografie und eine Eleganz, die nie aus der Mode kommt.",
   "tpl.modernLove.tagline": "Puristisch schön 🤍",
-  "tpl.modernLove.desc": "Minimalistisch und modern — klare Linien, reduzierte Farbpalette und goldene Akzente. Für Paare, die Understatement lieben.",
+  "tpl.modernLove.desc":
+    "Minimalistisch und modern — klare Linien, reduzierte Farbpalette und goldene Akzente. Für Paare, die Understatement lieben.",
   "tpl.executiveSummit.tagline": "Business Excellence 📊",
-  "tpl.executiveSummit.desc": "Professionell und repräsentativ — Navy Blau trifft auf goldene Akzente. Ideal für Konferenzen, Summits und hochkarätige Events.",
+  "tpl.executiveSummit.desc":
+    "Professionell und repräsentativ — Navy Blau trifft auf goldene Akzente. Ideal für Konferenzen, Summits und hochkarätige Events.",
   "tpl.techConference.tagline": "Innovation trifft Design 💡",
-  "tpl.techConference.desc": "Futuristisch und dynamisch — dunkle Basis mit leuchtenden Akzentfarben. Für Tech Events, Hackathons und digitale Konferenzen.",
+  "tpl.techConference.desc":
+    "Futuristisch und dynamisch — dunkle Basis mit leuchtenden Akzentfarben. Für Tech Events, Hackathons und digitale Konferenzen.",
   "tpl.galaEvening.tagline": "Black Tie Glamour 🥂",
-  "tpl.galaEvening.desc": "Luxuriös und exklusiv — Gold auf Schwarz, für Gala Abende, Award Ceremonies und Events, die beeindrucken sollen.",
+  "tpl.galaEvening.desc":
+    "Luxuriös und exklusiv — Gold auf Schwarz, für Gala Abende, Award Ceremonies und Events, die beeindrucken sollen.",
 
   // Demo Preview Content
   "demo.chooseDesign": "Dieses Design wählen",
@@ -542,7 +562,8 @@ const de = {
   "demo.wedding.description": "Wir laden euch herzlich zu unserer Hochzeit ein!",
   "demo.wedding.location": "Schloss Mirabell",
   "demo.wedding.address": "Mirabellplatz 4, 5020 Salzburg",
-  "demo.wedding.story": "Wir haben uns an einem Frühlingsnachmittag kennengelernt, zwischen Lachen und Kaffee. Seitdem ist jeder Tag ein neues Abenteuer zusammen.",
+  "demo.wedding.story":
+    "Wir haben uns an einem Frühlingsnachmittag kennengelernt, zwischen Lachen und Kaffee. Seitdem ist jeder Tag ein neues Abenteuer zusammen.",
   "demo.wedding.ceremonyLocation": "Kirche St. Peter",
   "demo.wedding.ceremonyAddress": "St. Peter Bezirk 1, 5020 Salzburg",
   "demo.wedding.dressCode": "Festlich / Semi-formal",
@@ -642,8 +663,10 @@ const de = {
 
   // Success Page - Pending
   "success.pending.title": "Danke für deine Bestellung!",
-  "success.pending.subtitle": "Deine Event-Seite enthält individuelle Elemente, die von unserem Team bearbeitet werden.",
-  "success.pending.info": "Wir melden uns in Kürze bei dir per E-Mail. Sobald alles fertig ist, findest du deine Seite in deinem Dashboard.",
+  "success.pending.subtitle":
+    "Deine Event-Seite enthält individuelle Elemente, die von unserem Team bearbeitet werden.",
+  "success.pending.info":
+    "Wir melden uns in Kürze bei dir per E-Mail. Sobald alles fertig ist, findest du deine Seite in deinem Dashboard.",
   "success.pending.whatNow": "Was passiert jetzt?",
   "success.pending.step1": "Unser Team bearbeitet deine individuellen Blöcke (z.B. Illustration, Musik).",
   "success.pending.step2": "Du erhältst eine E-Mail, sobald deine Seite fertig ist.",
@@ -707,7 +730,7 @@ const de = {
   "block.desc.musicwish": "Songwünsche einsammeln.",
   "block.desc.quiz": "Quiz/Umfrage (Fragen + Ergebnisse).",
   "block.desc.games": "Poll: welche Spiele, Ergebnisanzeige.",
-  "block.desc.potluck": "\"Wer bringt was mit?\" Liste.",
+  "block.desc.potluck": '"Wer bringt was mit?" Liste.',
   "block.desc.timeline.party": "Party-Ablauf als Zeitstrahl.",
   "block.desc.timeline.business": "Ablauf/Slots als Zeitstrahl.",
   "block.desc.dresscode.single": "Dresscode-Hinweis.",
@@ -776,7 +799,8 @@ const de = {
   "event.companionName": "Name Begleitperson",
 
   // New: Templates custom note
-  "templates.customNote": "Gefällt dir nicht ganz was du siehst? Keine Sorge – all unsere Templates sind vollständig anpassbar, vom Hero-Bild bis zu den Farben und Schriften!",
+  "templates.customNote":
+    "Gefällt dir nicht ganz was du siehst? Keine Sorge – all unsere Templates sind vollständig anpassbar, vom Hero-Bild bis zu den Farben und Schriften!",
 
   // New: Video/Voice message block
   "block.videomsg": "Video / Sprachnachricht",
