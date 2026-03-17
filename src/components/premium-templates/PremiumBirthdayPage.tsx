@@ -183,9 +183,9 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
             )}
 
             {hasBlock("-videomsg") && <VideoMessageSection accentColor={accent} lang={lang} blockConfig={blockCfg} variant="birthday" />}
-            {hasBlock("-quiz") && <QuizSection questions={blockCfg.quiz} accentColor={accent} lang={lang} />}
-            {hasBlock("-games") && <GamesVoteSection games={blockCfg.games} accentColor={accent} lang={lang} />}
-            {hasBlock("-potluck") && <PotluckSection items={blockCfg.potluck} accentColor={accent} lang={lang} />}
+            {hasBlock("-quiz") && <QuizSection questions={blockCfg.quiz} accentColor={accent} lang={lang} eventId={event.id} isPreview={isDemo} />}
+            {hasBlock("-games") && <GamesVoteSection games={blockCfg.games} accentColor={accent} lang={lang} eventId={event.id} isPreview={isDemo} />}
+            {hasBlock("-potluck") && <PotluckSection items={blockCfg.potluck} accentColor={accent} lang={lang} eventId={event.id} isPreview={isDemo} />}
             {hasBlock("-wishlist") && <WishlistSection items={blockCfg.wishlist} accentColor={accent} lang={lang} />}
             {hasBlock("-musicwish") && <MusicWishSection accentColor={accent} eventId={event.id} lang={lang} isPreview={isDemo} />}
 
