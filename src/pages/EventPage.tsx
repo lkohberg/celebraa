@@ -133,9 +133,11 @@ const EventPage = () => {
     }
 
     if (PremiumComponent) {
+      const blockCfg = (eventData as any).block_config || {};
+      const showIntro = !blockCfg.disable_intro;
       return (
         <Suspense fallback={blankFallback}>
-          <PremiumComponent event={eventData} theme={eventTheme} lang={eventLang} />
+          <PremiumComponent event={eventData} theme={eventTheme} lang={eventLang} showIntro={showIntro} />
         </Suspense>
       );
     }
