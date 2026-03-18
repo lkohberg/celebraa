@@ -14,7 +14,7 @@ import demoLogoTechcorp from "@/assets/demo-logo-techcorp.png";
 import demoLogoInnovatelab from "@/assets/demo-logo-innovatelab.png";
 import demoLogoFuturevision from "@/assets/demo-logo-futurevision.png";
 import demoLogoCloudbase from "@/assets/demo-logo-cloudbase.png";
-import demoIllustration from "@/assets/IllustrationDemo.jpeg";
+import demoIllustration from "@/assets/IllustrationDemo.jpg";
 
 interface DemoPreviewProps {
   template: Template | null;
@@ -48,11 +48,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
       dress_code: t("demo.wedding.dressCode"),
       children_welcome: true,
       hotel_recommendations: [
-        {
-          name: t("demo.wedding.hotel1.name"),
-          address: "Schwarzstraße 5-7, 5020 Salzburg",
-          url: "https://www.sacher.com",
-        },
+        { name: t("demo.wedding.hotel1.name"), address: "Schwarzstraße 5-7, 5020 Salzburg", url: "https://www.sacher.com" },
         { name: t("demo.wedding.hotel2.name"), address: "Makartplatz 4, 5020 Salzburg", url: "https://www.bristol.at" },
       ],
       schedule: [
@@ -62,18 +58,9 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
         { time: "20:00", label: t("demo.wedding.schedule.4") },
       ],
       selected_blocks: [
-        "wedding-timeline",
-        "wedding-story",
-        "wedding-wishlist",
-        "wedding-dresscode",
-        "wedding-bgmusic",
-        "wedding-videomsg",
-        "wedding-hotels",
-        "wedding-slideshow",
-        "wedding-menu",
-        "wedding-shuttle",
-        "wedding-musicpro",
-        "wedding-illustration",
+        "wedding-timeline", "wedding-story", "wedding-wishlist", "wedding-dresscode",
+        "wedding-bgmusic", "wedding-videomsg", "wedding-hotels", "wedding-slideshow", "wedding-menu",
+        "wedding-shuttle", "wedding-musicpro", "wedding-illustration",
       ],
       block_config: {
         illustration_url: demoIllustration,
@@ -85,27 +72,13 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
         dresscode_male: t("demo.wedding.dresscode.male"),
         dresscode_female: t("demo.wedding.dresscode.female"),
         shuttle: [
-          {
-            time: "14:30",
-            from: t("demo.wedding.shuttle.from"),
-            to: t("demo.wedding.ceremonyLocation"),
-            note: t("demo.wedding.shuttle.1.note"),
-          },
+          { time: "14:30", from: t("demo.wedding.shuttle.from"), to: t("demo.wedding.ceremonyLocation"), note: t("demo.wedding.shuttle.1.note") },
           { time: "16:00", from: t("demo.wedding.ceremonyLocation"), to: t("demo.wedding.location") },
-          {
-            time: "00:00",
-            from: t("demo.wedding.location"),
-            to: t("demo.wedding.shuttle.from"),
-            note: t("demo.wedding.shuttle.3.note"),
-          },
+          { time: "00:00", from: t("demo.wedding.location"), to: t("demo.wedding.shuttle.from"), note: t("demo.wedding.shuttle.3.note") },
         ],
         wishlist: [
           { name: t("demo.wedding.wishlist.1.name"), hint: t("demo.wedding.wishlist.1.hint") },
-          {
-            name: t("demo.wedding.wishlist.2.name"),
-            hint: t("demo.wedding.wishlist.2.hint"),
-            url: "https://example.com",
-          },
+          { name: t("demo.wedding.wishlist.2.name"), hint: t("demo.wedding.wishlist.2.hint"), url: "https://example.com" },
           { name: t("demo.wedding.wishlist.3.name"), hint: t("demo.wedding.wishlist.3.hint") },
         ],
       },
@@ -128,16 +101,9 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
         { time: "21:00", label: t("demo.birthday.schedule.4") },
       ],
       selected_blocks: [
-        "party-timeline",
-        "party-musicwish",
-        "party-wishlist",
-        "party-dresscode",
-        "party-bgmusic",
-        "party-videomsg",
-        "party-quiz",
-        "party-menu",
-        "party-games",
-        "party-potluck",
+        "party-timeline", "party-musicwish", "party-wishlist", "party-dresscode",
+        "party-bgmusic", "party-videomsg",
+        "party-quiz", "party-menu", "party-games", "party-potluck",
       ],
       block_config: {
         music_url: "/GebDemo.mp3",
@@ -149,10 +115,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
         dresscode_male: t("demo.birthday.dresscode.male"),
         dresscode_female: t("demo.birthday.dresscode.female"),
         quiz: [
-          {
-            question: t("demo.birthday.quiz.1.question"),
-            options: ["Dancing Queen", "Bohemian Rhapsody", "Happy", "Shut Up and Dance"],
-          },
+          { question: t("demo.birthday.quiz.1.question"), options: ["Dancing Queen", "Bohemian Rhapsody", "Happy", "Shut Up and Dance"] },
           { question: t("demo.birthday.quiz.2.question"), options: ["Japan", "Island", "Mexiko", "Neuseeland"] },
         ],
         games: [
@@ -185,11 +148,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
     story_text: t("demo.corporate.story"),
     dress_code: t("demo.corporate.dressCode"),
     hotel_recommendations: [
-      {
-        name: t("demo.corporate.hotel1.name"),
-        address: "Donau-City-Straße 7, 1220 Wien",
-        url: "https://www.melia.com",
-      },
+      { name: t("demo.corporate.hotel1.name"), address: "Donau-City-Straße 7, 1220 Wien", url: "https://www.melia.com" },
       { name: t("demo.corporate.hotel2.name"), address: "Handelskai 269, 1020 Wien", url: "https://www.hilton.com" },
     ],
     schedule: [
@@ -199,14 +158,9 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
       { time: "14:00", label: t("demo.corporate.schedule.4") },
     ],
     selected_blocks: [
-      "business-timeline",
-      "business-dresscode",
-      "business-hotels",
+      "business-timeline", "business-dresscode", "business-hotels",
       "business-videomsg",
-      "business-menu",
-      "business-agenda",
-      "business-products",
-      "business-sponsors",
+      "business-menu", "business-agenda", "business-products", "business-sponsors",
     ],
     block_config: {
       menu: [
@@ -221,21 +175,9 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
         { time: "14:00", title: t("demo.corporate.agenda.4.title"), speaker: t("demo.corporate.agenda.4.speaker") },
       ],
       products: [
-        {
-          name: t("demo.corporate.products.1.name"),
-          description: t("demo.corporate.products.1.desc"),
-          imageUrl: demoProductAnalytics,
-        },
-        {
-          name: t("demo.corporate.products.2.name"),
-          description: t("demo.corporate.products.2.desc"),
-          imageUrl: demoProductCloud,
-        },
-        {
-          name: t("demo.corporate.products.3.name"),
-          description: t("demo.corporate.products.3.desc"),
-          imageUrl: demoProductSecurity,
-        },
+        { name: t("demo.corporate.products.1.name"), description: t("demo.corporate.products.1.desc"), imageUrl: demoProductAnalytics },
+        { name: t("demo.corporate.products.2.name"), description: t("demo.corporate.products.2.desc"), imageUrl: demoProductCloud },
+        { name: t("demo.corporate.products.3.name"), description: t("demo.corporate.products.3.desc"), imageUrl: demoProductSecurity },
       ],
       sponsors: [
         { name: "TechCorp", logoUrl: demoLogoTechcorp },
@@ -277,7 +219,9 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
       <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto p-0">
         <DialogTitle className="sr-only">Demo: {template.name}</DialogTitle>
 
-        <div className="rounded-xl overflow-hidden">{renderPreview()}</div>
+        <div className="rounded-xl overflow-hidden">
+          {renderPreview()}
+        </div>
 
         <div className="flex justify-center py-4">
           <Button
