@@ -7,6 +7,15 @@ import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPag
 import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 
+import demoProductAnalytics from "@/assets/demo-product-analytics.jpg";
+import demoProductCloud from "@/assets/demo-product-cloud.jpg";
+import demoProductSecurity from "@/assets/demo-product-security.jpg";
+import demoLogoTechcorp from "@/assets/demo-logo-techcorp.png";
+import demoLogoInnovatelab from "@/assets/demo-logo-innovatelab.png";
+import demoLogoFuturevision from "@/assets/demo-logo-futurevision.png";
+import demoLogoCloudbase from "@/assets/demo-logo-cloudbase.png";
+import demoIllustration from "@/assets/IllustrationDemo.jpg";
+
 interface DemoPreviewProps {
   template: Template | null;
   open: boolean;
@@ -54,6 +63,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
         "wedding-shuttle", "wedding-musicpro", "wedding-illustration",
       ],
       block_config: {
+        illustration_url: demoIllustration,
         menu: [
           { name: t("demo.wedding.menu.1.name"), description: t("demo.wedding.menu.1.desc") },
           { name: t("demo.wedding.menu.2.name"), description: t("demo.wedding.menu.2.desc") },
@@ -96,6 +106,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
         "party-quiz", "party-menu", "party-games", "party-potluck",
       ],
       block_config: {
+        music_url: "/GebDemo.mp3",
         menu: [
           { name: t("demo.birthday.menu.1.name"), description: t("demo.birthday.menu.1.desc") },
           { name: t("demo.birthday.menu.2.name"), description: t("demo.birthday.menu.2.desc") },
@@ -127,6 +138,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
     };
   }
 
+  // Corporate - NO bgmusic block
   return {
     ...base,
     title: t("demo.corporate.title"),
@@ -147,7 +159,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
     ],
     selected_blocks: [
       "business-timeline", "business-dresscode", "business-hotels",
-      "business-bgmusic", "business-videomsg",
+      "business-videomsg",
       "business-menu", "business-agenda", "business-products", "business-sponsors",
     ],
     block_config: {
@@ -163,15 +175,15 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
         { time: "14:00", title: t("demo.corporate.agenda.4.title"), speaker: t("demo.corporate.agenda.4.speaker") },
       ],
       products: [
-        { name: t("demo.corporate.products.1.name"), description: t("demo.corporate.products.1.desc"), imageUrl: "" },
-        { name: t("demo.corporate.products.2.name"), description: t("demo.corporate.products.2.desc"), imageUrl: "" },
-        { name: t("demo.corporate.products.3.name"), description: t("demo.corporate.products.3.desc"), imageUrl: "" },
+        { name: t("demo.corporate.products.1.name"), description: t("demo.corporate.products.1.desc"), imageUrl: demoProductAnalytics },
+        { name: t("demo.corporate.products.2.name"), description: t("demo.corporate.products.2.desc"), imageUrl: demoProductCloud },
+        { name: t("demo.corporate.products.3.name"), description: t("demo.corporate.products.3.desc"), imageUrl: demoProductSecurity },
       ],
       sponsors: [
-        { name: "TechCorp" },
-        { name: "InnovateLab" },
-        { name: "FutureVision" },
-        { name: "CloudBase" },
+        { name: "TechCorp", logoUrl: demoLogoTechcorp },
+        { name: "InnovateLab", logoUrl: demoLogoInnovatelab },
+        { name: "FutureVision", logoUrl: demoLogoFuturevision },
+        { name: "CloudBase", logoUrl: demoLogoCloudbase },
       ],
     },
   };
