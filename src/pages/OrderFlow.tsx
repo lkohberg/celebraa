@@ -663,7 +663,7 @@ const OrderFlow = () => {
                 </div>
                 <div>
                   <Label className="font-body">{t("order.location")}</Label>
-                  <Input placeholder={t("configure.locationPlaceholder")} value={form.locationName} onChange={(e) => setForm(prev => ({ ...prev, locationName: e.target.value }))} className="font-body mt-1" />
+                  <Input placeholder={t(`configure.locationPlaceholder.${category}`)} value={form.locationName} onChange={(e) => setForm(prev => ({ ...prev, locationName: e.target.value }))} className="font-body mt-1" />
                 </div>
                 <div>
                   <Label className="font-body">{t("order.address")}</Label>

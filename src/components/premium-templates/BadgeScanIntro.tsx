@@ -79,8 +79,8 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
 
           {/* Tap hint – always takes space, invisible when not idle */}
           <p
-            className={`font-body text-[10px] tracking-[0.5em] uppercase mb-10 relative z-10 transition-opacity duration-300 ${phase === "idle" ? "opacity-70" : "opacity-0"}`}
-            style={{ color: accent }}
+            className={`font-body text-[12px] tracking-[0.5em] uppercase mb-10 relative z-10 transition-opacity duration-300 ${phase === "idle" ? "opacity-100" : "opacity-0"}`}
+            style={{ color: "hsl(0, 0%, 100%)", textShadow: "0 0 20px rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.6)" }}
           >
             {tapLabel || t("event.tapToOpen")}
           </p>
