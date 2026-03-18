@@ -54,6 +54,7 @@ const Index = () => {
           <div className="hidden md:flex gap-4 items-center">
             <a href="#templates" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">{t("nav.templates")}</a>
             <a href="#features" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">{t("nav.features")}</a>
+            <button onClick={() => setHowItWorksOpen(true)} className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">{t("nav.howItWorks")}</button>
             <LanguageSwitcher />
             {user ? (
               <Button size="sm" variant="outline" className="font-body" onClick={() => navigate("/dashboard")}>
