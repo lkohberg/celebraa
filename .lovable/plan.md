@@ -1,9 +1,9 @@
-
-
 ## Plan: Neue Event-Optionen (Tagesablauf, Dresscode, Google Maps, Kinder, Hotels)
 
 ### Zusammenfassung
+
 Fünf neue Features für den Event-Konfigurator und die Event-Anzeige:
+
 1. **Tagesablauf** -- vertikaler Zeitstrahl mit Uhrzeiten und Beschreibungen
 2. **Dresscode** -- optionale Auswahl (z.B. Casual, Smart Casual, Elegant, Black Tie)
 3. **Google Maps** -- eingebettete Karte beim Veranstaltungsort
@@ -15,6 +15,7 @@ Fünf neue Features für den Event-Konfigurator und die Event-Anzeige:
 ### 1. Datenbank-Migration
 
 Neue Spalten in `events`:
+
 ```sql
 ALTER TABLE events ADD COLUMN dress_code text;           -- z.B. 'casual', 'smart_casual', 'elegant', 'black_tie'
 ALTER TABLE events ADD COLUMN children_welcome boolean;  -- null = nicht angegeben, true/false
@@ -38,6 +39,7 @@ Im Konfigurator (`ConfigurePage.tsx`) werden folgende Abschnitte ergänzt:
 ### 3. Event-Seiten -- Anzeige der neuen Daten
 
 **Tagesablauf-Komponente** (neue Datei `src/components/premium-templates/ScheduleTimeline.tsx`):
+
 - Vertikaler Zeitstrahl mit einer durchgehenden Linie
 - Kreismarkierungen an jedem Punkt
 - Uhrzeit links, Beschreibung rechts
@@ -61,14 +63,13 @@ Erweitert um: `dress_code`, `children_welcome`, `hotel_recommendations`.
 
 ### Dateien die geändert/erstellt werden
 
-| Datei | Aktion |
-|-------|--------|
-| DB Migration | Neue Spalten |
-| `src/components/premium-templates/ScheduleTimeline.tsx` | Neu -- Zeitstrahl-Komponente |
-| `src/components/premium-templates/PremiumWeddingPage.tsx` | Erweitern -- Zeitstrahl, Maps, Dresscode, Kinder, Hotels |
-| `src/components/premium-templates/PremiumBirthdayPage.tsx` | Erweitern -- Zeitstrahl, Maps, Dresscode, Hotels |
-| `src/components/premium-templates/PremiumCorporatePage.tsx` | Erweitern -- Zeitstrahl, Maps, Dresscode, Hotels |
-| `src/pages/ConfigurePage.tsx` | Erweitern -- alle neuen Formularfelder |
-| `src/i18n/de.ts` | Neue Übersetzungen |
-| `src/i18n/en.ts` | Neue Übersetzungen |
-
+| Datei                                                       | Aktion                                                   |
+| ----------------------------------------------------------- | -------------------------------------------------------- |
+| DB Migration                                                | Neue Spalten                                             |
+| `src/components/premium-templates/ScheduleTimeline.tsx`     | Neu -- Zeitstrahl-Komponente                             |
+| `src/components/premium-templates/PremiumWeddingPage.tsx`   | Erweitern -- Zeitstrahl, Maps, Dresscode, Kinder, Hotels |
+| `src/components/premium-templates/PremiumBirthdayPage.tsx`  | Erweitern -- Zeitstrahl, Maps, Dresscode, Hotels         |
+| `src/components/premium-templates/PremiumCorporatePage.tsx` | Erweitern -- Zeitstrahl, Maps, Dresscode, Hotels         |
+| `src/pages/ConfigurePage.tsx`                               | Erweitern -- alle neuen Formularfelder                   |
+| `src/i18n/de.ts`                                            | Neue Übersetzungen                                       |
+| `src/i18n/en.ts`                                            | Neue Übersetzungen                                       |
