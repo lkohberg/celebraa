@@ -677,7 +677,7 @@ const OrderFlow = () => {
                 </div>
                 <div>
                   <Label className="font-body">{t("order.description")}</Label>
-                  <Textarea placeholder={t("order.descriptionPlaceholder")} value={form.description} onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))} className="font-body mt-1" rows={3} />
+                  <Textarea placeholder={t(`order.descriptionPlaceholder.${category}`)} value={form.description} onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))} className="font-body mt-1" rows={3} />
                 </div>
 
                 {category === "wedding" && (
