@@ -649,7 +649,7 @@ const OrderFlow = () => {
               <div className="space-y-6">
                 <div>
                   <Label className="font-body">{t("order.eventTitle")} *</Label>
-                  <Input placeholder={t("configure.eventTitlePlaceholder")} value={form.title} onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))} className="font-body mt-1" />
+                  <Input placeholder={t(`configure.eventTitlePlaceholder.${category}`)} value={form.title} onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))} className="font-body mt-1" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -663,7 +663,7 @@ const OrderFlow = () => {
                 </div>
                 <div>
                   <Label className="font-body">{t("order.location")}</Label>
-                  <Input placeholder={t("configure.locationPlaceholder")} value={form.locationName} onChange={(e) => setForm(prev => ({ ...prev, locationName: e.target.value }))} className="font-body mt-1" />
+                  <Input placeholder={t(`configure.locationPlaceholder.${category}`)} value={form.locationName} onChange={(e) => setForm(prev => ({ ...prev, locationName: e.target.value }))} className="font-body mt-1" />
                 </div>
                 <div>
                   <Label className="font-body">{t("order.address")}</Label>
@@ -677,7 +677,7 @@ const OrderFlow = () => {
                 </div>
                 <div>
                   <Label className="font-body">{t("order.description")}</Label>
-                  <Textarea placeholder={t("order.descriptionPlaceholder")} value={form.description} onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))} className="font-body mt-1" rows={3} />
+                  <Textarea placeholder={t(`order.descriptionPlaceholder.${category}`)} value={form.description} onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))} className="font-body mt-1" rows={3} />
                 </div>
 
                 {category === "wedding" && (
@@ -797,6 +797,17 @@ const OrderFlow = () => {
                   )}
                 </div>
 
+                {/* Intro Animation Toggle */}
+                <div className="flex items-center justify-between border border-border rounded-lg p-4">
+                  <div>
+                    <Label className="font-body">{t("order.disableIntro")}</Label>
+                    <p className="font-body text-xs text-muted-foreground mt-0.5">{t("order.disableIntroHint")}</p>
+                  </div>
+                  <Switch
+                    checked={blockConfig.disable_intro === true}
+                    onCheckedChange={(v) => setBlockConfig((prev: any) => ({ ...prev, disable_intro: v }))}
+                  />
+                </div>
                 {/* Style */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -928,11 +939,11 @@ const OrderFlow = () => {
                         const previewEvent = buildPreviewEvent();
                         switch (category) {
                           case "wedding":
-                            return <PremiumWeddingPage event={previewEvent} theme={previewTheme} />;
+                            return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                           case "birthday":
-                            return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} />;
+                            return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                           case "corporate":
-                            return <PremiumCorporatePage event={previewEvent} theme={previewTheme} />;
+                            return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                         }
                       })()}
                     </div>
