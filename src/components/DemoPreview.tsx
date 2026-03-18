@@ -14,7 +14,7 @@ import demoLogoTechcorp from "@/assets/demo-logo-techcorp.png";
 import demoLogoInnovatelab from "@/assets/demo-logo-innovatelab.png";
 import demoLogoFuturevision from "@/assets/demo-logo-futurevision.png";
 import demoLogoCloudbase from "@/assets/demo-logo-cloudbase.png";
-import demoIllustration from "@/assets/IllustrationDemo.png";
+import demoIllustration from "@/assets/IllustrationDemo.jpg";
 
 interface DemoPreviewProps {
   template: Template | null;
