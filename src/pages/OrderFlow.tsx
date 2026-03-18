@@ -797,6 +797,17 @@ const OrderFlow = () => {
                   )}
                 </div>
 
+                {/* Intro Animation Toggle */}
+                <div className="flex items-center justify-between border border-border rounded-lg p-4">
+                  <div>
+                    <Label className="font-body">{t("order.disableIntro")}</Label>
+                    <p className="font-body text-xs text-muted-foreground mt-0.5">{t("order.disableIntroHint")}</p>
+                  </div>
+                  <Switch
+                    checked={blockConfig.disable_intro === true}
+                    onCheckedChange={(v) => setBlockConfig((prev: any) => ({ ...prev, disable_intro: v }))}
+                  />
+                </div>
                 {/* Style */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
