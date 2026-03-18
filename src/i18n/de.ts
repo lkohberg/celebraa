@@ -7,6 +7,7 @@ const de = {
   "nav.logout": "Abmelden",
   "nav.back": "Zurück",
   "nav.home": "Startseite",
+  "nav.howItWorks": "Wie funktioniert's?",
 
   // Hero
   "hero.badge": "Für unsere Erde 🌍",
