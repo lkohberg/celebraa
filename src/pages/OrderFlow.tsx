@@ -939,11 +939,11 @@ const OrderFlow = () => {
                         const previewEvent = buildPreviewEvent();
                         switch (category) {
                           case "wedding":
-                            return <PremiumWeddingPage event={previewEvent} theme={previewTheme} />;
+                            return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                           case "birthday":
-                            return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} />;
+                            return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                           case "corporate":
-                            return <PremiumCorporatePage event={previewEvent} theme={previewTheme} />;
+                            return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                         }
                       })()}
                     </div>
