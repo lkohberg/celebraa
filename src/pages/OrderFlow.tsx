@@ -649,7 +649,7 @@ const OrderFlow = () => {
               <div className="space-y-6">
                 <div>
                   <Label className="font-body">{t("order.eventTitle")} *</Label>
-                  <Input placeholder={t("configure.eventTitlePlaceholder")} value={form.title} onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))} className="font-body mt-1" />
+                  <Input placeholder={t(`configure.eventTitlePlaceholder.${category}`)} value={form.title} onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))} className="font-body mt-1" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
