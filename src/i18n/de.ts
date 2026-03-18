@@ -7,7 +7,7 @@ const de = {
   "nav.logout": "Abmelden",
   "nav.back": "Zurück",
   "nav.home": "Startseite",
-  "nav.howItWorks": "Wie funktioniert's?",
+  "nav.howItWorks": "So funktioniert es",
 
   // Hero
   "hero.badge": "Für unsere Erde 🌍",
@@ -367,7 +367,8 @@ const de = {
   "order.descriptionPlaceholder.birthday": "Was erwartet deine Gäste auf deiner Party?",
   "order.descriptionPlaceholder.corporate": "Beschreiben Sie Ihr Event für die Teilnehmer...",
   "order.disableIntro": "Intro-Animation deaktivieren",
-  "order.disableIntroHint": "Deaktiviere die Eröffnungsanimation (Briefumschlag, Geschenkbox, Badge-Scan) auf deiner Event-Seite.",
+  "order.disableIntroHint":
+    "Deaktiviere die Eröffnungsanimation (Briefumschlag, Geschenkbox, Badge-Scan) auf deiner Event-Seite.",
   "order.weddingDetails": "Hochzeitsdetails",
   "order.ceremonyVenue": "Trauungsort",
   "order.ceremonyAddress": "Adresse Trauung",
