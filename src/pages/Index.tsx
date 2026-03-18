@@ -81,6 +81,7 @@ const Index = () => {
           >
             <a href="#templates" className="block font-body text-sm text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>{t("nav.templates")}</a>
             <a href="#features" className="block font-body text-sm text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>{t("nav.features")}</a>
+            <button className="block font-body text-sm text-muted-foreground text-left w-full" onClick={() => { setHowItWorksOpen(true); setMobileMenuOpen(false); }}>{t("nav.howItWorks")}</button>
             {user ? (
               <>
                 <Button size="sm" variant="outline" className="w-full font-body" onClick={() => { navigate("/dashboard"); setMobileMenuOpen(false); }}>
