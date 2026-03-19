@@ -49,6 +49,11 @@ const AdminDashboard = () => {
   const isLoading = adminLoading || eventsLoading;
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
+  // Mark dashboard as visited to reset notification badge
+  useEffect(() => {
+    if (user) markDashboardVisited();
+  }, [user]);
+
   const selectedEvent = events?.find((e) => e.id === selectedEventId);
 
   if (!authLoading && !user) {

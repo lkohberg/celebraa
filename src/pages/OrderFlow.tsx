@@ -87,6 +87,8 @@ const OrderFlow = () => {
     receptionStreet: "",
     receptionZip: "",
     receptionCity: "",
+    childrenWelcome: null as boolean | null,
+    languages: ["de"] as string[],
   });
 
   // Block selection
