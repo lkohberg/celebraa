@@ -91,8 +91,13 @@ const Index = () => {
             <button className="block font-body text-sm text-muted-foreground text-left w-full" onClick={() => { setHowItWorksOpen(true); setMobileMenuOpen(false); }}>{t("nav.howItWorks")}</button>
             {user ? (
               <>
-                <Button size="sm" variant="outline" className="w-full font-body" onClick={() => { navigate("/dashboard"); setMobileMenuOpen(false); }}>
+                <Button size="sm" variant="outline" className="w-full font-body relative" onClick={() => { navigate("/dashboard"); setMobileMenuOpen(false); }}>
                   <LayoutDashboard className="w-4 h-4 mr-1" /> {t("nav.dashboard")}
+                  {(notifCount ?? 0) > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 bg-destructive text-destructive-foreground text-[10px] font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1">
+                      {notifCount! > 99 ? "99+" : notifCount}
+                    </span>
+                  )}
                 </Button>
                 <Button size="sm" variant="ghost" className="w-full font-body text-muted-foreground" onClick={() => { signOut(); setMobileMenuOpen(false); }}>
                   <LogOut className="w-4 h-4 mr-1" /> {t("nav.logout")}
