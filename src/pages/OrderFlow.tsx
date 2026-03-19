@@ -267,7 +267,8 @@ const OrderFlow = () => {
         schedule: blockConfig.schedule?.length > 0 ? blockConfig.schedule : null,
         hotel_recommendations: blockConfig.hotels?.length > 0 ? blockConfig.hotels : null,
         block_config: { ...blockConfig, _manual_info: manualInfo },
-        languages: ["de"],
+        languages: form.languages,
+        children_welcome: form.childrenWelcome,
       };
 
       const { data: created, error: createError } = await supabase
