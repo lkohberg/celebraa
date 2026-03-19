@@ -28,6 +28,7 @@ const Index = () => {
   const [authOpen, setAuthOpen] = useState(false);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { data: notifCount } = useNotificationCount(user?.id);
 
   const eventTypes = [
     { value: "birthday", label: t("templates.birthday") },
