@@ -59,8 +59,13 @@ const Index = () => {
             <button onClick={() => setHowItWorksOpen(true)} className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">{t("nav.howItWorks")}</button>
             <LanguageSwitcher />
             {user ? (
-              <Button size="sm" variant="outline" className="font-body" onClick={() => navigate("/dashboard")}>
+              <Button size="sm" variant="outline" className="font-body relative" onClick={() => navigate("/dashboard")}>
                 <LayoutDashboard className="w-4 h-4 mr-1" /> {t("nav.dashboard")}
+                {(notifCount ?? 0) > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-destructive text-destructive-foreground text-[10px] font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1">
+                    {notifCount! > 99 ? "99+" : notifCount}
+                  </span>
+                )}
               </Button>
             ) : (
               <Button size="sm" variant="outline" className="font-body" onClick={() => setAuthOpen(true)}>
