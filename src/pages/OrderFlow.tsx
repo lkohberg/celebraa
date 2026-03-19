@@ -788,7 +788,7 @@ const OrderFlow = () => {
                     })()}
                   </div>
                   {form.languages.length > 1 && (
-                    <p className="font-body text-xs text-primary">{t("order.languagesExtra", { count: form.languages.length - 1 })}</p>
+                    <p className="font-body text-xs text-primary">{`+${form.languages.length - 1} ${form.languages.length - 1 === 1 ? "Sprache" : "Sprachen"} (je €3)`}</p>
                   )}
                 </div>
                 <div>
