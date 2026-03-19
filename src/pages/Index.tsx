@@ -16,6 +16,7 @@ import HowItWorksDialog from "@/components/HowItWorksDialog";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "@/i18n";
+import { useNotificationCount } from "@/hooks/useNotificationCount";
 import { LayoutDashboard, LogIn, LogOut, Menu, X } from "lucide-react";
 
 const Index = () => {
@@ -27,6 +28,7 @@ const Index = () => {
   const [authOpen, setAuthOpen] = useState(false);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { data: notifCount } = useNotificationCount(user?.id);
 
   const eventTypes = [
     { value: "birthday", label: t("templates.birthday") },
@@ -57,8 +59,13 @@ const Index = () => {
             <button onClick={() => setHowItWorksOpen(true)} className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">{t("nav.howItWorks")}</button>
             <LanguageSwitcher />
             {user ? (
-              <Button size="sm" variant="outline" className="font-body" onClick={() => navigate("/dashboard")}>
+              <Button size="sm" variant="outline" className="font-body relative" onClick={() => navigate("/dashboard")}>
                 <LayoutDashboard className="w-4 h-4 mr-1" /> {t("nav.dashboard")}
+                {(notifCount ?? 0) > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-destructive text-destructive-foreground text-[10px] font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1">
+                    {notifCount! > 99 ? "99+" : notifCount}
+                  </span>
+                )}
               </Button>
             ) : (
               <Button size="sm" variant="outline" className="font-body" onClick={() => setAuthOpen(true)}>
@@ -84,8 +91,13 @@ const Index = () => {
             <button className="block font-body text-sm text-muted-foreground text-left w-full" onClick={() => { setHowItWorksOpen(true); setMobileMenuOpen(false); }}>{t("nav.howItWorks")}</button>
             {user ? (
               <>
-                <Button size="sm" variant="outline" className="w-full font-body" onClick={() => { navigate("/dashboard"); setMobileMenuOpen(false); }}>
+                <Button size="sm" variant="outline" className="w-full font-body relative" onClick={() => { navigate("/dashboard"); setMobileMenuOpen(false); }}>
                   <LayoutDashboard className="w-4 h-4 mr-1" /> {t("nav.dashboard")}
+                  {(notifCount ?? 0) > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 bg-destructive text-destructive-foreground text-[10px] font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1">
+                      {notifCount! > 99 ? "99+" : notifCount}
+                    </span>
+                  )}
                 </Button>
                 <Button size="sm" variant="ghost" className="w-full font-body text-muted-foreground" onClick={() => { signOut(); setMobileMenuOpen(false); }}>
                   <LogOut className="w-4 h-4 mr-1" /> {t("nav.logout")}

@@ -87,6 +87,8 @@ const OrderFlow = () => {
     receptionStreet: "",
     receptionZip: "",
     receptionCity: "",
+    childrenWelcome: null as boolean | null,
+    languages: ["de"] as string[],
   });
 
   // Block selection
@@ -265,7 +267,8 @@ const OrderFlow = () => {
         schedule: blockConfig.schedule?.length > 0 ? blockConfig.schedule : null,
         hotel_recommendations: blockConfig.hotels?.length > 0 ? blockConfig.hotels : null,
         block_config: { ...blockConfig, _manual_info: manualInfo },
-        languages: ["de"],
+        languages: form.languages,
+        children_welcome: form.childrenWelcome,
       };
 
       const { data: created, error: createError } = await supabase
@@ -716,7 +719,78 @@ const OrderFlow = () => {
                   </div>
                 )}
 
-                {/* Hero Image */}
+                {/* Children Welcome (Wedding only) */}
+                {category === "wedding" && (
+                  <div className="border border-border rounded-lg p-5 space-y-3">
+                    <Label className="font-body font-semibold">{t("order.childrenWelcome")}</Label>
+                    <div className="flex gap-3">
+                      <Button type="button" size="sm" variant={form.childrenWelcome === true ? "default" : "outline"} className="font-body" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: true }))}>
+                        {t("order.childrenYes")}
+                      </Button>
+                      <Button type="button" size="sm" variant={form.childrenWelcome === false ? "default" : "outline"} className="font-body" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: false }))}>
+                        {t("order.childrenNo")}
+                      </Button>
+                      <Button type="button" size="sm" variant={form.childrenWelcome === null ? "default" : "outline"} className="font-body" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: null }))}>
+                        {t("order.childrenNotShown")}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Language Selection */}
+                <div className="border border-border rounded-lg p-5 space-y-3">
+                  <Label className="font-body font-semibold">{t("order.languages")}</Label>
+                  <p className="font-body text-xs text-muted-foreground">{t("order.languagesHint")}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {(() => {
+                      const SUPPORTED_LANGUAGES = [
+                        { code: "de", label: "Deutsch", flag: "🇩🇪" },
+                        { code: "en", label: "English", flag: "🇬🇧" },
+                        { code: "es", label: "Español", flag: "🇪🇸" },
+                        { code: "pt", label: "Português", flag: "🇵🇹" },
+                        { code: "fr", label: "Français", flag: "🇫🇷" },
+                        { code: "it", label: "Italiano", flag: "🇮🇹" },
+                        { code: "pl", label: "Polski", flag: "🇵🇱" },
+                        { code: "ro", label: "Română", flag: "🇷🇴" },
+                        { code: "nl", label: "Nederlands", flag: "🇳🇱" },
+                        { code: "tr", label: "Türkçe", flag: "🇹🇷" },
+                        { code: "zh", label: "中文", flag: "🇨🇳" },
+                      ];
+                      return SUPPORTED_LANGUAGES.map((lang) => {
+                        const isSelected = form.languages.includes(lang.code);
+                        const isFirst = form.languages[0] === lang.code;
+                        const canSelect = isSelected || form.languages.length < 3;
+                        return (
+                          <button
+                            key={lang.code}
+                            type="button"
+                            disabled={isFirst || (!isSelected && !canSelect)}
+                            onClick={() => {
+                              if (isFirst) return;
+                              setForm(prev => ({
+                                ...prev,
+                                languages: isSelected
+                                  ? prev.languages.filter(c => c !== lang.code)
+                                  : [...prev.languages, lang.code],
+                              }));
+                            }}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-body text-xs border transition-all ${
+                              isSelected
+                                ? "border-primary bg-primary/10 text-foreground font-medium"
+                                : "border-border text-muted-foreground hover:border-primary/30"
+                            } ${isFirst ? "opacity-70 cursor-default" : ""} ${!isSelected && !canSelect ? "opacity-40 cursor-not-allowed" : ""}`}
+                          >
+                            <span>{lang.flag}</span> {lang.label}
+                            {isFirst && <span className="text-[9px] text-muted-foreground ml-1">({t("order.primary")})</span>}
+                          </button>
+                        );
+                      });
+                    })()}
+                  </div>
+                  {form.languages.length > 1 && (
+                    <p className="font-body text-xs text-primary">{`+${form.languages.length - 1} ${form.languages.length - 1 === 1 ? "Sprache" : "Sprachen"} (je €3)`}</p>
+                  )}
+                </div>
                 <div>
                   <Label className="font-body">{t("order.heroImage")}</Label>
                   <div

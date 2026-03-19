@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { blocks, isManualBlock } from "@/data/blocks";
 import EventDetail from "@/components/dashboard/EventDetail";
 import CopyrightReportsPanel from "@/components/dashboard/CopyrightReportsPanel";
+import { markDashboardVisited } from "@/hooks/useNotificationCount";
 
 const useUserEmail = (userId: string | undefined, enabled: boolean) =>
   useQuery({
@@ -47,6 +48,11 @@ const AdminDashboard = () => {
   const { data: events, isLoading: eventsLoading } = useMyEvents(user?.id, isAdmin);
   const isLoading = adminLoading || eventsLoading;
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+
+  // Mark dashboard as visited to reset notification badge
+  useEffect(() => {
+    if (user) markDashboardVisited();
+  }, [user]);
 
   const selectedEvent = events?.find((e) => e.id === selectedEventId);
 
