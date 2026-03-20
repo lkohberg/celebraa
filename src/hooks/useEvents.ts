@@ -216,13 +216,10 @@ export const useQuizResponses = (eventId: string) =>
 export const useSubmitQuizResponse = () =>
   useMutation({
     mutationFn: async (response: { event_id: string; question_index: number; selected_option: number; guest_name?: string }) => {
-      const { data, error } = await supabase
-        .from("quiz_responses" as any)
-        .insert(response)
-        .select()
-        .single();
+      const { error } = await supabase
+        .from("quiz_responses")
+        .insert(response);
       if (error) throw error;
-      return data;
     },
   });
 
