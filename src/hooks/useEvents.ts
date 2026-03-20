@@ -243,13 +243,10 @@ export const useSubmitGameVote = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (vote: { event_id: string; game_name: string; guest_name?: string }) => {
-      const { data, error } = await supabase
-        .from("game_votes" as any)
-        .insert(vote)
-        .select()
-        .single();
+      const { error } = await supabase
+        .from("game_votes")
+        .insert(vote);
       if (error) throw error;
-      return data;
     },
     onSuccess: (_data, variables) => {
       qc.invalidateQueries({ queryKey: ["game-votes", variables.event_id] });
