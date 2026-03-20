@@ -186,13 +186,10 @@ export const useClaimPotluckItem = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (claim: { event_id: string; item_name: string; claimed_by: string }) => {
-      const { data, error } = await supabase
-        .from("potluck_claims" as any)
-        .insert(claim)
-        .select()
-        .single();
+      const { error } = await supabase
+        .from("potluck_claims")
+        .insert(claim);
       if (error) throw error;
-      return data;
     },
     onSuccess: (_data, variables) => {
       qc.invalidateQueries({ queryKey: ["potluck-claims", variables.event_id] });
