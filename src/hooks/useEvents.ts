@@ -159,13 +159,10 @@ export const useMusicWishes = (eventId: string) =>
 export const useSubmitMusicWish = () =>
   useMutation({
     mutationFn: async (wish: { event_id: string; song_title: string; artist?: string; guest_name?: string }) => {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("music_wishes")
-        .insert(wish)
-        .select()
-        .single();
+        .insert(wish);
       if (error) throw error;
-      return data;
     },
   });
 
