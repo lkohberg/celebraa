@@ -118,14 +118,13 @@ export const useSubmitRsvp = () =>
       message?: string;
     }) => {
       const { companion_count, companion_names, ...rest } = guest;
-      const { data, error } = await supabase.from("guests").insert({
+      const { error } = await supabase.from("guests").insert({
         ...rest,
         responded_at: new Date().toISOString(),
         companion_count: companion_count || 0,
         companion_names: companion_names || [],
-      } as any).select().single();
+      } as any);
       if (error) throw error;
-      return data;
     },
   });
 
