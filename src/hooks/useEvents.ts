@@ -118,14 +118,13 @@ export const useSubmitRsvp = () =>
       message?: string;
     }) => {
       const { companion_count, companion_names, ...rest } = guest;
-      const { data, error } = await supabase.from("guests").insert({
+      const { error } = await supabase.from("guests").insert({
         ...rest,
         responded_at: new Date().toISOString(),
         companion_count: companion_count || 0,
         companion_names: companion_names || [],
-      } as any).select().single();
+      } as any);
       if (error) throw error;
-      return data;
     },
   });
 
@@ -160,13 +159,10 @@ export const useMusicWishes = (eventId: string) =>
 export const useSubmitMusicWish = () =>
   useMutation({
     mutationFn: async (wish: { event_id: string; song_title: string; artist?: string; guest_name?: string }) => {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("music_wishes")
-        .insert(wish)
-        .select()
-        .single();
+        .insert(wish);
       if (error) throw error;
-      return data;
     },
   });
 
@@ -190,13 +186,10 @@ export const useClaimPotluckItem = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (claim: { event_id: string; item_name: string; claimed_by: string }) => {
-      const { data, error } = await supabase
-        .from("potluck_claims" as any)
-        .insert(claim)
-        .select()
-        .single();
+      const { error } = await supabase
+        .from("potluck_claims")
+        .insert(claim);
       if (error) throw error;
-      return data;
     },
     onSuccess: (_data, variables) => {
       qc.invalidateQueries({ queryKey: ["potluck-claims", variables.event_id] });
@@ -223,13 +216,10 @@ export const useQuizResponses = (eventId: string) =>
 export const useSubmitQuizResponse = () =>
   useMutation({
     mutationFn: async (response: { event_id: string; question_index: number; selected_option: number; guest_name?: string }) => {
-      const { data, error } = await supabase
-        .from("quiz_responses" as any)
-        .insert(response)
-        .select()
-        .single();
+      const { error } = await supabase
+        .from("quiz_responses")
+        .insert(response);
       if (error) throw error;
-      return data;
     },
   });
 
@@ -253,13 +243,10 @@ export const useSubmitGameVote = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (vote: { event_id: string; game_name: string; guest_name?: string }) => {
-      const { data, error } = await supabase
-        .from("game_votes" as any)
-        .insert(vote)
-        .select()
-        .single();
+      const { error } = await supabase
+        .from("game_votes")
+        .insert(vote);
       if (error) throw error;
-      return data;
     },
     onSuccess: (_data, variables) => {
       qc.invalidateQueries({ queryKey: ["game-votes", variables.event_id] });
