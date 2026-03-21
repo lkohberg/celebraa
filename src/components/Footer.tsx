@@ -13,6 +13,13 @@ const Footer = () => {
         <p className="font-body text-sm text-muted-foreground mt-3">
           © {new Date().getFullYear()} Celebra.at · {t("footer.tagline")}
         </p>
+        <p className="font-body text-[10px] text-muted-foreground mt-1">
+          {t("uptime.legal")}
+        </p>
+        </span>
+        <p className="font-body text-sm text-muted-foreground mt-3">
+          © {new Date().getFullYear()} Celebra.at · {t("footer.tagline")}
+        </p>
         <LegalDialogs />
       </div>
     </footer>

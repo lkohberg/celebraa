@@ -88,6 +88,9 @@ const PriceSummary = ({ templateName, basePrice, menuSelection, menuPrice, extra
       <p className="text-xs text-muted-foreground text-center font-body">
         {t("price.stripe")}
       </p>
+      <p className="text-[10px] text-muted-foreground text-center font-body mt-1">
+        {t("uptime.legal")}
+      </p>
     </div>
   );
 };
