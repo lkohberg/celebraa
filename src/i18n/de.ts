@@ -845,6 +845,14 @@ const de = {
   "blockConfig.videoMessageTypeAudio": "Sprachnachricht",
   "blockConfig.videoMessageUpload": "Datei hochladen",
   "blockConfig.videoMessageRemove": "Entfernen",
+
+  // Order languages
+  "order.languages": "Sprachen der Einladung (max. 3)",
+  "order.languagesHint": "Wähle bis zu 3 Sprachen. Pro Sprache wird ein eigener Link erstellt.",
+
+  // 6-month uptime
+  "uptime.note": "Deine Event-Seite bleibt 6 Monate online. Danach kann sie für €10 verlängert werden.",
+  "uptime.legal": "6 Monate Hosting inklusive · Verlängerung: €10 / 6 Monate",
 };
 
 export default de;

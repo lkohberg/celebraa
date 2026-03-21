@@ -819,6 +819,14 @@ const en = {
   "blockConfig.videoMessageTypeAudio": "Voice message",
   "blockConfig.videoMessageUpload": "Upload file",
   "blockConfig.videoMessageRemove": "Remove",
+
+  // Order languages
+  "order.languages": "Invitation languages (max. 3)",
+  "order.languagesHint": "Choose up to 3 languages. A separate link is created for each.",
+
+  // 6-month uptime
+  "uptime.note": "Your event page stays online for 6 months. After that, it can be extended for €10.",
+  "uptime.legal": "6 months hosting included · Renewal: €10 / 6 months",
 };
 
 export default en;
