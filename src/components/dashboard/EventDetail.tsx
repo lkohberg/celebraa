@@ -10,6 +10,7 @@ import { useEventGuests, useEventAnalytics, useUpdateEvent, useMusicWishes, useP
 import { toast } from "sonner";
 import { blocks } from "@/data/blocks";
 import { BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Archive, Radio, Rocket, Music, Trash2, Package, Pencil, ShoppingBasket, HelpCircle, Gamepad2 } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import AdminFulfillmentPanel from "./AdminFulfillmentPanel";
 import LanguageLinks from "./LanguageLinks";
 import StatCard from "./StatCard";
