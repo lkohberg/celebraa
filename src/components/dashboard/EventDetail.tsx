@@ -201,8 +201,18 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
               <div className="flex justify-end mb-4">
                 <Button variant="outline" size="sm" className="font-body" onClick={() => {
                   if (!guests) return;
-                  const headers = ["Name", "Email", "RSVP", "Plus One", "Menu Choice", "Message", "Date"];
-                  const csvRows = guests.map(g => [g.name, g.email || "", g.rsvp_status, g.plus_one ? "Yes" : "No", g.menu_choice || "", (g.message || "").replace(/"/g, '""'), g.responded_at ? new Date(g.responded_at).toLocaleDateString("de-AT") : ""].map(v => `"${v}"`).join(","));
+                  const headers = ["Name", "Email", "RSVP", "Plus One", "Companions", "Companion Names", "Menu Choice", "Message", "Date"];
+                  const csvRows = guests.map(g => [
+                    g.name,
+                    g.email || "",
+                    g.rsvp_status,
+                    g.plus_one ? "Yes" : "No",
+                    String(g.companion_count ?? 0),
+                    (g.companion_names as string[] || []).join("; "),
+                    g.menu_choice || "",
+                    (g.message || "").replace(/"/g, '""'),
+                    g.responded_at ? new Date(g.responded_at).toLocaleDateString("de-AT") : "",
+                  ].map(v => `"${v}"`).join(","));
                   const csv = [headers.join(","), ...csvRows].join("\n");
                   const blob = new Blob([csv], { type: "text/csv" });
                   const url = URL.createObjectURL(blob);
