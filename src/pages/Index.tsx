@@ -50,9 +50,9 @@ const Index = () => {
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="font-display text-xl font-bold text-foreground">
+          <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="font-display text-xl font-bold text-foreground cursor-pointer">
             celebra<span className="text-primary">.at</span>
-          </span>
+          </a>
           <div className="hidden md:flex gap-4 items-center">
             <a href="#templates" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">{t("nav.templates")}</a>
             <a href="#features" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">{t("nav.features")}</a>

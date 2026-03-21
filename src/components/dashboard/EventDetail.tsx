@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "@/i18n";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { useEventGuests, useEventAnalytics, useUpdateEvent, useMusicWishes, useP
 import { toast } from "sonner";
 import { blocks } from "@/data/blocks";
 import { BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Archive, Radio, Rocket, Music, Trash2, Package, Pencil, ShoppingBasket, HelpCircle, Gamepad2 } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import AdminFulfillmentPanel from "./AdminFulfillmentPanel";
 import LanguageLinks from "./LanguageLinks";
 import StatCard from "./StatCard";
@@ -184,6 +185,10 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
           {event.status === "live" && (
             <div className="space-y-3">
               <LanguageLinks event={event} />
+              {/* Single-language QR code */}
+              {(!event.languages || (event.languages as string[]).length <= 1) && (
+                <SingleQrCode eventLink={event.event_link} />
+              )}
               <Button variant="outline" asChild className="font-body">
                 <a href={`/${event.event_link}`} target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="w-4 h-4 mr-2" /> {t("dashboard.openEvent")}
@@ -201,8 +206,18 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
               <div className="flex justify-end mb-4">
                 <Button variant="outline" size="sm" className="font-body" onClick={() => {
                   if (!guests) return;
-                  const headers = ["Name", "Email", "RSVP", "Plus One", "Menu Choice", "Message", "Date"];
-                  const csvRows = guests.map(g => [g.name, g.email || "", g.rsvp_status, g.plus_one ? "Yes" : "No", g.menu_choice || "", (g.message || "").replace(/"/g, '""'), g.responded_at ? new Date(g.responded_at).toLocaleDateString("de-AT") : ""].map(v => `"${v}"`).join(","));
+                  const headers = ["Name", "Email", "RSVP", "Plus One", "Companions", "Companion Names", "Menu Choice", "Message", "Date"];
+                  const csvRows = guests.map(g => [
+                    g.name,
+                    g.email || "",
+                    g.rsvp_status,
+                    g.plus_one ? "Yes" : "No",
+                    String(g.companion_count ?? 0),
+                    (g.companion_names as string[] || []).join("; "),
+                    g.menu_choice || "",
+                    (g.message || "").replace(/"/g, '""'),
+                    g.responded_at ? new Date(g.responded_at).toLocaleDateString("de-AT") : "",
+                  ].map(v => `"${v}"`).join(","));
                   const csv = [headers.join(","), ...csvRows].join("\n");
                   const blob = new Blob([csv], { type: "text/csv" });
                   const url = URL.createObjectURL(blob);
@@ -383,6 +398,41 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
 
       <EventEditDialog event={event} open={editOpen} onOpenChange={setEditOpen} />
     </>
+  );
+};
+
+const SingleQrCode = ({ eventLink }: { eventLink: string }) => {
+  const qrRef = useRef<HTMLDivElement>(null);
+  const url = `${window.location.origin}/${eventLink}`;
+
+  const handleDownload = () => {
+    const svg = qrRef.current?.querySelector("svg");
+    if (!svg) return;
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    img.onload = () => {
+      ctx?.drawImage(img, 0, 0, 512, 512);
+      const a = document.createElement("a");
+      a.href = canvas.toDataURL("image/png");
+      a.download = `qr-${eventLink}.png`;
+      a.click();
+    };
+    img.src = "data:image/svg+xml;base64," + btoa(svgData);
+  };
+
+  return (
+    <div className="flex items-center gap-3">
+      <div ref={qrRef} className="inline-block bg-card p-2 rounded-lg">
+        <QRCodeSVG value={url} size={80} bgColor="transparent" fgColor="hsl(220, 20%, 14%)" level="H" />
+      </div>
+      <Button variant="ghost" size="sm" className="h-7 font-body text-xs" onClick={handleDownload}>
+        <Download className="w-3 h-3 mr-1" /> QR
+      </Button>
+    </div>
   );
 };
 

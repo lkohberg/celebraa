@@ -71,14 +71,14 @@ export const blocks: Block[] = [
 ];
 
 export const packages: Package[] = [
-  { id: "wedding-starter", nameKey: "pkg.wedding.starter", price: 39, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle"], category: "wedding" },
-  { id: "wedding-plus", nameKey: "pkg.wedding.plus", price: 49, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle", "wedding-menu"], category: "wedding" },
-  { id: "wedding-premium", nameKey: "pkg.wedding.premium", price: 79, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle", "wedding-menu", "wedding-slideshow", "wedding-story", "wedding-wishlist"], category: "wedding" },
-  { id: "business-starter", nameKey: "pkg.business.starter", price: 29, blockIds: ["business-timeline", "business-dresscode", "business-hotels", "business-agenda"], category: "corporate" },
-  { id: "business-pro", nameKey: "pkg.business.pro", price: 49, blockIds: ["business-timeline", "business-dresscode", "business-hotels", "business-agenda", "business-products", "business-sponsors"], category: "corporate" },
-  { id: "party-fun", nameKey: "pkg.party.fun", price: 25, blockIds: ["party-timeline", "party-musicwish", "party-games", "party-quiz"], category: "birthday" },
-  { id: "party-planer", nameKey: "pkg.party.planer", price: 25, blockIds: ["party-timeline", "party-menu", "party-potluck", "party-dresscode"], category: "birthday" },
-  { id: "party-allin", nameKey: "pkg.party.allin", price: 45, blockIds: ["party-timeline", "party-musicwish", "party-games", "party-quiz", "party-menu", "party-potluck", "party-dresscode", "party-wishlist"], category: "birthday" },
+  { id: "wedding-starter", nameKey: "pkg.wedding.starter", price: 39, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle", "wedding-bgmusic"], category: "wedding" },
+  { id: "wedding-plus", nameKey: "pkg.wedding.plus", price: 49, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle", "wedding-bgmusic", "wedding-menu", "wedding-videomsg"], category: "wedding" },
+  { id: "wedding-premium", nameKey: "pkg.wedding.premium", price: 79, blockIds: ["wedding-timeline", "wedding-dresscode", "wedding-hotels", "wedding-shuttle", "wedding-bgmusic", "wedding-menu", "wedding-slideshow", "wedding-story", "wedding-wishlist", "wedding-videomsg"], category: "wedding" },
+  { id: "business-starter", nameKey: "pkg.business.starter", price: 29, blockIds: ["business-timeline", "business-dresscode", "business-hotels", "business-agenda", "business-bgmusic"], category: "corporate" },
+  { id: "business-pro", nameKey: "pkg.business.pro", price: 49, blockIds: ["business-timeline", "business-dresscode", "business-hotels", "business-agenda", "business-bgmusic", "business-products", "business-sponsors", "business-videomsg", "business-menu"], category: "corporate" },
+  { id: "party-fun", nameKey: "pkg.party.fun", price: 25, blockIds: ["party-timeline", "party-musicwish", "party-games", "party-quiz", "party-bgmusic"], category: "birthday" },
+  { id: "party-planer", nameKey: "pkg.party.planer", price: 25, blockIds: ["party-timeline", "party-menu", "party-potluck", "party-dresscode", "party-bgmusic"], category: "birthday" },
+  { id: "party-allin", nameKey: "pkg.party.allin", price: 45, blockIds: ["party-timeline", "party-musicwish", "party-games", "party-quiz", "party-menu", "party-potluck", "party-dresscode", "party-wishlist", "party-bgmusic", "party-videomsg"], category: "birthday" },
 ];
 
 export const getBlocksForCategory = (category: "wedding" | "birthday" | "corporate") =>
