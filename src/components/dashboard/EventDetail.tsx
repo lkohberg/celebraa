@@ -185,6 +185,10 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
           {event.status === "live" && (
             <div className="space-y-3">
               <LanguageLinks event={event} />
+              {/* Single-language QR code */}
+              {(!event.languages || (event.languages as string[]).length <= 1) && (
+                <SingleQrCode eventLink={event.event_link} />
+              )}
               <Button variant="outline" asChild className="font-body">
                 <a href={`/${event.event_link}`} target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="w-4 h-4 mr-2" /> {t("dashboard.openEvent")}
