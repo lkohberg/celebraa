@@ -79,7 +79,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
           <CorpDivider color="rgba(255,255,255,0.4)" />
           <div className="flex items-center justify-center gap-6 text-white/70 font-body text-sm mt-4">
             <span className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full"><Calendar className="w-4 h-4" /> {formattedDate}</span>
-            <span className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full"><Clock className="w-4 h-4" /> {event.event_time} Uhr</span>
+            <span className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full"><Clock className="w-4 h-4" /> {event.event_time}{lang === "en" ? "" : " Uhr"}</span>
           </div>
           {event.description && <p className="font-body text-white/60 mt-6 text-lg max-w-xl mx-auto">{event.description}</p>}
         </motion.div>

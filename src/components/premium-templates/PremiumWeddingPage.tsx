@@ -70,7 +70,8 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
   const [showContent, setShowContent] = useState(!showIntro);
 
   const names = event.title;
-  const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", {
+  const dateLocale = lang === "en" ? "en-US" : lang === "de" ? "de-AT" : (lang || "de-AT");
+  const formattedDate = new Date(event.event_date).toLocaleDateString(dateLocale, {
     day: "numeric", month: "long", year: "numeric",
   });
 
