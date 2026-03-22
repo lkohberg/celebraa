@@ -12,6 +12,7 @@ import { useGuestName } from "@/hooks/useGuestName";
 const MusicProSection = ({ accentColor, eventId, isPreview = false, lang }: { accentColor?: string; eventId?: string; isPreview?: boolean; lang?: EventLang }) => {
   const [song, setSong] = useState("");
   const [artist, setArtist] = useState("");
+  const { guestName: sharedName, setGuestName: setSharedName } = useGuestName();
   const [guestName, setGuestName] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const submitWish = useSubmitMusicWish();
