@@ -54,7 +54,8 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
   const el = lang ? getEventLabels(lang) : null;
   const [showContent, setShowContent] = useState(!showIntro);
 
-  const formattedDate = new Date(event.event_date).toLocaleDateString("de-AT", { day: "numeric", month: "long", year: "numeric" });
+  const dateLocale = lang === "en" ? "en-US" : lang === "de" ? "de-AT" : (lang || "de-AT");
+  const formattedDate = new Date(event.event_date).toLocaleDateString(dateLocale, { day: "numeric", month: "long", year: "numeric" });
 
   const selectedBlocks = event.selectedBlocks || (event as any).selected_blocks || [];
   const blockCfg = (event as any).block_config || {};

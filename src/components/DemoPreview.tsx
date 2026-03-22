@@ -191,7 +191,7 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
 
 const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
 
   if (!template) return null;
 
@@ -203,14 +203,16 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
     font: template.font,
   };
 
+  const demoLang = locale as import("@/i18n/eventLabels").EventLang;
+
   const renderPreview = () => {
     switch (template.eventType) {
       case "wedding":
-        return <PremiumWeddingPage event={demoEvent} theme={theme} isDemo />;
+        return <PremiumWeddingPage event={demoEvent} theme={theme} lang={demoLang} isDemo />;
       case "birthday":
-        return <PremiumBirthdayPage event={demoEvent} theme={theme} isDemo />;
+        return <PremiumBirthdayPage event={demoEvent} theme={theme} lang={demoLang} isDemo />;
       case "corporate":
-        return <PremiumCorporatePage event={demoEvent} theme={theme} isDemo />;
+        return <PremiumCorporatePage event={demoEvent} theme={theme} lang={demoLang} isDemo />;
     }
   };
 
