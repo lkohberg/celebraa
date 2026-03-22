@@ -209,6 +209,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
         )}
       </AnimatePresence>
     </div>
+    </GuestNameProvider>
   );
 };
 
