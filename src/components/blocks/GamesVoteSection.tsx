@@ -107,7 +107,7 @@ const GamesVoteSection = ({ games, accentColor, isPreview = false, lang, eventId
                 <div className="flex items-center gap-3">
                   <span className="font-body text-xs text-muted-foreground font-medium">{game.votes}</span>
                   {!voted && (
-                    <Button size="sm" variant="outline" className="font-body text-xs h-8 px-3 rounded-lg" onClick={() => handleVote(game.name)} disabled={isPreview || submitVote.isPending || (showNameInput && !voterName.trim())}>
+                    <Button size="sm" variant="outline" className="font-body text-xs h-8 px-3 rounded-lg" onClick={() => handleVote(game.name)} disabled={isPreview || submitVote.isPending || (showNameInput && !(voterName || sharedName).trim())}>
                       👍 Vote
                     </Button>
                   )}

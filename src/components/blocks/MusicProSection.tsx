@@ -61,7 +61,7 @@ const MusicProSection = ({ accentColor, eventId, isPreview = false, lang }: { ac
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-border/50 shadow-sm space-y-4">
-          <Input placeholder={l("yourName")} value={guestName} onChange={(e) => setGuestName(e.target.value)} className="font-body" disabled={isPreview} />
+          <Input placeholder={l("yourName")} value={guestName || sharedName} onChange={(e) => { setGuestName(e.target.value); setSharedName(e.target.value); }} className="font-body" disabled={isPreview} />
           <Input placeholder={l("songTitle")} value={song} onChange={(e) => setSong(e.target.value)} className="font-body" disabled={isPreview} />
           <Input placeholder={l("artistBand")} value={artist} onChange={(e) => setArtist(e.target.value)} className="font-body" disabled={isPreview} />
           <Button className="w-full font-body" onClick={handleSubmit} disabled={isPreview || submitWish.isPending || !song.trim()}>

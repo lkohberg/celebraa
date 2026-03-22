@@ -108,12 +108,12 @@ const PotluckSection = ({ items, accentColor, isPreview = false, lang, eventId }
                   <div className="flex gap-2 mt-3">
                     <Input
                       placeholder={l("potluckYourName") || "Dein Name"}
-                      value={claimName}
-                      onChange={(e) => setClaimName(e.target.value)}
+                      value={claimName || sharedName}
+                      onChange={(e) => { setClaimName(e.target.value); setSharedName(e.target.value); }}
                       className="font-body text-sm flex-1"
                       onKeyDown={(e) => e.key === "Enter" && handleClaim(item.name, i)}
                     />
-                    <Button size="sm" className="font-body text-xs" disabled={!claimName.trim() || claimMutation.isPending} onClick={() => handleClaim(item.name, i)}>
+                    <Button size="sm" className="font-body text-xs" disabled={!(claimName || sharedName).trim() || claimMutation.isPending} onClick={() => handleClaim(item.name, i)}>
                       {l("potluckConfirm") || "Bestätigen"}
                     </Button>
                   </div>

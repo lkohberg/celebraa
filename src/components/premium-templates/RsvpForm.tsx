@@ -100,8 +100,8 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
           <input
             type="text"
             placeholder={labels?.name || t("event.name")}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={name || sharedName}
+            onChange={(e) => { setName(e.target.value); setSharedName(e.target.value); }}
             required
             className={inputClass}
           />
