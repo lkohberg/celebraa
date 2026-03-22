@@ -26,6 +26,7 @@ const PotluckSection = ({ items, accentColor, isPreview = false, lang, eventId }
 
   const { data: claims } = usePotluckClaims(eventId || "");
   const claimMutation = useClaimPotluckItem();
+  const { guestName: sharedName, setGuestName: setSharedName } = useGuestName();
   const [claimName, setClaimName] = useState("");
   const [claimingIndex, setClaimingIndex] = useState<number | null>(null);
 
