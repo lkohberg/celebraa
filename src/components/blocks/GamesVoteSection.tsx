@@ -7,6 +7,7 @@ import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 import { colorWithAlpha } from "@/lib/color-utils";
 import { useGameVotes, useSubmitGameVote } from "@/hooks/useEvents";
 import { toast } from "sonner";
+import { useGuestName } from "@/hooks/useGuestName";
 
 interface GameOption {
   name: string;
@@ -17,6 +18,7 @@ interface GameOption {
 const GamesVoteSection = ({ games, accentColor, isPreview = false, lang, eventId }: { games?: GameOption[]; accentColor?: string; isPreview?: boolean; lang?: EventLang; eventId?: string }) => {
   const displayGames = games && games.length > 0 ? games : [];
   const [voted, setVoted] = useState(false);
+  const { guestName: sharedName, setGuestName: setSharedName } = useGuestName();
   const [voterName, setVoterName] = useState("");
   const [showNameInput, setShowNameInput] = useState(false);
   const [pendingGame, setPendingGame] = useState<string | null>(null);
@@ -43,22 +45,24 @@ const GamesVoteSection = ({ games, accentColor, isPreview = false, lang, eventId
 
   const handleVote = (gameName: string) => {
     if (isPreview || !eventId || voted) return;
-    if (!showNameInput) {
+    const currentName = voterName || sharedName;
+    if (!showNameInput && !currentName) {
       setShowNameInput(true);
       setPendingGame(gameName);
       return;
     }
-    if (pendingGame === gameName && voterName.trim()) {
-      submitVote.mutate(
-        { event_id: eventId, game_name: gameName, guest_name: voterName.trim() },
-        {
-          onSuccess: () => { setVoted(true); setShowNameInput(false); },
-          onError: () => toast.error("Du hast bereits abgestimmt."),
-        }
-      );
-    } else {
+    const finalName = currentName.trim();
+    if (!finalName) {
       setPendingGame(gameName);
+      return;
     }
+    submitVote.mutate(
+      { event_id: eventId, game_name: gameName, guest_name: finalName },
+      {
+        onSuccess: () => { setVoted(true); setShowNameInput(false); setSharedName(finalName); },
+        onError: () => toast.error("Du hast bereits abgestimmt."),
+      }
+    );
   };
 
   return (
@@ -84,8 +88,8 @@ const GamesVoteSection = ({ games, accentColor, isPreview = false, lang, eventId
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
             <Input
               placeholder={l("potluckYourName") || "Dein Name"}
-              value={voterName}
-              onChange={(e) => setVoterName(e.target.value)}
+              value={voterName || sharedName}
+              onChange={(e) => { setVoterName(e.target.value); setSharedName(e.target.value); }}
               className="font-body text-sm"
             />
           </motion.div>
@@ -103,7 +107,7 @@ const GamesVoteSection = ({ games, accentColor, isPreview = false, lang, eventId
                 <div className="flex items-center gap-3">
                   <span className="font-body text-xs text-muted-foreground font-medium">{game.votes}</span>
                   {!voted && (
-                    <Button size="sm" variant="outline" className="font-body text-xs h-8 px-3 rounded-lg" onClick={() => handleVote(game.name)} disabled={isPreview || submitVote.isPending || (showNameInput && !voterName.trim())}>
+                    <Button size="sm" variant="outline" className="font-body text-xs h-8 px-3 rounded-lg" onClick={() => handleVote(game.name)} disabled={isPreview || submitVote.isPending || (showNameInput && !(voterName || sharedName).trim())}>
                       👍 Vote
                     </Button>
                   )}

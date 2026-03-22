@@ -7,6 +7,7 @@ import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 import { colorWithAlpha } from "@/lib/color-utils";
 import { usePotluckClaims, useClaimPotluckItem } from "@/hooks/useEvents";
 import { toast } from "sonner";
+import { useGuestName } from "@/hooks/useGuestName";
 
 interface PotluckItem {
   name?: string;
@@ -25,6 +26,7 @@ const PotluckSection = ({ items, accentColor, isPreview = false, lang, eventId }
 
   const { data: claims } = usePotluckClaims(eventId || "");
   const claimMutation = useClaimPotluckItem();
+  const { guestName: sharedName, setGuestName: setSharedName } = useGuestName();
   const [claimName, setClaimName] = useState("");
   const [claimingIndex, setClaimingIndex] = useState<number | null>(null);
 
@@ -39,14 +41,15 @@ const PotluckSection = ({ items, accentColor, isPreview = false, lang, eventId }
   const handleClaim = (itemName: string, index: number) => {
     if (isPreview || !eventId) return;
     if (claimingIndex === index) {
-      // Submit claim
-      if (!claimName.trim()) return;
+      const finalName = (claimName || sharedName).trim();
+      if (!finalName) return;
       claimMutation.mutate(
-        { event_id: eventId, item_name: itemName, claimed_by: claimName.trim() },
+        { event_id: eventId, item_name: itemName, claimed_by: finalName },
         {
           onSuccess: () => {
             setClaimingIndex(null);
             setClaimName("");
+            setSharedName(finalName);
           },
           onError: () => {
             toast.error(l("potluckAlreadyClaimed") || "Dieses Item wurde bereits beansprucht.");
@@ -105,12 +108,12 @@ const PotluckSection = ({ items, accentColor, isPreview = false, lang, eventId }
                   <div className="flex gap-2 mt-3">
                     <Input
                       placeholder={l("potluckYourName") || "Dein Name"}
-                      value={claimName}
-                      onChange={(e) => setClaimName(e.target.value)}
+                      value={claimName || sharedName}
+                      onChange={(e) => { setClaimName(e.target.value); setSharedName(e.target.value); }}
                       className="font-body text-sm flex-1"
                       onKeyDown={(e) => e.key === "Enter" && handleClaim(item.name, i)}
                     />
-                    <Button size="sm" className="font-body text-xs" disabled={!claimName.trim() || claimMutation.isPending} onClick={() => handleClaim(item.name, i)}>
+                    <Button size="sm" className="font-body text-xs" disabled={!(claimName || sharedName).trim() || claimMutation.isPending} onClick={() => handleClaim(item.name, i)}>
                       {l("potluckConfirm") || "Bestätigen"}
                     </Button>
                   </div>

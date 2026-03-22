@@ -9,6 +9,7 @@ import ScheduleTimeline from "./ScheduleTimeline";
 import GoogleMapsEmbed from "./GoogleMapsEmbed";
 import HotelRecommendations from "./HotelRecommendations";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
+import { GuestNameProvider } from "@/hooks/useGuestName";
 
 import { PremiumEventData, PremiumTheme } from "./PremiumWeddingPage";
 import { colorWithAlpha } from "@/lib/color-utils";
@@ -44,6 +45,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
   const maxCompanions = blockCfg.max_companions ?? 5;
 
   return (
+    <GuestNameProvider>
     <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
       <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
 
@@ -188,6 +190,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
       </motion.div>
       )}
     </div>
+    </GuestNameProvider>
   );
 };
 

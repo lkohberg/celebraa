@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSubmitRsvp } from "@/hooks/useEvents";
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
+import { useGuestName } from "@/hooks/useGuestName";
 
 interface RsvpFormProps {
   eventId: string;
@@ -17,6 +18,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
   const { t } = useTranslation();
   const labels = lang ? getEventLabels(lang) : null;
   const submitRsvp = useSubmitRsvp();
+  const { guestName: sharedName, setGuestName: setSharedName } = useGuestName();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [attendance, setAttendance] = useState<"accepted" | "declined" | null>(null);
@@ -98,8 +100,8 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
           <input
             type="text"
             placeholder={labels?.name || t("event.name")}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={name || sharedName}
+            onChange={(e) => { setName(e.target.value); setSharedName(e.target.value); }}
             required
             className={inputClass}
           />

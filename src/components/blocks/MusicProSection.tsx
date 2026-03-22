@@ -7,10 +7,12 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 import { colorWithAlpha } from "@/lib/color-utils";
+import { useGuestName } from "@/hooks/useGuestName";
 
 const MusicProSection = ({ accentColor, eventId, isPreview = false, lang }: { accentColor?: string; eventId?: string; isPreview?: boolean; lang?: EventLang }) => {
   const [song, setSong] = useState("");
   const [artist, setArtist] = useState("");
+  const { guestName: sharedName, setGuestName: setSharedName } = useGuestName();
   const [guestName, setGuestName] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const submitWish = useSubmitMusicWish();
@@ -20,12 +22,14 @@ const MusicProSection = ({ accentColor, eventId, isPreview = false, lang }: { ac
   const handleSubmit = async () => {
     if (isPreview || !eventId || !song.trim()) return;
     try {
+      const finalName = (guestName || sharedName).trim();
       await submitWish.mutateAsync({
         event_id: eventId,
         song_title: song.trim(),
         artist: artist.trim() || undefined,
-        guest_name: guestName.trim() || undefined,
+        guest_name: finalName || undefined,
       });
+      if (finalName) setSharedName(finalName);
       toast.success(l("songSaved"));
       setSong("");
       setArtist("");
@@ -57,7 +61,7 @@ const MusicProSection = ({ accentColor, eventId, isPreview = false, lang }: { ac
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-border/50 shadow-sm space-y-4">
-          <Input placeholder={l("yourName")} value={guestName} onChange={(e) => setGuestName(e.target.value)} className="font-body" disabled={isPreview} />
+          <Input placeholder={l("yourName")} value={guestName || sharedName} onChange={(e) => { setGuestName(e.target.value); setSharedName(e.target.value); }} className="font-body" disabled={isPreview} />
           <Input placeholder={l("songTitle")} value={song} onChange={(e) => setSong(e.target.value)} className="font-body" disabled={isPreview} />
           <Input placeholder={l("artistBand")} value={artist} onChange={(e) => setArtist(e.target.value)} className="font-body" disabled={isPreview} />
           <Button className="w-full font-body" onClick={handleSubmit} disabled={isPreview || submitWish.isPending || !song.trim()}>
