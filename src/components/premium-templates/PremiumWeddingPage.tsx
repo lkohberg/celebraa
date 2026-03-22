@@ -84,6 +84,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
   const maxCompanions = blockCfg.max_companions ?? 5;
 
   return (
+    <GuestNameProvider>
     <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'Lato', 'DM Sans', sans-serif", backgroundColor: theme?.secondary || "hsl(30, 33%, 96%)", color: theme?.accent || "hsl(30, 10%, 25%)" }}>
       <link href={`https://fonts.googleapis.com/css2?family=Great+Vibes&family=${encodeURIComponent(theme?.font || 'Playfair Display')}:wght@300;400;500;600;700&family=Lato:wght@300;400;500&display=swap`} rel="stylesheet" />
 
