@@ -9,6 +9,7 @@ import ScheduleTimeline from "./ScheduleTimeline";
 import GoogleMapsEmbed from "./GoogleMapsEmbed";
 import HotelRecommendations from "./HotelRecommendations";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
+import { GuestNameProvider } from "@/hooks/useGuestName";
 
 import WishlistSection from "@/components/blocks/WishlistSection";
 import SlideshowSection from "@/components/blocks/SlideshowSection";
