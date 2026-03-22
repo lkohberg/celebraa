@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 import { colorWithAlpha } from "@/lib/color-utils";
+import { useGuestName } from "@/hooks/useGuestName";
 
 const MusicProSection = ({ accentColor, eventId, isPreview = false, lang }: { accentColor?: string; eventId?: string; isPreview?: boolean; lang?: EventLang }) => {
   const [song, setSong] = useState("");
