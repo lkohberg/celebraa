@@ -18,6 +18,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
   const { t } = useTranslation();
   const labels = lang ? getEventLabels(lang) : null;
   const submitRsvp = useSubmitRsvp();
+  const { guestName: sharedName, setGuestName: setSharedName } = useGuestName();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [attendance, setAttendance] = useState<"accepted" | "declined" | null>(null);
