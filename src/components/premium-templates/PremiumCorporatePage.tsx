@@ -190,6 +190,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
       </motion.div>
       )}
     </div>
+    </GuestNameProvider>
   );
 };
 
