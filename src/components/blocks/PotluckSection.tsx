@@ -7,6 +7,7 @@ import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 import { colorWithAlpha } from "@/lib/color-utils";
 import { usePotluckClaims, useClaimPotluckItem } from "@/hooks/useEvents";
 import { toast } from "sonner";
+import { useGuestName } from "@/hooks/useGuestName";
 
 interface PotluckItem {
   name?: string;
