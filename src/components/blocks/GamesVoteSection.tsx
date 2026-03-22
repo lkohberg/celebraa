@@ -88,8 +88,8 @@ const GamesVoteSection = ({ games, accentColor, isPreview = false, lang, eventId
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
             <Input
               placeholder={l("potluckYourName") || "Dein Name"}
-              value={voterName}
-              onChange={(e) => setVoterName(e.target.value)}
+              value={voterName || sharedName}
+              onChange={(e) => { setVoterName(e.target.value); setSharedName(e.target.value); }}
               className="font-body text-sm"
             />
           </motion.div>
