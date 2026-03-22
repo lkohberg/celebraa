@@ -239,6 +239,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
         </motion.div>
       )}
     </div>
+    </GuestNameProvider>
   );
 };
 
