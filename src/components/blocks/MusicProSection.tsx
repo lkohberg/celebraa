@@ -22,12 +22,14 @@ const MusicProSection = ({ accentColor, eventId, isPreview = false, lang }: { ac
   const handleSubmit = async () => {
     if (isPreview || !eventId || !song.trim()) return;
     try {
+      const finalName = (guestName || sharedName).trim();
       await submitWish.mutateAsync({
         event_id: eventId,
         song_title: song.trim(),
         artist: artist.trim() || undefined,
-        guest_name: guestName.trim() || undefined,
+        guest_name: finalName || undefined,
       });
+      if (finalName) setSharedName(finalName);
       toast.success(l("songSaved"));
       setSong("");
       setArtist("");
