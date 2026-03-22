@@ -45,6 +45,7 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
   const maxCompanions = blockCfg.max_companions ?? 5;
 
   return (
+    <GuestNameProvider>
     <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
       <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
 
