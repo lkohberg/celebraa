@@ -18,6 +18,7 @@ interface GameOption {
 const GamesVoteSection = ({ games, accentColor, isPreview = false, lang, eventId }: { games?: GameOption[]; accentColor?: string; isPreview?: boolean; lang?: EventLang; eventId?: string }) => {
   const displayGames = games && games.length > 0 ? games : [];
   const [voted, setVoted] = useState(false);
+  const { guestName: sharedName, setGuestName: setSharedName } = useGuestName();
   const [voterName, setVoterName] = useState("");
   const [showNameInput, setShowNameInput] = useState(false);
   const [pendingGame, setPendingGame] = useState<string | null>(null);
