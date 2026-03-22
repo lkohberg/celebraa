@@ -45,22 +45,24 @@ const GamesVoteSection = ({ games, accentColor, isPreview = false, lang, eventId
 
   const handleVote = (gameName: string) => {
     if (isPreview || !eventId || voted) return;
-    if (!showNameInput) {
+    const currentName = voterName || sharedName;
+    if (!showNameInput && !currentName) {
       setShowNameInput(true);
       setPendingGame(gameName);
       return;
     }
-    if (pendingGame === gameName && voterName.trim()) {
-      submitVote.mutate(
-        { event_id: eventId, game_name: gameName, guest_name: voterName.trim() },
-        {
-          onSuccess: () => { setVoted(true); setShowNameInput(false); },
-          onError: () => toast.error("Du hast bereits abgestimmt."),
-        }
-      );
-    } else {
+    const finalName = currentName.trim();
+    if (!finalName) {
       setPendingGame(gameName);
+      return;
     }
+    submitVote.mutate(
+      { event_id: eventId, game_name: gameName, guest_name: finalName },
+      {
+        onSuccess: () => { setVoted(true); setShowNameInput(false); setSharedName(finalName); },
+        onError: () => toast.error("Du hast bereits abgestimmt."),
+      }
+    );
   };
 
   return (
