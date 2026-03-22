@@ -41,14 +41,15 @@ const PotluckSection = ({ items, accentColor, isPreview = false, lang, eventId }
   const handleClaim = (itemName: string, index: number) => {
     if (isPreview || !eventId) return;
     if (claimingIndex === index) {
-      // Submit claim
-      if (!claimName.trim()) return;
+      const finalName = (claimName || sharedName).trim();
+      if (!finalName) return;
       claimMutation.mutate(
-        { event_id: eventId, item_name: itemName, claimed_by: claimName.trim() },
+        { event_id: eventId, item_name: itemName, claimed_by: finalName },
         {
           onSuccess: () => {
             setClaimingIndex(null);
             setClaimName("");
+            setSharedName(finalName);
           },
           onError: () => {
             toast.error(l("potluckAlreadyClaimed") || "Dieses Item wurde bereits beansprucht.");
