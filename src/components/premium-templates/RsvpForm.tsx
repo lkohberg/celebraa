@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSubmitRsvp } from "@/hooks/useEvents";
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
+import { useGuestName } from "@/hooks/useGuestName";
 
 interface RsvpFormProps {
   eventId: string;
