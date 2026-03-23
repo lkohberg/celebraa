@@ -269,10 +269,18 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     und der Verbraucher dem ausdrücklich zugestimmt hat.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">5. Verfügbarkeit</h3>
+                  <h3 className="font-semibold text-foreground mt-6">5. Verfügbarkeit & Laufzeit</h3>
                   <p>
                     Wir bemühen uns um eine hohe Verfügbarkeit unserer Dienste, können jedoch keine 100%ige
                     Verfügbarkeit garantieren. Wartungsarbeiten werden nach Möglichkeit vorab angekündigt.
+                  </p>
+                  <p>
+                    Die initiale Laufzeit jeder Event-Seite beträgt 6 Monate ab Aktivierung. 10 Tage vor Ablauf
+                    der Laufzeit werden Sie per Dashboard-Benachrichtigung über die bevorstehende Abschaltung informiert.
+                    Eine Verlängerung um weitere 6 Monate ist für €10,00 (inkl. USt.) möglich. Erfolgt keine
+                    Verlängerung, wird die Event-Seite nach Ablauf der Laufzeit automatisch deaktiviert.
+                    Bereits gespeicherte Daten (Gästelisten, Antworten) bleiben für 30 Tage nach Deaktivierung
+                    abrufbar und können als CSV exportiert werden.
                   </p>
 
                   <h3 className="font-semibold text-foreground mt-6">6. Haftung</h3>
