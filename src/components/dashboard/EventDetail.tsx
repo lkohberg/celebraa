@@ -84,6 +84,18 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
   const hasInteractiveBlocks = hasPotluckBlock || hasQuizBlock || hasGamesBlock;
   const canEdit = event.status === "live" || event.status === "paid" || event.status === "draft";
 
+  // Uptime expiry notification (6 months = ~180 days, warn at 170 days = 5m20d)
+  const uptimeWarning = useMemo(() => {
+    if (event.status !== "live") return null;
+    const created = new Date(event.created_at);
+    const now = new Date();
+    const daysSinceCreation = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24));
+    const daysLeft = 180 - daysSinceCreation;
+    if (daysSinceCreation >= 170 && daysLeft > 0) return { type: "warning" as const, daysLeft };
+    if (daysLeft <= 0) return { type: "expired" as const, daysLeft: 0 };
+    return null;
+  }, [event.status, event.created_at]);
+
   // Quiz stats
   const blockCfg = (event.block_config || {}) as any;
   const quizQuestions = blockCfg.quiz || [];
