@@ -827,6 +827,12 @@ const en = {
   // 6-month uptime
   "uptime.note": "Your event page stays online for 6 months. After that, it can be extended for €10.",
   "uptime.legal": "6 months hosting included · Renewal: €10 / 6 months",
+  "uptime.expiringSoon": "Your event page expires in {days} days.",
+  "uptime.expired": "The 6-month runtime of your event page has expired.",
+  "uptime.renewHint": "Extend for another 6 months for €10. Contact us at celebra.at@gmail.com.",
+
+  // Birthday hotel block
+  "block.desc.hotels.party": "Recommend hotels for guests traveling from afar.",
 };
 
 export default en;
