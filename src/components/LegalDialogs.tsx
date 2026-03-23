@@ -269,10 +269,18 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     und der Verbraucher dem ausdrücklich zugestimmt hat.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">5. Verfügbarkeit</h3>
+                  <h3 className="font-semibold text-foreground mt-6">5. Verfügbarkeit & Laufzeit</h3>
                   <p>
                     Wir bemühen uns um eine hohe Verfügbarkeit unserer Dienste, können jedoch keine 100%ige
                     Verfügbarkeit garantieren. Wartungsarbeiten werden nach Möglichkeit vorab angekündigt.
+                  </p>
+                  <p>
+                    Die initiale Laufzeit jeder Event-Seite beträgt 6 Monate ab Aktivierung. 10 Tage vor Ablauf
+                    der Laufzeit werden Sie per Dashboard-Benachrichtigung über die bevorstehende Abschaltung informiert.
+                    Eine Verlängerung um weitere 6 Monate ist für €10,00 (inkl. USt.) möglich. Erfolgt keine
+                    Verlängerung, wird die Event-Seite nach Ablauf der Laufzeit automatisch deaktiviert.
+                    Bereits gespeicherte Daten (Gästelisten, Antworten) bleiben für 30 Tage nach Deaktivierung
+                    abrufbar und können als CSV exportiert werden.
                   </p>
 
                   <h3 className="font-semibold text-foreground mt-6">6. Haftung</h3>
@@ -326,10 +334,18 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     consumer has expressly agreed to this.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">5. Availability</h3>
+                  <h3 className="font-semibold text-foreground mt-6">5. Availability & Duration</h3>
                   <p>
                     We strive for high availability of our services but cannot guarantee 100% uptime.
                     Maintenance work will be announced in advance where possible.
+                  </p>
+                  <p>
+                    The initial runtime of each event page is 6 months from activation. 10 days before expiration
+                    you will be notified via dashboard notification about the upcoming deactivation.
+                    An extension of 6 additional months is available for €10.00 (incl. VAT). If no extension
+                    is made, the event page will be automatically deactivated after the runtime expires.
+                    Already saved data (guest lists, responses) remains accessible for 30 days after
+                    deactivation and can be exported as CSV.
                   </p>
 
                   <h3 className="font-semibold text-foreground mt-6">6. Liability</h3>

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "@/i18n";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEventGuests, useEventAnalytics, useUpdateEvent, useMusicWishes, usePotluckClaims, useQuizResponses, useGameVotes } from "@/hooks/useEvents";
 import { toast } from "sonner";
 import { blocks } from "@/data/blocks";
-import { BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Archive, Radio, Rocket, Music, Trash2, Package, Pencil, ShoppingBasket, HelpCircle, Gamepad2 } from "lucide-react";
+import { BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Archive, Radio, Rocket, Music, Trash2, Package, Pencil, ShoppingBasket, HelpCircle, Gamepad2, AlertTriangle } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import AdminFulfillmentPanel from "./AdminFulfillmentPanel";
 import LanguageLinks from "./LanguageLinks";
@@ -84,6 +84,18 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
   const hasInteractiveBlocks = hasPotluckBlock || hasQuizBlock || hasGamesBlock;
   const canEdit = event.status === "live" || event.status === "paid" || event.status === "draft";
 
+  // Uptime expiry notification (6 months = ~180 days, warn at 170 days = 5m20d)
+  const uptimeWarning = useMemo(() => {
+    if (event.status !== "live") return null;
+    const created = new Date(event.created_at);
+    const now = new Date();
+    const daysSinceCreation = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24));
+    const daysLeft = 180 - daysSinceCreation;
+    if (daysSinceCreation >= 170 && daysLeft > 0) return { type: "warning" as const, daysLeft };
+    if (daysLeft <= 0) return { type: "expired" as const, daysLeft: 0 };
+    return null;
+  }, [event.status, event.created_at]);
+
   // Quiz stats
   const blockCfg = (event.block_config || {}) as any;
   const quizQuestions = blockCfg.quiz || [];
@@ -149,6 +161,28 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
         )}
 
         <TabsContent value="analytics">
+          {/* Uptime warning */}
+          {uptimeWarning && (
+            <div className={`mb-4 p-4 rounded-lg border flex items-start gap-3 ${
+              uptimeWarning.type === "expired"
+                ? "border-destructive bg-destructive/10"
+                : "border-amber-400 bg-amber-50 dark:bg-amber-950/20"
+            }`}>
+              <AlertTriangle className={`w-5 h-5 mt-0.5 shrink-0 ${uptimeWarning.type === "expired" ? "text-destructive" : "text-amber-600"}`} />
+              <div>
+                <p className={`font-body text-sm font-semibold ${uptimeWarning.type === "expired" ? "text-destructive" : "text-amber-700"}`}>
+                  {uptimeWarning.type === "expired"
+                    ? (t("uptime.expired") || "Die 6-monatige Laufzeit ist abgelaufen.")
+                    : (t("uptime.expiringSoon") || `Deine Event-Seite läuft in ${uptimeWarning.daysLeft} Tagen ab.`).replace("{days}", String(uptimeWarning.daysLeft))
+                  }
+                </p>
+                <p className="font-body text-xs text-muted-foreground mt-1">
+                  {t("uptime.renewHint") || "Verlängere um weitere 6 Monate für €10. Kontaktiere uns unter celebra.at@gmail.com."}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
             <StatCard label={t("dashboard.pageViews")} value={pageViews} icon={Eye} />
             <StatCard label={t("dashboard.qrScans")} value={qrScans} icon={Eye} />

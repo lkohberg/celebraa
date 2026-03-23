@@ -1,3 +1,4 @@
+import { useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Video, Mic } from "lucide-react";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
@@ -9,6 +10,13 @@ interface VideoMessageSectionProps {
   blockConfig?: any;
   variant?: "wedding" | "birthday" | "corporate";
 }
+
+/** Duck (lower volume) or restore background music when this section's media plays/pauses */
+const duckBgMusic = (duck: boolean) => {
+  const bgAudio = (window as any).__celebra_bg_audio as HTMLAudioElement | undefined;
+  if (!bgAudio) return;
+  bgAudio.volume = duck ? 0.05 : 0.3;
+};
 
 const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "wedding" }: VideoMessageSectionProps) => {
   const color = accentColor || "hsl(38, 65%, 50%)";
@@ -46,7 +54,11 @@ const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "weddin
 
           {mediaType === "audio" ? (
             <div className="bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30 p-6">
-              <audio controls className="w-full" src={mediaUrl}>
+              <audio controls className="w-full" src={mediaUrl}
+                onPlay={() => duckBgMusic(true)}
+                onPause={() => duckBgMusic(false)}
+                onEnded={() => duckBgMusic(false)}
+              >
                 Your browser does not support audio playback.
               </audio>
             </div>
@@ -58,6 +70,9 @@ const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "weddin
                 src={mediaUrl}
                 preload="metadata"
                 playsInline
+                onPlay={() => duckBgMusic(true)}
+                onPause={() => duckBgMusic(false)}
+                onEnded={() => duckBgMusic(false)}
               >
                 Your browser does not support video playback.
               </video>

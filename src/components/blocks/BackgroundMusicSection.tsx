@@ -16,6 +16,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
 const BackgroundMusicSection = ({ accentColor, lang, isDemo = false, musicUrl, blockConfig, eventId }: { accentColor?: string; lang?: EventLang; isDemo?: boolean; musicUrl?: string; blockConfig?: any; eventId?: string }) => {
+  // Expose audio ref globally so VideoMessageSection can duck/pause it
+  const globalAudioRef = typeof window !== "undefined" ? (window as any) : {};
+
   const color = accentColor || "hsl(38, 65%, 50%)";
   const label = lang ? getEventLabel(lang, "bgMusicActive") : "♪ Hintergrundmusik aktiv";
   const [playing, setPlaying] = useState(false);
@@ -39,6 +42,7 @@ const BackgroundMusicSection = ({ accentColor, lang, isDemo = false, musicUrl, b
       audio.loop = true;
       audio.volume = 0.3;
       audioRef.current = audio;
+      globalAudioRef.__celebra_bg_audio = audio;
     }
     audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
   }, [src]);

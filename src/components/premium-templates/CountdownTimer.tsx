@@ -50,13 +50,13 @@ const CountdownTimer = ({ targetDate, targetTime, className, lang }: CountdownTi
 
   return (
     <div className={className}>
-      <div className="flex justify-center gap-6 md:gap-12">
+      <div className="flex justify-center gap-3 sm:gap-6 md:gap-12">
         {items.map((item) => (
-          <div key={item.label} className="text-center">
-            <p className="font-display text-[2.5rem] md:text-[4rem] text-primary tabular-nums">
+          <div key={item.label} className="text-center min-w-0">
+            <p className="font-display text-[1.8rem] sm:text-[2.5rem] md:text-[4rem] text-primary tabular-nums leading-none">
               {item.value}
             </p>
-            <p className="font-body text-xs md:text-sm text-muted-foreground tracking-[0.15em] uppercase">
+            <p className="font-body text-[10px] sm:text-xs md:text-sm text-muted-foreground tracking-[0.1em] sm:tracking-[0.15em] uppercase mt-1">
               {item.label}
             </p>
           </div>
