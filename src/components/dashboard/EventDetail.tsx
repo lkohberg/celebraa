@@ -149,6 +149,28 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
         )}
 
         <TabsContent value="analytics">
+          {/* Uptime warning */}
+          {uptimeWarning && (
+            <div className={`mb-4 p-4 rounded-lg border flex items-start gap-3 ${
+              uptimeWarning.type === "expired"
+                ? "border-destructive bg-destructive/10"
+                : "border-amber-400 bg-amber-50 dark:bg-amber-950/20"
+            }`}>
+              <AlertTriangle className={`w-5 h-5 mt-0.5 shrink-0 ${uptimeWarning.type === "expired" ? "text-destructive" : "text-amber-600"}`} />
+              <div>
+                <p className={`font-body text-sm font-semibold ${uptimeWarning.type === "expired" ? "text-destructive" : "text-amber-700"}`}>
+                  {uptimeWarning.type === "expired"
+                    ? (t("uptime.expired") || "Die 6-monatige Laufzeit ist abgelaufen.")
+                    : (t("uptime.expiringSoon") || `Deine Event-Seite läuft in ${uptimeWarning.daysLeft} Tagen ab.`).replace("{days}", String(uptimeWarning.daysLeft))
+                  }
+                </p>
+                <p className="font-body text-xs text-muted-foreground mt-1">
+                  {t("uptime.renewHint") || "Verlängere um weitere 6 Monate für €10. Kontaktiere uns unter celebra.at@gmail.com."}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
             <StatCard label={t("dashboard.pageViews")} value={pageViews} icon={Eye} />
             <StatCard label={t("dashboard.qrScans")} value={qrScans} icon={Eye} />
