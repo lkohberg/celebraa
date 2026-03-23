@@ -54,7 +54,11 @@ const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "weddin
 
           {mediaType === "audio" ? (
             <div className="bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30 p-6">
-              <audio controls className="w-full" src={mediaUrl}>
+              <audio controls className="w-full" src={mediaUrl}
+                onPlay={() => duckBgMusic(true)}
+                onPause={() => duckBgMusic(false)}
+                onEnded={() => duckBgMusic(false)}
+              >
                 Your browser does not support audio playback.
               </audio>
             </div>
@@ -66,6 +70,9 @@ const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "weddin
                 src={mediaUrl}
                 preload="metadata"
                 playsInline
+                onPlay={() => duckBgMusic(true)}
+                onPause={() => duckBgMusic(false)}
+                onEnded={() => duckBgMusic(false)}
               >
                 Your browser does not support video playback.
               </video>

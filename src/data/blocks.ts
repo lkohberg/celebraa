@@ -68,6 +68,7 @@ export const blocks: Block[] = [
   { id: "party-menu", nameKey: "block.menu", descriptionKey: "block.desc.menu.party", price: 9, category: "birthday", icon: "🍽️" },
   { id: "party-games", nameKey: "block.games", descriptionKey: "block.desc.games", price: 9, category: "birthday", icon: "🎮" },
   { id: "party-potluck", nameKey: "block.potluck", descriptionKey: "block.desc.potluck", price: 9, category: "birthday", icon: "🧺" },
+  { id: "party-hotels", nameKey: "block.hotels", descriptionKey: "block.desc.hotels.party", price: 9, category: "birthday", icon: "🏨" },
 ];
 
 export const packages: Package[] = [

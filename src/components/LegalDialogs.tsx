@@ -334,10 +334,18 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     consumer has expressly agreed to this.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">5. Availability</h3>
+                  <h3 className="font-semibold text-foreground mt-6">5. Availability & Duration</h3>
                   <p>
                     We strive for high availability of our services but cannot guarantee 100% uptime.
                     Maintenance work will be announced in advance where possible.
+                  </p>
+                  <p>
+                    The initial runtime of each event page is 6 months from activation. 10 days before expiration
+                    you will be notified via dashboard notification about the upcoming deactivation.
+                    An extension of 6 additional months is available for €10.00 (incl. VAT). If no extension
+                    is made, the event page will be automatically deactivated after the runtime expires.
+                    Already saved data (guest lists, responses) remains accessible for 30 days after
+                    deactivation and can be exported as CSV.
                   </p>
 
                   <h3 className="font-semibold text-foreground mt-6">6. Liability</h3>

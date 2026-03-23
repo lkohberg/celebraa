@@ -42,6 +42,7 @@ const BackgroundMusicSection = ({ accentColor, lang, isDemo = false, musicUrl, b
       audio.loop = true;
       audio.volume = 0.3;
       audioRef.current = audio;
+      globalAudioRef.__celebra_bg_audio = audio;
     }
     audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
   }, [src]);
