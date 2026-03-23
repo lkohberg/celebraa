@@ -1,3 +1,4 @@
+import { useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Video, Mic } from "lucide-react";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
@@ -9,6 +10,13 @@ interface VideoMessageSectionProps {
   blockConfig?: any;
   variant?: "wedding" | "birthday" | "corporate";
 }
+
+/** Duck (lower volume) or restore background music when this section's media plays/pauses */
+const duckBgMusic = (duck: boolean) => {
+  const bgAudio = (window as any).__celebra_bg_audio as HTMLAudioElement | undefined;
+  if (!bgAudio) return;
+  bgAudio.volume = duck ? 0.05 : 0.3;
+};
 
 const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "wedding" }: VideoMessageSectionProps) => {
   const color = accentColor || "hsl(38, 65%, 50%)";
