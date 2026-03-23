@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEventGuests, useEventAnalytics, useUpdateEvent, useMusicWishes, usePotluckClaims, useQuizResponses, useGameVotes } from "@/hooks/useEvents";
 import { toast } from "sonner";
 import { blocks } from "@/data/blocks";
-import { BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Archive, Radio, Rocket, Music, Trash2, Package, Pencil, ShoppingBasket, HelpCircle, Gamepad2 } from "lucide-react";
+import { BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Archive, Radio, Rocket, Music, Trash2, Package, Pencil, ShoppingBasket, HelpCircle, Gamepad2, AlertTriangle } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import AdminFulfillmentPanel from "./AdminFulfillmentPanel";
 import LanguageLinks from "./LanguageLinks";
