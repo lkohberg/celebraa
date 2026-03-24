@@ -20,6 +20,7 @@ import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayP
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import LegalDialogs from "@/components/LegalDialogs";
 import BlockConfigurator from "@/components/BlockConfigurator";
+import IframePreview from "@/components/IframePreview";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
