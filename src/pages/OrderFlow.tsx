@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { templates } from "@/components/TemplateCard";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayP
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import LegalDialogs from "@/components/LegalDialogs";
 import BlockConfigurator from "@/components/BlockConfigurator";
+import IframePreview from "@/components/IframePreview";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
@@ -1004,23 +1005,37 @@ const OrderFlow = () => {
                   </div>
 
                   <div className="lg:col-span-3 flex justify-center">
-                    <div
-                      className={`rounded-xl overflow-hidden shadow-card max-h-[75vh] overflow-y-auto transition-all duration-300 ${
-                        previewMode === "mobile" ? "w-[375px] border-[8px] border-foreground/10 rounded-[2rem]" : "w-full"
-                      }`}
-                    >
-                      {(() => {
-                        const previewEvent = buildPreviewEvent();
-                        switch (category) {
-                          case "wedding":
-                            return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                          case "birthday":
-                            return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                          case "corporate":
-                            return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                        }
-                      })()}
-                    </div>
+                    {previewMode === "mobile" ? (
+                      <div className="border-[8px] border-foreground/10 rounded-[2rem] overflow-hidden shadow-card">
+                        <IframePreview width={375} maxHeight="75vh">
+                          {(() => {
+                            const previewEvent = buildPreviewEvent();
+                            switch (category) {
+                              case "wedding":
+                                return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                              case "birthday":
+                                return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                              case "corporate":
+                                return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                            }
+                          })()}
+                        </IframePreview>
+                      </div>
+                    ) : (
+                      <div className="rounded-xl overflow-hidden shadow-card max-h-[75vh] overflow-y-auto w-full">
+                        {(() => {
+                          const previewEvent = buildPreviewEvent();
+                          switch (category) {
+                            case "wedding":
+                              return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                            case "birthday":
+                              return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                            case "corporate":
+                              return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                          }
+                        })()}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
