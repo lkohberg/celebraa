@@ -200,6 +200,7 @@ const de = {
   "dashboard.editError": "Fehler beim Speichern",
   "dashboard.cancel": "Abbrechen",
   "dashboard.saveChanges": "Speichern",
+  "dashboard.blockSettings": "Block-Einstellungen",
 
   // Footer
   "footer.tagline": "Digitale Event-Einladungen",

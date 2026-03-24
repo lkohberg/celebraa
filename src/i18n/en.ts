@@ -200,6 +200,7 @@ const en = {
   "dashboard.editError": "Error saving changes",
   "dashboard.cancel": "Cancel",
   "dashboard.saveChanges": "Save changes",
+  "dashboard.blockSettings": "Block settings",
 
   // Footer
   "footer.tagline": "Digital Event Invitations",
