@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "@/i18n";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import BlockConfigurator from "@/components/BlockConfigurator";
 
 interface EventEditDialogProps {
   event: any;
@@ -23,10 +24,19 @@ const fontOptions = [
   { value: "Georgia", label: "Georgia" },
 ];
 
+const getCategoryFromTemplate = (templateId: string): "wedding" | "birthday" | "corporate" => {
+  if (templateId?.startsWith("wedding")) return "wedding";
+  if (templateId?.startsWith("business") || templateId?.startsWith("corporate")) return "corporate";
+  return "birthday";
+};
+
 const EventEditDialog = ({ event, open, onOpenChange }: EventEditDialogProps) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [saving, setSaving] = useState(false);
+
+  const category = useMemo(() => getCategoryFromTemplate(event.template_id), [event.template_id]);
+  const selectedBlocks = useMemo(() => (event.selected_blocks || []) as string[], [event.selected_blocks]);
 
   const [form, setForm] = useState({
     title: event.title || "",
@@ -45,10 +55,10 @@ const EventEditDialog = ({ event, open, onOpenChange }: EventEditDialogProps) =>
     primary_color: event.primary_color || "#C8A951",
     font: event.font || "Playfair Display",
     children_welcome: event.children_welcome as boolean | null,
-    story_text: event.story_text || "",
-    dress_code: event.dress_code || "",
     hero_image_url: event.hero_image_url || "",
   });
+
+  const [blockConfig, setBlockConfig] = useState<any>(event.block_config || {});
 
   // Reset form when event changes
   useEffect(() => {
@@ -69,10 +79,9 @@ const EventEditDialog = ({ event, open, onOpenChange }: EventEditDialogProps) =>
       primary_color: event.primary_color || "#C8A951",
       font: event.font || "Playfair Display",
       children_welcome: event.children_welcome as boolean | null,
-      story_text: event.story_text || "",
-      dress_code: event.dress_code || "",
       hero_image_url: event.hero_image_url || "",
     });
+    setBlockConfig(event.block_config || {});
   }, [event]);
 
   const handleSave = async () => {
@@ -97,9 +106,13 @@ const EventEditDialog = ({ event, open, onOpenChange }: EventEditDialogProps) =>
           primary_color: form.primary_color,
           font: form.font,
           children_welcome: form.children_welcome,
-          story_text: form.story_text || null,
-          dress_code: form.dress_code || null,
           hero_image_url: form.hero_image_url || null,
+          // Save story_text and dress_code from blockConfig to their dedicated columns
+          story_text: blockConfig.story_text || null,
+          dress_code: blockConfig.dresscode_male
+            ? `${blockConfig.dresscode_male}${blockConfig.dresscode_female ? ` / ${blockConfig.dresscode_female}` : ""}`
+            : null,
+          block_config: blockConfig,
         } as any)
         .eq("id", event.id);
       if (error) throw error;
@@ -112,15 +125,16 @@ const EventEditDialog = ({ event, open, onOpenChange }: EventEditDialogProps) =>
     setSaving(false);
   };
 
-  const isWedding = event.template_id?.startsWith("wedding");
+  const isWedding = category === "wedding";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-display">{t("dashboard.editEvent") || "Event bearbeiten"}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-2">
+          {/* Basic fields */}
           <div>
             <Label className="font-body">{t("order.eventTitle") || "Titel"}</Label>
             <Input value={form.title} onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))} className="font-body mt-1" />
@@ -197,18 +211,6 @@ const EventEditDialog = ({ event, open, onOpenChange }: EventEditDialogProps) =>
             )}
           </div>
 
-          {/* Story Text */}
-          <div>
-            <Label className="font-body">{t("blockConfig.story") || "Geschichte / Beschreibung"}</Label>
-            <Textarea value={form.story_text} onChange={(e) => setForm(prev => ({ ...prev, story_text: e.target.value }))} className="font-body mt-1" rows={3} />
-          </div>
-
-          {/* Dress Code */}
-          <div>
-            <Label className="font-body">{t("blockConfig.dresscode") || "Dresscode"}</Label>
-            <Input value={form.dress_code} onChange={(e) => setForm(prev => ({ ...prev, dress_code: e.target.value }))} className="font-body mt-1" />
-          </div>
-
           {/* Style */}
           <div className="grid grid-cols-2 gap-4 border-t border-border pt-4">
             <div>
@@ -227,6 +229,21 @@ const EventEditDialog = ({ event, open, onOpenChange }: EventEditDialogProps) =>
               </Select>
             </div>
           </div>
+
+          {/* Block Configurator - only shows blocks this event actually has */}
+          {selectedBlocks.length > 0 && (
+            <div className="border-t border-border pt-4">
+              <Label className="font-body text-sm font-semibold mb-3 block">
+                {t("dashboard.blockSettings") || "Block-Einstellungen"}
+              </Label>
+              <BlockConfigurator
+                selectedBlocks={selectedBlocks}
+                blockConfig={blockConfig}
+                setBlockConfig={setBlockConfig}
+                category={category}
+              />
+            </div>
+          )}
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} className="font-body">{t("dashboard.cancel") || "Abbrechen"}</Button>
