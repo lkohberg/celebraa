@@ -20,6 +20,13 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
   const submitRsvp = useSubmitRsvp();
   const { guestName: sharedName, setGuestName: setSharedName } = useGuestName();
   const [name, setName] = useState(sharedName || "");
+
+  // Sync shared name into local state when it changes externally
+  useEffect(() => {
+    if (sharedName && !name) {
+      setName(sharedName);
+    }
+  }, [sharedName]);
   const [email, setEmail] = useState("");
   const [attendance, setAttendance] = useState<"accepted" | "declined" | null>(null);
   const [companionCount, setCompanionCount] = useState(0);
