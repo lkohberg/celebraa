@@ -357,24 +357,33 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     deactivation and can be exported as CSV.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">6. Liability</h3>
+                  <h3 className="font-semibold text-foreground mt-6">6. User-Generated Content & Copyright</h3>
+                  <p>
+                    The user is responsible for all uploaded content (images, music, texts) and guarantees
+                    having the necessary rights. In particular, no copyrighted music may be uploaded without
+                    an appropriate license. celebra.at reserves the right to remove unlawful content without
+                    prior notice. In case of substantiated copyright infringement, celebra.at may block
+                    access to the event page.
+                  </p>
+
+                  <h3 className="font-semibold text-foreground mt-6">7. Liability</h3>
                   <p>
                     Liability is limited to intent and gross negligence. We are only liable for slight negligence
                     in case of breach of essential contractual obligations.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">7. Intellectual Property</h3>
+                  <h3 className="font-semibold text-foreground mt-6">8. Intellectual Property</h3>
                   <p>
                     Templates and designs of celebra.at are protected by copyright. With purchase, you receive
                     a simple right of use for the agreed purpose.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">8. Applicable Law</h3>
+                  <h3 className="font-semibold text-foreground mt-6">9. Applicable Law</h3>
                   <p>
                     Austrian law applies. The place of jurisdiction is the competent court in Austria.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">9. Contact</h3>
+                  <h3 className="font-semibold text-foreground mt-6">10. Contact</h3>
                   <p>For questions, please contact: celebra.at@gmail.com</p>
                 </>
               )}
