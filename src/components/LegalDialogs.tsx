@@ -283,7 +283,16 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     abrufbar und können als CSV exportiert werden.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">6. Haftung</h3>
+                  <h3 className="font-semibold text-foreground mt-6">6. Nutzergenerierte Inhalte & Urheberrecht</h3>
+                  <p>
+                    Der Nutzer ist für alle hochgeladenen Inhalte (Bilder, Musik, Texte) selbst verantwortlich und
+                    garantiert, über die erforderlichen Rechte zu verfügen. Insbesondere darf keine urheberrechtlich
+                    geschützte Musik ohne entsprechende Lizenz hochgeladen werden. celebra.at behält sich das Recht vor,
+                    rechtswidrige Inhalte ohne Vorankündigung zu entfernen. Bei begründetem Urheberrechtsverstoß kann
+                    celebra.at den Zugang zur Event-Seite sperren.
+                  </p>
+
+                  <h3 className="font-semibold text-foreground mt-6">7. Haftung</h3>
                   <p>
                     Die Haftung ist auf Vorsatz und grobe Fahrlässigkeit beschränkt. Für leichte Fahrlässigkeit
                     haften wir nur bei Verletzung wesentlicher Vertragspflichten.
