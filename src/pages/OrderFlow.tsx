@@ -1004,10 +1004,40 @@ const OrderFlow = () => {
                     </Button>
                   </div>
 
-                  <div className="lg:col-span-3 flex justify-center">
-                    {previewMode === "mobile" ? (
-                      <div className="border-[8px] border-foreground/10 rounded-[2rem] overflow-hidden shadow-card">
-                        <IframePreview width={375} maxHeight="75vh">
+                  <div className="lg:col-span-3 flex justify-center order-1 lg:order-2">
+                    <AnimatePresence mode="wait">
+                      {previewMode === "mobile" ? (
+                        <motion.div
+                          key="mobile-preview"
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="border-[8px] border-foreground/10 rounded-[2rem] overflow-hidden shadow-card"
+                        >
+                          <IframePreview width={375} maxHeight="75vh">
+                            {(() => {
+                              const previewEvent = buildPreviewEvent();
+                              switch (category) {
+                                case "wedding":
+                                  return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                case "birthday":
+                                  return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                case "corporate":
+                                  return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                              }
+                            })()}
+                          </IframePreview>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="desktop-preview"
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="rounded-xl overflow-hidden shadow-card max-h-[75vh] overflow-y-auto w-full"
+                        >
                           {(() => {
                             const previewEvent = buildPreviewEvent();
                             switch (category) {
@@ -1019,23 +1049,9 @@ const OrderFlow = () => {
                                 return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                             }
                           })()}
-                        </IframePreview>
-                      </div>
-                    ) : (
-                      <div className="rounded-xl overflow-hidden shadow-card max-h-[75vh] overflow-y-auto w-full">
-                        {(() => {
-                          const previewEvent = buildPreviewEvent();
-                          switch (category) {
-                            case "wedding":
-                              return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                            case "birthday":
-                              return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                            case "corporate":
-                              return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                          }
-                        })()}
-                      </div>
-                    )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </div>
               </div>
