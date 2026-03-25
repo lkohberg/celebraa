@@ -298,18 +298,18 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     haften wir nur bei Verletzung wesentlicher Vertragspflichten.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">7. Geistiges Eigentum</h3>
+                  <h3 className="font-semibold text-foreground mt-6">8. Geistiges Eigentum</h3>
                   <p>
                     Die Templates und Designs von celebra.at sind urheberrechtlich geschützt. Mit dem Kauf erhalten
                     Sie ein einfaches Nutzungsrecht für den vereinbarten Zweck.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">8. Anwendbares Recht</h3>
+                  <h3 className="font-semibold text-foreground mt-6">9. Anwendbares Recht</h3>
                   <p>
                     Es gilt österreichisches Recht. Gerichtsstand ist das sachlich zuständige Gericht in Österreich.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">9. Kontakt</h3>
+                  <h3 className="font-semibold text-foreground mt-6">10. Kontakt</h3>
                   <p>Bei Fragen wenden Sie sich bitte an: celebra.at@gmail.com</p>
                 </>
               ) : (
