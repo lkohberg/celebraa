@@ -884,10 +884,10 @@ const OrderFlow = () => {
                   />
                 </div>
                 {/* Style */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="font-body">{t("order.primaryColor")}</Label>
-                    <Input type="color" value={form.primaryColor} onChange={(e) => setForm(prev => ({ ...prev, primaryColor: e.target.value }))} className="mt-1 h-12 cursor-pointer" />
+                    <Input type="color" value={form.primaryColor} onChange={(e) => setForm(prev => ({ ...prev, primaryColor: e.target.value }))} className="mt-1 h-12 w-full cursor-pointer" />
                   </div>
                   <div>
                     <Label className="font-body">{t("order.font")}</Label>
