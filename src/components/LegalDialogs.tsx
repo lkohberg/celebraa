@@ -225,6 +225,13 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     No tracking or advertising cookies are used.
                   </p>
 
+                  <h3 className="font-semibold text-foreground mt-6">Uploaded Content</h3>
+                  <p>
+                    Content uploaded by users (images, music, videos) is stored exclusively for the purpose
+                    of event presentation and deleted after the runtime expires or 30 days after deactivation.
+                    No sharing with third parties takes place.
+                  </p>
+
                   <h3 className="font-semibold text-foreground mt-6">Payment Processing</h3>
                   <p>
                     Payments are processed through Stripe. Stripe's privacy policy applies (stripe.com/privacy).
