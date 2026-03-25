@@ -638,6 +638,9 @@ const OrderFlow = () => {
                     <Button className="w-full font-body font-semibold mt-3" onClick={() => setStep(1)}>
                       {t("order.continueEvent")} <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
+                    <p className="text-[10px] font-body text-muted-foreground mt-2 text-center leading-relaxed">
+                      ℹ️ {t("order.uptimeInfo")}
+                    </p>
                   </div>
                 </div>
               </div>
