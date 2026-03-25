@@ -858,14 +858,14 @@ const OrderFlow = () => {
                       </div>
                       <div>
                         <Label className="font-body text-sm">{t("order.maxCompanions")}</Label>
-                        <Input
+                      <Input
                           type="number"
                           min={0}
                           max={20}
                           placeholder={t("order.maxCompanionsPlaceholder")}
                           value={blockConfig.max_companions ?? ""}
                           onChange={(e) => setBlockConfig((prev: any) => ({ ...prev, max_companions: parseInt(e.target.value) || 0 }))}
-                          className="font-body mt-1 w-32"
+                          className="font-body mt-1 w-full sm:w-32"
                         />
                       </div>
                     </>
