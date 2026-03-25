@@ -978,7 +978,7 @@ const OrderFlow = () => {
                 </div>
 
                 <div className="grid lg:grid-cols-4 gap-6">
-                  <div className="lg:col-span-1">
+                  <div className="lg:col-span-1 order-2 lg:order-1">
                     <div className="bg-secondary rounded-xl p-4 space-y-2">
                       <h4 className="font-display text-sm font-semibold text-foreground mb-2">{t("order.selectedBlocks")}</h4>
                       <div className="flex justify-between font-body text-xs">
