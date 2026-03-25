@@ -655,10 +655,10 @@ const OrderFlow = () => {
                   <Label className="font-body">{t("order.eventTitle")} *</Label>
                   <Input placeholder={t(`configure.eventTitlePlaceholder.${category}`)} value={form.title} onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))} className="font-body mt-1" />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="font-body">{t("order.date")} *</Label>
-                    <Input type="date" value={form.date} onChange={(e) => setForm(prev => ({ ...prev, date: e.target.value }))} className="font-body mt-1" />
+                    <Input type="date" value={form.date} onChange={(e) => setForm(prev => ({ ...prev, date: e.target.value }))} className="font-body mt-1 w-full min-w-0" />
                   </div>
                   <div>
                     <Label className="font-body">{t("order.time")} *</Label>
