@@ -167,6 +167,13 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     erforderlich sind. Es werden keine Tracking-Cookies oder Cookies zu Werbezwecken eingesetzt.
                   </p>
 
+                  <h3 className="font-semibold text-foreground mt-6">Hochgeladene Inhalte</h3>
+                  <p>
+                    Von Nutzern hochgeladene Inhalte (Bilder, Musik, Videos) werden ausschließlich zum Zweck
+                    der Event-Darstellung gespeichert und nach Ablauf der Laufzeit bzw. 30 Tage nach Deaktivierung
+                    gelöscht. Eine Weitergabe an Dritte findet nicht statt.
+                  </p>
+
                   <h3 className="font-semibold text-foreground mt-6">Zahlungsabwicklung</h3>
                   <p>
                     Zahlungen werden über den Zahlungsdienstleister Stripe abgewickelt. Es gelten die
