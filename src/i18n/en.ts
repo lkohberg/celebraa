@@ -397,6 +397,7 @@ const en = {
   "order.template": "Template",
   "order.package": "Package",
   "order.manualWorkNote": "Your page contains custom blocks and will go live after processing by our team.",
+  "order.uptimeInfo": "Each event page is online for 6 months from activation. After that, an extension of 6 months is available for €10.",
   "order.acceptTerms": "I accept the",
   "order.and": "&",
   "order.processing": "Processing...",

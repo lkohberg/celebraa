@@ -410,6 +410,7 @@ const de = {
   "order.package": "Paket",
   "order.manualWorkNote":
     "Deine Seite enthält individuelle Blöcke und wird nach Bearbeitung durch unser Team freigeschaltet.",
+  "order.uptimeInfo": "Jede Event-Seite ist für 6 Monate ab Aktivierung online. Danach ist eine Verlängerung um weitere 6 Monate für €10 möglich.",
   "order.acceptTerms": "Ich akzeptiere die",
   "order.and": "&",
   "order.processing": "Wird verarbeitet...",

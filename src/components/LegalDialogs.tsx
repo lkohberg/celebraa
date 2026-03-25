@@ -167,6 +167,13 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     erforderlich sind. Es werden keine Tracking-Cookies oder Cookies zu Werbezwecken eingesetzt.
                   </p>
 
+                  <h3 className="font-semibold text-foreground mt-6">Hochgeladene Inhalte</h3>
+                  <p>
+                    Von Nutzern hochgeladene Inhalte (Bilder, Musik, Videos) werden ausschließlich zum Zweck
+                    der Event-Darstellung gespeichert und nach Ablauf der Laufzeit bzw. 30 Tage nach Deaktivierung
+                    gelöscht. Eine Weitergabe an Dritte findet nicht statt.
+                  </p>
+
                   <h3 className="font-semibold text-foreground mt-6">Zahlungsabwicklung</h3>
                   <p>
                     Zahlungen werden über den Zahlungsdienstleister Stripe abgewickelt. Es gelten die
@@ -216,6 +223,13 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                   <p>
                     Our website uses only technically necessary cookies required for operation.
                     No tracking or advertising cookies are used.
+                  </p>
+
+                  <h3 className="font-semibold text-foreground mt-6">Uploaded Content</h3>
+                  <p>
+                    Content uploaded by users (images, music, videos) is stored exclusively for the purpose
+                    of event presentation and deleted after the runtime expires or 30 days after deactivation.
+                    No sharing with third parties takes place.
                   </p>
 
                   <h3 className="font-semibold text-foreground mt-6">Payment Processing</h3>
@@ -283,24 +297,33 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     abrufbar und können als CSV exportiert werden.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">6. Haftung</h3>
+                  <h3 className="font-semibold text-foreground mt-6">6. Nutzergenerierte Inhalte & Urheberrecht</h3>
+                  <p>
+                    Der Nutzer ist für alle hochgeladenen Inhalte (Bilder, Musik, Texte) selbst verantwortlich und
+                    garantiert, über die erforderlichen Rechte zu verfügen. Insbesondere darf keine urheberrechtlich
+                    geschützte Musik ohne entsprechende Lizenz hochgeladen werden. celebra.at behält sich das Recht vor,
+                    rechtswidrige Inhalte ohne Vorankündigung zu entfernen. Bei begründetem Urheberrechtsverstoß kann
+                    celebra.at den Zugang zur Event-Seite sperren.
+                  </p>
+
+                  <h3 className="font-semibold text-foreground mt-6">7. Haftung</h3>
                   <p>
                     Die Haftung ist auf Vorsatz und grobe Fahrlässigkeit beschränkt. Für leichte Fahrlässigkeit
                     haften wir nur bei Verletzung wesentlicher Vertragspflichten.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">7. Geistiges Eigentum</h3>
+                  <h3 className="font-semibold text-foreground mt-6">8. Geistiges Eigentum</h3>
                   <p>
                     Die Templates und Designs von celebra.at sind urheberrechtlich geschützt. Mit dem Kauf erhalten
                     Sie ein einfaches Nutzungsrecht für den vereinbarten Zweck.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">8. Anwendbares Recht</h3>
+                  <h3 className="font-semibold text-foreground mt-6">9. Anwendbares Recht</h3>
                   <p>
                     Es gilt österreichisches Recht. Gerichtsstand ist das sachlich zuständige Gericht in Österreich.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">9. Kontakt</h3>
+                  <h3 className="font-semibold text-foreground mt-6">10. Kontakt</h3>
                   <p>Bei Fragen wenden Sie sich bitte an: celebra.at@gmail.com</p>
                 </>
               ) : (
@@ -348,24 +371,33 @@ const LegalDialogs = ({ inline, renderTrigger }: LegalDialogsProps = {}) => {
                     deactivation and can be exported as CSV.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">6. Liability</h3>
+                  <h3 className="font-semibold text-foreground mt-6">6. User-Generated Content & Copyright</h3>
+                  <p>
+                    The user is responsible for all uploaded content (images, music, texts) and guarantees
+                    having the necessary rights. In particular, no copyrighted music may be uploaded without
+                    an appropriate license. celebra.at reserves the right to remove unlawful content without
+                    prior notice. In case of substantiated copyright infringement, celebra.at may block
+                    access to the event page.
+                  </p>
+
+                  <h3 className="font-semibold text-foreground mt-6">7. Liability</h3>
                   <p>
                     Liability is limited to intent and gross negligence. We are only liable for slight negligence
                     in case of breach of essential contractual obligations.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">7. Intellectual Property</h3>
+                  <h3 className="font-semibold text-foreground mt-6">8. Intellectual Property</h3>
                   <p>
                     Templates and designs of celebra.at are protected by copyright. With purchase, you receive
                     a simple right of use for the agreed purpose.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">8. Applicable Law</h3>
+                  <h3 className="font-semibold text-foreground mt-6">9. Applicable Law</h3>
                   <p>
                     Austrian law applies. The place of jurisdiction is the competent court in Austria.
                   </p>
 
-                  <h3 className="font-semibold text-foreground mt-6">9. Contact</h3>
+                  <h3 className="font-semibold text-foreground mt-6">10. Contact</h3>
                   <p>For questions, please contact: celebra.at@gmail.com</p>
                 </>
               )}

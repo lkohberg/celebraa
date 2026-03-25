@@ -638,6 +638,9 @@ const OrderFlow = () => {
                     <Button className="w-full font-body font-semibold mt-3" onClick={() => setStep(1)}>
                       {t("order.continueEvent")} <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
+                    <p className="text-[10px] font-body text-muted-foreground mt-2 text-center leading-relaxed">
+                      ℹ️ {t("order.uptimeInfo")}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -655,10 +658,10 @@ const OrderFlow = () => {
                   <Label className="font-body">{t("order.eventTitle")} *</Label>
                   <Input placeholder={t(`configure.eventTitlePlaceholder.${category}`)} value={form.title} onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))} className="font-body mt-1" />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="font-body">{t("order.date")} *</Label>
-                    <Input type="date" value={form.date} onChange={(e) => setForm(prev => ({ ...prev, date: e.target.value }))} className="font-body mt-1" />
+                    <Input type="date" value={form.date} onChange={(e) => setForm(prev => ({ ...prev, date: e.target.value }))} className="font-body mt-1 w-full min-w-0" />
                   </div>
                   <div>
                     <Label className="font-body">{t("order.time")} *</Label>
@@ -724,14 +727,14 @@ const OrderFlow = () => {
                 {category === "wedding" && (
                   <div className="border border-border rounded-lg p-5 space-y-3">
                     <Label className="font-body font-semibold">{t("order.childrenWelcome")}</Label>
-                    <div className="flex gap-3">
-                      <Button type="button" size="sm" variant={form.childrenWelcome === true ? "default" : "outline"} className="font-body" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: true }))}>
+                    <div className="flex flex-wrap gap-2 sm:gap-3">
+                      <Button type="button" size="sm" variant={form.childrenWelcome === true ? "default" : "outline"} className="font-body text-xs sm:text-sm" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: true }))}>
                         {t("order.childrenYes")}
                       </Button>
-                      <Button type="button" size="sm" variant={form.childrenWelcome === false ? "default" : "outline"} className="font-body" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: false }))}>
+                      <Button type="button" size="sm" variant={form.childrenWelcome === false ? "default" : "outline"} className="font-body text-xs sm:text-sm" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: false }))}>
                         {t("order.childrenNo")}
                       </Button>
-                      <Button type="button" size="sm" variant={form.childrenWelcome === null ? "default" : "outline"} className="font-body" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: null }))}>
+                      <Button type="button" size="sm" variant={form.childrenWelcome === null ? "default" : "outline"} className="font-body text-xs sm:text-sm" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: null }))}>
                         {t("order.childrenNotShown")}
                       </Button>
                     </div>
@@ -858,14 +861,14 @@ const OrderFlow = () => {
                       </div>
                       <div>
                         <Label className="font-body text-sm">{t("order.maxCompanions")}</Label>
-                        <Input
+                      <Input
                           type="number"
                           min={0}
                           max={20}
                           placeholder={t("order.maxCompanionsPlaceholder")}
                           value={blockConfig.max_companions ?? ""}
                           onChange={(e) => setBlockConfig((prev: any) => ({ ...prev, max_companions: parseInt(e.target.value) || 0 }))}
-                          className="font-body mt-1 w-32"
+                          className="font-body mt-1 w-full sm:w-32"
                         />
                       </div>
                     </>
@@ -884,10 +887,10 @@ const OrderFlow = () => {
                   />
                 </div>
                 {/* Style */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="font-body">{t("order.primaryColor")}</Label>
-                    <Input type="color" value={form.primaryColor} onChange={(e) => setForm(prev => ({ ...prev, primaryColor: e.target.value }))} className="mt-1 h-12 cursor-pointer" />
+                    <Input type="color" value={form.primaryColor} onChange={(e) => setForm(prev => ({ ...prev, primaryColor: e.target.value }))} className="mt-1 h-12 w-full cursor-pointer" />
                   </div>
                   <div>
                     <Label className="font-body">{t("order.font")}</Label>
@@ -978,7 +981,7 @@ const OrderFlow = () => {
                 </div>
 
                 <div className="grid lg:grid-cols-4 gap-6">
-                  <div className="lg:col-span-1">
+                  <div className="lg:col-span-1 order-2 lg:order-1">
                     <div className="bg-secondary rounded-xl p-4 space-y-2">
                       <h4 className="font-display text-sm font-semibold text-foreground mb-2">{t("order.selectedBlocks")}</h4>
                       <div className="flex justify-between font-body text-xs">
@@ -1004,10 +1007,40 @@ const OrderFlow = () => {
                     </Button>
                   </div>
 
-                  <div className="lg:col-span-3 flex justify-center">
-                    {previewMode === "mobile" ? (
-                      <div className="border-[8px] border-foreground/10 rounded-[2rem] overflow-hidden shadow-card">
-                        <IframePreview width={375} maxHeight="75vh">
+                  <div className="lg:col-span-3 flex justify-center order-1 lg:order-2">
+                    <AnimatePresence mode="wait">
+                      {previewMode === "mobile" ? (
+                        <motion.div
+                          key="mobile-preview"
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="border-[8px] border-foreground/10 rounded-[2rem] overflow-hidden shadow-card"
+                        >
+                          <IframePreview width={375} maxHeight="75vh">
+                            {(() => {
+                              const previewEvent = buildPreviewEvent();
+                              switch (category) {
+                                case "wedding":
+                                  return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                case "birthday":
+                                  return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                case "corporate":
+                                  return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                              }
+                            })()}
+                          </IframePreview>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="desktop-preview"
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="rounded-xl overflow-hidden shadow-card max-h-[75vh] overflow-y-auto w-full"
+                        >
                           {(() => {
                             const previewEvent = buildPreviewEvent();
                             switch (category) {
@@ -1019,23 +1052,9 @@ const OrderFlow = () => {
                                 return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                             }
                           })()}
-                        </IframePreview>
-                      </div>
-                    ) : (
-                      <div className="rounded-xl overflow-hidden shadow-card max-h-[75vh] overflow-y-auto w-full">
-                        {(() => {
-                          const previewEvent = buildPreviewEvent();
-                          switch (category) {
-                            case "wedding":
-                              return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                            case "birthday":
-                              return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                            case "corporate":
-                              return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                          }
-                        })()}
-                      </div>
-                    )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </div>
               </div>

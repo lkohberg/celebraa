@@ -19,7 +19,14 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
   const labels = lang ? getEventLabels(lang) : null;
   const submitRsvp = useSubmitRsvp();
   const { guestName: sharedName, setGuestName: setSharedName } = useGuestName();
-  const [name, setName] = useState("");
+  const [name, setName] = useState(sharedName || "");
+
+  // Sync shared name into local state when it changes externally
+  useEffect(() => {
+    if (sharedName && !name) {
+      setName(sharedName);
+    }
+  }, [sharedName]);
   const [email, setEmail] = useState("");
   const [attendance, setAttendance] = useState<"accepted" | "declined" | null>(null);
   const [companionCount, setCompanionCount] = useState(0);
@@ -100,7 +107,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
           <input
             type="text"
             placeholder={labels?.name || t("event.name")}
-            value={name || sharedName}
+            value={name}
             onChange={(e) => { setName(e.target.value); setSharedName(e.target.value); }}
             required
             className={inputClass}
