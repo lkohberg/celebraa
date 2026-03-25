@@ -724,14 +724,14 @@ const OrderFlow = () => {
                 {category === "wedding" && (
                   <div className="border border-border rounded-lg p-5 space-y-3">
                     <Label className="font-body font-semibold">{t("order.childrenWelcome")}</Label>
-                    <div className="flex gap-3">
-                      <Button type="button" size="sm" variant={form.childrenWelcome === true ? "default" : "outline"} className="font-body" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: true }))}>
+                    <div className="flex flex-wrap gap-2 sm:gap-3">
+                      <Button type="button" size="sm" variant={form.childrenWelcome === true ? "default" : "outline"} className="font-body text-xs sm:text-sm" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: true }))}>
                         {t("order.childrenYes")}
                       </Button>
-                      <Button type="button" size="sm" variant={form.childrenWelcome === false ? "default" : "outline"} className="font-body" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: false }))}>
+                      <Button type="button" size="sm" variant={form.childrenWelcome === false ? "default" : "outline"} className="font-body text-xs sm:text-sm" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: false }))}>
                         {t("order.childrenNo")}
                       </Button>
-                      <Button type="button" size="sm" variant={form.childrenWelcome === null ? "default" : "outline"} className="font-body" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: null }))}>
+                      <Button type="button" size="sm" variant={form.childrenWelcome === null ? "default" : "outline"} className="font-body text-xs sm:text-sm" onClick={() => setForm(prev => ({ ...prev, childrenWelcome: null }))}>
                         {t("order.childrenNotShown")}
                       </Button>
                     </div>
