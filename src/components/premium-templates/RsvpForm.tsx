@@ -19,7 +19,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
   const labels = lang ? getEventLabels(lang) : null;
   const submitRsvp = useSubmitRsvp();
   const { guestName: sharedName, setGuestName: setSharedName } = useGuestName();
-  const [name, setName] = useState("");
+  const [name, setName] = useState(sharedName || "");
   const [email, setEmail] = useState("");
   const [attendance, setAttendance] = useState<"accepted" | "declined" | null>(null);
   const [companionCount, setCompanionCount] = useState(0);
