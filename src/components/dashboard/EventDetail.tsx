@@ -10,6 +10,7 @@ import { useEventGuests, useEventAnalytics, useUpdateEvent, useMusicWishes, useP
 import { toast } from "sonner";
 import { blocks } from "@/data/blocks";
 import { BarChart3, CreditCard, Eye, Users, ExternalLink, Download, Archive, Radio, Rocket, Music, Trash2, Package, Pencil, ShoppingBasket, HelpCircle, Gamepad2, AlertTriangle } from "lucide-react";
+import * as XLSX from "xlsx";
 import { QRCodeSVG } from "qrcode.react";
 import AdminFulfillmentPanel from "./AdminFulfillmentPanel";
 import LanguageLinks from "./LanguageLinks";
@@ -59,7 +60,7 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
     } catch { toast.error(t("admin.eventLiveError")); }
   };
 
-  const exportMusicWishesCSV = () => {
+  const exportMusicWishesXlsx = () => {
     if (!musicWishes?.length) return;
     const headers = [t("admin.csvSong"), t("admin.csvArtist"), t("admin.csvGuest"), t("admin.csvDate")];
     const rows = musicWishes.map((w: any) => [
@@ -67,13 +68,12 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
       w.artist || "",
       w.guest_name || "",
       w.created_at ? new Date(w.created_at).toLocaleDateString("de-AT") : "",
-    ].map(v => `"${v}"`).join(","));
-    const csv = [headers.join(","), ...rows].join("\n");
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = `musikwuensche-${event.event_link}.csv`; a.click();
-    URL.revokeObjectURL(url);
+    ]);
+    const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+    ws["!cols"] = headers.map(() => ({ wch: 20 }));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Musikwünsche");
+    XLSX.writeFile(wb, `musikwuensche-${event.event_link}.xlsx`);
   };
 
   const selectedBlocks = (event.selected_blocks || []) as string[];
@@ -241,7 +241,7 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
                 <Button variant="outline" size="sm" className="font-body" onClick={() => {
                   if (!guests) return;
                   const headers = ["Name", "Email", "RSVP", "Plus One", "Companions", "Companion Names", "Menu Choice", "Message", "Date"];
-                  const csvRows = guests.map(g => [
+                  const rows = guests.map(g => [
                     g.name,
                     g.email || "",
                     g.rsvp_status,
@@ -249,16 +249,16 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
                     String(g.companion_count ?? 0),
                     (g.companion_names as string[] || []).join("; "),
                     g.menu_choice || "",
-                    (g.message || "").replace(/"/g, '""'),
+                    g.message || "",
                     g.responded_at ? new Date(g.responded_at).toLocaleDateString("de-AT") : "",
-                  ].map(v => `"${v}"`).join(","));
-                  const csv = [headers.join(","), ...csvRows].join("\n");
-                  const blob = new Blob([csv], { type: "text/csv" });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement("a"); a.href = url; a.download = `guests-${event.event_link}.csv`; a.click();
-                  URL.revokeObjectURL(url);
+                  ]);
+                  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+                  ws["!cols"] = headers.map(() => ({ wch: 18 }));
+                  const wb = XLSX.utils.book_new();
+                  XLSX.utils.book_append_sheet(wb, ws, "Gäste");
+                  XLSX.writeFile(wb, `guests-${event.event_link}.xlsx`);
                 }}>
-                  <Download className="w-4 h-4 mr-2" /> {t("dashboard.exportCsv")}
+                  <Download className="w-4 h-4 mr-2" /> {t("dashboard.exportXlsx")}
                 </Button>
               </div>
               <div className="space-y-3">
@@ -291,7 +291,7 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display text-lg font-semibold text-foreground">{t("admin.musicWishes")} ({musicWishes?.length || 0})</h3>
               {musicWishes && musicWishes.length > 0 && (
-                <Button variant="outline" size="sm" className="font-body" onClick={exportMusicWishesCSV}>
+                <Button variant="outline" size="sm" className="font-body" onClick={exportMusicWishesXlsx}>
                   <Download className="w-4 h-4 mr-2" /> {t("admin.csvExport")}
                 </Button>
               )}
