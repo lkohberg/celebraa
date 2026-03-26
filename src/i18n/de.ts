@@ -59,7 +59,7 @@ const de = {
   "usp.dashboard.title": "Live-Dashboard",
   "usp.dashboard.desc": "Zu-/Absagen und Essenswünsche in Echtzeit einsehen über deinen persönlichen Link.",
   "usp.export.title": "Excel-Export",
-  "usp.export.desc": "Alle Gästedaten mit einem Klick als CSV exportieren. Für Caterer, Location & Co.",
+  "usp.export.desc": "Alle Gästedaten mit einem Klick als Excel exportieren. Für Caterer, Location & Co.",
 
   // Eco Section
   "eco.title": "Nachhaltig feiern",

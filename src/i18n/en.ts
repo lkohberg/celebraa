@@ -59,7 +59,7 @@ const en = {
   "usp.dashboard.title": "Live dashboard",
   "usp.dashboard.desc": "View RSVPs and dietary preferences in real-time via your personal link.",
   "usp.export.title": "Excel export",
-  "usp.export.desc": "Export all guest data as CSV with one click. For caterers, venues & more.",
+  "usp.export.desc": "Export all guest data as Excel with one click. For caterers, venues & more.",
 
   // Eco Section
   "eco.title": "Celebrate sustainably",
