@@ -11,7 +11,7 @@ export const useMyReview = (userId?: string) =>
         .eq("user_id", userId!)
         .maybeSingle();
       if (error) throw error;
-      return data as { id: string; rating: number; feedback: string | null; created_at: string } | null;
+      return data as unknown as { id: string; rating: number; feedback: string | null; created_at: string } | null;
     },
     enabled: !!userId,
   });
@@ -25,7 +25,7 @@ export const useAllReviews = (isAdmin: boolean) =>
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data as { id: string; user_id: string; rating: number; feedback: string | null; created_at: string }[];
+      return data as unknown as { id: string; user_id: string; rating: number; feedback: string | null; created_at: string }[];
     },
     enabled: isAdmin,
   });
