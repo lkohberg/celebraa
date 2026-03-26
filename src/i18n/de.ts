@@ -167,6 +167,7 @@ const de = {
   "dashboard.paid": "Bezahlt",
   "dashboard.loading": "Lade Events...",
   "dashboard.exportCsv": "CSV exportieren",
+  "dashboard.exportXlsx": "Excel exportieren",
   "dashboard.status.draft": "Entwurf",
   "dashboard.status.unpaid": "Unbezahlt",
   "dashboard.status.paid": "Bezahlt",
@@ -861,6 +862,20 @@ const de = {
 
   // Birthday hotel block
   "block.desc.hotels.party": "Empfehle Hotels für Gäste mit längerer Anreise.",
+
+  // Reviews
+  "review.rateUs": "Wie gefällt dir Celebra?",
+  "review.yourReview": "Deine Bewertung",
+  "review.edit": "Bearbeiten",
+  "review.submit": "Bewertung abgeben",
+  "review.cancel": "Abbrechen",
+  "review.submitted": "Danke für deine Bewertung!",
+  "review.error": "Fehler beim Speichern der Bewertung.",
+  "review.feedbackPlaceholder": "Optionales Feedback (max. 500 Zeichen)",
+  "review.adminButton": "Bewertungen",
+  "review.adminTitle": "Kundenbewertungen",
+  "review.reviewsCount": "Bewertungen",
+  "review.noReviews": "Noch keine Bewertungen vorhanden.",
 };
 
 export default de;

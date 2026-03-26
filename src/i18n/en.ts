@@ -167,6 +167,7 @@ const en = {
   "dashboard.paid": "Paid",
   "dashboard.loading": "Loading events...",
   "dashboard.exportCsv": "Export CSV",
+  "dashboard.exportXlsx": "Export Excel",
   "dashboard.status.draft": "Draft",
   "dashboard.status.unpaid": "Unpaid",
   "dashboard.status.paid": "Paid",
@@ -835,6 +836,20 @@ const en = {
 
   // Birthday hotel block
   "block.desc.hotels.party": "Recommend hotels for guests traveling from afar.",
+
+  // Reviews
+  "review.rateUs": "How do you like Celebra?",
+  "review.yourReview": "Your review",
+  "review.edit": "Edit",
+  "review.submit": "Submit review",
+  "review.cancel": "Cancel",
+  "review.submitted": "Thank you for your review!",
+  "review.error": "Error saving your review.",
+  "review.feedbackPlaceholder": "Optional feedback (max. 500 characters)",
+  "review.adminButton": "Reviews",
+  "review.adminTitle": "Customer Reviews",
+  "review.reviewsCount": "reviews",
+  "review.noReviews": "No reviews yet.",
 };
 
 export default en;
