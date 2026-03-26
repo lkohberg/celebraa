@@ -1033,25 +1033,28 @@ const OrderFlow = () => {
                           </IframePreview>
                         </motion.div>
                       ) : (
-                        <motion.div
+                      <motion.div
                           key="desktop-preview"
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.9 }}
                           transition={{ duration: 0.3, ease: "easeInOut" }}
-                          className="rounded-xl overflow-hidden shadow-card max-h-[75vh] overflow-y-auto w-full"
+                          className="rounded-xl overflow-hidden shadow-card w-full"
+                          style={{ maxHeight: "75vh" }}
                         >
-                          {(() => {
-                            const previewEvent = buildPreviewEvent();
-                            switch (category) {
-                              case "wedding":
-                                return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                              case "birthday":
-                                return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                              case "corporate":
-                                return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                            }
-                          })()}
+                          <IframePreview width={1200} maxHeight="75vh">
+                            {(() => {
+                              const previewEvent = buildPreviewEvent();
+                              switch (category) {
+                                case "wedding":
+                                  return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                case "birthday":
+                                  return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                case "corporate":
+                                  return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                              }
+                            })()}
+                          </IframePreview>
                         </motion.div>
                       )}
                     </AnimatePresence>
