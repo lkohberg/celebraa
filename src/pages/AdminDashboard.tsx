@@ -14,6 +14,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { blocks, isManualBlock } from "@/data/blocks";
 import EventDetail from "@/components/dashboard/EventDetail";
 import CopyrightReportsPanel from "@/components/dashboard/CopyrightReportsPanel";
+import ReviewForm from "@/components/dashboard/ReviewForm";
+import AdminReviewsPanel from "@/components/dashboard/AdminReviewsPanel";
 import { markDashboardVisited } from "@/hooks/useNotificationCount";
 
 const useUserEmail = (userId: string | undefined, enabled: boolean) =>
@@ -96,7 +98,11 @@ const AdminDashboard = () => {
       </nav>
 
       <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-10">
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8">{t("dashboard.title")}</h1>
+        <div className="flex items-center justify-between mb-6 sm:mb-8">
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground">{t("dashboard.title")}</h1>
+          {isAdmin && <AdminReviewsPanel />}
+        </div>
+        {user && <ReviewForm userId={user.id} />}
         {isAdmin && <CopyrightReportsPanel />}
 
         {isAdmin && pendingEvents.length > 0 && (
