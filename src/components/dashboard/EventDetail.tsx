@@ -241,7 +241,7 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
                 <Button variant="outline" size="sm" className="font-body" onClick={() => {
                   if (!guests) return;
                   const headers = ["Name", "Email", "RSVP", "Plus One", "Companions", "Companion Names", "Menu Choice", "Message", "Date"];
-                  const csvRows = guests.map(g => [
+                  const rows = guests.map(g => [
                     g.name,
                     g.email || "",
                     g.rsvp_status,
@@ -249,16 +249,16 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
                     String(g.companion_count ?? 0),
                     (g.companion_names as string[] || []).join("; "),
                     g.menu_choice || "",
-                    (g.message || "").replace(/"/g, '""'),
+                    g.message || "",
                     g.responded_at ? new Date(g.responded_at).toLocaleDateString("de-AT") : "",
-                  ].map(v => `"${v}"`).join(","));
-                  const csv = [headers.join(","), ...csvRows].join("\n");
-                  const blob = new Blob([csv], { type: "text/csv" });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement("a"); a.href = url; a.download = `guests-${event.event_link}.csv`; a.click();
-                  URL.revokeObjectURL(url);
+                  ]);
+                  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+                  ws["!cols"] = headers.map(() => ({ wch: 18 }));
+                  const wb = XLSX.utils.book_new();
+                  XLSX.utils.book_append_sheet(wb, ws, "Gäste");
+                  XLSX.writeFile(wb, `guests-${event.event_link}.xlsx`);
                 }}>
-                  <Download className="w-4 h-4 mr-2" /> {t("dashboard.exportCsv")}
+                  <Download className="w-4 h-4 mr-2" /> {t("dashboard.exportXlsx")}
                 </Button>
               </div>
               <div className="space-y-3">
