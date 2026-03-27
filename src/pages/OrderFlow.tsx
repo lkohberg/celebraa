@@ -1042,7 +1042,7 @@ const OrderFlow = () => {
                           className="rounded-xl overflow-hidden shadow-card w-full"
                           style={{ maxHeight: "75vh" }}
                         >
-                          <IframePreview width={1200} maxHeight="75vh">
+                          <IframePreview width={1200} maxHeight="75vh" scaleToFit>
                             {(() => {
                               const previewEvent = buildPreviewEvent();
                               switch (category) {

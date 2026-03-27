@@ -6,16 +6,35 @@ interface IframePreviewProps {
   width: number;
   maxHeight?: string;
   className?: string;
+  scaleToFit?: boolean;
 }
 
 /**
  * Renders children inside an <iframe> so that CSS media queries
  * (Tailwind sm:, md:, lg:) fire based on the iframe viewport width.
  */
-const IframePreview = ({ children, width, maxHeight = "75vh", className }: IframePreviewProps) => {
+const IframePreview = ({ children, width, maxHeight = "75vh", className, scaleToFit }: IframePreviewProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [mountNode, setMountNode] = useState<HTMLElement | null>(null);
   const [ready, setReady] = useState(false);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    if (!scaleToFit || !containerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const containerWidth = entry.contentRect.width;
+        if (containerWidth > 0 && containerWidth < width) {
+          setScale(containerWidth / width);
+        } else {
+          setScale(1);
+        }
+      }
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [scaleToFit, width]);
 
   useEffect(() => {
     const iframe = iframeRef.current;
@@ -25,18 +44,15 @@ const IframePreview = ({ children, width, maxHeight = "75vh", className }: Ifram
       const doc = iframe.contentDocument;
       if (!doc) return;
 
-      // Clear previous content if re-setup
       doc.head.innerHTML = "";
       doc.body.innerHTML = "";
 
-      // Copy all stylesheets from parent
       const parentStyles = document.querySelectorAll('style, link[rel="stylesheet"]');
       parentStyles.forEach((node) => {
         const clone = node.cloneNode(true) as HTMLElement;
         doc.head.appendChild(clone);
       });
 
-      // Copy CSS custom properties from :root
       const rootStyles = getComputedStyle(document.documentElement);
       const cssVars: string[] = [];
       for (let i = 0; i < rootStyles.length; i++) {
@@ -54,10 +70,8 @@ const IframePreview = ({ children, width, maxHeight = "75vh", className }: Ifram
       `;
       doc.head.appendChild(extraStyle);
 
-      // Copy dark mode / html classes
       doc.documentElement.className = document.documentElement.className;
 
-      // Mount point
       const mount = doc.createElement("div");
       mount.id = "iframe-root";
       doc.body.appendChild(mount);
@@ -73,6 +87,22 @@ const IframePreview = ({ children, width, maxHeight = "75vh", className }: Ifram
       setMountNode(null);
     };
   }, []);
+
+  if (scaleToFit) {
+    return (
+      <div ref={containerRef} className={className} style={{ width: "100%", maxHeight, overflow: "hidden", borderRadius: "inherit" }}>
+        <div style={{ width: `${width}px`, height: maxHeight, transform: `scale(${scale})`, transformOrigin: "top left" }}>
+          <iframe
+            ref={iframeRef}
+            title="Preview"
+            style={{ width: `${width}px`, height: `calc(${maxHeight} / ${scale})`, border: "none", display: "block" }}
+            srcDoc="<!DOCTYPE html><html><head></head><body></body></html>"
+          />
+          {ready && mountNode && createPortal(children, mountNode)}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
