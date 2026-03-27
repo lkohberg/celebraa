@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "@/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ArrowLeft, MailCheck } from "lucide-react";
+import { ArrowLeft, MailCheck, Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
 
 interface AuthDialogProps {
   open: boolean;
@@ -17,10 +17,21 @@ interface AuthDialogProps {
 const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const { signIn, signUp } = useAuth();
   const { t } = useTranslation();
-  const [mode, setMode] = useState<"login" | "register" | "forgot" | "verify">("login");
+  const [mode, setMode] = useState<"choose" | "login" | "register" | "forgot" | "verify">("choose");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const resetAndClose = (newOpen: boolean) => {
+    if (!newOpen) {
+      setMode("choose");
+      setEmail("");
+      setPassword("");
+      setShowPassword(false);
+    }
+    onOpenChange(newOpen);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,16 +71,18 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       toast.error(error.message);
     } else {
       toast.success(t("auth.loginSuccess"));
-      onOpenChange(false);
+      resetAndClose(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={resetAndClose}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl">
-            {mode === "verify"
+            {mode === "choose"
+              ? t("auth.welcome")
+              : mode === "verify"
               ? t("auth.verifyTitle")
               : mode === "forgot"
               ? t("auth.resetPassword")
@@ -79,13 +92,23 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
           </DialogTitle>
         </DialogHeader>
 
-        {mode === "verify" ? (
+        {mode === "choose" ? (
+          <div className="space-y-4 py-2">
+            <p className="font-body text-sm text-muted-foreground">{t("auth.chooseMethod")}</p>
+            <Button className="w-full font-body gap-2 py-5" onClick={() => setMode("login")}>
+              <LogIn className="w-4 h-4" /> {t("auth.login")}
+            </Button>
+            <Button variant="outline" className="w-full font-body gap-2 py-5" onClick={() => setMode("register")}>
+              <UserPlus className="w-4 h-4" /> {t("auth.register")}
+            </Button>
+          </div>
+        ) : mode === "verify" ? (
           <div className="space-y-4 text-center py-4">
             <MailCheck className="w-12 h-12 text-primary mx-auto" />
             <p className="font-body text-sm text-muted-foreground">
               {t("auth.verifyDesc")}
             </p>
-            <Button variant="outline" className="font-body" onClick={() => { setMode("login"); }}>
+            <Button variant="outline" className="font-body" onClick={() => setMode("login")}>
               {t("auth.backToLogin")}
             </Button>
           </div>
@@ -111,7 +134,24 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
             </div>
             <div>
               <Label className="font-body">{t("auth.password")}</Label>
-              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="font-body mt-1" />
+              <div className="relative mt-1">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="font-body pr-10"
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
             {mode === "login" && (
               <button type="button" className="text-xs text-primary underline font-body" onClick={() => setMode("forgot")}>

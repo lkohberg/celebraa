@@ -102,7 +102,6 @@ const AdminDashboard = () => {
           <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground">{t("dashboard.title")}</h1>
           {isAdmin && <AdminReviewsPanel />}
         </div>
-        {user && <ReviewForm userId={user.id} />}
         {isAdmin && <CopyrightReportsPanel />}
 
         {isAdmin && pendingEvents.length > 0 && (
@@ -177,6 +176,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
+        {user && <ReviewForm userId={user.id} />}
       </div>
     </div>
   );

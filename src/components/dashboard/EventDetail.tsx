@@ -177,8 +177,32 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
                   }
                 </p>
                 <p className="font-body text-xs text-muted-foreground mt-1">
-                  {t("uptime.renewHint") || "Verlängere um weitere 6 Monate für €10. Kontaktiere uns unter celebra.at@gmail.com."}
+                  {t("uptime.renewHint") || "Verlängere um weitere 6 Monate für €10."}
                 </p>
+                <Button
+                  size="sm"
+                  className="font-body mt-2"
+                  onClick={async () => {
+                    try {
+                      const { data, error } = await supabase.functions.invoke("create-renewal-checkout", {
+                        body: {
+                          eventId: event.id,
+                          successUrl: `${window.location.origin}/dashboard`,
+                          cancelUrl: `${window.location.origin}/dashboard`,
+                        },
+                      });
+                      if (error || !data?.url) {
+                        toast.error(t("order.paymentError"));
+                        return;
+                      }
+                      window.open(data.url, "_blank");
+                    } catch {
+                      toast.error(t("order.paymentError"));
+                    }
+                  }}
+                >
+                  {t("uptime.renewButton") || "Jetzt verlängern (€10)"}
+                </Button>
               </div>
             </div>
           )}
@@ -240,20 +264,34 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
               <div className="flex justify-end mb-4">
                 <Button variant="outline" size="sm" className="font-body" onClick={() => {
                   if (!guests) return;
-                  const headers = ["Name", "Email", "RSVP", "Plus One", "Companions", "Companion Names", "Menu Choice", "Message", "Date"];
-                  const rows = guests.map(g => [
-                    g.name,
-                    g.email || "",
-                    g.rsvp_status,
-                    g.plus_one ? "Yes" : "No",
-                    String(g.companion_count ?? 0),
-                    (g.companion_names as string[] || []).join("; "),
-                    g.menu_choice || "",
-                    g.message || "",
-                    g.responded_at ? new Date(g.responded_at).toLocaleDateString("de-AT") : "",
-                  ]);
+                  const hasMenu = event.menu_selection;
+                  const hasCompanions = guests.some(g => (g.companion_count ?? 0) > 0);
+                  const hasMessages = guests.some(g => g.message);
+                  const hasEmails = guests.some(g => g.email);
+
+                  const headers: string[] = ["Name"];
+                  if (hasEmails) headers.push("Email");
+                  headers.push("RSVP");
+                  if (hasCompanions) headers.push("Begleitung");
+                  if (hasMenu) headers.push("Menüwahl");
+                  if (hasMessages) headers.push("Nachricht");
+                  headers.push("Datum");
+
+                  const rows = guests.map(g => {
+                    const row: string[] = [g.name];
+                    if (hasEmails) row.push(g.email || "");
+                    row.push(g.rsvp_status === "accepted" ? "Zusage" : g.rsvp_status === "declined" ? "Absage" : "Offen");
+                    if (hasCompanions) {
+                      const names = (g.companion_names as string[] || []).join(", ");
+                      row.push((g.companion_count ?? 0) > 0 ? `${g.companion_count}${names ? ` (${names})` : ""}` : "");
+                    }
+                    if (hasMenu) row.push(g.menu_choice || "");
+                    if (hasMessages) row.push(g.message || "");
+                    row.push(g.responded_at ? new Date(g.responded_at).toLocaleDateString("de-AT") : "");
+                    return row;
+                  });
                   const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-                  ws["!cols"] = headers.map(() => ({ wch: 18 }));
+                  ws["!cols"] = headers.map(() => ({ wch: 20 }));
                   const wb = XLSX.utils.book_new();
                   XLSX.utils.book_append_sheet(wb, ws, "Gäste");
                   XLSX.writeFile(wb, `guests-${event.event_link}.xlsx`);

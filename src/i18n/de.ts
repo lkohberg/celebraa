@@ -292,6 +292,8 @@ const de = {
   "configure.addHotel": "Hotel hinzufügen",
 
   // Auth Dialog
+  "auth.welcome": "Willkommen",
+  "auth.chooseMethod": "Melde dich an oder erstelle ein neues Konto.",
   "auth.login": "Anmelden",
   "auth.register": "Registrieren",
   "auth.email": "E-Mail",
@@ -858,7 +860,8 @@ const de = {
   "uptime.legal": "6 Monate Hosting inklusive · Verlängerung: €10 / 6 Monate",
   "uptime.expiringSoon": "Deine Event-Seite läuft in {days} Tagen ab.",
   "uptime.expired": "Die 6-monatige Laufzeit deiner Event-Seite ist abgelaufen.",
-  "uptime.renewHint": "Verlängere um weitere 6 Monate für €10. Kontaktiere uns unter celebra.at@gmail.com.",
+  "uptime.renewHint": "Verlängere um weitere 6 Monate für €10.",
+  "uptime.renewButton": "Jetzt verlängern (€10)",
 
   // Birthday hotel block
   "block.desc.hotels.party": "Empfehle Hotels für Gäste mit längerer Anreise.",
