@@ -290,6 +290,8 @@ const en = {
   "configure.addHotel": "Add hotel",
 
   // Auth Dialog
+  "auth.welcome": "Welcome",
+  "auth.chooseMethod": "Sign in or create a new account.",
   "auth.login": "Sign In",
   "auth.register": "Register",
   "auth.email": "Email",

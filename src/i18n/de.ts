@@ -292,6 +292,8 @@ const de = {
   "configure.addHotel": "Hotel hinzufügen",
 
   // Auth Dialog
+  "auth.welcome": "Willkommen",
+  "auth.chooseMethod": "Melde dich an oder erstelle ein neues Konto.",
   "auth.login": "Anmelden",
   "auth.register": "Registrieren",
   "auth.email": "E-Mail",
