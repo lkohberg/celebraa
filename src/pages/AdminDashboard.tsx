@@ -16,6 +16,7 @@ import EventDetail from "@/components/dashboard/EventDetail";
 import CopyrightReportsPanel from "@/components/dashboard/CopyrightReportsPanel";
 import ReviewForm from "@/components/dashboard/ReviewForm";
 import AdminReviewsPanel from "@/components/dashboard/AdminReviewsPanel";
+import SuggestionBox from "@/components/dashboard/SuggestionBox";
 import { markDashboardVisited } from "@/hooks/useNotificationCount";
 
 const useUserEmail = (userId: string | undefined, enabled: boolean) =>
@@ -176,7 +177,12 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
-        {user && <ReviewForm userId={user.id} />}
+        {user && (
+          <div className="grid sm:grid-cols-2 gap-4 mt-2">
+            <ReviewForm userId={user.id} />
+            <SuggestionBox userId={user.id} />
+          </div>
+        )}
       </div>
     </div>
   );
