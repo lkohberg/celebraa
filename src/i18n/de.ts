@@ -879,6 +879,16 @@ const de = {
   "review.adminTitle": "Kundenbewertungen",
   "review.reviewsCount": "Bewertungen",
   "review.noReviews": "Noch keine Bewertungen vorhanden.",
+
+  // Suggestions
+  "suggestion.title": "Wir wollen mit euch wachsen – gebt uns eure Vorschläge!",
+  "suggestion.placeholder": "Was können wir verbessern? (max. 1000 Zeichen)",
+  "suggestion.yourSuggestion": "Dein Vorschlag",
+  "suggestion.send": "Senden",
+  "suggestion.submitted": "Danke für deinen Vorschlag!",
+  "suggestion.error": "Fehler beim Speichern.",
+  "suggestion.adminTab": "Vorschläge",
+  "suggestion.noSuggestions": "Noch keine Vorschläge vorhanden.",
 };
 
 export default de;

@@ -853,6 +853,16 @@ const en = {
   "review.adminTitle": "Customer Reviews",
   "review.reviewsCount": "reviews",
   "review.noReviews": "No reviews yet.",
+
+  // Suggestions
+  "suggestion.title": "Help us grow – share your improvement ideas!",
+  "suggestion.placeholder": "What can we improve? (max. 1000 characters)",
+  "suggestion.yourSuggestion": "Your suggestion",
+  "suggestion.send": "Send",
+  "suggestion.submitted": "Thanks for your suggestion!",
+  "suggestion.error": "Error saving suggestion.",
+  "suggestion.adminTab": "Suggestions",
+  "suggestion.noSuggestions": "No suggestions yet.",
 };
 
 export default en;

@@ -1,0 +1,1 @@
+ALTER TABLE public.suggestions ADD CONSTRAINT suggestions_user_id_unique UNIQUE (user_id);
