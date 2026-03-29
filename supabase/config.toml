@@ -7,3 +7,7 @@ project_id = "nycaurobmnnrskwlzgym"
     verify_jwt = false
   [functions.stripe-webhook]
     verify_jwt = false
+  [functions.process-email-queue]
+    verify_jwt = true
+  [functions.create-renewal-checkout]
+    verify_jwt = false
