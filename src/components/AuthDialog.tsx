@@ -60,6 +60,14 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       if (error) {
         toast.error(error.message);
       } else {
+        // Send welcome email (fire-and-forget)
+        supabase.functions.invoke("send-transactional-email", {
+          body: {
+            templateName: "welcome",
+            recipientEmail: loginEmail,
+            idempotencyKey: `welcome-${loginEmail}`,
+          },
+        }).catch(() => {});
         setMode("verify");
       }
       return;
