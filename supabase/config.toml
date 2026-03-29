@@ -19,3 +19,5 @@ project_id = "nycaurobmnnrskwlzgym"
     verify_jwt = false
   [functions.handle-email-suppression]
     verify_jwt = false
+  [functions.check-renewal-reminders]
+    verify_jwt = false
