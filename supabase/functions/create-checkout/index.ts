@@ -75,6 +75,14 @@ function calculatePriceServer(
   return total;
 }
 
+function applyPromoDiscount(priceCents: number, discountType: string, discountValue: number): number {
+  if (discountType === "percentage") {
+    return Math.round(priceCents * (1 - discountValue / 100));
+  }
+  // Fixed amount in euros → convert to cents
+  return Math.max(0, priceCents - Math.round(discountValue * 100));
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -105,7 +113,7 @@ Deno.serve(async (req) => {
     }
 
     const userId = claimsData.claims.sub;
-    const { eventId, successUrl, cancelUrl, selectedPackageId } = await req.json();
+    const { eventId, successUrl, cancelUrl, selectedPackageId, promoCode } = await req.json();
 
     const adminClient = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -127,13 +135,40 @@ Deno.serve(async (req) => {
     }
 
     // Server-side price calculation — never trust client price_paid
-    const unitAmount = calculatePriceServer(
+    let unitAmount = calculatePriceServer(
       event.selected_blocks || [],
       event.menu_selection || false,
       event.languages || ["de"],
       event.tier || "basis",
       selectedPackageId,
     );
+
+    // Validate and apply promo code server-side
+    let appliedPromoCode: string | null = null;
+    if (promoCode && typeof promoCode === "string") {
+      const { data: promo } = await adminClient
+        .from("promo_codes")
+        .select("*")
+        .eq("code", promoCode.toUpperCase())
+        .eq("active", true)
+        .single();
+
+      if (promo) {
+        const isExpired = promo.expires_at && new Date(promo.expires_at) < new Date();
+        const isMaxedOut = promo.max_uses && promo.current_uses >= promo.max_uses;
+
+        if (!isExpired && !isMaxedOut) {
+          unitAmount = applyPromoDiscount(unitAmount, promo.discount_type, Number(promo.discount_value));
+          appliedPromoCode = promo.code;
+
+          // Increment usage counter
+          await adminClient
+            .from("promo_codes")
+            .update({ current_uses: promo.current_uses + 1 })
+            .eq("id", promo.id);
+        }
+      }
+    }
 
     // Persist the server-calculated price back to the event
     await adminClient
@@ -148,6 +183,14 @@ Deno.serve(async (req) => {
     const { data: userData } = await supabase.auth.getUser(token);
     const userEmail = userData?.user?.email;
 
+    const metadata: Record<string, string> = {
+      event_id: event.id,
+      user_id: userId,
+    };
+    if (appliedPromoCode) {
+      metadata.promo_code = appliedPromoCode;
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -161,17 +204,14 @@ Deno.serve(async (req) => {
             currency: "eur",
             product_data: {
               name: `Event-Seite: ${event.title}`,
-              description: `Template: ${event.template_id} · Link: ${event.event_link}.celebra.at`,
+              description: `Template: ${event.template_id} · Link: ${event.event_link}.celebra.at${appliedPromoCode ? ` · Promo: ${appliedPromoCode}` : ""}`,
             },
             unit_amount: unitAmount,
           },
           quantity: 1,
         },
       ],
-      metadata: {
-        event_id: event.id,
-        user_id: userId,
-      },
+      metadata,
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
