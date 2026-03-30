@@ -132,6 +132,50 @@ const OrderFlow = () => {
   // Scroll to top on step change
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [step]);
 
+  const applyPromoCode = async () => {
+    if (!promoCode.trim()) return;
+    setPromoLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("promo_codes")
+        .select("code, discount_type, discount_value, max_uses, current_uses, active, expires_at")
+        .eq("code", promoCode.trim().toUpperCase())
+        .eq("active", true)
+        .maybeSingle();
+      if (error || !data) {
+        toast.error(t("promo.invalid"));
+        setPromoLoading(false);
+        return;
+      }
+      if (data.max_uses && data.current_uses >= data.max_uses) {
+        toast.error(t("promo.invalid"));
+        setPromoLoading(false);
+        return;
+      }
+      if (data.expires_at && new Date(data.expires_at) < new Date()) {
+        toast.error(t("promo.invalid"));
+        setPromoLoading(false);
+        return;
+      }
+      setPromoApplied({ code: data.code, discount_type: data.discount_type, discount_value: Number(data.discount_value) });
+      toast.success(t("promo.applied"));
+    } catch {
+      toast.error(t("promo.invalid"));
+    }
+    setPromoLoading(false);
+  };
+
+  const calculateDiscount = (price: number) => {
+    if (!promoApplied) return 0;
+    if (promoApplied.discount_type === "percentage") {
+      return Math.round(price * promoApplied.discount_value) / 100;
+    }
+    return Math.min(promoApplied.discount_value, price);
+  };
+
+  const discountAmount = calculateDiscount(totalPrice);
+  const finalPrice = Math.max(0, totalPrice - discountAmount);
+
   if (!template) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
