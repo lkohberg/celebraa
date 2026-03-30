@@ -101,7 +101,14 @@ const AdminDashboard = () => {
       <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-10">
         <div className="flex items-center justify-between mb-6 sm:mb-8">
           <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground">{t("dashboard.title")}</h1>
-          {isAdmin && <AdminReviewsPanel />}
+          <div className="flex items-center gap-2">
+            {isAdmin && (
+              <Button variant="outline" size="sm" onClick={() => navigate("/admin-tools")} className="font-body gap-1">
+                <Settings className="w-4 h-4" /> {t("adminTools.button")}
+              </Button>
+            )}
+            {isAdmin && <AdminReviewsPanel />}
+          </div>
         </div>
         {isAdmin && <CopyrightReportsPanel />}
 

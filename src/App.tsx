@@ -51,6 +51,7 @@ const App = () => (
                 <Route path="/dashboard" element={<AdminDashboard />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/unsubscribe" element={<UnsubscribePage />} />
+                <Route path="/admin-tools" element={<AdminTools />} />
                 <Route path="/:eventLink" element={<EventPage />} />
                 <Route path="/:eventLink/:lang" element={<EventPage />} />
                 <Route path="*" element={<NotFound />} />
