@@ -826,6 +826,8 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_event_live: { Args: { _event_id: string }; Returns: boolean }
+      is_event_rsvp_open: { Args: { _event_id: string }; Returns: boolean }
       move_to_dlq: {
         Args: {
           dlq_name: string
