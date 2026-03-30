@@ -106,6 +106,9 @@ const OrderFlow = () => {
   const [blockConfig, setBlockConfig] = useState<any>({});
   const [dragActive, setDragActive] = useState(false);
   const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
+  const [promoCode, setPromoCode] = useState("");
+  const [promoApplied, setPromoApplied] = useState<{ code: string; discount_type: string; discount_value: number } | null>(null);
+  const [promoLoading, setPromoLoading] = useState(false);
 
   const linkCheckTimer = useRef<ReturnType<typeof setTimeout>>();
   
