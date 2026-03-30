@@ -173,9 +173,6 @@ const OrderFlow = () => {
     return Math.min(promoApplied.discount_value, price);
   };
 
-  const discountAmount = calculateDiscount(totalPrice);
-  const finalPrice = Math.max(0, totalPrice - discountAmount);
-
   if (!template) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
