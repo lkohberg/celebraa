@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { ArrowLeft, AlertTriangle, Package } from "lucide-react";
+import { ArrowLeft, AlertTriangle, Package, Settings } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { blocks, isManualBlock } from "@/data/blocks";
 import EventDetail from "@/components/dashboard/EventDetail";
