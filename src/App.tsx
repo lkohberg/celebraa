@@ -18,6 +18,7 @@ const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const EventPage = lazy(() => import("./pages/EventPage"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const UnsubscribePage = lazy(() => import("./pages/UnsubscribePage"));
+const AdminTools = lazy(() => import("./pages/AdminTools"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
