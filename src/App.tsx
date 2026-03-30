@@ -18,6 +18,7 @@ const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const EventPage = lazy(() => import("./pages/EventPage"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const UnsubscribePage = lazy(() => import("./pages/UnsubscribePage"));
+const AdminTools = lazy(() => import("./pages/AdminTools"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -50,6 +51,7 @@ const App = () => (
                 <Route path="/dashboard" element={<AdminDashboard />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/unsubscribe" element={<UnsubscribePage />} />
+                <Route path="/admin-tools" element={<AdminTools />} />
                 <Route path="/:eventLink" element={<EventPage />} />
                 <Route path="/:eventLink/:lang" element={<EventPage />} />
                 <Route path="*" element={<NotFound />} />

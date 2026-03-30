@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Clock, MapPin, ArrowLeft, ArrowRight, Upload, X, Check, Package, Sparkles, User, CreditCard, Eye, Crown, Star, Smartphone, Monitor } from "lucide-react";
+import { Calendar, Clock, MapPin, ArrowLeft, ArrowRight, Upload, X, Check, Package, Sparkles, User, CreditCard, Eye, Crown, Star, Smartphone, Monitor, Ticket } from "lucide-react";
 import HeroImageLibrary from "@/components/HeroImageLibrary";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
@@ -106,6 +106,9 @@ const OrderFlow = () => {
   const [blockConfig, setBlockConfig] = useState<any>({});
   const [dragActive, setDragActive] = useState(false);
   const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
+  const [promoCode, setPromoCode] = useState("");
+  const [promoApplied, setPromoApplied] = useState<{ code: string; discount_type: string; discount_value: number } | null>(null);
+  const [promoLoading, setPromoLoading] = useState(false);
 
   const linkCheckTimer = useRef<ReturnType<typeof setTimeout>>();
   
@@ -129,6 +132,47 @@ const OrderFlow = () => {
   // Scroll to top on step change
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [step]);
 
+  const applyPromoCode = async () => {
+    if (!promoCode.trim()) return;
+    setPromoLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("promo_codes")
+        .select("code, discount_type, discount_value, max_uses, current_uses, active, expires_at")
+        .eq("code", promoCode.trim().toUpperCase())
+        .eq("active", true)
+        .maybeSingle();
+      if (error || !data) {
+        toast.error(t("promo.invalid"));
+        setPromoLoading(false);
+        return;
+      }
+      if (data.max_uses && data.current_uses >= data.max_uses) {
+        toast.error(t("promo.invalid"));
+        setPromoLoading(false);
+        return;
+      }
+      if (data.expires_at && new Date(data.expires_at) < new Date()) {
+        toast.error(t("promo.invalid"));
+        setPromoLoading(false);
+        return;
+      }
+      setPromoApplied({ code: data.code, discount_type: data.discount_type, discount_value: Number(data.discount_value) });
+      toast.success(t("promo.applied"));
+    } catch {
+      toast.error(t("promo.invalid"));
+    }
+    setPromoLoading(false);
+  };
+
+  const calculateDiscount = (price: number) => {
+    if (!promoApplied) return 0;
+    if (promoApplied.discount_type === "percentage") {
+      return Math.round(price * promoApplied.discount_value) / 100;
+    }
+    return Math.min(promoApplied.discount_value, price);
+  };
+
   if (!template) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -146,6 +190,8 @@ const OrderFlow = () => {
 
   const allSelectedBlocks = getAllSelectedBlockIds(selectedBlockIds, selectedPackageId);
   const totalPrice = calculatePrice(selectedBlockIds, selectedPackageId);
+  const discountAmount = calculateDiscount(totalPrice);
+  const finalPrice = Math.max(0, totalPrice - discountAmount);
   const needsManualWork = hasManualBlocks(allSelectedBlocks);
   const manualBlocks = getManualBlocks(allSelectedBlocks);
 
@@ -303,6 +349,7 @@ const OrderFlow = () => {
             ? `${window.location.origin}/success/${form.eventLink}?pending=true`
             : `${window.location.origin}/success/${form.eventLink}`,
           cancelUrl: window.location.href,
+          promoCode: promoApplied?.code || null,
         },
       });
 
@@ -1102,6 +1149,35 @@ const OrderFlow = () => {
                   />
                 </div>
 
+                {/* Promo Code */}
+                <div className="border border-border rounded-lg p-4">
+                  <Label className="font-body flex items-center gap-2 mb-2"><Ticket className="w-4 h-4 text-primary" /> {t("promo.enterCode")}</Label>
+                  {promoApplied ? (
+                    <div className="flex items-center justify-between bg-primary/10 rounded-lg px-4 py-2">
+                      <span className="font-body text-sm font-semibold text-foreground">
+                        <code className="bg-secondary px-2 py-0.5 rounded mr-2">{promoApplied.code}</code>
+                        {promoApplied.discount_type === "percentage" ? `${promoApplied.discount_value}%` : `€${promoApplied.discount_value}`} {t("promo.discount")}
+                      </span>
+                      <Button variant="ghost" size="sm" onClick={() => { setPromoApplied(null); setPromoCode(""); }} className="font-body text-xs">
+                        {t("promo.remove")}
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <Input
+                        value={promoCode}
+                        onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                        placeholder="CODE"
+                        className="font-body uppercase"
+                        onKeyDown={(e) => e.key === "Enter" && applyPromoCode()}
+                      />
+                      <Button variant="outline" onClick={applyPromoCode} disabled={promoLoading || !promoCode.trim()} className="font-body">
+                        {t("promo.apply")}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+
                 {/* Price Summary */}
                 <div className="bg-secondary rounded-xl p-6 space-y-3">
                   <h4 className="font-display text-lg font-semibold text-foreground">{t("order.summary")}</h4>
@@ -1130,9 +1206,20 @@ const OrderFlow = () => {
                       </div>
                     ) : null;
                   })}
+                  {promoApplied && discountAmount > 0 && (
+                    <div className="flex justify-between font-body text-sm text-green-600">
+                      <span>🎫 {t("promo.discount")} ({promoApplied.code})</span>
+                      <span>-€{discountAmount}</span>
+                    </div>
+                  )}
                   <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
                     <span className="text-foreground">{t("order.total")}</span>
-                    <span className="text-primary text-lg">€{totalPrice}</span>
+                    <div className="text-right">
+                      {promoApplied && discountAmount > 0 && (
+                        <span className="text-muted-foreground line-through text-sm mr-2">€{totalPrice}</span>
+                      )}
+                      <span className="text-primary text-lg">€{finalPrice}</span>
+                    </div>
                   </div>
                   {needsManualWork && (
                     <p className="text-xs font-body text-amber-600">
@@ -1169,7 +1256,7 @@ const OrderFlow = () => {
                   disabled={!step4Valid || loading}
                   onClick={handleSubmit}
                 >
-                  {loading ? t("order.processing") : `${t("order.payNow")} €${totalPrice}`}
+                  {loading ? t("order.processing") : `${t("order.payNow")} €${finalPrice}`}
                   {!loading && <CreditCard className="w-4 h-4 ml-2" />}
                 </Button>
                 <p className="text-xs text-muted-foreground text-center font-body">
