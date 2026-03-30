@@ -190,6 +190,8 @@ const OrderFlow = () => {
 
   const allSelectedBlocks = getAllSelectedBlockIds(selectedBlockIds, selectedPackageId);
   const totalPrice = calculatePrice(selectedBlockIds, selectedPackageId);
+  const discountAmount = calculateDiscount(totalPrice);
+  const finalPrice = Math.max(0, totalPrice - discountAmount);
   const needsManualWork = hasManualBlocks(allSelectedBlocks);
   const manualBlocks = getManualBlocks(allSelectedBlocks);
 
