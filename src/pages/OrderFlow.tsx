@@ -1148,6 +1148,35 @@ const OrderFlow = () => {
                   />
                 </div>
 
+                {/* Promo Code */}
+                <div className="border border-border rounded-lg p-4">
+                  <Label className="font-body flex items-center gap-2 mb-2"><Ticket className="w-4 h-4 text-primary" /> {t("promo.enterCode")}</Label>
+                  {promoApplied ? (
+                    <div className="flex items-center justify-between bg-primary/10 rounded-lg px-4 py-2">
+                      <span className="font-body text-sm font-semibold text-foreground">
+                        <code className="bg-secondary px-2 py-0.5 rounded mr-2">{promoApplied.code}</code>
+                        {promoApplied.discount_type === "percentage" ? `${promoApplied.discount_value}%` : `€${promoApplied.discount_value}`} {t("promo.discount")}
+                      </span>
+                      <Button variant="ghost" size="sm" onClick={() => { setPromoApplied(null); setPromoCode(""); }} className="font-body text-xs">
+                        {t("promo.remove")}
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <Input
+                        value={promoCode}
+                        onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                        placeholder="CODE"
+                        className="font-body uppercase"
+                        onKeyDown={(e) => e.key === "Enter" && applyPromoCode()}
+                      />
+                      <Button variant="outline" onClick={applyPromoCode} disabled={promoLoading || !promoCode.trim()} className="font-body">
+                        {t("promo.apply")}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+
                 {/* Price Summary */}
                 <div className="bg-secondary rounded-xl p-6 space-y-3">
                   <h4 className="font-display text-lg font-semibold text-foreground">{t("order.summary")}</h4>
@@ -1176,9 +1205,20 @@ const OrderFlow = () => {
                       </div>
                     ) : null;
                   })}
+                  {promoApplied && discountAmount > 0 && (
+                    <div className="flex justify-between font-body text-sm text-green-600">
+                      <span>🎫 {t("promo.discount")} ({promoApplied.code})</span>
+                      <span>-€{discountAmount}</span>
+                    </div>
+                  )}
                   <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
                     <span className="text-foreground">{t("order.total")}</span>
-                    <span className="text-primary text-lg">€{totalPrice}</span>
+                    <div className="text-right">
+                      {promoApplied && discountAmount > 0 && (
+                        <span className="text-muted-foreground line-through text-sm mr-2">€{totalPrice}</span>
+                      )}
+                      <span className="text-primary text-lg">€{finalPrice}</span>
+                    </div>
                   </div>
                   {needsManualWork && (
                     <p className="text-xs font-body text-amber-600">
@@ -1215,7 +1255,7 @@ const OrderFlow = () => {
                   disabled={!step4Valid || loading}
                   onClick={handleSubmit}
                 >
-                  {loading ? t("order.processing") : `${t("order.payNow")} €${totalPrice}`}
+                  {loading ? t("order.processing") : `${t("order.payNow")} €${finalPrice}`}
                   {!loading && <CreditCard className="w-4 h-4 ml-2" />}
                 </Button>
                 <p className="text-xs text-muted-foreground text-center font-body">
