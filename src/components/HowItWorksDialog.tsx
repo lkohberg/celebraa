@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Palette, Package, Eye, User, CreditCard, PartyPopper } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/i18n";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface HowItWorksDialogProps {
   open: boolean;
