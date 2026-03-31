@@ -204,6 +204,7 @@ const ConfigurePage = () => {
           eventId: created.id,
           successUrl: `${window.location.origin}/success/${form.eventLink}`,
           cancelUrl: window.location.href,
+          currency: currency.code.toLowerCase(),
         },
       });
 
