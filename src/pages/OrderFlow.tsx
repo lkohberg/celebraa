@@ -1189,7 +1189,7 @@ const OrderFlow = () => {
                   </div>
                   <div className="flex justify-between font-body text-sm">
                     <span className="text-muted-foreground">{t("order.basePage")}</span>
-                    <span className="text-foreground">{formatPrice(BASE_PRICE)}</span>
+                    <span className="text-foreground">{formatPriceCeil(BASE_PRICE)}</span>
                   </div>
                   {selectedPackageId && (() => {
                     const pkg = packages.find(p => p.id === selectedPackageId);
