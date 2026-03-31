@@ -1025,7 +1025,7 @@ const OrderFlow = () => {
                     </div>
                     <div className="text-right">
                       <p className="font-body text-sm text-muted-foreground">{t("order.totalPrice")}</p>
-                      <p className="font-display text-2xl font-bold text-primary">€{totalPrice}</p>
+                      <p className="font-display text-2xl font-bold text-primary">{formatPriceCeil(totalPrice)}</p>
                     </div>
                   </div>
                 </div>
