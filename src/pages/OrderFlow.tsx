@@ -1219,7 +1219,7 @@ const OrderFlow = () => {
                     <span className="text-foreground">{t("order.total")}</span>
                     <div className="text-right">
                       {promoApplied && discountAmount > 0 && (
-                         <span className="text-muted-foreground line-through text-sm mr-2">{formatPrice(totalPrice)}</span>
+                         <span className="text-muted-foreground line-through text-sm mr-2">{formatPriceCeil(totalPrice)}</span>
                       )}
                        <span className="text-primary text-lg">{formatPrice(finalPrice)}</span>
                     </div>
