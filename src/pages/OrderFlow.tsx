@@ -1036,7 +1036,7 @@ const OrderFlow = () => {
                       <h4 className="font-display text-sm font-semibold text-foreground mb-2">{t("order.selectedBlocks")}</h4>
                       <div className="flex justify-between font-body text-xs">
                         <span className="text-muted-foreground">{t("order.basePage")}</span>
-                        <span>€{BASE_PRICE}</span>
+                        <span>{formatPriceCeil(BASE_PRICE)}</span>
                       </div>
                       {allSelectedBlocks.map(id => {
                         const block = blocks.find(b => b.id === id);
