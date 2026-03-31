@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { AuthProvider } from "@/hooks/useAuth";
 import { I18nProvider } from "@/i18n";
+import { CurrencyProvider } from "@/hooks/useCurrency";
 import CookieConsent from "@/components/CookieConsent";
 import Index from "./pages/Index";
 
