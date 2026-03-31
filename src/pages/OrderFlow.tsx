@@ -472,7 +472,7 @@ const OrderFlow = () => {
                               <div className="text-right">
                                 <span className="font-display text-lg font-bold text-primary">{formatPriceCeil(pkg.price)}</span>
                                 {savings > 0 && (
-                                  <p className="text-[10px] font-body text-green-600">{t("order.save")} {formatPrice(savings)}</p>
+                                  <p className="text-[10px] font-body text-green-600">{t("order.save")} {formatPriceCeil(savings)}</p>
                                 )}
                               </div>
                             </div>
