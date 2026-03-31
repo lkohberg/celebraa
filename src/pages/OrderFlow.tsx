@@ -470,7 +470,7 @@ const OrderFlow = () => {
                             <div className="flex items-center justify-between mb-3">
                               <h4 className="font-display font-semibold text-foreground">{t(pkg.nameKey)}</h4>
                               <div className="text-right">
-                                <span className="font-display text-lg font-bold text-primary">{formatPrice(pkg.price)}</span>
+                                <span className="font-display text-lg font-bold text-primary">{formatPriceCeil(pkg.price)}</span>
                                 {savings > 0 && (
                                   <p className="text-[10px] font-body text-green-600">{t("order.save")} {formatPrice(savings)}</p>
                                 )}
