@@ -532,7 +532,7 @@ const OrderFlow = () => {
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className={`font-body text-sm font-semibold ${premium ? "text-amber-600" : "text-primary"}`}>+{formatPrice(block.price)}</span>
+                                <span className={`font-body text-sm font-semibold ${premium ? "text-amber-600" : "text-primary"}`}>+{formatPriceCeil(block.price)}</span>
                                 {(isSelected || inPackage) && <Check className="w-4 h-4 text-primary" />}
                               </div>
                             </div>
