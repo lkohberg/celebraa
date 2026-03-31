@@ -132,7 +132,8 @@ Deno.serve(async (req) => {
     }
 
     const userId = claimsData.claims.sub;
-    const { eventId, successUrl, cancelUrl, selectedPackageId, promoCode } = await req.json();
+    const { eventId, successUrl, cancelUrl, selectedPackageId, promoCode, currency: reqCurrency } = await req.json();
+    const currency = (typeof reqCurrency === "string" && CURRENCY_RATES[reqCurrency]) ? reqCurrency : "eur";
 
     const adminClient = createClient(
       Deno.env.get("SUPABASE_URL")!,
