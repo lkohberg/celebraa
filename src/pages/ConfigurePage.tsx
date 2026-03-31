@@ -28,6 +28,7 @@ const ConfigurePage = () => {
   const { templateId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { currency } = useCurrency();
 
   const fontOptions = [
     { value: "Playfair Display", label: t("font.playfair") },
