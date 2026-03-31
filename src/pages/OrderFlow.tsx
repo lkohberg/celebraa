@@ -1212,7 +1212,7 @@ const OrderFlow = () => {
                   {promoApplied && discountAmount > 0 && (
                     <div className="flex justify-between font-body text-sm text-green-600">
                       <span>🎫 {t("promo.discount")} ({promoApplied.code})</span>
-                      <span>-€{discountAmount}</span>
+                      <span>-{formatPrice(discountAmount)}</span>
                     </div>
                   )}
                   <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
