@@ -211,6 +211,8 @@ Deno.serve(async (req) => {
       metadata.promo_code = appliedPromoCode;
     }
 
+    const stripeAmount = convertCents(unitAmount, currency);
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -221,17 +223,17 @@ Deno.serve(async (req) => {
       line_items: [
         {
           price_data: {
-            currency: "eur",
+            currency,
             product_data: {
               name: `Event-Seite: ${event.title}`,
               description: `Template: ${event.template_id} · Link: ${event.event_link}.celebra.at${appliedPromoCode ? ` · Promo: ${appliedPromoCode}` : ""}`,
             },
-            unit_amount: unitAmount,
+            unit_amount: stripeAmount,
           },
           quantity: 1,
         },
       ],
-      metadata,
+      metadata: { ...metadata, original_eur_cents: String(unitAmount) },
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
