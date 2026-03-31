@@ -60,7 +60,7 @@ const HowItWorksDialog = ({ open, onOpenChange }: HowItWorksDialogProps) => {
 
         <div className="mt-5 text-center">
           <p className="font-body text-xs text-muted-foreground">
-            {t("howItWorks.price")} <span className="font-semibold text-primary">€19</span> · {t("howItWorks.priceNote")}
+            {t("howItWorks.price")} <span className="font-semibold text-primary">{formatPriceCeil(19)}</span> · {t("howItWorks.priceNote")}
           </p>
         </div>
       </DialogContent>

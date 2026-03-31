@@ -201,7 +201,7 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
                     }
                   }}
                 >
-                  {t("uptime.renewButton") || "Jetzt verlängern (€10)"}
+                  {t("uptime.renewButton") || `Jetzt verlängern (${formatPriceCeil(10)})`}
                 </Button>
               </div>
             </div>

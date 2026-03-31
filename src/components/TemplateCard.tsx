@@ -185,7 +185,7 @@ const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: Template
             <p className="text-white/70 text-xs font-body mt-0.5">{t(template.taglineKey)}</p>
           </div>
           <Badge className="bg-white/20 backdrop-blur-sm text-white border-white/20 font-body text-[10px]">
-            {t("templateCard.from")} €19
+            {t("templateCard.from")} {formatPriceCeil(19)}
           </Badge>
         </div>
       </div>
