@@ -177,7 +177,7 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
                   }
                 </p>
                 <p className="font-body text-xs text-muted-foreground mt-1">
-                  {t("uptime.renewHint") || "Verlängere um weitere 6 Monate für €10."}
+                  {t("uptime.renewHint") || `Verlängere um weitere 6 Monate für ${formatPriceCeil(10)}.`}
                 </p>
                 <Button
                   size="sm"
