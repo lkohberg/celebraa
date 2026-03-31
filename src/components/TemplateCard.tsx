@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Eye, Sparkles, Star } from "lucide-react";
 import { useTranslation } from "@/i18n";
+import { useCurrency } from "@/hooks/useCurrency";
 
 import heroBirthdayNeon from "@/assets/hero-birthday-neon.jpg";
 import heroBirthdayGlamour from "@/assets/hero-birthday-glamour.jpg";
