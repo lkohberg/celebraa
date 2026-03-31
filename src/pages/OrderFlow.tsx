@@ -349,7 +349,9 @@ const OrderFlow = () => {
             ? `${window.location.origin}/success/${form.eventLink}?pending=true`
             : `${window.location.origin}/success/${form.eventLink}`,
           cancelUrl: window.location.href,
+          selectedPackageId: selectedPackageId || null,
           promoCode: promoApplied?.code || null,
+          currency: currency.code.toLowerCase(),
         },
       });
 
