@@ -40,7 +40,7 @@ const OrderFlow = () => {
   const { templateId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { currency, formatPrice } = useCurrency();
+  const { currency, formatPrice, formatPriceCeil } = useCurrency();
   const fontOptions = [
     { value: "Playfair Display", label: t("font.playfair") },
     { value: "DM Sans", label: t("font.dmsans") },
