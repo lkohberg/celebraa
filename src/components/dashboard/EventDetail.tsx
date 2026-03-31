@@ -20,6 +20,7 @@ import EventEditDialog from "./EventEditDialog";
 
 const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: boolean; onDeleted?: () => void }) => {
   const { t } = useTranslation();
+  const { formatPriceCeil } = useCurrency();
   const { data: guests } = useEventGuests(event.id);
   const { data: analytics } = useEventAnalytics(event.id);
   const { data: musicWishes } = useMusicWishes(event.id);
