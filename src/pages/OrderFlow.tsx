@@ -23,6 +23,7 @@ import BlockConfigurator from "@/components/BlockConfigurator";
 import IframePreview from "@/components/IframePreview";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslation } from "@/i18n";
+import { useCurrency } from "@/hooks/useCurrency";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import {
