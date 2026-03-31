@@ -1205,7 +1205,7 @@ const OrderFlow = () => {
                     return block ? (
                       <div key={id} className="flex justify-between font-body text-sm">
                         <span className="text-muted-foreground">{block.icon} {t(block.nameKey)}</span>
-                        <span className="text-foreground">{formatPrice(block.price)}</span>
+                        <span className="text-foreground">{formatPriceCeil(block.price)}</span>
                       </div>
                     ) : null;
                   })}
