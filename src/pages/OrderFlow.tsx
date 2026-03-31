@@ -1159,7 +1159,7 @@ const OrderFlow = () => {
                     <div className="flex items-center justify-between bg-primary/10 rounded-lg px-4 py-2">
                       <span className="font-body text-sm font-semibold text-foreground">
                         <code className="bg-secondary px-2 py-0.5 rounded mr-2">{promoApplied.code}</code>
-                        {promoApplied.discount_type === "percentage" ? `${promoApplied.discount_value}%` : `€${promoApplied.discount_value}`} {t("promo.discount")}
+                        {promoApplied.discount_type === "percentage" ? `${promoApplied.discount_value}%` : formatPrice(promoApplied.discount_value)} {t("promo.discount")}
                       </span>
                       <Button variant="ghost" size="sm" onClick={() => { setPromoApplied(null); setPromoCode(""); }} className="font-body text-xs">
                         {t("promo.remove")}
