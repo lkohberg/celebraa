@@ -50,12 +50,26 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
     return Math.round(converted * 100) / 100;
   }, [currency]);
 
+  // Round up to next whole number for non-EUR (used for block/package prices)
+  const convertFromEurCeil = useCallback((eurAmount: number) => {
+    if (currency.code === "EUR") return eurAmount;
+    const converted = eurAmount * currency.rate;
+    return Math.ceil(converted);
+  }, [currency]);
+
   const formatPrice = useCallback((eurAmount: number) => {
     const converted = convertFromEur(eurAmount);
     if (currency.code === "EUR") return `€${converted}`;
     if (currency.rate > 10) return `${currency.symbol}${converted}`;
     return `${currency.symbol}${converted.toFixed(2)}`;
   }, [currency, convertFromEur]);
+
+  // Format with ceil rounding (for item prices, not final totals with promo)
+  const formatPriceCeil = useCallback((eurAmount: number) => {
+    const converted = convertFromEurCeil(eurAmount);
+    if (currency.code === "EUR") return `€${converted}`;
+    return `${currency.symbol}${converted}`;
+  }, [currency, convertFromEurCeil]);
 
   return (
     <CurrencyContext.Provider value={{ currency, setCurrencyCode, convertFromEur, formatPrice }}>
