@@ -678,7 +678,7 @@ const OrderFlow = () => {
                     })}
                     <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
                       <span className="text-foreground">{t("order.total")}</span>
-                      <span className="text-primary text-lg">{formatPrice(totalPrice)}</span>
+                      <span className="text-primary text-lg">{formatPriceCeil(totalPrice)}</span>
                     </div>
                     {needsManualWork && (
                       <p className="text-[10px] font-body text-amber-600">
