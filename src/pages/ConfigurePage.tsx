@@ -20,6 +20,7 @@ import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPag
 import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import { useTranslation } from "@/i18n";
+import { useCurrency } from "@/hooks/useCurrency";
 import { toast } from "sonner";
 
 
@@ -27,6 +28,7 @@ const ConfigurePage = () => {
   const { templateId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { currency } = useCurrency();
 
   const fontOptions = [
     { value: "Playfair Display", label: t("font.playfair") },
@@ -202,6 +204,7 @@ const ConfigurePage = () => {
           eventId: created.id,
           successUrl: `${window.location.origin}/success/${form.eventLink}`,
           cancelUrl: window.location.href,
+          currency: currency.code.toLowerCase(),
         },
       });
 

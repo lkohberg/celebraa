@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { AuthProvider } from "@/hooks/useAuth";
 import { I18nProvider } from "@/i18n";
+import { CurrencyProvider } from "@/hooks/useCurrency";
 import CookieConsent from "@/components/CookieConsent";
 import Index from "./pages/Index";
 
@@ -36,6 +37,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <I18nProvider>
+        <CurrencyProvider>
         <TooltipProvider>
           <Toaster />
           <Sonner />
@@ -60,6 +62,7 @@ const App = () => (
           </BrowserRouter>
           <CookieConsent />
         </TooltipProvider>
+        </CurrencyProvider>
       </I18nProvider>
     </AuthProvider>
   </QueryClientProvider>

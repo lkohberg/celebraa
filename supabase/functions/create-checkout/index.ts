@@ -40,6 +40,25 @@ const PACKAGE_PRICES: Record<string, { priceCents: number; blockIds: string[] }>
 
 const LANG_PRICE_CENTS = 300; // €3 per extra language
 
+// Supported Stripe currencies and their EUR exchange rates
+const CURRENCY_RATES: Record<string, number> = {
+  eur: 1, usd: 1.09, gbp: 0.86, chf: 0.96, jpy: 163.5,
+  cad: 1.48, aud: 1.67, cny: 7.92, inr: 91.2, brl: 5.45,
+  mxn: 18.7, sek: 11.2, nok: 11.6, dkk: 7.46, pln: 4.32,
+};
+
+// Zero-decimal currencies in Stripe
+const ZERO_DECIMAL_CURRENCIES = new Set(["jpy"]);
+
+function convertCents(eurCents: number, currency: string): number {
+  const rate = CURRENCY_RATES[currency] || 1;
+  if (ZERO_DECIMAL_CURRENCIES.has(currency)) {
+    // JPY: convert EUR cents to whole yen (eurCents/100 * rate)
+    return Math.round((eurCents / 100) * rate);
+  }
+  return Math.round(eurCents * rate);
+}
+
 function calculatePriceServer(
   selectedBlocks: string[],
   menuSelection: boolean,
@@ -113,7 +132,8 @@ Deno.serve(async (req) => {
     }
 
     const userId = claimsData.claims.sub;
-    const { eventId, successUrl, cancelUrl, selectedPackageId, promoCode } = await req.json();
+    const { eventId, successUrl, cancelUrl, selectedPackageId, promoCode, currency: reqCurrency } = await req.json();
+    const currency = (typeof reqCurrency === "string" && CURRENCY_RATES[reqCurrency]) ? reqCurrency : "eur";
 
     const adminClient = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -191,6 +211,8 @@ Deno.serve(async (req) => {
       metadata.promo_code = appliedPromoCode;
     }
 
+    const stripeAmount = convertCents(unitAmount, currency);
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -201,17 +223,17 @@ Deno.serve(async (req) => {
       line_items: [
         {
           price_data: {
-            currency: "eur",
+            currency,
             product_data: {
               name: `Event-Seite: ${event.title}`,
               description: `Template: ${event.template_id} · Link: ${event.event_link}.celebra.at${appliedPromoCode ? ` · Promo: ${appliedPromoCode}` : ""}`,
             },
-            unit_amount: unitAmount,
+            unit_amount: stripeAmount,
           },
           quantity: 1,
         },
       ],
-      metadata,
+      metadata: { ...metadata, original_eur_cents: String(unitAmount) },
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
