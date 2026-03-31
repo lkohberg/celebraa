@@ -1259,7 +1259,7 @@ const OrderFlow = () => {
                   disabled={!step4Valid || loading}
                   onClick={handleSubmit}
                 >
-                  {loading ? t("order.processing") : `${t("order.payNow")} €${finalPrice}`}
+                  {loading ? t("order.processing") : `${t("order.payNow")} ${formatPrice(finalPrice)}`}
                   {!loading && <CreditCard className="w-4 h-4 ml-2" />}
                 </Button>
                 <p className="text-xs text-muted-foreground text-center font-body">
