@@ -1196,7 +1196,7 @@ const OrderFlow = () => {
                     return pkg ? (
                       <div className="flex justify-between font-body text-sm">
                         <span className="text-muted-foreground">{t("order.package")}: {t(pkg.nameKey)}</span>
-                        <span className="text-foreground">€{pkg.price}</span>
+                        <span className="text-foreground">{formatPrice(pkg.price)}</span>
                       </div>
                     ) : null;
                   })()}
