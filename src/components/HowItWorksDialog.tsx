@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Palette, Package, Eye, User, CreditCard, PartyPopper } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/i18n";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface HowItWorksDialogProps {
   open: boolean;
@@ -10,6 +11,7 @@ interface HowItWorksDialogProps {
 
 const HowItWorksDialog = ({ open, onOpenChange }: HowItWorksDialogProps) => {
   const { t } = useTranslation();
+  const { formatPriceCeil } = useCurrency();
 
   const steps = [
     { icon: Palette, titleKey: "howItWorks.step1.title", descKey: "howItWorks.step1.desc", color: "text-pink-500", bg: "bg-pink-50 dark:bg-pink-950/20" },
@@ -59,7 +61,7 @@ const HowItWorksDialog = ({ open, onOpenChange }: HowItWorksDialogProps) => {
 
         <div className="mt-5 text-center">
           <p className="font-body text-xs text-muted-foreground">
-            {t("howItWorks.price")} <span className="font-semibold text-primary">€19</span> · {t("howItWorks.priceNote")}
+            {t("howItWorks.price")} <span className="font-semibold text-primary">{formatPriceCeil(19)}</span> · {t("howItWorks.priceNote")}
           </p>
         </div>
       </DialogContent>

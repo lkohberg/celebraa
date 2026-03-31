@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "@/i18n";
+import { useCurrency } from "@/hooks/useCurrency";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,6 +20,7 @@ import EventEditDialog from "./EventEditDialog";
 
 const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: boolean; onDeleted?: () => void }) => {
   const { t } = useTranslation();
+  const { formatPriceCeil } = useCurrency();
   const { data: guests } = useEventGuests(event.id);
   const { data: analytics } = useEventAnalytics(event.id);
   const { data: musicWishes } = useMusicWishes(event.id);
@@ -177,7 +179,7 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
                   }
                 </p>
                 <p className="font-body text-xs text-muted-foreground mt-1">
-                  {t("uptime.renewHint") || "Verlängere um weitere 6 Monate für €10."}
+                  {t("uptime.renewHint") || `Verlängere um weitere 6 Monate für ${formatPriceCeil(10)}.`}
                 </p>
                 <Button
                   size="sm"
@@ -201,7 +203,7 @@ const EventDetail = ({ event, isAdmin, onDeleted }: { event: any; isAdmin?: bool
                     }
                   }}
                 >
-                  {t("uptime.renewButton") || "Jetzt verlängern (€10)"}
+                  {t("uptime.renewButton") || `Jetzt verlängern (${formatPriceCeil(10)})`}
                 </Button>
               </div>
             </div>

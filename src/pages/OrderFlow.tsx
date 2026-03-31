@@ -40,7 +40,7 @@ const OrderFlow = () => {
   const { templateId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { currency, formatPrice } = useCurrency();
+  const { currency, formatPrice, formatPriceCeil } = useCurrency();
   const fontOptions = [
     { value: "Playfair Display", label: t("font.playfair") },
     { value: "DM Sans", label: t("font.dmsans") },
@@ -470,9 +470,9 @@ const OrderFlow = () => {
                             <div className="flex items-center justify-between mb-3">
                               <h4 className="font-display font-semibold text-foreground">{t(pkg.nameKey)}</h4>
                               <div className="text-right">
-                                <span className="font-display text-lg font-bold text-primary">{formatPrice(pkg.price)}</span>
+                                <span className="font-display text-lg font-bold text-primary">{formatPriceCeil(pkg.price)}</span>
                                 {savings > 0 && (
-                                  <p className="text-[10px] font-body text-green-600">{t("order.save")} {formatPrice(savings)}</p>
+                                  <p className="text-[10px] font-body text-green-600">{t("order.save")} {formatPriceCeil(savings)}</p>
                                 )}
                               </div>
                             </div>
@@ -532,7 +532,7 @@ const OrderFlow = () => {
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className={`font-body text-sm font-semibold ${premium ? "text-amber-600" : "text-primary"}`}>+{formatPrice(block.price)}</span>
+                                <span className={`font-body text-sm font-semibold ${premium ? "text-amber-600" : "text-primary"}`}>+{formatPriceCeil(block.price)}</span>
                                 {(isSelected || inPackage) && <Check className="w-4 h-4 text-primary" />}
                               </div>
                             </div>
@@ -656,14 +656,14 @@ const OrderFlow = () => {
                     <h4 className="font-display text-lg font-semibold text-foreground">{t("order.priceOverview")}</h4>
                     <div className="flex justify-between font-body text-sm">
                       <span className="text-muted-foreground">{t("order.basePage")}</span>
-                       <span className="text-foreground">{formatPrice(BASE_PRICE)}</span>
+                       <span className="text-foreground">{formatPriceCeil(BASE_PRICE)}</span>
                     </div>
                     {selectedPackageId && (() => {
                       const pkg = packages.find(p => p.id === selectedPackageId);
                       return pkg ? (
                         <div className="flex justify-between font-body text-sm">
                           <span className="text-muted-foreground">{t(pkg.nameKey)}</span>
-                           <span className="text-foreground">{formatPrice(pkg.price)}</span>
+                           <span className="text-foreground">{formatPriceCeil(pkg.price)}</span>
                         </div>
                       ) : null;
                     })()}
@@ -672,13 +672,13 @@ const OrderFlow = () => {
                       return block ? (
                         <div key={id} className="flex justify-between font-body text-sm">
                            <span className="text-muted-foreground">{block.icon} {t(block.nameKey)}</span>
-                           <span className="text-foreground">{formatPrice(block.price)}</span>
+                           <span className="text-foreground">{formatPriceCeil(block.price)}</span>
                         </div>
                       ) : null;
                     })}
                     <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
                       <span className="text-foreground">{t("order.total")}</span>
-                      <span className="text-primary text-lg">{formatPrice(totalPrice)}</span>
+                      <span className="text-primary text-lg">{formatPriceCeil(totalPrice)}</span>
                     </div>
                     {needsManualWork && (
                       <p className="text-[10px] font-body text-amber-600">
@@ -842,7 +842,7 @@ const OrderFlow = () => {
                     })()}
                   </div>
                   {form.languages.length > 1 && (
-                    <p className="font-body text-xs text-primary">{`+${form.languages.length - 1} ${form.languages.length - 1 === 1 ? "Sprache" : "Sprachen"} (je €3)`}</p>
+                    <p className="font-body text-xs text-primary">{`+${form.languages.length - 1} ${form.languages.length - 1 === 1 ? "Sprache" : "Sprachen"} (je ${formatPriceCeil(3)})`}</p>
                   )}
                 </div>
                 <div>
@@ -1025,7 +1025,7 @@ const OrderFlow = () => {
                     </div>
                     <div className="text-right">
                       <p className="font-body text-sm text-muted-foreground">{t("order.totalPrice")}</p>
-                      <p className="font-display text-2xl font-bold text-primary">€{totalPrice}</p>
+                      <p className="font-display text-2xl font-bold text-primary">{formatPriceCeil(totalPrice)}</p>
                     </div>
                   </div>
                 </div>
@@ -1036,20 +1036,20 @@ const OrderFlow = () => {
                       <h4 className="font-display text-sm font-semibold text-foreground mb-2">{t("order.selectedBlocks")}</h4>
                       <div className="flex justify-between font-body text-xs">
                         <span className="text-muted-foreground">{t("order.basePage")}</span>
-                        <span>€{BASE_PRICE}</span>
+                        <span>{formatPriceCeil(BASE_PRICE)}</span>
                       </div>
                       {allSelectedBlocks.map(id => {
                         const block = blocks.find(b => b.id === id);
                         return block ? (
                           <div key={id} className="flex justify-between font-body text-xs">
                             <span className="text-muted-foreground">{block.icon} {t(block.nameKey)}</span>
-                            <span>€{block.price}</span>
+                            <span>{formatPriceCeil(block.price)}</span>
                           </div>
                         ) : null;
                       })}
                       <div className="border-t border-border pt-2 flex justify-between font-body text-sm font-semibold">
                         <span>{t("order.total")}</span>
-                        <span className="text-primary">€{totalPrice}</span>
+                        <span className="text-primary">{formatPriceCeil(totalPrice)}</span>
                       </div>
                     </div>
                     <Button className="w-full mt-4 font-body font-semibold" onClick={() => setStep(3)}>
@@ -1189,14 +1189,14 @@ const OrderFlow = () => {
                   </div>
                   <div className="flex justify-between font-body text-sm">
                     <span className="text-muted-foreground">{t("order.basePage")}</span>
-                    <span className="text-foreground">{formatPrice(BASE_PRICE)}</span>
+                    <span className="text-foreground">{formatPriceCeil(BASE_PRICE)}</span>
                   </div>
                   {selectedPackageId && (() => {
                     const pkg = packages.find(p => p.id === selectedPackageId);
                     return pkg ? (
                       <div className="flex justify-between font-body text-sm">
                         <span className="text-muted-foreground">{t("order.package")}: {t(pkg.nameKey)}</span>
-                        <span className="text-foreground">{formatPrice(pkg.price)}</span>
+                        <span className="text-foreground">{formatPriceCeil(pkg.price)}</span>
                       </div>
                     ) : null;
                   })()}
@@ -1205,7 +1205,7 @@ const OrderFlow = () => {
                     return block ? (
                       <div key={id} className="flex justify-between font-body text-sm">
                         <span className="text-muted-foreground">{block.icon} {t(block.nameKey)}</span>
-                        <span className="text-foreground">{formatPrice(block.price)}</span>
+                        <span className="text-foreground">{formatPriceCeil(block.price)}</span>
                       </div>
                     ) : null;
                   })}
@@ -1219,7 +1219,7 @@ const OrderFlow = () => {
                     <span className="text-foreground">{t("order.total")}</span>
                     <div className="text-right">
                       {promoApplied && discountAmount > 0 && (
-                         <span className="text-muted-foreground line-through text-sm mr-2">{formatPrice(totalPrice)}</span>
+                         <span className="text-muted-foreground line-through text-sm mr-2">{formatPriceCeil(totalPrice)}</span>
                       )}
                        <span className="text-primary text-lg">{formatPrice(finalPrice)}</span>
                     </div>

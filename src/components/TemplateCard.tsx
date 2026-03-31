@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Eye, Sparkles, Star } from "lucide-react";
 import { useTranslation } from "@/i18n";
+import { useCurrency } from "@/hooks/useCurrency";
 
 import heroBirthdayNeon from "@/assets/hero-birthday-neon.jpg";
 import heroBirthdayGlamour from "@/assets/hero-birthday-glamour.jpg";
@@ -160,6 +161,7 @@ interface TemplateCardProps {
 
 const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: TemplateCardProps) => {
   const { t } = useTranslation();
+  const { formatPriceCeil } = useCurrency();
 
   return (
     <motion.div
@@ -184,7 +186,7 @@ const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: Template
             <p className="text-white/70 text-xs font-body mt-0.5">{t(template.taglineKey)}</p>
           </div>
           <Badge className="bg-white/20 backdrop-blur-sm text-white border-white/20 font-body text-[10px]">
-            {t("templateCard.from")} €19
+            {t("templateCard.from")} {formatPriceCeil(19)}
           </Badge>
         </div>
       </div>
