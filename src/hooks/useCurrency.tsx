@@ -29,7 +29,9 @@ interface CurrencyContextType {
   currency: CurrencyInfo;
   setCurrencyCode: (code: string) => void;
   convertFromEur: (eurAmount: number) => number;
+  convertFromEurCeil: (eurAmount: number) => number;
   formatPrice: (eurAmount: number) => string;
+  formatPriceCeil: (eurAmount: number) => string;
 }
 
 const CurrencyContext = createContext<CurrencyContextType | null>(null);
