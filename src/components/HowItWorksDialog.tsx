@@ -11,6 +11,7 @@ interface HowItWorksDialogProps {
 
 const HowItWorksDialog = ({ open, onOpenChange }: HowItWorksDialogProps) => {
   const { t } = useTranslation();
+  const { formatPriceCeil } = useCurrency();
 
   const steps = [
     { icon: Palette, titleKey: "howItWorks.step1.title", descKey: "howItWorks.step1.desc", color: "text-pink-500", bg: "bg-pink-50 dark:bg-pink-950/20" },
