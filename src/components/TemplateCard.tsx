@@ -161,6 +161,7 @@ interface TemplateCardProps {
 
 const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: TemplateCardProps) => {
   const { t } = useTranslation();
+  const { formatPriceCeil } = useCurrency();
 
   return (
     <motion.div
