@@ -20,6 +20,7 @@ import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPag
 import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import { useTranslation } from "@/i18n";
+import { useCurrency } from "@/hooks/useCurrency";
 import { toast } from "sonner";
 
 
