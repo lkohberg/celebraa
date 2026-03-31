@@ -1049,7 +1049,7 @@ const OrderFlow = () => {
                       })}
                       <div className="border-t border-border pt-2 flex justify-between font-body text-sm font-semibold">
                         <span>{t("order.total")}</span>
-                        <span className="text-primary">€{totalPrice}</span>
+                        <span className="text-primary">{formatPriceCeil(totalPrice)}</span>
                       </div>
                     </div>
                     <Button className="w-full mt-4 font-body font-semibold" onClick={() => setStep(3)}>
