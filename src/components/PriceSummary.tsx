@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Crown } from "lucide-react";
 import { useTranslation } from "@/i18n";
+import { useCurrency } from "@/hooks/useCurrency";
 import LegalDialogs from "@/components/LegalDialogs";
 
 interface PriceSummaryProps {
@@ -22,6 +23,7 @@ interface PriceSummaryProps {
 
 const PriceSummary = ({ templateName, basePrice, menuSelection, menuPrice, extraLangs = 0, langPrice = 0, totalPrice, isValid, loading, onSubmit, tier = "basis" }: PriceSummaryProps) => {
   const { t } = useTranslation();
+  const { formatPrice } = useCurrency();
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   return (
@@ -37,23 +39,23 @@ const PriceSummary = ({ templateName, basePrice, menuSelection, menuPrice, extra
       </div>
       <div className="flex justify-between font-body text-sm">
         <span className="text-muted-foreground">{templateName} {t("price.template")}</span>
-        <span className="text-foreground">€{basePrice}</span>
+        <span className="text-foreground">{formatPrice(basePrice)}</span>
       </div>
       {menuSelection && (
         <div className="flex justify-between font-body text-sm">
           <span className="text-muted-foreground">{t("price.menu")}</span>
-          <span className="text-foreground">€{menuPrice}</span>
+          <span className="text-foreground">{formatPrice(menuPrice)}</span>
         </div>
       )}
       {extraLangs > 0 && (
         <div className="flex justify-between font-body text-sm">
-          <span className="text-muted-foreground">{t("price.languages")} ({extraLangs}×€3)</span>
-          <span className="text-foreground">€{langPrice}</span>
+          <span className="text-muted-foreground">{t("price.languages")} ({extraLangs}×{formatPrice(3)})</span>
+          <span className="text-foreground">{formatPrice(langPrice)}</span>
         </div>
       )}
       <div className="border-t border-border pt-3 flex justify-between font-body font-semibold">
         <span className="text-foreground">{t("price.total")}</span>
-        <span className="text-primary text-lg">€{totalPrice}</span>
+        <span className="text-primary text-lg">{formatPrice(totalPrice)}</span>
       </div>
 
       <div className="flex items-start gap-2 pt-2">
