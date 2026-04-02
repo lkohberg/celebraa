@@ -138,27 +138,14 @@ const OrderFlow = () => {
     setPromoLoading(true);
     try {
       const { data, error } = await supabase
-        .from("promo_codes")
-        .select("code, discount_type, discount_value, max_uses, current_uses, active, expires_at")
-        .eq("code", promoCode.trim().toUpperCase())
-        .eq("active", true)
-        .maybeSingle();
-      if (error || !data) {
+        .rpc("validate_promo_code", { p_code: promoCode.trim() });
+      if (error || !data || data.length === 0) {
         toast.error(t("promo.invalid"));
         setPromoLoading(false);
         return;
       }
-      if (data.max_uses && data.current_uses >= data.max_uses) {
-        toast.error(t("promo.invalid"));
-        setPromoLoading(false);
-        return;
-      }
-      if (data.expires_at && new Date(data.expires_at) < new Date()) {
-        toast.error(t("promo.invalid"));
-        setPromoLoading(false);
-        return;
-      }
-      setPromoApplied({ code: data.code, discount_type: data.discount_type, discount_value: Number(data.discount_value) });
+      const promo = data[0];
+      setPromoApplied({ code: promoCode.trim().toUpperCase(), discount_type: promo.discount_type, discount_value: Number(promo.discount_value) });
       toast.success(t("promo.applied"));
     } catch {
       toast.error(t("promo.invalid"));
