@@ -9,7 +9,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { I18nProvider } from "@/i18n";
 import { CurrencyProvider } from "@/hooks/useCurrency";
 import CookieConsent from "@/components/CookieConsent";
-import Index from "./pages/Index";
+const Index = lazy(() => import("./pages/Index"));
 
 const TemplatesPage = lazy(() => import("./pages/TemplatesPage"));
 const ConfigurePage = lazy(() => import("./pages/ConfigurePage"));
