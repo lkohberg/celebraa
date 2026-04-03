@@ -1,8 +1,10 @@
+import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Template } from "@/components/TemplateCard";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/i18n";
+import { ChevronDown } from "lucide-react";
 import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPage";
 import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
