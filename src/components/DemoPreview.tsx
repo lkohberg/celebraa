@@ -218,7 +218,7 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto p-0">
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto p-0 [&>button]:bg-background/80 [&>button]:backdrop-blur-sm [&>button]:rounded-full [&>button]:w-9 [&>button]:h-9 [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button]:shadow-lg [&>button]:opacity-100 [&>button]:top-3 [&>button]:right-3 [&>button>svg]:w-5 [&>button>svg]:h-5 [&>button]:border [&>button]:border-border/50">
         <DialogTitle className="sr-only">Demo: {template.name}</DialogTitle>
 
         <div className="rounded-xl overflow-hidden">
