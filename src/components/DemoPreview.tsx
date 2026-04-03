@@ -1,8 +1,10 @@
+import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Template } from "@/components/TemplateCard";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/i18n";
+import { ChevronDown } from "lucide-react";
 import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPage";
 import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
@@ -192,6 +194,18 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
 const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   const navigate = useNavigate();
   const { t, locale } = useTranslation();
+  const [showArrow, setShowArrow] = useState(true);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (open) setShowArrow(true);
+  }, [open]);
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const { scrollTop } = scrollRef.current;
+    if (scrollTop > 60) setShowArrow(false);
+  };
 
   if (!template) return null;
 
@@ -217,8 +231,12 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto p-0 [&>button]:bg-background/80 [&>button]:backdrop-blur-sm [&>button]:rounded-full [&>button]:w-9 [&>button]:h-9 [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button]:shadow-lg [&>button]:opacity-100 [&>button]:top-3 [&>button]:right-3 [&>button>svg]:w-5 [&>button>svg]:h-5 [&>button]:border [&>button]:border-border/50">
+    <Dialog open={open} onOpenChange={(v) => { setShowArrow(true); onOpenChange(v); }}>
+      <DialogContent
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="max-w-5xl max-h-[90vh] overflow-y-auto p-0 [&>button]:bg-background/80 [&>button]:backdrop-blur-sm [&>button]:rounded-full [&>button]:w-9 [&>button]:h-9 [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button]:shadow-lg [&>button]:opacity-100 [&>button]:top-3 [&>button]:right-3 [&>button>svg]:w-5 [&>button>svg]:h-5 [&>button]:border [&>button]:border-border/50"
+      >
         <DialogTitle className="sr-only">Demo: {template.name}</DialogTitle>
 
         <div className="rounded-xl overflow-hidden">
@@ -236,6 +254,18 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
             {t("demo.chooseDesign")}
           </Button>
         </div>
+
+        {/* Scroll hint arrow */}
+        {showArrow && (
+          <div
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] pointer-events-none animate-bounce"
+            style={{ animationDuration: "1.8s" }}
+          >
+            <div className="bg-background/70 backdrop-blur-sm rounded-full p-2 shadow-md border border-border/40">
+              <ChevronDown className="w-5 h-5 text-muted-foreground" />
+            </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
