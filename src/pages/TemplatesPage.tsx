@@ -46,21 +46,21 @@ const TemplatesPage = () => {
         <div className="absolute top-10 left-10 w-64 h-64 rounded-full opacity-[0.04]" style={{ background: "radial-gradient(circle, hsl(38, 65%, 50%), transparent)" }} />
         <div className="absolute bottom-0 right-10 w-96 h-96 rounded-full opacity-[0.03]" style={{ background: "radial-gradient(circle, hsl(340, 65%, 50%), transparent)" }} />
 
-        <div className="container mx-auto px-6 py-20 relative">
+        <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-20 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center mb-6"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full text-primary font-body text-xs tracking-wide mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full text-primary font-body text-xs tracking-wide mb-4 sm:mb-6">
               <Sparkles className="w-3 h-3" />
               {t("templates.handpicked")}
             </div>
-            <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-3 sm:mb-4">
               {t("templates.title")}
             </h1>
-            <p className="font-body text-muted-foreground text-lg max-w-xl mx-auto">
+            <p className="font-body text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
               {t("templates.subtitle")}
             </p>
           </motion.div>
