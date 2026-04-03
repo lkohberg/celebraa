@@ -170,17 +170,17 @@ const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: Template
       className="group bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 border border-border/30"
     >
       <div
-        className="h-52 relative overflow-hidden cursor-pointer"
+        className="h-44 sm:h-52 relative overflow-hidden cursor-pointer"
         style={{ background: template.previewGradient }}
         onClick={() => onDemo(template)}
       >
         {template.defaultHeroImage && (
-          <img src={template.defaultHeroImage} alt={template.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+          <img src={template.defaultHeroImage} alt={template.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-        <div className="absolute inset-0 flex items-end justify-between p-5">
+        <div className="absolute inset-0 flex items-end justify-between p-4 sm:p-5">
           <div>
-            <p className="text-2xl font-bold text-white" style={{ fontFamily: template.font, textShadow: "0 2px 10px rgba(0,0,0,0.4)" }}>
+            <p className="text-xl sm:text-2xl font-bold text-white" style={{ fontFamily: template.font, textShadow: "0 2px 10px rgba(0,0,0,0.4)" }}>
               {template.name}
             </p>
             <p className="text-white/70 text-xs font-body mt-0.5">{t(template.taglineKey)}</p>
@@ -189,15 +189,24 @@ const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: Template
             {t("templateCard.from")} {formatPriceCeil(19)}
           </Badge>
         </div>
+
+        {/* Mobile demo overlay button */}
+        <button
+          className="absolute top-3 right-3 sm:hidden flex items-center gap-1.5 bg-white/90 backdrop-blur-sm text-foreground text-xs font-body font-medium px-3 py-1.5 rounded-full shadow-md"
+          onClick={(e) => { e.stopPropagation(); onDemo(template); }}
+        >
+          <Eye className="w-3.5 h-3.5" />
+          Demo
+        </button>
       </div>
 
-      <div className="p-5">
-        <p className="font-body text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-3">
+      <div className="p-4 sm:p-5">
+        <p className="font-body text-sm text-muted-foreground mb-3 sm:mb-4 leading-relaxed line-clamp-2 sm:line-clamp-3">
           {t(template.descriptionKey)}
         </p>
 
         {template.premiumFeatureKeys && (
-          <div className="flex flex-wrap gap-1.5 mb-5">
+          <div className="flex flex-wrap gap-1.5 mb-4 sm:mb-5">
             {template.premiumFeatureKeys.slice(0, 4).map((key) => (
               <span key={key} className="text-[10px] font-body bg-secondary/80 text-muted-foreground px-2 py-0.5 rounded-full flex items-center gap-1">
                 <Sparkles className="w-2.5 h-2.5" />
@@ -214,12 +223,22 @@ const TemplateCard = ({ template, onSelect, onDemo, demoOnly = false }: Template
             </Button>
           )}
           <button
-            className={`inline-flex items-center justify-center gap-2 font-body text-xs tracking-wide rounded-full border border-border px-5 py-2.5 text-muted-foreground transition-all duration-300 hover:border-primary hover:text-foreground hover:bg-primary/5 ${demoOnly ? "flex-1" : ""}`}
+            className={`hidden sm:inline-flex items-center justify-center gap-2 font-body text-xs tracking-wide rounded-full border border-border px-5 py-2.5 text-muted-foreground transition-all duration-300 hover:border-primary hover:text-foreground hover:bg-primary/5 ${demoOnly ? "flex-1" : ""}`}
             onClick={() => onDemo(template)}
           >
             <Eye className="w-3.5 h-3.5" />
             {t("templateCard.demoView")}
           </button>
+          {/* Mobile: full-width demo button when demoOnly */}
+          {demoOnly && (
+            <button
+              className="sm:hidden flex-1 inline-flex items-center justify-center gap-2 font-body text-xs tracking-wide rounded-full border border-primary/30 bg-primary/5 px-4 py-2.5 text-foreground font-medium transition-all active:scale-[0.97]"
+              onClick={() => onDemo(template)}
+            >
+              <Eye className="w-3.5 h-3.5" />
+              {t("templateCard.demoView")}
+            </button>
+          )}
         </div>
       </div>
     </motion.div>
