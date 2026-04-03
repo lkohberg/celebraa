@@ -218,16 +218,17 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto p-0">
+      <DialogContent className="max-w-5xl max-h-[90vh] sm:max-h-[90vh] h-[100dvh] sm:h-auto overflow-y-auto p-0 sm:rounded-lg rounded-none">
         <DialogTitle className="sr-only">Demo: {template.name}</DialogTitle>
 
-        <div className="rounded-xl overflow-hidden">
+        <div className="rounded-none sm:rounded-xl overflow-hidden">
           {renderPreview()}
         </div>
 
-        <div className="flex justify-center py-4">
+        <div className="sticky bottom-0 bg-background/95 backdrop-blur-sm border-t border-border/50 flex justify-center py-3 sm:py-4 px-4 sm:relative sm:border-0 sm:bg-transparent sm:backdrop-blur-none">
           <Button
-            className="font-body"
+            className="font-body w-full sm:w-auto"
+            size="lg"
             onClick={() => {
               onOpenChange(false);
               navigate(`/order/${template.id}`);
