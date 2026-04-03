@@ -46,33 +46,33 @@ const TemplatesPage = () => {
         <div className="absolute top-10 left-10 w-64 h-64 rounded-full opacity-[0.04]" style={{ background: "radial-gradient(circle, hsl(38, 65%, 50%), transparent)" }} />
         <div className="absolute bottom-0 right-10 w-96 h-96 rounded-full opacity-[0.03]" style={{ background: "radial-gradient(circle, hsl(340, 65%, 50%), transparent)" }} />
 
-        <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-20 relative">
+        <div className="container mx-auto px-6 py-20 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center mb-6"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full text-primary font-body text-xs tracking-wide mb-4 sm:mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full text-primary font-body text-xs tracking-wide mb-6">
               <Sparkles className="w-3 h-3" />
               {t("templates.handpicked")}
             </div>
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-3 sm:mb-4">
+            <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
               {t("templates.title")}
             </h1>
-            <p className="font-body text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
+            <p className="font-body text-muted-foreground text-lg max-w-xl mx-auto">
               {t("templates.subtitle")}
             </p>
           </motion.div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 pb-16 sm:pb-20">
+      <div className="container mx-auto px-6 pb-20">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-5xl mx-auto">
           <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto mb-4">
             {eventTypes.map((type) => (
-              <TabsTrigger key={type.value} value={type.value} className="font-body gap-1 sm:gap-1.5 text-xs sm:text-sm">
-                <type.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <TabsTrigger key={type.value} value={type.value} className="font-body gap-1.5">
+                <type.icon className="w-3.5 h-3.5" />
                 {t(type.labelKey)}
               </TabsTrigger>
             ))}
@@ -83,7 +83,7 @@ const TemplatesPage = () => {
             key={activeTab}
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center font-body text-xs sm:text-sm text-muted-foreground mb-6 sm:mb-10 max-w-lg mx-auto"
+            className="text-center font-body text-sm text-muted-foreground mb-10 max-w-lg mx-auto"
           >
             {t(categoryDescriptionKeys[activeTab])}
           </motion.p>
@@ -94,7 +94,7 @@ const TemplatesPage = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6"
+                className="grid md:grid-cols-3 gap-6"
               >
                 {templates
                   .filter((tpl) => tpl.eventType === type.value)
