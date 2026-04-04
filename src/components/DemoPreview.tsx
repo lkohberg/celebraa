@@ -195,12 +195,14 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   const navigate = useNavigate();
   const { t, locale } = useTranslation();
   const [showArrow, setShowArrow] = useState(false);
+  const [arrowVisible, setArrowVisible] = useState(false);
   const [introFinished, setIntroFinished] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (open) {
       setShowArrow(false);
+      setArrowVisible(false);
       setIntroFinished(false);
     }
   }, [open]);
@@ -208,12 +210,18 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   const handleIntroComplete = () => {
     setIntroFinished(true);
     setShowArrow(true);
+    setArrowVisible(true);
+  };
+
+  const hideArrow = () => {
+    setArrowVisible(false);
+    setTimeout(() => setShowArrow(false), 500);
   };
 
   const handleScroll = () => {
     if (!scrollRef.current) return;
     const { scrollTop } = scrollRef.current;
-    if (scrollTop > 60) setShowArrow(false);
+    if (scrollTop > 60 && arrowVisible) hideArrow();
   };
 
   if (!template) return null;
@@ -240,7 +248,7 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { setShowArrow(false); onOpenChange(v); }}>
+    <Dialog open={open} onOpenChange={(v) => { setShowArrow(false); setArrowVisible(false); onOpenChange(v); }}>
       <DialogContent
         ref={scrollRef}
         onScroll={handleScroll}
@@ -267,7 +275,7 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
         {/* Scroll hint arrow */}
         {showArrow && (
           <div
-            className="fixed bottom-10 inset-x-0 z-[60] pointer-events-none animate-bounce flex items-center justify-center"
+            className={`fixed bottom-10 inset-x-0 z-[60] pointer-events-none flex items-center justify-center transition-opacity duration-500 ${arrowVisible ? 'opacity-100 animate-bounce' : 'opacity-0'}`}
             style={{ animationDuration: "1.8s" }}
           >
             <div className="rounded-full bg-foreground/70 p-2 shadow-lg">
