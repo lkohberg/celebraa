@@ -194,12 +194,21 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
 const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   const navigate = useNavigate();
   const { t, locale } = useTranslation();
-  const [showArrow, setShowArrow] = useState(true);
+  const [showArrow, setShowArrow] = useState(false);
+  const [introFinished, setIntroFinished] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (open) setShowArrow(true);
+    if (open) {
+      setShowArrow(false);
+      setIntroFinished(false);
+    }
   }, [open]);
+
+  const handleIntroComplete = () => {
+    setIntroFinished(true);
+    setShowArrow(true);
+  };
 
   const handleScroll = () => {
     if (!scrollRef.current) return;
@@ -222,16 +231,16 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   const renderPreview = () => {
     switch (template.eventType) {
       case "wedding":
-        return <PremiumWeddingPage event={demoEvent} theme={theme} lang={demoLang} isDemo />;
+        return <PremiumWeddingPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
       case "birthday":
-        return <PremiumBirthdayPage event={demoEvent} theme={theme} lang={demoLang} isDemo />;
+        return <PremiumBirthdayPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
       case "corporate":
-        return <PremiumCorporatePage event={demoEvent} theme={theme} lang={demoLang} isDemo />;
+        return <PremiumCorporatePage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { setShowArrow(true); onOpenChange(v); }}>
+    <Dialog open={open} onOpenChange={(v) => { setShowArrow(false); onOpenChange(v); }}>
       <DialogContent
         ref={scrollRef}
         onScroll={handleScroll}
@@ -258,12 +267,10 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
         {/* Scroll hint arrow */}
         {showArrow && (
           <div
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] pointer-events-none animate-bounce"
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] pointer-events-none animate-bounce flex items-center justify-center"
             style={{ animationDuration: "1.8s" }}
           >
-            <div className="bg-background/70 backdrop-blur-sm rounded-full p-2 shadow-md border border-border/40">
-              <ChevronDown className="w-5 h-5 text-muted-foreground" />
-            </div>
+            <ChevronDown className="w-6 h-6 text-muted-foreground drop-shadow-md" />
           </div>
         )}
       </DialogContent>
