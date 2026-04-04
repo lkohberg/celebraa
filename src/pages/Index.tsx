@@ -119,27 +119,27 @@ const Index = () => {
       <EcoSection />
 
       {/* Template Selection */}
-      <section id="templates" className="py-24">
-        <div className="container mx-auto px-6">
+      <section id="templates" className="py-14 sm:py-24">
+        <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-12"
           >
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 sm:mb-4">
               {t("templates.title")}
             </h2>
-            <p className="font-body text-muted-foreground text-lg max-w-md mx-auto">
+            <p className="font-body text-muted-foreground text-base sm:text-lg max-w-md mx-auto">
               {t("templates.subtitle")}
             </p>
           </motion.div>
 
           <Tabs defaultValue="birthday" className="max-w-5xl mx-auto">
-            <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto mb-10">
+            <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto mb-6 sm:mb-10">
               {eventTypes.map((type) => (
-                <TabsTrigger key={type.value} value={type.value} className="font-body">
+                <TabsTrigger key={type.value} value={type.value} className="font-body text-xs sm:text-sm">
                   {type.label}
                 </TabsTrigger>
               ))}
@@ -147,7 +147,7 @@ const Index = () => {
 
             {eventTypes.map((type) => (
               <TabsContent key={type.value} value={type.value}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {templates
                     .filter((tpl) => tpl.eventType === type.value)
                     .map((template) => (
