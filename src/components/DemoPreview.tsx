@@ -248,7 +248,7 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { setShowArrow(false); onOpenChange(v); }}>
+    <Dialog open={open} onOpenChange={(v) => { setShowArrow(false); setArrowVisible(false); onOpenChange(v); }}>
       <DialogContent
         ref={scrollRef}
         onScroll={handleScroll}
