@@ -195,6 +195,7 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   const navigate = useNavigate();
   const { t, locale } = useTranslation();
   const [showArrow, setShowArrow] = useState(false);
+  const [arrowVisible, setArrowVisible] = useState(false);
   const [introFinished, setIntroFinished] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
