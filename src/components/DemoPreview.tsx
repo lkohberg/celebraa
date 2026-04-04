@@ -267,12 +267,10 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
         {/* Scroll hint arrow */}
         {showArrow && (
           <div
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] pointer-events-none animate-bounce"
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] pointer-events-none animate-bounce flex items-center justify-center"
             style={{ animationDuration: "1.8s" }}
           >
-            <div className="bg-background/70 backdrop-blur-sm rounded-full p-2 shadow-md border border-border/40">
-              <ChevronDown className="w-5 h-5 text-muted-foreground" />
-            </div>
+            <ChevronDown className="w-6 h-6 text-muted-foreground drop-shadow-md" />
           </div>
         )}
       </DialogContent>
