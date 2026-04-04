@@ -194,12 +194,21 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
 const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   const navigate = useNavigate();
   const { t, locale } = useTranslation();
-  const [showArrow, setShowArrow] = useState(true);
+  const [showArrow, setShowArrow] = useState(false);
+  const [introFinished, setIntroFinished] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (open) setShowArrow(true);
+    if (open) {
+      setShowArrow(false);
+      setIntroFinished(false);
+    }
   }, [open]);
+
+  const handleIntroComplete = () => {
+    setIntroFinished(true);
+    setShowArrow(true);
+  };
 
   const handleScroll = () => {
     if (!scrollRef.current) return;
