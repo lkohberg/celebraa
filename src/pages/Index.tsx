@@ -119,19 +119,19 @@ const Index = () => {
       <EcoSection />
 
       {/* Template Selection */}
-      <section id="templates" className="py-24">
-        <div className="container mx-auto px-6">
+      <section id="templates" className="py-14 sm:py-24">
+        <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-12"
           >
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 sm:mb-4">
               {t("templates.title")}
             </h2>
-            <p className="font-body text-muted-foreground text-lg max-w-md mx-auto">
+            <p className="font-body text-muted-foreground text-base sm:text-lg max-w-md mx-auto">
               {t("templates.subtitle")}
             </p>
           </motion.div>
