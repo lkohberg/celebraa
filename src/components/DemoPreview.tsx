@@ -202,6 +202,7 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   useEffect(() => {
     if (open) {
       setShowArrow(false);
+      setArrowVisible(false);
       setIntroFinished(false);
     }
   }, [open]);
@@ -209,12 +210,18 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
   const handleIntroComplete = () => {
     setIntroFinished(true);
     setShowArrow(true);
+    setArrowVisible(true);
+  };
+
+  const hideArrow = () => {
+    setArrowVisible(false);
+    setTimeout(() => setShowArrow(false), 500);
   };
 
   const handleScroll = () => {
     if (!scrollRef.current) return;
     const { scrollTop } = scrollRef.current;
-    if (scrollTop > 60) setShowArrow(false);
+    if (scrollTop > 60 && arrowVisible) hideArrow();
   };
 
   if (!template) return null;
