@@ -137,9 +137,9 @@ const Index = () => {
           </motion.div>
 
           <Tabs defaultValue="birthday" className="max-w-5xl mx-auto">
-            <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto mb-10">
+            <TabsList className="grid grid-cols-3 w-full max-w-md mx-auto mb-6 sm:mb-10">
               {eventTypes.map((type) => (
-                <TabsTrigger key={type.value} value={type.value} className="font-body">
+                <TabsTrigger key={type.value} value={type.value} className="font-body text-xs sm:text-sm">
                   {type.label}
                 </TabsTrigger>
               ))}
@@ -147,7 +147,7 @@ const Index = () => {
 
             {eventTypes.map((type) => (
               <TabsContent key={type.value} value={type.value}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {templates
                     .filter((tpl) => tpl.eventType === type.value)
                     .map((template) => (
