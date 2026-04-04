@@ -275,7 +275,7 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
         {/* Scroll hint arrow */}
         {showArrow && (
           <div
-            className="fixed bottom-10 inset-x-0 z-[60] pointer-events-none animate-bounce flex items-center justify-center"
+            className={`fixed bottom-10 inset-x-0 z-[60] pointer-events-none flex items-center justify-center transition-opacity duration-500 ${arrowVisible ? 'opacity-100 animate-bounce' : 'opacity-0'}`}
             style={{ animationDuration: "1.8s" }}
           >
             <div className="rounded-full bg-foreground/70 p-2 shadow-lg">
