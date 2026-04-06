@@ -1,6 +1,6 @@
 import { useRef, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Video, Mic } from "lucide-react";
+import { Video, Mic, Heart, MessageCircle } from "lucide-react";
 import { type EventLang, getEventLabel } from "@/i18n/eventLabels";
 import { colorWithAlpha } from "@/lib/color-utils";
 
@@ -31,8 +31,6 @@ const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "weddin
     ? getEventLabel(lang, isCorporate ? "promoVideoSub" : "personalMessageSub")
     : (isCorporate ? "Ein Video oder eine Nachricht für Sie" : "Eine Nachricht an euch");
 
-  if (!mediaUrl) return null;
-
   return (
     <section className="py-20 relative overflow-hidden bg-card">
       <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: `radial-gradient(${color} 1px, transparent 1px)`, backgroundSize: "24px 24px" }} />
@@ -52,30 +50,51 @@ const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "weddin
           <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{label}</h2>
           <p className="font-body text-sm text-muted-foreground mb-8">{subtitle}</p>
 
-          {mediaType === "audio" ? (
-            <div className="bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30 p-6">
-              <audio controls className="w-full" src={mediaUrl}
-                onPlay={() => duckBgMusic(true)}
-                onPause={() => duckBgMusic(false)}
-                onEnded={() => duckBgMusic(false)}
-              >
-                Your browser does not support audio playback.
-              </audio>
-            </div>
+          {mediaUrl ? (
+            mediaType === "audio" ? (
+              <div className="bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30 p-6">
+                <audio controls className="w-full" src={mediaUrl}
+                  onPlay={() => duckBgMusic(true)}
+                  onPause={() => duckBgMusic(false)}
+                  onEnded={() => duckBgMusic(false)}
+                >
+                  Your browser does not support audio playback.
+                </audio>
+              </div>
+            ) : (
+              <div className="rounded-2xl overflow-hidden border border-border/30 shadow-sm">
+                <video
+                  controls
+                  className="w-full"
+                  src={mediaUrl}
+                  preload="metadata"
+                  playsInline
+                  onPlay={() => duckBgMusic(true)}
+                  onPause={() => duckBgMusic(false)}
+                  onEnded={() => duckBgMusic(false)}
+                >
+                  Your browser does not support video playback.
+                </video>
+              </div>
+            )
           ) : (
+            /* Placeholder when no media uploaded yet */
             <div className="rounded-2xl overflow-hidden border border-border/30 shadow-sm">
-              <video
-                controls
-                className="w-full"
-                src={mediaUrl}
-                preload="metadata"
-                playsInline
-                onPlay={() => duckBgMusic(true)}
-                onPause={() => duckBgMusic(false)}
-                onEnded={() => duckBgMusic(false)}
-              >
-                Your browser does not support video playback.
-              </video>
+              <div className="aspect-video bg-gradient-to-br from-secondary via-card to-secondary flex items-center justify-center relative">
+                <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(${color} 1px, transparent 1px)`, backgroundSize: "16px 16px" }} />
+                <div className="text-center relative">
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(color, 0.1) }}>
+                    {isCorporate ? (
+                      <Video className="w-8 h-8" style={{ color, opacity: 0.5 }} />
+                    ) : (
+                      <Heart className="w-8 h-8" style={{ color, opacity: 0.5 }} />
+                    )}
+                  </div>
+                  <p className="font-body text-sm text-muted-foreground">
+                    {lang ? getEventLabel(lang, "messagePlaceholder") : "Wird bald verfügbar sein"}
+                  </p>
+                </div>
+              </div>
             </div>
           )}
         </motion.div>
