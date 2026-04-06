@@ -223,6 +223,7 @@ const de = {
   "event.minutes": "Minuten",
   "event.seconds": "Sekunden",
   "event.ourStory": "Unsere Geschichte",
+  "event.slideshow": "Unsere Momente",
   "event.details": "Veranstaltungsdetails",
   "event.ceremony": "Trauung",
   "event.schedule": "Zeitplan",
