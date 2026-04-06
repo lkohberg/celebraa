@@ -85,6 +85,12 @@ const getDemoEvent = (template: Template, t: (key: string) => string) => {
           { name: t("demo.wedding.wishlist.2.name"), hint: t("demo.wedding.wishlist.2.hint"), url: "https://example.com" },
           { name: t("demo.wedding.wishlist.3.name"), hint: t("demo.wedding.wishlist.3.hint") },
         ],
+        slideshow_urls: [
+          "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80",
+          "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800&q=80",
+          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80",
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80",
+        ],
       },
     };
   }
