@@ -187,9 +187,6 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
                   <h3 className="text-xl mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{el?.ceremony || t("event.ceremony")}</h3>
                   <p className="text-sm font-medium mb-1">{event.ceremony_location || event.location_name || "—"}</p>
                   <p className="text-sm" style={{ color: "hsl(30, 10%, 50%)" }}>{event.ceremony_address || event.address || ""}</p>
-                  {event.event_time && (
-                    <p className="text-xs tracking-widest uppercase mt-4" style={{ color: accent }}>{event.event_time}</p>
-                  )}
                 </motion.div>
                 <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
                   className="text-center p-8 relative"
@@ -199,9 +196,6 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
                   <h3 className="text-xl mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{el?.reception || t("event.reception")}</h3>
                   <p className="text-sm font-medium mb-1">{event.reception_location || event.location_name || "—"}</p>
                   <p className="text-sm" style={{ color: "hsl(30, 10%, 50%)" }}>{event.reception_address || event.address || ""}</p>
-                  {event.event_time && (
-                    <p className="text-xs tracking-widest uppercase mt-4" style={{ color: accent }}>{event.event_time}</p>
-                  )}
                 </motion.div>
               </div>
               {event.children_welcome !== null && event.children_welcome !== undefined && (
