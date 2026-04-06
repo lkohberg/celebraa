@@ -4,6 +4,7 @@ import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 import { useGuestName } from "@/hooks/useGuestName";
+import { colorWithAlpha } from "@/lib/color-utils";
 
 interface RsvpFormProps {
   eventId: string;
@@ -12,9 +13,10 @@ interface RsvpFormProps {
   variant?: "wedding" | "birthday" | "corporate";
   lang?: EventLang;
   maxCompanions?: number;
+  accentColor?: string;
 }
 
-const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", lang, maxCompanions = 5 }: RsvpFormProps) => {
+const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", lang, maxCompanions = 5, accentColor }: RsvpFormProps) => {
   const { t } = useTranslation();
   const labels = lang ? getEventLabels(lang) : null;
   const submitRsvp = useSubmitRsvp();
@@ -22,7 +24,6 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
   const [name, setName] = useState(sharedName || "");
   const [nameEditedLocally, setNameEditedLocally] = useState(false);
 
-  // Sync shared name into local state when it changes externally (e.g. from vote)
   useEffect(() => {
     if (sharedName && !nameEditedLocally) {
       setName(sharedName);
@@ -35,11 +36,11 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
   const [message, setMessage] = useState("");
   const [menuChoice, setMenuChoice] = useState("");
 
-  const primaryColor = variant === "wedding"
+  const primaryColor = accentColor || (variant === "wedding"
     ? "hsl(150, 18%, 38%)"
     : variant === "birthday"
     ? "hsl(340, 65%, 50%)"
-    : "hsl(220, 50%, 35%)";
+    : "hsl(220, 50%, 35%)");
 
   const handleCompanionCountChange = (value: number) => {
     const clamped = Math.max(0, Math.min(value, maxCompanions));
@@ -85,9 +86,12 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
   };
 
   const inputClass =
-    "w-full px-4 py-3 font-body text-base bg-card border border-border rounded-md text-foreground focus:outline-none focus:border-primary transition-colors";
+    "w-full px-4 py-3 font-body text-base bg-card border border-border rounded-lg text-foreground focus:outline-none transition-colors";
 
   const companionLabel = labels?.companions || t("event.companions") || "Begleitpersonen";
+
+  const softBg = colorWithAlpha(primaryColor, 0.04);
+  const focusBorder = colorWithAlpha(primaryColor, 0.5);
 
   return (
     <section className="py-24" style={{ backgroundColor: "hsl(30, 33%, 96%)" }}>
@@ -104,7 +108,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
           )}
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <input
             type="text"
             placeholder={labels?.name || t("event.name")}
@@ -112,6 +116,9 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
             onChange={(e) => { setName(e.target.value); setSharedName(e.target.value); setNameEditedLocally(true); }}
             required
             className={inputClass}
+            style={{ borderColor: "hsl(30, 20%, 88%)" }}
+            onFocus={(e) => e.currentTarget.style.borderColor = focusBorder}
+            onBlur={(e) => e.currentTarget.style.borderColor = "hsl(30, 20%, 88%)"}
           />
           <input
             type="email"
@@ -119,6 +126,9 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className={inputClass}
+            style={{ borderColor: "hsl(30, 20%, 88%)" }}
+            onFocus={(e) => e.currentTarget.style.borderColor = focusBorder}
+            onBlur={(e) => e.currentTarget.style.borderColor = "hsl(30, 20%, 88%)"}
           />
 
           {/* Attendance buttons */}
@@ -126,11 +136,11 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
             <button
               type="button"
               onClick={() => setAttendance("accepted")}
-              className="flex-1 py-3 px-4 font-body text-sm rounded-md border transition-all"
+              className="flex-1 py-3 px-4 font-body text-sm rounded-lg border-2 transition-all duration-200"
               style={
                 attendance === "accepted"
-                  ? { backgroundColor: primaryColor, color: "white", borderColor: primaryColor }
-                  : { backgroundColor: "hsl(30, 30%, 98%)", borderColor: "hsl(30, 20%, 88%)" }
+                  ? { backgroundColor: primaryColor, color: "white", borderColor: primaryColor, boxShadow: `0 4px 14px ${colorWithAlpha(primaryColor, 0.3)}` }
+                  : { backgroundColor: "hsl(30, 30%, 98%)", borderColor: "hsl(30, 20%, 88%)", color: "hsl(30, 10%, 40%)" }
               }
             >
               {labels?.attending || t("event.attending")}
@@ -138,11 +148,11 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
             <button
               type="button"
               onClick={() => setAttendance("declined")}
-              className="flex-1 py-3 px-4 font-body text-sm rounded-md border transition-all"
+              className="flex-1 py-3 px-4 font-body text-sm rounded-lg border-2 transition-all duration-200"
               style={
                 attendance === "declined"
-                  ? { backgroundColor: primaryColor, color: "white", borderColor: primaryColor }
-                  : { backgroundColor: "hsl(30, 30%, 98%)", borderColor: "hsl(30, 20%, 88%)" }
+                  ? { backgroundColor: primaryColor, color: "white", borderColor: primaryColor, boxShadow: `0 4px 14px ${colorWithAlpha(primaryColor, 0.3)}` }
+                  : { backgroundColor: "hsl(30, 30%, 98%)", borderColor: "hsl(30, 20%, 88%)", color: "hsl(30, 10%, 40%)" }
               }
             >
               {labels?.notAttending || t("event.notAttending")}
@@ -151,7 +161,6 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
 
           {attendance === "accepted" && (
             <>
-              {/* Companion count */}
               <div>
                 <label className="block font-body text-sm text-foreground mb-2">
                   {companionLabel} {maxCompanions > 0 && <span className="text-muted-foreground">(max. {maxCompanions})</span>}
@@ -163,10 +172,10 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
                   value={companionCount}
                   onChange={(e) => handleCompanionCountChange(parseInt(e.target.value) || 0)}
                   className={inputClass + " w-24"}
+                  style={{ borderColor: "hsl(30, 20%, 88%)" }}
                 />
               </div>
 
-              {/* Companion name fields */}
               {companionCount > 0 && (
                 <div className="space-y-3">
                   {Array.from({ length: companionCount }).map((_, i) => (
@@ -181,6 +190,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
                         setCompanionNames(updated);
                       }}
                       className={inputClass}
+                      style={{ borderColor: "hsl(30, 20%, 88%)" }}
                     />
                   ))}
                 </div>
@@ -195,6 +205,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
                     value={menuChoice}
                     onChange={(e) => setMenuChoice(e.target.value)}
                     className={inputClass}
+                    style={{ borderColor: "hsl(30, 20%, 88%)" }}
                   >
                     <option value="">{labels?.standard || t("event.dietary.standard")}</option>
                     <option value="vegetarian">{labels?.vegetarian || t("event.dietary.vegetarian")}</option>
@@ -213,13 +224,14 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
             onChange={(e) => setMessage(e.target.value)}
             rows={3}
             className={inputClass + " resize-y min-h-[80px]"}
+            style={{ borderColor: "hsl(30, 20%, 88%)" }}
           />
 
           <button
             type="submit"
             disabled={submitRsvp.isPending}
-            className="w-full py-4 font-body text-sm tracking-[0.15em] uppercase text-white rounded-md transition-opacity hover:opacity-90 disabled:opacity-50"
-            style={{ backgroundColor: primaryColor }}
+            className="w-full py-4 font-body text-sm tracking-[0.15em] uppercase text-white rounded-lg transition-all duration-200 hover:opacity-90 disabled:opacity-50"
+            style={{ backgroundColor: primaryColor, boxShadow: `0 4px 14px ${colorWithAlpha(primaryColor, 0.25)}` }}
           >
             {submitRsvp.isPending ? "..." : (labels?.submit || t("event.submit"))}
           </button>
