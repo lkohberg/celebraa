@@ -9,6 +9,9 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 
 // Lazy-load heavy premium templates – only the needed one gets downloaded
+const WeddingFloralPage = lazy(() => import("@/components/premium-templates/WeddingFloralPage"));
+const WeddingClassicPage = lazy(() => import("@/components/premium-templates/WeddingClassicPage"));
+const WeddingModernPage = lazy(() => import("@/components/premium-templates/WeddingModernPage"));
 const PremiumWeddingPage = lazy(() => import("@/components/premium-templates/PremiumWeddingPage"));
 const PremiumBirthdayPage = lazy(() => import("@/components/premium-templates/PremiumBirthdayPage"));
 const PremiumCorporatePage = lazy(() => import("@/components/premium-templates/PremiumCorporatePage"));
@@ -125,7 +128,13 @@ const EventPage = () => {
     let PremiumComponent: React.LazyExoticComponent<React.ComponentType<any>> | null = null;
 
     if (templateId.includes("wedding") || templateId.startsWith("wedding")) {
-      PremiumComponent = PremiumWeddingPage;
+      if (templateId.includes("classic")) {
+        PremiumComponent = WeddingClassicPage;
+      } else if (templateId.includes("modern")) {
+        PremiumComponent = WeddingModernPage;
+      } else {
+        PremiumComponent = WeddingFloralPage;
+      }
     } else if (templateId.includes("birthday") || templateId.startsWith("birthday")) {
       PremiumComponent = PremiumBirthdayPage;
     } else if (templateId.includes("corporate") || templateId.startsWith("corporate")) {
