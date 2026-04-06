@@ -1,8 +1,9 @@
 import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Camera, ImageIcon } from "lucide-react";
 import { useTranslation } from "@/i18n";
-import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
+import { type EventLang, getEventLabels, getEventLabel } from "@/i18n/eventLabels";
+import { colorWithAlpha } from "@/lib/color-utils";
 
 interface SlideshowSectionProps {
   accentColor?: string;
@@ -21,8 +22,6 @@ const SlideshowSection = ({ accentColor = "hsl(150, 18%, 38%)", lang, blockConfi
   const next = useCallback(() => setCurrent(i => (i + 1) % urls.length), [urls.length]);
   const prev = useCallback(() => setCurrent(i => (i - 1 + urls.length) % urls.length), [urls.length]);
 
-  if (!urls.length) return null;
-
   const handleDragEnd = (_: any, info: PanInfo) => {
     if (info.offset.x < -60) next();
     else if (info.offset.x > 60) prev();
@@ -39,65 +38,99 @@ const SlideshowSection = ({ accentColor = "hsl(150, 18%, 38%)", lang, blockConfi
             <div className="w-12 h-px mx-auto" style={{ backgroundColor: accentColor, opacity: 0.3 }} />
           </div>
 
-          <div className="relative" ref={containerRef}>
-            <div className="overflow-hidden rounded-2xl shadow-md aspect-[16/10]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={current}
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -50 }}
-                  transition={{ duration: 0.35 }}
-                  drag="x"
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.15}
-                  onDragEnd={handleDragEnd}
-                  className="w-full h-full cursor-grab active:cursor-grabbing"
-                  onClick={() => setLightboxIndex(current)}
-                >
-                  <img
-                    src={urls[current]}
-                    alt=""
-                    className="w-full h-full object-cover select-none pointer-events-none"
-                    draggable={false}
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {urls.length > 1 && (
-              <>
-                <button
-                  onClick={prev}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-card/70 backdrop-blur-sm border border-border/30 flex items-center justify-center shadow-sm hover:bg-card transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4 text-foreground" />
-                </button>
-                <button
-                  onClick={next}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-card/70 backdrop-blur-sm border border-border/30 flex items-center justify-center shadow-sm hover:bg-card transition-colors"
-                >
-                  <ChevronRight className="w-4 h-4 text-foreground" />
-                </button>
-              </>
-            )}
-
-            {urls.length > 1 && (
-              <div className="flex justify-center gap-2 mt-5">
-                {urls.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setCurrent(i)}
-                    className="w-2 h-2 rounded-full transition-all duration-300"
-                    style={{
-                      backgroundColor: i === current ? accentColor : "hsl(30, 15%, 80%)",
-                      transform: i === current ? "scale(1.4)" : "scale(1)",
-                    }}
-                  />
-                ))}
+          {urls.length > 0 ? (
+            <div className="relative" ref={containerRef}>
+              <div className="overflow-hidden rounded-2xl shadow-md aspect-[16/10]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={current}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    transition={{ duration: 0.35 }}
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.15}
+                    onDragEnd={handleDragEnd}
+                    className="w-full h-full cursor-grab active:cursor-grabbing"
+                    onClick={() => setLightboxIndex(current)}
+                  >
+                    <img
+                      src={urls[current]}
+                      alt=""
+                      className="w-full h-full object-cover select-none pointer-events-none"
+                      draggable={false}
+                    />
+                  </motion.div>
+                </AnimatePresence>
               </div>
-            )}
-          </div>
+
+              {urls.length > 1 && (
+                <>
+                  <button
+                    onClick={prev}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-card/70 backdrop-blur-sm border border-border/30 flex items-center justify-center shadow-sm hover:bg-card transition-colors"
+                  >
+                    <ChevronLeft className="w-4 h-4 text-foreground" />
+                  </button>
+                  <button
+                    onClick={next}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-card/70 backdrop-blur-sm border border-border/30 flex items-center justify-center shadow-sm hover:bg-card transition-colors"
+                  >
+                    <ChevronRight className="w-4 h-4 text-foreground" />
+                  </button>
+                </>
+              )}
+
+              {urls.length > 1 && (
+                <div className="flex justify-center gap-2 mt-5">
+                  {urls.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrent(i)}
+                      className="w-2 h-2 rounded-full transition-all duration-300"
+                      style={{
+                        backgroundColor: i === current ? accentColor : "hsl(30, 15%, 80%)",
+                        transform: i === current ? "scale(1.4)" : "scale(1)",
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            /* Placeholder when no photos uploaded yet */
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="rounded-2xl overflow-hidden shadow-md"
+            >
+              <div className="aspect-[16/10] bg-gradient-to-br from-secondary via-card to-secondary flex items-center justify-center relative">
+                <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(${accentColor} 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
+                <div className="text-center relative">
+                  <div className="flex items-center justify-center gap-4 mb-6">
+                    {[Camera, ImageIcon, Camera].map((Icon, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.15 }}
+                        className="w-14 h-14 rounded-xl flex items-center justify-center"
+                        style={{ backgroundColor: colorWithAlpha(accentColor, 0.08 + i * 0.04) }}
+                      >
+                        <Icon className="w-6 h-6" style={{ color: accentColor, opacity: 0.4 + i * 0.1 }} />
+                      </motion.div>
+                    ))}
+                  </div>
+                  <p className="font-body text-sm text-muted-foreground">
+                    {lang ? getEventLabel(lang, "slideshowPlaceholder") : "Fotos werden bald hinzugefügt"}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </div>
       </section>
 
