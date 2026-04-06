@@ -14,7 +14,7 @@ interface SlideshowSectionProps {
 const SlideshowSection = ({ accentColor = "hsl(150, 18%, 38%)", lang, blockConfig }: SlideshowSectionProps) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
-  const urls: string[] = blockConfig?.slideshow_urls || blockConfig?.slideshow_images || [];
+  const urls: string[] = blockConfig?.slideshow_urls || [];
   const [current, setCurrent] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
