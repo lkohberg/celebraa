@@ -212,11 +212,6 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
                   <h3 className="font-display text-xl text-foreground mb-3">{el?.ceremony || t("event.ceremony")}</h3>
                   <p className="font-body text-sm font-medium text-foreground mb-1">{event.ceremony_location || event.location_name || "—"}</p>
                   <p className="font-body text-sm text-muted-foreground">{event.ceremony_address || event.address || ""}</p>
-                  {event.event_time && (
-                    <div className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: colorWithAlpha(accent, 0.1), color: accent }}>
-                      <Clock className="w-3 h-3" />{event.event_time}
-                    </div>
-                  )}
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-center p-8 bg-card/60 backdrop-blur-sm rounded-3xl border border-border/30 shadow-sm">
                   <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(softPink, 0.2) }}>
@@ -225,11 +220,6 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
                   <h3 className="font-display text-xl text-foreground mb-3">{el?.reception || t("event.reception")}</h3>
                   <p className="font-body text-sm font-medium text-foreground mb-1">{event.reception_location || event.location_name || "—"}</p>
                   <p className="font-body text-sm text-muted-foreground">{event.reception_address || event.address || ""}</p>
-                  {event.event_time && (
-                    <div className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: colorWithAlpha(softPink, 0.15), color: "hsl(10, 50%, 55%)" }}>
-                      <Clock className="w-3 h-3" />{event.event_time}
-                    </div>
-                  )}
                 </motion.div>
               </div>
               {event.children_welcome !== null && event.children_welcome !== undefined && (

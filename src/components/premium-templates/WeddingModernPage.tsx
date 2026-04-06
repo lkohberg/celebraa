@@ -198,7 +198,6 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
                   style={{ backgroundColor: bgWhite }}>
                   <div className="flex-shrink-0">
                     <p className="text-xs tracking-[0.3em] uppercase mb-1" style={{ color: accent }}>{el?.ceremony || t("event.ceremony")}</p>
-                    {event.event_time && <p className="text-3xl font-bold tracking-tight">{event.event_time}</p>}
                   </div>
                   <div className="hidden md:block w-px h-12 bg-border" />
                   <div>
@@ -212,7 +211,7 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
                   style={{ backgroundColor: bgWhite }}>
                   <div className="flex-shrink-0">
                     <p className="text-xs tracking-[0.3em] uppercase mb-1" style={{ color: accent }}>{el?.reception || t("event.reception")}</p>
-                    {event.event_time && <p className="text-3xl font-bold tracking-tight">{event.event_time}</p>}
+                    
                   </div>
                   <div className="hidden md:block w-px h-12 bg-border" />
                   <div>
