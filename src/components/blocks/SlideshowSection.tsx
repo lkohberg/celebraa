@@ -41,7 +41,7 @@ const SlideshowSection = ({ accentColor = "hsl(150, 18%, 38%)", lang, blockConfi
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-10">
             <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">
-              {el?.slideshow || t("event.slideshow")}
+              {el?.slideshow || "Unsere Momente"}
             </h2>
             <div className="w-12 h-px mx-auto" style={{ backgroundColor: accentColor, opacity: 0.3 }} />
           </div>
