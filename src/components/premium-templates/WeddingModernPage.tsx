@@ -90,25 +90,25 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
             ) : (
               <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, hsl(0 0% 15%) 0%, hsl(0 0% 5%) 100%)` }} />
             )}
-            <motion.div className="relative z-10 w-full px-6 md:px-16 pb-16 md:pb-24" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
-              <p className="text-xs tracking-[0.5em] uppercase mb-6 text-white/50">{el?.weMarry || t("event.weMarry")}</p>
+            <motion.div className="relative z-10 w-full px-5 md:px-16 pb-12 md:pb-24" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
+              <p className="text-[10px] md:text-xs tracking-[0.5em] uppercase mb-4 md:mb-6 text-white/50">{el?.weMarry || t("event.weMarry")}</p>
               {/* Oversized names – stacked, left-aligned */}
-              <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-bold leading-[0.85] tracking-tight text-white uppercase">
+              <h1 className="text-[2.75rem] md:text-8xl lg:text-[10rem] font-bold leading-[0.85] tracking-tight text-white uppercase">
                 {name1}
               </h1>
               {name2 && (
                 <>
-                  <span className="text-2xl md:text-4xl font-light tracking-[0.3em] text-white/40 block my-2 md:my-4">&</span>
-                  <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-bold leading-[0.85] tracking-tight text-white uppercase">
+                  <span className="text-xl md:text-4xl font-light tracking-[0.3em] text-white/40 block my-1 md:my-4">&</span>
+                  <h1 className="text-[2.75rem] md:text-8xl lg:text-[10rem] font-bold leading-[0.85] tracking-tight text-white uppercase">
                     {name2}
                   </h1>
                 </>
               )}
-              <div className="flex items-center gap-4 mt-8">
-                <div className="h-px flex-1 max-w-[120px]" style={{ backgroundColor: accent }} />
-                <p className="text-sm tracking-[0.2em] text-white/60">{formattedDate}</p>
+              <div className="flex items-center gap-3 md:gap-4 mt-5 md:mt-8">
+                <div className="h-px flex-1 max-w-[80px] md:max-w-[120px]" style={{ backgroundColor: accent }} />
+                <p className="text-xs md:text-sm tracking-[0.2em] text-white/60">{formattedDate}</p>
               </div>
-              {event.description && <p className="text-sm mt-4 text-white/40 max-w-md">{event.description}</p>}
+              {event.description && <p className="text-xs md:text-sm mt-3 md:mt-4 text-white/40 max-w-md">{event.description}</p>}
             </motion.div>
             <button className="absolute bottom-8 left-1/2 -translate-x-1/2" onClick={() => document.getElementById("countdown-modern")?.scrollIntoView({ behavior: "smooth" })}>
               <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 4, repeat: Infinity }}><ChevronDown className="w-6 h-6 text-white/40" /></motion.div>
@@ -118,12 +118,12 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
           {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} eventId={event.id} />}
 
           {/* Countdown – minimal, no decoration */}
-          <section id="countdown-modern" className="py-28" style={{ backgroundColor: bgWhite }}>
-            <div className="max-w-4xl mx-auto px-6 md:px-16">
-              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+          <section id="countdown-modern" className="py-14 md:py-28" style={{ backgroundColor: bgWhite }}>
+            <div className="max-w-4xl mx-auto px-5 md:px-16">
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-6 mb-8 md:mb-12">
                 <div>
                   <p className="text-xs tracking-[0.3em] uppercase mb-2" style={{ color: accent }}>{el?.countdown || t("event.countdown")}</p>
-                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight">{el?.countdownSub || t("event.countdownSub")}</h2>
+                  <h2 className="text-2xl md:text-4xl font-bold tracking-tight">{el?.countdownSub || t("event.countdownSub")}</h2>
                 </div>
                 <div className="h-px flex-1 max-w-[200px] hidden md:block" style={{ backgroundColor: "hsl(0,0%,85%)" }} />
               </div>
@@ -135,13 +135,13 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
 
           {/* Story – left-aligned, with a thick accent bar */}
           {event.story_text && (
-            <section className="py-28" style={{ backgroundColor: bgOff }}>
-              <div className="max-w-4xl mx-auto px-6 md:px-16">
+            <section className="py-14 md:py-28" style={{ backgroundColor: bgOff }}>
+              <div className="max-w-4xl mx-auto px-5 md:px-16">
                 <div className="md:grid md:grid-cols-[auto_1fr] md:gap-12">
                   <div className="hidden md:block w-1 self-stretch rounded-full" style={{ backgroundColor: accent }} />
                   <div>
-                    <p className="text-xs tracking-[0.3em] uppercase mb-3" style={{ color: accent }}>{el?.ourStory || t("event.ourStory")}</p>
-                    <p className="text-lg md:text-xl leading-relaxed whitespace-pre-line" style={{ color: "hsl(0, 0%, 35%)" }}>{event.story_text}</p>
+                    <p className="text-xs tracking-[0.3em] uppercase mb-2 md:mb-3" style={{ color: accent }}>{el?.ourStory || t("event.ourStory")}</p>
+                    <p className="text-base md:text-xl leading-relaxed whitespace-pre-line" style={{ color: "hsl(0, 0%, 35%)" }}>{event.story_text}</p>
                   </div>
                 </div>
               </div>
@@ -155,9 +155,9 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
           {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
             <>
               <DiagonalCut from={bgOff} to={bgWhite} />
-              <section className="py-24" style={{ backgroundColor: bgWhite }}>
-                <div className="max-w-4xl mx-auto px-6 md:px-16">
-                  <p className="text-xs tracking-[0.3em] uppercase mb-8" style={{ color: accent }}>{el?.timeline || t("event.timeline")}</p>
+              <section className="py-14 md:py-24" style={{ backgroundColor: bgWhite }}>
+                <div className="max-w-4xl mx-auto px-5 md:px-16">
+                  <p className="text-xs tracking-[0.3em] uppercase mb-6 md:mb-8" style={{ color: accent }}>{el?.timeline || t("event.timeline")}</p>
                   {/* Horizontal on desktop */}
                   <div className="hidden md:block">
                     <div className="relative">
@@ -188,9 +188,9 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
           <DiagonalCut from={bgWhite} to={bgOff} />
 
           {/* Details – stacked full-width cards */}
-          <section className="py-28" style={{ backgroundColor: bgOff }}>
-            <div className="max-w-4xl mx-auto px-6 md:px-16">
-              <p className="text-xs tracking-[0.3em] uppercase mb-10" style={{ color: accent }}>{el?.details || t("event.details")}</p>
+          <section className="py-14 md:py-28" style={{ backgroundColor: bgOff }}>
+            <div className="max-w-4xl mx-auto px-5 md:px-16">
+              <p className="text-xs tracking-[0.3em] uppercase mb-6 md:mb-10" style={{ color: accent }}>{el?.details || t("event.details")}</p>
               <div className="space-y-6">
                 {/* Ceremony */}
                 <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
@@ -244,13 +244,13 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
           {event.rsvp_enabled && <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="wedding" lang={lang} maxCompanions={maxCompanions} />}
 
           {/* Footer – bold and minimal */}
-          <footer className="py-32 relative" style={{ backgroundColor: bgDark }}>
-            <div className="max-w-4xl mx-auto px-6 md:px-16 text-white">
-              <h2 className="text-5xl md:text-7xl font-bold tracking-tight uppercase leading-none">{name1}</h2>
+          <footer className="py-16 md:py-32 relative" style={{ backgroundColor: bgDark }}>
+            <div className="max-w-4xl mx-auto px-5 md:px-16 text-white">
+              <h2 className="text-3xl md:text-7xl font-bold tracking-tight uppercase leading-none">{name1}</h2>
               {name2 && (
                 <>
                   <span className="text-xl font-light tracking-[0.3em] text-white/30 block my-3">&</span>
-                  <h2 className="text-5xl md:text-7xl font-bold tracking-tight uppercase leading-none">{name2}</h2>
+                  <h2 className="text-3xl md:text-7xl font-bold tracking-tight uppercase leading-none">{name2}</h2>
                 </>
               )}
               <div className="flex items-center gap-4 mt-8 mb-10">

@@ -129,11 +129,11 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
             )}
             <BotanicalFrame color={event.hero_image_url ? "rgba(255,255,255,0.6)" : accent} />
             <motion.div className="relative z-10 text-center px-4" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
-              <p className="font-body text-sm tracking-[0.3em] uppercase mb-4" style={{ color: event.hero_image_url ? "rgba(255,255,255,0.8)" : "hsl(30, 8%, 50%)" }}>{el?.weMarry || t("event.weMarry")}</p>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl mb-6" style={{ fontFamily: "'Great Vibes', cursive", color: event.hero_image_url ? "white" : "hsl(30, 10%, 25%)", lineHeight: 1.2 }}>{names}</h1>
+              <p className="font-body text-xs md:text-sm tracking-[0.3em] uppercase mb-3 md:mb-4" style={{ color: event.hero_image_url ? "rgba(255,255,255,0.8)" : "hsl(30, 8%, 50%)" }}>{el?.weMarry || t("event.weMarry")}</p>
+              <h1 className="text-4xl md:text-7xl lg:text-8xl mb-4 md:mb-6" style={{ fontFamily: "'Great Vibes', cursive", color: event.hero_image_url ? "white" : "hsl(30, 10%, 25%)", lineHeight: 1.2 }}>{names}</h1>
               <FloralDivider color={event.hero_image_url ? "rgba(255,255,255,0.5)" : "hsl(30, 20%, 70%)"} />
-              <p className="text-xl md:text-2xl italic mt-4" style={{ fontFamily: "var(--font-display)", color: event.hero_image_url ? "rgba(255,255,255,0.9)" : "hsl(30, 10%, 35%)" }}>{formattedDate}</p>
-              {event.description && <p className="font-body text-sm mt-3 tracking-[0.15em] uppercase" style={{ color: event.hero_image_url ? "rgba(255,255,255,0.7)" : "hsl(30, 8%, 50%)" }}>{event.description}</p>}
+              <p className="text-lg md:text-2xl italic mt-3 md:mt-4" style={{ fontFamily: "var(--font-display)", color: event.hero_image_url ? "rgba(255,255,255,0.9)" : "hsl(30, 10%, 35%)" }}>{formattedDate}</p>
+              {event.description && <p className="font-body text-xs md:text-sm mt-2 md:mt-3 tracking-[0.15em] uppercase" style={{ color: event.hero_image_url ? "rgba(255,255,255,0.7)" : "hsl(30, 8%, 50%)" }}>{event.description}</p>}
             </motion.div>
             <button className="absolute bottom-8 left-1/2 -translate-x-1/2" onClick={() => document.getElementById("countdown")?.scrollIntoView({ behavior: "smooth" })} style={{ color: event.hero_image_url ? "rgba(255,255,255,0.6)" : "hsl(30, 8%, 50%)" }}>
               <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 4, repeat: Infinity }}><ChevronDown className="w-6 h-6" /></motion.div>
@@ -145,13 +145,13 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
           <FloralWave from={event.hero_image_url ? "hsl(0,0%,15%)" : "hsl(340,30%,90%)"} to={bgLight} accent={accent} />
 
           {/* Countdown – centered with botanical card */}
-          <section id="countdown" className="py-24 relative overflow-hidden" style={{ backgroundColor: bgLight }}>
+          <section id="countdown" className="py-14 md:py-24 relative overflow-hidden" style={{ backgroundColor: bgLight }}>
             <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "30px 30px" }} />
             <div className="relative max-w-3xl mx-auto px-4 text-center">
-              <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">{el?.countdown || t("event.countdown")}</p>
-              <h2 className="font-display text-2xl md:text-3xl text-foreground mb-4">{el?.countdownSub || t("event.countdownSub")}</h2>
+              <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 md:mb-3">{el?.countdown || t("event.countdown")}</p>
+              <h2 className="font-display text-xl md:text-3xl text-foreground mb-3 md:mb-4">{el?.countdownSub || t("event.countdownSub")}</h2>
               <FloralDivider color={accent} />
-              <div className="mt-10">
+              <div className="mt-6 md:mt-10">
                 <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} variant="floral" accentColor={accent} />
               </div>
             </div>
@@ -161,14 +161,14 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
 
           {/* Story – centered with heart icon and blush background */}
           {event.story_text && (
-            <section className="py-28 relative overflow-hidden" style={{ backgroundColor: bgWarm }}>
+            <section className="py-16 md:py-28 relative overflow-hidden" style={{ backgroundColor: bgWarm }}>
               <div className="absolute top-0 left-0 w-72 h-72 rounded-full opacity-[0.04]" style={{ background: `radial-gradient(circle, ${softPink}, transparent)` }} />
               <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full opacity-[0.04]" style={{ background: `radial-gradient(circle, ${accent}, transparent)` }} />
               <div className="relative max-w-2xl mx-auto px-4 text-center">
-                <Heart className="w-6 h-6 mx-auto mb-4" style={{ color: softPink }} />
-                <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{el?.ourStory || t("event.ourStory")}</h2>
+                <Heart className="w-5 h-5 md:w-6 md:h-6 mx-auto mb-3 md:mb-4" style={{ color: softPink }} />
+                <h2 className="font-display text-xl md:text-3xl text-foreground mb-2">{el?.ourStory || t("event.ourStory")}</h2>
                 <FloralDivider color={softPink} />
-                <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line mt-8">{event.story_text}</p>
+                <p className="font-body text-base md:text-lg text-muted-foreground leading-relaxed whitespace-pre-line mt-5 md:mt-8">{event.story_text}</p>
               </div>
             </section>
           )}
@@ -179,11 +179,11 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
           {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
             <>
               <FloralWave from={bgLight} to={bgWarm} accent={accent} />
-              <section className="py-24 relative overflow-hidden" style={{ backgroundColor: bgWarm }}>
+              <section className="py-14 md:py-24 relative overflow-hidden" style={{ backgroundColor: bgWarm }}>
                 <div className="relative max-w-3xl mx-auto px-4">
-                  <div className="text-center mb-12">
-                    <Clock className="w-6 h-6 mx-auto mb-3" style={{ color: accent }} />
-                    <h2 className="font-display text-2xl md:text-3xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
+                  <div className="text-center mb-8 md:mb-12">
+                    <Clock className="w-5 h-5 md:w-6 md:h-6 mx-auto mb-2 md:mb-3" style={{ color: accent }} />
+                    <h2 className="font-display text-xl md:text-3xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
                     <FloralDivider color={accent} />
                   </div>
                   <ScheduleTimeline schedule={event.schedule} accentColor={accent} />
@@ -198,14 +198,14 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
           <FloralWave from={bgWarm} to={bgLight} accent={accent} />
 
           {/* Details – soft rounded cards */}
-          <section className="py-28 relative overflow-hidden" style={{ backgroundColor: bgLight }}>
+          <section className="py-16 md:py-28 relative overflow-hidden" style={{ backgroundColor: bgLight }}>
             <div className="relative max-w-5xl mx-auto px-4">
-              <div className="text-center mb-16">
-                <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{el?.details || t("event.details")}</h2>
+              <div className="text-center mb-10 md:mb-16">
+                <h2 className="font-display text-xl md:text-3xl text-foreground mb-2">{el?.details || t("event.details")}</h2>
                 <FloralDivider color={softPink} />
               </div>
-              <div className="grid md:grid-cols-2 gap-12 max-w-3xl mx-auto">
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-8 bg-card/60 backdrop-blur-sm rounded-3xl border border-border/30 shadow-sm">
+              <div className="grid md:grid-cols-2 gap-6 md:gap-12 max-w-3xl mx-auto">
+                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-5 md:p-8 bg-card/60 backdrop-blur-sm rounded-3xl border border-border/30 shadow-sm">
                   <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                     <Church className="w-6 h-6" style={{ color: accent }} />
                   </div>
@@ -213,7 +213,7 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
                   <p className="font-body text-sm font-medium text-foreground mb-1">{event.ceremony_location || event.location_name || "—"}</p>
                   <p className="font-body text-sm text-muted-foreground">{event.ceremony_address || event.address || ""}</p>
                 </motion.div>
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-center p-8 bg-card/60 backdrop-blur-sm rounded-3xl border border-border/30 shadow-sm">
+                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-center p-5 md:p-8 bg-card/60 backdrop-blur-sm rounded-3xl border border-border/30 shadow-sm">
                   <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(softPink, 0.2) }}>
                     <Wine className="w-6 h-6" style={{ color: "hsl(10, 50%, 55%)" }} />
                   </div>
@@ -252,7 +252,7 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
           <FloralWave from={bgWarm} to={bgLight} accent={accent} />
 
           {/* Footer */}
-          <footer className="py-20 text-center relative overflow-hidden" style={{ backgroundColor: bgLight }}>
+          <footer className="py-14 md:py-20 text-center relative overflow-hidden" style={{ backgroundColor: bgLight }}>
             <div className="relative">
               <h2 className="text-4xl mb-3" style={{ fontFamily: "'Great Vibes', cursive", color: accent }}>{names}</h2>
               <FloralDivider color={accent} />
