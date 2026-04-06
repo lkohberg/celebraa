@@ -14,19 +14,19 @@ interface CountdownTimerProps {
   accentColor?: string;
 }
 
-/** Single flip digit */
+/** Single flip digit – fixed height to prevent layout bounce */
 const FlipDigit = ({ value, prevValue }: { value: string; prevValue: string }) => {
   const changed = value !== prevValue;
   return (
-    <span className="relative inline-block overflow-hidden" style={{ width: "1ch" }}>
-      <AnimatePresence mode="popLayout">
+    <span className="relative inline-block overflow-hidden align-top" style={{ width: "1ch", height: "1em" }}>
+      <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
           key={value}
-          initial={changed ? { y: -20, opacity: 0 } : false}
+          initial={changed ? { y: "-100%", opacity: 0 } : false}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 20, opacity: 0 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="inline-block"
+          exit={{ y: "100%", opacity: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="inline-block absolute inset-0"
         >
           {value}
         </motion.span>
