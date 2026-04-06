@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Camera, ImageIcon } from "lucide-react";
 import { useTranslation } from "@/i18n";
@@ -18,9 +18,17 @@ const SlideshowSection = ({ accentColor = "hsl(150, 18%, 38%)", lang, blockConfi
   const [current, setCurrent] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const next = useCallback(() => setCurrent(i => (i + 1) % urls.length), [urls.length]);
   const prev = useCallback(() => setCurrent(i => (i - 1 + urls.length) % urls.length), [urls.length]);
+
+  // Auto-rotate every 4 seconds when lightbox is closed
+  useEffect(() => {
+    if (urls.length <= 1 || lightboxIndex !== null) return;
+    autoplayRef.current = setInterval(next, 4000);
+    return () => { if (autoplayRef.current) clearInterval(autoplayRef.current); };
+  }, [urls.length, lightboxIndex, next]);
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     if (info.offset.x < -60) next();
@@ -33,7 +41,7 @@ const SlideshowSection = ({ accentColor = "hsl(150, 18%, 38%)", lang, blockConfi
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-10">
             <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">
-              {el?.slideshow || t("event.slideshow")}
+              {el?.slideshow || "Unsere Momente"}
             </h2>
             <div className="w-12 h-px mx-auto" style={{ backgroundColor: accentColor, opacity: 0.3 }} />
           </div>
