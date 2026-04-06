@@ -1,101 +1,117 @@
 
 
-## Premium Event-Seiten Upgrade — mit Funktionalitäts-Garantie
+# Premium Event Pages Overhaul — Implementation Plan
 
-### Bestandsaufnahme: Alle bestehenden Features
+## Problem Analysis
 
-Jedes Template hat diese Funktionalitäten, die **1:1 erhalten bleiben**:
+After reviewing all three premium templates (Wedding, Birthday, Corporate) and the basis template, here's what's wrong:
 
-**Wedding:** EnvelopeIntro → Hero (mit/ohne Bild) → BackgroundMusic → Countdown → Story → CustomIllustration → Slideshow → ScheduleTimeline → FoodMenu → DressCode → Details (Ceremony + Reception + Children + GoogleMaps) → HotelRecommendations → VideoMessage → Shuttle → Wishlist → MusicPro → RSVP → Footer
+1. **Structural sameness**: All three premium templates follow the exact same section order — Hero → Countdown → Story → Timeline → Details → RSVP → Footer. Same layout rhythm, same spacing, same dot-pattern backgrounds. Only the accent color and divider SVG differ.
+2. **Generic backgrounds**: Every section uses the same `radial-gradient dots` or `linear-gradient grid` pattern at 1-2% opacity. It's the same trick repeated 6-8 times per page.
+3. **Countdown/RSVP not themed**: `CountdownTimer` and `RsvpForm` ignore the event's `primary_color` — they use hardcoded HSL values or the generic `text-primary` class.
+4. **Basis template is bare**: The fallback template is just centered text with an RSVP form. No visual identity at all.
+5. **No layout variation**: Cards, sections, and grids are all center-aligned with identical padding. No asymmetry, no full-bleed sections, no visual surprise.
 
-**Birthday:** GiftBoxIntro → Hero → BackgroundMusic → Countdown → Story → ScheduleTimeline → FoodMenu → DressCode → Details (Venue + GoogleMaps) → HotelRecommendations → VideoMessage → Quiz → Games → Potluck → Wishlist → MusicWish → RSVP → Footer
-
-**Corporate:** BadgeScanIntro → Hero → BackgroundMusic → Countdown → About → ScheduleTimeline → Agenda → FoodMenu → Details (Location + DressCode + GoogleMaps) → HotelRecommendations → VideoMessage → Products → Sponsors → RSVP → Footer
-
-**Shared Components:** CountdownTimer, RsvpForm (mit companion management, menu selection, guest name sync), ScheduleTimeline (alternating left/right), GoogleMapsEmbed, HotelRecommendations
-
----
-
-### Umsetzungsplan
-
-#### 1. CountdownTimer — 3 Varianten (neuer `variant` Prop)
-
-Bestehende Props bleiben: `targetDate`, `targetTime`, `className`, `lang`. Neuer optionaler Prop: `variant`.
-
-- **Wedding (`"elegant"`):** Zahlen in feinen Kreisbögen (SVG ring), Serif-Font, sanfte opacity-Animation beim Sekundenwechsel
-- **Birthday (`"bold"`):** Große farbige Kacheln mit Schatten, abgerundete Ecken, leichter scale-bounce bei Sekundenwechsel
-- **Corporate (`"minimal"`):** Einzeilige Darstellung `23d : 04h : 12m`, Monospace-Font, kein vertikales Layout
-
-Default (kein variant): aktuelles Verhalten bleibt identisch.
-
-#### 2. ScheduleTimeline — Template-spezifische Styles (neuer `variant` Prop)
-
-Bestehende Props bleiben: `schedule`, `accentColor`. Neuer optionaler Prop: `variant`.
-
-- **Wedding:** Zartere Dot-Styles, florale Akzente an den Verbindungslinien
-- **Birthday:** Farbigere Dots, leicht größere Abstände, playful rounded Cards um jeden Eintrag
-- **Corporate:** Horizontale statt vertikale Timeline auf Desktop, kompakte Liste auf Mobile
-
-Default: aktuelles alternating Layout bleibt.
-
-#### 3. Sektions-Backgrounds & Dividers pro Template
-
-Neue Datei: `SectionDivider.tsx` mit `variant` Prop.
-
-- **Wedding:** SVG-Wellen-Divider zwischen Sektionen, botanische SVG-Ornamente an Sektionsrändern
-- **Birthday:** Diagonale Schnitte via `clip-path`, Konfetti-Burst am Sektionsende
-- **Corporate:** Thin accent-line mit Fade-Gradient
-
-Jedes Template-File (`PremiumWeddingPage`, `PremiumBirthdayPage`, `PremiumCorporatePage`) bekommt template-spezifische Hintergrund-Patterns statt der identischen `radial-gradient` Dots.
-
-#### 4. RsvpForm — Visuelle Varianten
-
-Bestehende Logik bleibt komplett identisch (submitRsvp, companion management, menu selection, guest name sync, deadline display). Nur das Styling ändert sich pro Variant:
-
-- **Wedding:** Underline-Inputs statt bordered, Script-Font für Überschrift, dezente Herz-Animation bei Submit-Success
-- **Birthday:** Rounded pill-Inputs, farbigere Toggle-Buttons, Konfetti-Animation bei Submit
-- **Corporate:** Label-Float-Inputs, scharfe Ecken, professioneller Checkmark bei Submit
-
-#### 5. Template-spezifische Layout-Anpassungen
-
-Kein Entfernen oder Umordnen von Sektionen. Nur:
-- **Wedding:** Sektionen bekommen mehr vertikalen Atem (py-32 statt py-24), florale Ornamente als absolute-positioned SVGs
-- **Birthday:** Leicht asymmetrische Sektionen (alternierend links/rechts-aligned), bunte Akzente
-- **Corporate:** Engeres Spacing, Grid-basierte Card-Layouts für Details
+## Plan — 5 Prioritized Changes (all MVP-scoped)
 
 ---
 
-### Funktionalitäts-Checkliste
+### 1. Theme-Aware Countdown & RSVP (Impact: High, Scope: Small)
 
-Jede Änderung wird gegen diese Liste geprüft:
+**Why**: These are the two most interactive parts of every event page, and they currently ignore the user's chosen color.
 
-- [ ] Alle `hasBlock()` Checks und Block-Rendering identisch
-- [ ] Intro-Animationen (Envelope, GiftBox, BadgeScan) unverändert
-- [ ] `onIntroComplete` Callback funktioniert
-- [ ] RSVP: companion count/names, menu selection, guest name sync, deadline
-- [ ] CountdownTimer: Zeitberechnung, interval cleanup
-- [ ] ScheduleTimeline: alternating layout, animation
-- [ ] GoogleMapsEmbed: address encoding
-- [ ] HotelRecommendations: links, notes
-- [ ] Theme-Farben (primary, secondary, accent, font) werden durchgereicht
-- [ ] i18n labels (eventLabels + t()) funktionieren
-- [ ] `isDemo` Flag wird korrekt weitergegeben
-- [ ] `GuestNameProvider` wrapping bleibt
-- [ ] Hero-Bilder (mit/ohne) funktionieren
-- [ ] Children welcome (Wedding only) bleibt
-- [ ] Dress code display (Corporate) bleibt
+**Changes**:
+- **CountdownTimer.tsx**: Accept `accentColor` prop. Style the numbers with it instead of generic `text-primary`. Add a subtle card/pill background per digit for visual weight.
+- **RsvpForm.tsx**: Accept `accentColor` prop. Use it for the submit button, attendance toggle active state, and the divider — instead of the hardcoded per-variant HSL values.
+- Update all 3 premium templates + EventPage basis to pass `accentColor`.
 
-### Betroffene Dateien
+---
 
-| Datei | Änderung |
-|---|---|
-| `CountdownTimer.tsx` | Neuer `variant` Prop, 3 Render-Pfade |
-| `ScheduleTimeline.tsx` | Neuer `variant` Prop, 3 Styles |
-| `RsvpForm.tsx` | Styling-Varianten (Logik identisch) |
-| `SectionDivider.tsx` | **Neu** — SVG-basierte Sektions-Trenner |
-| `PremiumWeddingPage.tsx` | Dividers + Ornamente + Variant-Props |
-| `PremiumBirthdayPage.tsx` | Dividers + Clip-Paths + Variant-Props |
-| `PremiumCorporatePage.tsx` | Dividers + Grid-Layouts + Variant-Props |
+### 2. Distinct Visual DNA per Template Type (Impact: Critical, Scope: Medium)
 
-Keine DB-Änderungen. Keine neuen API-Calls. Keine Änderungen an Block-Komponenten, Intros oder Hooks.
+**Why**: This is the core complaint — all invitations look the same.
+
+**Wedding** — Romantic, editorial:
+- Replace dot-pattern backgrounds with subtle watercolor-like gradient blobs (soft radials, larger, fewer)
+- Add parallax-style staggered entrance animations (left/right alternating)
+- Use serif typography hierarchy more aggressively (Great Vibes for headings, lighter body)
+- Add a decorative border/frame around the hero text area
+
+**Birthday** — Bold, energetic:
+- Use diagonal/angled section dividers (CSS clip-path) instead of flat section breaks
+- Add floating confetti particles that drift in the background (already have ConfettiParticle, but it's unused after intro)
+- Use larger, bolder typography with tighter spacing
+- Use gradient text for the title
+- Add a subtle gradient wave between sections
+
+**Corporate** — Clean, geometric:
+- Use sharp geometric dividers (straight lines, diamond shapes — already have CorpDivider)
+- Add a frosted-glass navbar that appears on scroll with event title
+- Use a 2-column asymmetric layout for the details section
+- Add subtle grid animation in hero (slow-moving grid lines)
+- Professional badge/pill design for date/time/location
+
+---
+
+### 3. Elevated Section Backgrounds (Impact: High, Scope: Small)
+
+**Why**: The dot/grid patterns are the #1 source of visual monotony.
+
+**Changes**:
+- Create a `SectionBackground` component with 4 variants: `subtle-gradient`, `mesh`, `geometric`, `watercolor`
+- Wedding uses `watercolor` (soft blurred blobs)
+- Birthday uses `mesh` (vibrant gradient mesh)
+- Corporate uses `geometric` (fine grid + diagonal accent line)
+- Each section alternates between 2 background styles instead of repeating the same dot pattern
+
+---
+
+### 4. Basis Template Visual Upgrade (Impact: High, Scope: Small)
+
+**Why**: Users who don't pick premium still deserve a polished page.
+
+**Changes**:
+- Add a hero section with the event's `primary_color` as a gradient background
+- Add a subtle decorative divider
+- Style the date/time/location with icon pills (similar to corporate hero)
+- Add a fade-in animation on load
+- Add a simple footer with event name + date
+
+---
+
+### 5. Animated Section Entrances (Impact: Medium, Scope: Small)
+
+**Why**: Currently sections just appear. Staggered reveals add perceived quality.
+
+**Changes**:
+- Create a reusable `RevealSection` wrapper using framer-motion `whileInView`
+- Wedding: fade-up with slight scale
+- Birthday: slide-in from alternating sides
+- Corporate: clean fade with horizontal line wipe
+- Apply to all sections in all 3 templates, replacing the current inconsistent `motion.div` wrappers
+
+---
+
+## Implementation Order
+
+1. **CountdownTimer + RsvpForm** theming (touches 2 shared components)
+2. **SectionBackground** component (new file, pure visual)
+3. **Wedding template** visual rework (apply new backgrounds, typography, animations)
+4. **Birthday template** visual rework (clip-paths, confetti, gradient text)
+5. **Corporate template** visual rework (geometry, asymmetry, frost navbar)
+6. **Basis template** upgrade
+7. **Testing** — verify all block combinations still render, RSVP submits, countdown ticks, intros play
+
+## Files to Create/Modify
+
+- `src/components/premium-templates/SectionBackground.tsx` (new)
+- `src/components/premium-templates/RevealSection.tsx` (new)
+- `src/components/premium-templates/CountdownTimer.tsx` (modify)
+- `src/components/premium-templates/RsvpForm.tsx` (modify)
+- `src/components/premium-templates/PremiumWeddingPage.tsx` (modify)
+- `src/components/premium-templates/PremiumBirthdayPage.tsx` (modify)
+- `src/components/premium-templates/PremiumCorporatePage.tsx` (modify)
+- `src/pages/EventPage.tsx` (modify — basis template section)
+
+No database changes needed. No new dependencies.
 
