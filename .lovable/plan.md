@@ -1,75 +1,101 @@
-## Plan: Neue Event-Optionen (Tagesablauf, Dresscode, Google Maps, Kinder, Hotels)
 
-### Zusammenfassung
 
-Fünf neue Features für den Event-Konfigurator und die Event-Anzeige:
+## Premium Event-Seiten Upgrade — mit Funktionalitäts-Garantie
 
-1. **Tagesablauf** -- vertikaler Zeitstrahl mit Uhrzeiten und Beschreibungen
-2. **Dresscode** -- optionale Auswahl (z.B. Casual, Smart Casual, Elegant, Black Tie)
-3. **Google Maps** -- eingebettete Karte beim Veranstaltungsort
-4. **Kinder willkommen** -- nur bei Hochzeiten, Auswahl ob Kinder erwünscht/nicht erwünscht
-5. **Hotelempfehlungen** -- Liste mit Hotels für Gäste von weiter weg
+### Bestandsaufnahme: Alle bestehenden Features
+
+Jedes Template hat diese Funktionalitäten, die **1:1 erhalten bleiben**:
+
+**Wedding:** EnvelopeIntro → Hero (mit/ohne Bild) → BackgroundMusic → Countdown → Story → CustomIllustration → Slideshow → ScheduleTimeline → FoodMenu → DressCode → Details (Ceremony + Reception + Children + GoogleMaps) → HotelRecommendations → VideoMessage → Shuttle → Wishlist → MusicPro → RSVP → Footer
+
+**Birthday:** GiftBoxIntro → Hero → BackgroundMusic → Countdown → Story → ScheduleTimeline → FoodMenu → DressCode → Details (Venue + GoogleMaps) → HotelRecommendations → VideoMessage → Quiz → Games → Potluck → Wishlist → MusicWish → RSVP → Footer
+
+**Corporate:** BadgeScanIntro → Hero → BackgroundMusic → Countdown → About → ScheduleTimeline → Agenda → FoodMenu → Details (Location + DressCode + GoogleMaps) → HotelRecommendations → VideoMessage → Products → Sponsors → RSVP → Footer
+
+**Shared Components:** CountdownTimer, RsvpForm (mit companion management, menu selection, guest name sync), ScheduleTimeline (alternating left/right), GoogleMapsEmbed, HotelRecommendations
 
 ---
 
-### 1. Datenbank-Migration
+### Umsetzungsplan
 
-Neue Spalten in `events`:
+#### 1. CountdownTimer — 3 Varianten (neuer `variant` Prop)
 
-```sql
-ALTER TABLE events ADD COLUMN dress_code text;           -- z.B. 'casual', 'smart_casual', 'elegant', 'black_tie'
-ALTER TABLE events ADD COLUMN children_welcome boolean;  -- null = nicht angegeben, true/false
-ALTER TABLE events ADD COLUMN hotel_recommendations jsonb; -- [{name, address, url?, note?}]
-```
+Bestehende Props bleiben: `targetDate`, `targetTime`, `className`, `lang`. Neuer optionaler Prop: `variant`.
 
-Die `schedule`-Spalte existiert bereits als `jsonb` -- wird jetzt aktiv genutzt als `[{time: "14:00", label: "Trauung"}, ...]`.
+- **Wedding (`"elegant"`):** Zahlen in feinen Kreisbögen (SVG ring), Serif-Font, sanfte opacity-Animation beim Sekundenwechsel
+- **Birthday (`"bold"`):** Große farbige Kacheln mit Schatten, abgerundete Ecken, leichter scale-bounce bei Sekundenwechsel
+- **Corporate (`"minimal"`):** Einzeilige Darstellung `23d : 04h : 12m`, Monospace-Font, kein vertikales Layout
 
-### 2. ConfigurePage -- Neue Formularfelder
+Default (kein variant): aktuelles Verhalten bleibt identisch.
 
-Im Konfigurator (`ConfigurePage.tsx`) werden folgende Abschnitte ergänzt:
+#### 2. ScheduleTimeline — Template-spezifische Styles (neuer `variant` Prop)
 
-**Tagesablauf-Editor**: Dynamische Liste mit +/- Buttons. Jede Zeile hat ein Zeitfeld (Input type="time") und ein Textfeld (z.B. "Empfang", "Kuchen anschneiden"). Die Daten werden als `schedule` JSON gespeichert.
+Bestehende Props bleiben: `schedule`, `accentColor`. Neuer optionaler Prop: `variant`.
 
-**Dresscode-Auswahl**: Ein `Select`-Dropdown mit Optionen: Keine Angabe, Casual, Smart Casual, Elegant, Black Tie.
+- **Wedding:** Zartere Dot-Styles, florale Akzente an den Verbindungslinien
+- **Birthday:** Farbigere Dots, leicht größere Abstände, playful rounded Cards um jeden Eintrag
+- **Corporate:** Horizontale statt vertikale Timeline auf Desktop, kompakte Liste auf Mobile
 
-**Kinder willkommen** (nur bei `eventType === "wedding"`): Ein Switch/Select mit 3 Zuständen: Keine Angabe, Kinder willkommen, Nur Erwachsene.
+Default: aktuelles alternating Layout bleibt.
 
-**Hotelempfehlungen**: Dynamische Liste mit Name, Adresse, optionaler URL. +/- Buttons zum Hinzufügen/Entfernen.
+#### 3. Sektions-Backgrounds & Dividers pro Template
 
-### 3. Event-Seiten -- Anzeige der neuen Daten
+Neue Datei: `SectionDivider.tsx` mit `variant` Prop.
 
-**Tagesablauf-Komponente** (neue Datei `src/components/premium-templates/ScheduleTimeline.tsx`):
+- **Wedding:** SVG-Wellen-Divider zwischen Sektionen, botanische SVG-Ornamente an Sektionsrändern
+- **Birthday:** Diagonale Schnitte via `clip-path`, Konfetti-Burst am Sektionsende
+- **Corporate:** Thin accent-line mit Fade-Gradient
 
-- Vertikaler Zeitstrahl mit einer durchgehenden Linie
-- Kreismarkierungen an jedem Punkt
-- Uhrzeit links, Beschreibung rechts
-- Wird in allen 3 Premium-Templates und auch in Basis-Templates eingebunden
+Jedes Template-File (`PremiumWeddingPage`, `PremiumBirthdayPage`, `PremiumCorporatePage`) bekommt template-spezifische Hintergrund-Patterns statt der identischen `radial-gradient` Dots.
 
-**Dresscode-Anzeige**: Wird im Details-Bereich als Icon + Text angezeigt (z.B. Shirt-Icon + "Elegant").
+#### 4. RsvpForm — Visuelle Varianten
 
-**Google Maps Embed**: Wenn eine Adresse vorhanden ist, wird ein `<iframe>` mit Google Maps Embed API eingebettet. Nutzt die kostenlose Embed-Variante: `https://www.google.com/maps/embed/v1/place?q=ADRESSE&key=API_KEY` oder alternativ die keyless Variante `https://maps.google.com/maps?q=ADRESSE&output=embed`.
+Bestehende Logik bleibt komplett identisch (submitRsvp, companion management, menu selection, guest name sync, deadline display). Nur das Styling ändert sich pro Variant:
 
-**Kinder-Hinweis** (nur Hochzeit): Im Details-Bereich ein dezenter Hinweis "Kinder sind herzlich willkommen" oder "Wir bitten um Verständnis, dass diese Feier nur für Erwachsene geplant ist."
+- **Wedding:** Underline-Inputs statt bordered, Script-Font für Überschrift, dezente Herz-Animation bei Submit-Success
+- **Birthday:** Rounded pill-Inputs, farbigere Toggle-Buttons, Konfetti-Animation bei Submit
+- **Corporate:** Label-Float-Inputs, scharfe Ecken, professioneller Checkmark bei Submit
 
-**Hotelempfehlungen**: Eigene Sektion mit Karten-Layout, Name, Adresse und optionalem Link zum Hotel.
+#### 5. Template-spezifische Layout-Anpassungen
 
-### 4. i18n -- Neue Übersetzungen (de.ts, en.ts)
+Kein Entfernen oder Umordnen von Sektionen. Nur:
+- **Wedding:** Sektionen bekommen mehr vertikalen Atem (py-32 statt py-24), florale Ornamente als absolute-positioned SVGs
+- **Birthday:** Leicht asymmetrische Sektionen (alternierend links/rechts-aligned), bunte Akzente
+- **Corporate:** Engeres Spacing, Grid-basierte Card-Layouts für Details
 
-Neue Keys für: Tagesablauf-Labels, Dresscode-Optionen, Kinder-Hinweise, Hotel-Sektion, Google Maps.
+---
 
-### 5. PremiumEventData Interface
+### Funktionalitäts-Checkliste
 
-Erweitert um: `dress_code`, `children_welcome`, `hotel_recommendations`.
+Jede Änderung wird gegen diese Liste geprüft:
 
-### Dateien die geändert/erstellt werden
+- [ ] Alle `hasBlock()` Checks und Block-Rendering identisch
+- [ ] Intro-Animationen (Envelope, GiftBox, BadgeScan) unverändert
+- [ ] `onIntroComplete` Callback funktioniert
+- [ ] RSVP: companion count/names, menu selection, guest name sync, deadline
+- [ ] CountdownTimer: Zeitberechnung, interval cleanup
+- [ ] ScheduleTimeline: alternating layout, animation
+- [ ] GoogleMapsEmbed: address encoding
+- [ ] HotelRecommendations: links, notes
+- [ ] Theme-Farben (primary, secondary, accent, font) werden durchgereicht
+- [ ] i18n labels (eventLabels + t()) funktionieren
+- [ ] `isDemo` Flag wird korrekt weitergegeben
+- [ ] `GuestNameProvider` wrapping bleibt
+- [ ] Hero-Bilder (mit/ohne) funktionieren
+- [ ] Children welcome (Wedding only) bleibt
+- [ ] Dress code display (Corporate) bleibt
 
-| Datei                                                       | Aktion                                                   |
-| ----------------------------------------------------------- | -------------------------------------------------------- |
-| DB Migration                                                | Neue Spalten                                             |
-| `src/components/premium-templates/ScheduleTimeline.tsx`     | Neu -- Zeitstrahl-Komponente                             |
-| `src/components/premium-templates/PremiumWeddingPage.tsx`   | Erweitern -- Zeitstrahl, Maps, Dresscode, Kinder, Hotels |
-| `src/components/premium-templates/PremiumBirthdayPage.tsx`  | Erweitern -- Zeitstrahl, Maps, Dresscode, Hotels         |
-| `src/components/premium-templates/PremiumCorporatePage.tsx` | Erweitern -- Zeitstrahl, Maps, Dresscode, Hotels         |
-| `src/pages/ConfigurePage.tsx`                               | Erweitern -- alle neuen Formularfelder                   |
-| `src/i18n/de.ts`                                            | Neue Übersetzungen                                       |
-| `src/i18n/en.ts`                                            | Neue Übersetzungen                                       |
+### Betroffene Dateien
+
+| Datei | Änderung |
+|---|---|
+| `CountdownTimer.tsx` | Neuer `variant` Prop, 3 Render-Pfade |
+| `ScheduleTimeline.tsx` | Neuer `variant` Prop, 3 Styles |
+| `RsvpForm.tsx` | Styling-Varianten (Logik identisch) |
+| `SectionDivider.tsx` | **Neu** — SVG-basierte Sektions-Trenner |
+| `PremiumWeddingPage.tsx` | Dividers + Ornamente + Variant-Props |
+| `PremiumBirthdayPage.tsx` | Dividers + Clip-Paths + Variant-Props |
+| `PremiumCorporatePage.tsx` | Dividers + Grid-Layouts + Variant-Props |
+
+Keine DB-Änderungen. Keine neuen API-Calls. Keine Änderungen an Block-Komponenten, Intros oder Hooks.
+
