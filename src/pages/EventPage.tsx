@@ -112,11 +112,18 @@ const EventPage = () => {
     hero_image_url?: string;
   };
 
-  // Build theme from event's primary_color
+  // Build theme from event's template – match the template-specific colors
+  const templateColors: Record<string, { secondary: string; accent: string }> = {
+    "classic": { secondary: "#FAF5EF", accent: "#1A1A1A" },
+    "modern": { secondary: "#FAFAFA", accent: "#C9A96E" },
+  };
+  const templateKey = eventData.template_id?.includes("classic") ? "classic" : eventData.template_id?.includes("modern") ? "modern" : null;
+  const tplColors = templateKey ? templateColors[templateKey] : null;
+
   const eventTheme = eventData.primary_color ? {
     primary: eventData.primary_color,
-    secondary: "hsl(30, 33%, 96%)",
-    accent: "hsl(30, 10%, 25%)",
+    secondary: tplColors?.secondary || "#FFF8F0",
+    accent: tplColors?.accent || "#D4A0A0",
     font: eventData.font || "Playfair Display",
   } : undefined;
 
