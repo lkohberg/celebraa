@@ -143,7 +143,7 @@ const EventPage = () => {
     }
   }
 
-  // Basis template - simple styled page
+  // Basis template - polished minimal page
   const primaryColor = event.primary_color || "#C8A951";
 
   const dateLocaleMap: Record<string, string> = { de: "de-AT", en: "en-US", es: "es-ES", pt: "pt-BR", fr: "fr-FR", it: "it-IT", pl: "pl-PL", ro: "ro-RO", nl: "nl-NL", tr: "tr-TR", zh: "zh-CN" };
@@ -154,38 +154,46 @@ const EventPage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background" style={{ fontFamily: `'${fontName}', serif` }}>
-      <div className="max-w-2xl mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">
+    <div className="min-h-screen" style={{ fontFamily: `'${fontName}', serif`, backgroundColor: "#FAFAF8" }}>
+      {/* Accent top bar */}
+      <div className="w-full h-1" style={{ background: `linear-gradient(90deg, transparent, ${primaryColor}, transparent)` }} />
+
+      <div className="max-w-xl mx-auto px-6 py-20 md:py-28">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <p className="text-[10px] tracking-[0.4em] uppercase mb-6" style={{ color: primaryColor, opacity: 0.7 }}>
             {labels.rsvp}
           </p>
           <h1
-            className="text-4xl md:text-5xl font-bold text-foreground mb-4"
-            style={{ color: primaryColor }}
+            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-[1.1]"
+            style={{ color: "#1A1A1A" }}
           >
             {event.title}
           </h1>
+          <div className="w-12 h-px mx-auto my-6" style={{ backgroundColor: primaryColor }} />
           {event.description && (
-            <p className="font-body text-muted-foreground mt-2">{event.description}</p>
+            <p className="text-base md:text-lg font-light leading-relaxed" style={{ color: "rgba(26,26,26,0.55)" }}>{event.description}</p>
           )}
         </div>
 
-        <div className="space-y-3 max-w-sm mx-auto mb-12">
-          <div className="flex items-center gap-3 font-body text-sm text-muted-foreground">
-            <Calendar className="w-4 h-4" />
-            <span>{formattedDate}</span>
-          </div>
-          <div className="flex items-center gap-3 font-body text-sm text-muted-foreground">
-            <Clock className="w-4 h-4" />
-            <span>{event.event_time}</span>
-          </div>
-          {event.location_name && (
-            <div className="flex items-center gap-3 font-body text-sm text-muted-foreground">
-              <MapPin className="w-4 h-4" />
-              <span>{event.location_name}{event.address ? `, ${event.address}` : ""}</span>
+        {/* Event details card */}
+        <div className="p-8 mb-16 text-center" style={{ backgroundColor: "#fff", border: "1px solid rgba(0,0,0,0.06)" }}>
+          <div className="space-y-4">
+            <div className="flex items-center justify-center gap-3 text-sm" style={{ color: "rgba(26,26,26,0.6)" }}>
+              <Calendar className="w-4 h-4" style={{ color: primaryColor }} />
+              <span>{formattedDate}</span>
             </div>
-          )}
+            <div className="flex items-center justify-center gap-3 text-sm" style={{ color: "rgba(26,26,26,0.6)" }}>
+              <Clock className="w-4 h-4" style={{ color: primaryColor }} />
+              <span>{event.event_time}</span>
+            </div>
+            {event.location_name && (
+              <div className="flex items-center justify-center gap-3 text-sm" style={{ color: "rgba(26,26,26,0.6)" }}>
+                <MapPin className="w-4 h-4" style={{ color: primaryColor }} />
+                <span>{event.location_name}{event.address ? `, ${event.address}` : ""}</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {event.rsvp_enabled && (
@@ -198,6 +206,9 @@ const EventPage = () => {
           />
         )}
       </div>
+
+      {/* Footer accent */}
+      <div className="w-full h-px" style={{ background: `linear-gradient(90deg, transparent, ${primaryColor}40, transparent)` }} />
     </div>
   );
 };
