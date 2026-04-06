@@ -240,8 +240,12 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
 
   const renderPreview = () => {
     switch (template.eventType) {
-      case "wedding":
-        return <PremiumWeddingPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
+      case "wedding": {
+        const tid = template.id || "";
+        if (tid.includes("classic")) return <WeddingClassicPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
+        if (tid.includes("modern")) return <WeddingModernPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
+        return <WeddingFloralPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
+      }
       case "birthday":
         return <PremiumBirthdayPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
       case "corporate":
