@@ -16,7 +16,9 @@ import { supabase } from "@/integrations/supabase/client";
 import AuthDialog from "@/components/AuthDialog";
 import PriceSummary from "@/components/PriceSummary";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPage";
+import WeddingFloralPage from "@/components/premium-templates/WeddingFloralPage";
+import WeddingClassicPage from "@/components/premium-templates/WeddingClassicPage";
+import WeddingModernPage from "@/components/premium-templates/WeddingModernPage";
 import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import { useTranslation } from "@/i18n";
@@ -296,7 +298,9 @@ const ConfigurePage = () => {
                     };
                     switch (template.eventType) {
                       case "wedding":
-                        return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
+                        if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
+                        if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
+                        return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
                       case "birthday":
                         return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
                       case "corporate":

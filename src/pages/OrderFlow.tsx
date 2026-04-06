@@ -15,7 +15,9 @@ import { useCheckEventLink } from "@/hooks/useEvents";
 import { supabase } from "@/integrations/supabase/client";
 import AuthDialog from "@/components/AuthDialog";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPage";
+import WeddingFloralPage from "@/components/premium-templates/WeddingFloralPage";
+import WeddingClassicPage from "@/components/premium-templates/WeddingClassicPage";
+import WeddingModernPage from "@/components/premium-templates/WeddingModernPage";
 import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 import LegalDialogs from "@/components/LegalDialogs";
@@ -1060,7 +1062,9 @@ const OrderFlow = () => {
                               const previewEvent = buildPreviewEvent();
                               switch (category) {
                                 case "wedding":
-                                  return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                  if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                  if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                  return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                                 case "birthday":
                                   return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                                 case "corporate":
@@ -1084,7 +1088,9 @@ const OrderFlow = () => {
                               const previewEvent = buildPreviewEvent();
                               switch (category) {
                                 case "wedding":
-                                  return <PremiumWeddingPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                  if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                  if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                  return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                                 case "birthday":
                                   return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
                                 case "corporate":
