@@ -89,36 +89,30 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
 
       {showContent && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
-          {/* Hero – Split layout: image left, text right on desktop */}
-          <section className="relative min-h-screen flex flex-col md:flex-row overflow-hidden">
-            {/* Image half */}
-            <div className="relative md:w-1/2 min-h-[50vh] md:min-h-screen">
-              {event.hero_image_url ? (
-                <>
-                  <img src={event.hero_image_url} alt="" className="absolute inset-0 w-full h-full object-cover" loading="eager" fetchPriority="high" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/10" />
-                </>
-              ) : (
-                <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${bgCream} 0%, hsl(38 30% 85%) 100%)` }} />
-              )}
-            </div>
-            {/* Text half */}
-            <div className="relative md:w-1/2 flex items-center justify-center py-20 md:py-0" style={{ backgroundColor: bgIvory }}>
-              <motion.div className="text-center px-8 md:px-12 max-w-lg" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
-                {/* Monogram */}
-                <div className="w-20 h-20 mx-auto mb-8 rounded-full flex items-center justify-center" style={{ border: `2px solid ${accent}`, borderColor: accent }}>
-                  <span className="text-2xl font-light tracking-widest" style={{ color: accent, fontFamily: "'Cormorant Garamond', serif" }}>{initials}</span>
-                </div>
-                <p className="text-xs tracking-[0.4em] uppercase mb-6" style={{ color: accent }}>{el?.weMarry || t("event.weMarry")}</p>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl mb-6 leading-tight" style={{ fontFamily: "'Great Vibes', cursive", color: textDark }}>{names}</h1>
-                <ClassicOrnament color={accent} />
-                <p className="text-lg tracking-[0.15em] mt-4" style={{ color: textDark }}>{formattedDate}</p>
-                {event.description && <p className="text-sm mt-4 tracking-wider italic" style={{ color: "hsl(30, 10%, 50%)" }}>{event.description}</p>}
-              </motion.div>
-              <button className="absolute bottom-8 left-1/2 -translate-x-1/2 md:hidden" onClick={() => document.getElementById("countdown-classic")?.scrollIntoView({ behavior: "smooth" })} style={{ color: "hsl(30, 8%, 50%)" }}>
-                <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 4, repeat: Infinity }}><ChevronDown className="w-6 h-6" /></motion.div>
-              </button>
-            </div>
+          {/* Hero – Full-screen centered, formal elegance */}
+          <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+            {event.hero_image_url ? (
+              <>
+                <img src={event.hero_image_url} alt="" className="absolute inset-0 w-full h-full object-cover" loading="eager" fetchPriority="high" />
+                <div className="absolute inset-0 bg-black/40" />
+              </>
+            ) : (
+              <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${bgCream} 0%, hsl(38 30% 85%) 100%)` }} />
+            )}
+            <motion.div className="relative text-center px-8 max-w-lg z-10" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
+              {/* Monogram */}
+              <div className="w-20 h-20 mx-auto mb-8 rounded-full flex items-center justify-center" style={{ border: `2px solid ${event.hero_image_url ? 'rgba(255,255,255,0.7)' : accent}` }}>
+                <span className="text-2xl font-light tracking-widest" style={{ color: event.hero_image_url ? 'rgba(255,255,255,0.9)' : accent, fontFamily: "'Cormorant Garamond', serif" }}>{initials}</span>
+              </div>
+              <p className="text-xs tracking-[0.4em] uppercase mb-6" style={{ color: event.hero_image_url ? 'rgba(255,255,255,0.7)' : accent }}>{el?.weMarry || t("event.weMarry")}</p>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl mb-6 leading-tight" style={{ fontFamily: "'Great Vibes', cursive", color: event.hero_image_url ? '#fff' : textDark }}>{names}</h1>
+              <ClassicOrnament color={event.hero_image_url ? 'rgba(255,255,255,0.5)' : accent} />
+              <p className="text-lg tracking-[0.15em] mt-4" style={{ color: event.hero_image_url ? 'rgba(255,255,255,0.85)' : textDark }}>{formattedDate}</p>
+              {event.description && <p className="text-sm mt-4 tracking-wider italic" style={{ color: event.hero_image_url ? 'rgba(255,255,255,0.6)' : "hsl(30, 10%, 50%)" }}>{event.description}</p>}
+            </motion.div>
+            <button className="absolute bottom-8 left-1/2 -translate-x-1/2" onClick={() => document.getElementById("countdown-classic")?.scrollIntoView({ behavior: "smooth" })} style={{ color: event.hero_image_url ? 'rgba(255,255,255,0.5)' : "hsl(30, 8%, 50%)" }}>
+              <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 4, repeat: Infinity }}><ChevronDown className="w-6 h-6" /></motion.div>
+            </button>
           </section>
 
           {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} eventId={event.id} />}
