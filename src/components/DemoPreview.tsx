@@ -5,7 +5,9 @@ import { Template } from "@/components/TemplateCard";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/i18n";
 import { ChevronDown } from "lucide-react";
-import PremiumWeddingPage from "@/components/premium-templates/PremiumWeddingPage";
+import WeddingFloralPage from "@/components/premium-templates/WeddingFloralPage";
+import WeddingClassicPage from "@/components/premium-templates/WeddingClassicPage";
+import WeddingModernPage from "@/components/premium-templates/WeddingModernPage";
 import PremiumBirthdayPage from "@/components/premium-templates/PremiumBirthdayPage";
 import PremiumCorporatePage from "@/components/premium-templates/PremiumCorporatePage";
 
