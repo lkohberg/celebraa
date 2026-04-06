@@ -12,7 +12,7 @@
  */
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Clock, ChevronDown, Baby, CalendarPlus, ArrowRight } from "lucide-react";
+import { MapPin, Clock, ChevronDown, Baby, CalendarPlus } from "lucide-react";
 import { useTranslation } from "@/i18n";
 import EnvelopeIntro from "./EnvelopeIntro";
 import CountdownTimer from "./CountdownTimer";
@@ -205,7 +205,6 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
                     <p className="font-medium">{event.ceremony_location || event.location_name || "—"}</p>
                     <p className="text-sm" style={{ color: "hsl(0,0%,50%)" }}>{event.ceremony_address || event.address || ""}</p>
                   </div>
-                  <ArrowRight className="hidden md:block ml-auto w-5 h-5" style={{ color: "hsl(0,0%,70%)" }} />
                 </motion.div>
                 {/* Reception */}
                 <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
@@ -213,6 +212,7 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
                   style={{ backgroundColor: bgWhite }}>
                   <div className="flex-shrink-0">
                     <p className="text-xs tracking-[0.3em] uppercase mb-1" style={{ color: accent }}>{el?.reception || t("event.reception")}</p>
+                    {event.event_time && <p className="text-3xl font-bold tracking-tight">{event.event_time}</p>}
                   </div>
                   <div className="hidden md:block w-px h-12 bg-border" />
                   <div>
