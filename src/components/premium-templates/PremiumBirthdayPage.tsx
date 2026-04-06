@@ -8,6 +8,8 @@ import RsvpForm from "./RsvpForm";
 import ScheduleTimeline from "./ScheduleTimeline";
 import GoogleMapsEmbed from "./GoogleMapsEmbed";
 import HotelRecommendations from "./HotelRecommendations";
+import RevealSection from "./RevealSection";
+import SectionBackground from "./SectionBackground";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 import { GuestNameProvider } from "@/hooks/useGuestName";
 
@@ -44,9 +46,18 @@ const ConfettiParticle = ({ delay }: { delay: number }) => {
 
 const PartyDivider = ({ color }: { color: string }) => (
   <div className="flex items-center justify-center gap-2 my-2">
-    <div className="w-8 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
-    <Star className="w-3 h-3" style={{ color, opacity: 0.4 }} />
-    <div className="w-8 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+    <div className="w-10 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+    <Star className="w-4 h-4" style={{ color, opacity: 0.5 }} />
+    <div className="w-10 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+  </div>
+);
+
+/* Angled section wave divider */
+const WaveDivider = ({ color, flip }: { color: string; flip?: boolean }) => (
+  <div className="relative w-full h-12 -my-1 overflow-hidden" style={{ transform: flip ? "scaleY(-1)" : undefined }}>
+    <svg viewBox="0 0 1440 48" fill="none" className="w-full h-full" preserveAspectRatio="none">
+      <path d="M0 48L60 40C120 32 240 16 360 8C480 0 600 0 720 8C840 16 960 32 1080 40C1200 48 1320 48 1380 48L1440 48V0H0V48Z" fill={color} />
+    </svg>
   </div>
 );
 
@@ -62,7 +73,11 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
   const blockCfg = (event as any).block_config || {};
   const hasBlock = (suffix: string) => selectedBlocks.some((id: string) => id.endsWith(suffix));
   const accent = theme?.primary || "hsl(340, 65%, 50%)";
+  const secondaryAccent = "hsl(280, 60%, 55%)";
   const maxCompanions = blockCfg.max_companions ?? 5;
+
+  const bgLight = "hsl(30, 30%, 98%)";
+  const bgCard = "hsl(30, 25%, 96%)";
 
   return (
     <GuestNameProvider>
@@ -78,7 +93,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
             <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{
               background: event.hero_image_url ? undefined
                 : theme ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.accent} 50%, ${theme.primary} 100%)`
-                : "linear-gradient(135deg, hsl(340 65% 50%) 0%, hsl(280 60% 55%) 50%, hsl(340 70% 60%) 100%)",
+                : `linear-gradient(135deg, hsl(340 65% 50%) 0%, hsl(280 60% 55%) 50%, hsl(340 70% 60%) 100%)`,
             }}>
               {event.hero_image_url && (
                 <>
@@ -88,17 +103,32 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
               )}
               {!event.hero_image_url && (
                 <>
-                  <div className="absolute top-[10%] left-[5%] w-32 h-32 rounded-full bg-white/5 blur-2xl" />
-                  <div className="absolute bottom-[15%] right-[8%] w-48 h-48 rounded-full bg-white/5 blur-3xl" />
-                  <div className="absolute top-[40%] right-[15%] w-20 h-20 rounded-full bg-white/5 blur-xl" />
+                  <div className="absolute top-[10%] left-[5%] w-40 h-40 rounded-full bg-white/[0.07] blur-3xl" />
+                  <div className="absolute bottom-[15%] right-[8%] w-56 h-56 rounded-full bg-white/[0.05] blur-3xl" />
+                  <div className="absolute top-[50%] right-[20%] w-24 h-24 rounded-full bg-white/[0.06] blur-2xl" />
+                  {/* Floating confetti */}
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <ConfettiParticle key={i} delay={i * 0.6} />
+                  ))}
                 </>
               )}
-              <motion.div className="relative z-10 text-center px-4" initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }}>
+              <motion.div className="relative z-10 text-center px-4" initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }}>
                 <motion.div animate={{ rotate: [0, -10, 10, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
                   <PartyPopper className="w-16 h-16 mx-auto mb-6 text-white/80" />
                 </motion.div>
                 <p className="font-body text-sm tracking-[0.3em] uppercase mb-4 text-white/70">{el?.letsCelebrate || t("event.letsCelebrate")}</p>
-                <h1 className="font-display text-5xl md:text-7xl font-bold text-white mb-4">{event.title}</h1>
+                {/* Gradient text title */}
+                <h1
+                  className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-4"
+                  style={{
+                    background: event.hero_image_url
+                      ? "linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.8) 100%)"
+                      : "linear-gradient(135deg, #ffffff 0%, #ffd4e0 50%, #ffffff 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    lineHeight: 1.1,
+                  }}
+                >{event.title}</h1>
                 <PartyDivider color="rgba(255,255,255,0.5)" />
                 <p className="font-display text-2xl md:text-3xl text-white/90 italic mt-4">{formattedDate}</p>
                 {event.description && <p className="font-body text-white/70 mt-4 text-lg max-w-md mx-auto">{event.description}</p>}
@@ -107,49 +137,58 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
 
             {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} eventId={event.id} />}
 
+            {/* Wave transition */}
+            <WaveDivider color={bgLight} />
+
             {/* Countdown */}
-            <section className="py-24 relative overflow-hidden bg-card">
-              <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(${accent} 1.5px, transparent 1.5px)`, backgroundSize: "28px 28px" }} />
+            <RevealSection variant="slide-left" className="py-24 relative overflow-hidden" style={{ backgroundColor: bgLight }} as="section">
+              <SectionBackground variant="mesh" accentColor={accent} secondaryColor={secondaryAccent} />
               <div className="relative max-w-3xl mx-auto px-4 text-center">
                 <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">{el?.countdown || t("event.countdown")}</p>
                 <h2 className="font-display text-2xl md:text-3xl text-foreground mb-4">{el?.countdownSub || t("event.countdownSub")}</h2>
                 <PartyDivider color={accent} />
                 <div className="mt-10">
-                  <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} />
+                  <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} accentColor={accent} />
                 </div>
               </div>
-            </section>
+            </RevealSection>
 
             {/* Story / About */}
             {event.story_text && (
-              <section className="py-28 relative overflow-hidden bg-background">
-                <div className="absolute top-10 right-10 w-64 h-64 rounded-full opacity-[0.04]" style={{ background: `radial-gradient(circle, ${accent}, transparent)` }} />
-                <div className="relative max-w-2xl mx-auto px-4 text-center">
-                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
-                    <Music className="w-6 h-6" style={{ color: accent }} />
+              <>
+                <WaveDivider color={bgCard} />
+                <RevealSection variant="slide-right" className="py-28 relative overflow-hidden" style={{ backgroundColor: bgCard }} as="section">
+                  <SectionBackground variant="mesh" accentColor={secondaryAccent} secondaryColor={accent} />
+                  <div className="relative max-w-2xl mx-auto px-4 text-center">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
+                      <Music className="w-6 h-6" style={{ color: accent }} />
+                    </div>
+                    <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{el?.party || t("event.party")}</h2>
+                    <PartyDivider color={accent} />
+                    <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line mt-8">{event.story_text}</p>
                   </div>
-                  <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{el?.party || t("event.party")}</h2>
-                  <PartyDivider color={accent} />
-                  <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line mt-8">{event.story_text}</p>
-                </div>
-              </section>
+                </RevealSection>
+              </>
             )}
 
             {/* Timeline */}
             {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
-              <section className="py-20 relative overflow-hidden bg-background">
-                <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "24px 24px" }} />
-                <div className="relative max-w-3xl mx-auto px-4">
-                  <div className="text-center mb-12">
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
-                      <Clock className="w-6 h-6" style={{ color: accent }} />
+              <>
+                <WaveDivider color={bgLight} />
+                <RevealSection variant="slide-left" className="py-20 relative overflow-hidden" style={{ backgroundColor: bgLight }} as="section">
+                  <SectionBackground variant="subtle-gradient" accentColor={accent} secondaryColor={secondaryAccent} />
+                  <div className="relative max-w-3xl mx-auto px-4">
+                    <div className="text-center mb-12">
+                      <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
+                        <Clock className="w-6 h-6" style={{ color: accent }} />
+                      </div>
+                      <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
+                      <PartyDivider color={accent} />
                     </div>
-                    <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
-                    <PartyDivider color={accent} />
+                    <ScheduleTimeline schedule={event.schedule} accentColor={accent} />
                   </div>
-                  <ScheduleTimeline schedule={event.schedule} />
-                </div>
-              </section>
+                </RevealSection>
+              </>
             )}
 
             {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} lang={lang} />}
@@ -158,15 +197,16 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
             )}
 
             {/* Details */}
-            <section className="py-28 relative overflow-hidden bg-card">
-              <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
+            <WaveDivider color={bgCard} />
+            <RevealSection variant="slide-right" className="py-28 relative overflow-hidden" style={{ backgroundColor: bgCard }} as="section">
+              <SectionBackground variant="mesh" accentColor={accent} secondaryColor={secondaryAccent} />
               <div className="relative max-w-5xl mx-auto px-4">
                 <div className="text-center mb-16">
                   <h2 className="font-display text-2xl md:text-3xl text-foreground">{el?.details || t("event.details")}</h2>
                   <PartyDivider color={accent} />
                 </div>
                 <div className="grid md:grid-cols-1 gap-12 max-w-lg mx-auto">
-                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
+                  <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30 shadow-sm">
                     <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                       <MapPin className="w-6 h-6" style={{ color: accent }} />
                     </div>
@@ -179,10 +219,10 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
                   <div className="mt-12 max-w-xl mx-auto"><GoogleMapsEmbed address={event.address} /></div>
                 )}
               </div>
-            </section>
+            </RevealSection>
 
             {event.hotel_recommendations && Array.isArray(event.hotel_recommendations) && event.hotel_recommendations.length > 0 && (
-              <HotelRecommendations hotels={event.hotel_recommendations} />
+              <HotelRecommendations hotels={event.hotel_recommendations} accentColor={accent} />
             )}
 
             {hasBlock("-videomsg") && <VideoMessageSection accentColor={accent} lang={lang} blockConfig={blockCfg} variant="birthday" />}
@@ -193,18 +233,18 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
             {hasBlock("-musicwish") && <MusicWishSection accentColor={accent} eventId={event.id} lang={lang} isPreview={isDemo} />}
 
             {event.rsvp_enabled && (
-              <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="birthday" lang={lang} maxCompanions={maxCompanions} />
+              <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="birthday" lang={lang} maxCompanions={maxCompanions} accentColor={accent} />
             )}
 
             {/* Footer */}
-            <footer className="py-20 text-center relative overflow-hidden bg-card">
-              <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "18px 18px" }} />
+            <RevealSection variant="fade" className="py-20 text-center relative overflow-hidden" style={{ backgroundColor: bgLight }} as="footer">
+              <SectionBackground variant="subtle-gradient" accentColor={accent} secondaryColor={secondaryAccent} />
               <div className="relative">
                 <h2 className="font-display text-3xl mb-2" style={{ color: accent }}>{event.title}</h2>
                 <PartyDivider color={accent} />
                 <p className="font-body text-sm text-muted-foreground tracking-[0.15em] uppercase mt-3">{formattedDate}</p>
               </div>
-            </footer>
+            </RevealSection>
           </motion.div>
         )}
       </AnimatePresence>
