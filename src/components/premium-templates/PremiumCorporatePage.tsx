@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Building2, MapPin, Clock, Calendar, Shirt, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Building2, MapPin, Clock, Calendar, Shirt, Sparkles } from "lucide-react";
 import { useTranslation } from "@/i18n";
 import BadgeScanIntro from "./BadgeScanIntro";
 import CountdownTimer from "./CountdownTimer";
@@ -21,12 +21,11 @@ import SponsorsSection from "@/components/blocks/SponsorsSection";
 import BackgroundMusicSection from "@/components/blocks/BackgroundMusicSection";
 import VideoMessageSection from "@/components/blocks/VideoMessageSection";
 
-/* Monoline rule divider */
-const RuleDivider = ({ color }: { color: string }) => (
-  <div className="flex items-center gap-4 my-6">
-    <div className="flex-1 h-px" style={{ backgroundColor: colorWithAlpha(color, 0.15) }} />
-    <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: color }} />
-    <div className="flex-1 h-px" style={{ backgroundColor: colorWithAlpha(color, 0.15) }} />
+const CorpDivider = ({ color }: { color: string }) => (
+  <div className="flex items-center justify-center gap-3 my-2">
+    <div className="w-10 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+    <div className="w-2 h-2 rotate-45" style={{ backgroundColor: color, opacity: 0.3 }} />
+    <div className="w-10 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
   </div>
 );
 
@@ -41,214 +40,153 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
   const selectedBlocks = event.selectedBlocks || (event as any).selected_blocks || [];
   const blockCfg = (event as any).block_config || {};
   const hasBlock = (suffix: string) => selectedBlocks.some((id: string) => id.endsWith(suffix));
-  const accent = theme?.primary || "#2563EB";
-  const bg = "#FAFAFA";
-  const cardBg = "#FFFFFF";
-  const darkText = "#111111";
+  const accent = theme?.primary || "hsl(220, 50%, 35%)";
+  const gold = theme?.accent || "hsl(43, 55%, 55%)";
   const maxCompanions = blockCfg.max_companions ?? 5;
 
   return (
     <GuestNameProvider>
-    <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'Inter', 'SF Pro Display', system-ui, sans-serif", backgroundColor: bg, color: darkText }}>
-      <link href={`https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=${encodeURIComponent(theme?.font || 'Inter')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
+    <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
+      <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
 
       {showIntro && !showContent && <BadgeScanIntro title={event.title} onOpen={() => { setShowContent(true); onIntroComplete?.(); }} accentColor={accent} />}
 
       {showContent && (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
+      {/* Hero */}
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden" style={{
+        background: event.hero_image_url ? undefined
+          : theme ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.secondary} 100%)`
+          : "linear-gradient(135deg, hsl(220 40% 12%) 0%, hsl(220 50% 22%) 100%)",
+      }}>
+        {event.hero_image_url && (
+          <>
+            <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/70" />
+          </>
+        )}
+        {!event.hero_image_url && (
+          <>
+            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`, backgroundSize: "60px 60px" }} />
+            <div className="absolute top-[10%] right-[10%] w-40 h-40 border border-white/5 rotate-45" />
+            <div className="absolute bottom-[15%] left-[8%] w-24 h-24 border border-white/5 rotate-12" />
+          </>
+        )}
+        <motion.div className="relative z-10 text-center px-4 max-w-3xl" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <div className="w-16 h-16 mx-auto mb-6 rounded-lg flex items-center justify-center bg-white/10 backdrop-blur-sm border border-white/10">
+            <Building2 className="w-8 h-8 text-white/70" />
+          </div>
+          <p className="font-body text-sm tracking-[0.3em] uppercase mb-4 text-white/60">{el?.youreInvited || t("event.youreInvited")}</p>
+          <h1 className="font-display text-4xl md:text-6xl font-bold text-white mb-4">{event.title}</h1>
+          <CorpDivider color="rgba(255,255,255,0.4)" />
+          <div className="flex items-center justify-center gap-6 text-white/70 font-body text-sm mt-4">
+            <span className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full"><Calendar className="w-4 h-4" /> {formattedDate}</span>
+            <span className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full"><Clock className="w-4 h-4" /> {event.event_time}{lang === "en" ? "" : " Uhr"}</span>
+          </div>
+          {event.description && <p className="font-body text-white/60 mt-6 text-lg max-w-xl mx-auto">{event.description}</p>}
+        </motion.div>
+      </section>
 
-        {/* ─── HERO ─── Ultra-clean, structured, Apple-event-style */}
-        <section className="relative min-h-[90vh] flex items-end overflow-hidden pb-20" style={{
-          background: event.hero_image_url ? undefined : `linear-gradient(180deg, ${cardBg} 0%, ${bg} 100%)`,
-        }}>
-          {event.hero_image_url ? (
-            <>
-              <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
-              <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%)" }} />
-            </>
-          ) : (
-            <>
-              {/* Blueprint grid */}
-              <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `linear-gradient(${accent} 1px, transparent 1px), linear-gradient(90deg, ${accent} 1px, transparent 1px)`, backgroundSize: "80px 80px" }} />
-              {/* Accent line */}
-              <div className="absolute top-0 left-0 w-full h-[3px]" style={{ background: `linear-gradient(90deg, transparent 0%, ${accent} 50%, transparent 100%)` }} />
-            </>
-          )}
+      {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} eventId={event.id} />}
 
-          <motion.div
-            className="relative z-10 w-full max-w-5xl mx-auto px-8 md:px-16"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            {/* Meta info bar */}
-            <div className="flex flex-wrap items-center gap-4 mb-8">
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium tracking-wider uppercase" style={{ color: event.hero_image_url ? "#fff" : accent, border: `1px solid ${event.hero_image_url ? "rgba(255,255,255,0.2)" : colorWithAlpha(accent, 0.2)}`, fontFamily: "'JetBrains Mono', monospace" }}>
-                <Calendar className="w-3.5 h-3.5" />
-                {formattedDate}
-              </span>
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium tracking-wider uppercase" style={{ color: event.hero_image_url ? "#fff" : accent, border: `1px solid ${event.hero_image_url ? "rgba(255,255,255,0.2)" : colorWithAlpha(accent, 0.2)}`, fontFamily: "'JetBrains Mono', monospace" }}>
-                <Clock className="w-3.5 h-3.5" />
-                {event.event_time}{lang === "en" ? "" : " Uhr"}
-              </span>
-            </div>
-
-            <p className="text-xs font-medium tracking-[0.3em] uppercase mb-4" style={{ color: event.hero_image_url ? "rgba(255,255,255,0.5)" : colorWithAlpha(darkText, 0.4) }}>
-              {el?.youreInvited || t("event.youreInvited")}
-            </p>
-
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] mb-6" style={{ color: event.hero_image_url ? "#fff" : darkText, letterSpacing: "-0.02em" }}>
-              {event.title}
-            </h1>
-
-            {event.description && (
-              <p className="text-lg md:text-xl max-w-2xl font-light leading-relaxed" style={{ color: event.hero_image_url ? "rgba(255,255,255,0.6)" : colorWithAlpha(darkText, 0.5) }}>
-                {event.description}
-              </p>
-            )}
-          </motion.div>
-        </section>
-
-        {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} eventId={event.id} />}
-
-        {/* ─── COUNTDOWN ─── Clean numbers on structured grid */}
-        <section className="py-20 md:py-28 relative" style={{ backgroundColor: cardBg }}>
-          <div className="max-w-4xl mx-auto px-8 md:px-16">
-            <div className="flex items-center justify-between mb-10">
-              <h2 className="text-xs font-medium tracking-[0.25em] uppercase" style={{ color: colorWithAlpha(darkText, 0.4) }}>
-                {el?.countdown || t("event.countdown")}
-              </h2>
-              <div className="flex-1 h-px mx-8" style={{ backgroundColor: colorWithAlpha(darkText, 0.08) }} />
-            </div>
+      {/* Countdown */}
+      <section className="py-24 relative overflow-hidden bg-card">
+        <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `linear-gradient(${accent} 1px, transparent 1px), linear-gradient(90deg, ${accent} 1px, transparent 1px)`, backgroundSize: "50px 50px" }} />
+        <div className="relative max-w-3xl mx-auto px-4 text-center">
+          <h2 className="font-display text-2xl text-foreground mb-4">{el?.countdown || t("event.countdown")}</h2>
+          <CorpDivider color={accent} />
+          <div className="mt-10">
             <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} />
           </div>
+        </div>
+      </section>
+
+      {/* About */}
+      {event.story_text && (
+        <section className="py-28 relative overflow-hidden bg-background">
+          <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-[0.03]" style={{ background: `radial-gradient(circle, ${accent}, transparent)` }} />
+          <div className="relative max-w-2xl mx-auto px-4 text-center">
+            <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{el?.agenda || t("event.agenda")}</h2>
+            <CorpDivider color={accent} />
+            <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line mt-8">{event.story_text}</p>
+          </div>
         </section>
+      )}
 
-        {/* ─── ABOUT ─── */}
-        {event.story_text && (
-          <section className="py-20 md:py-28 relative" style={{ backgroundColor: bg }}>
-            <div className="max-w-4xl mx-auto px-8 md:px-16">
-              <div className="grid md:grid-cols-[200px_1fr] gap-12">
-                <div>
-                  <h2 className="text-xs font-medium tracking-[0.25em] uppercase sticky top-24" style={{ color: colorWithAlpha(darkText, 0.4) }}>
-                    {el?.agenda || t("event.agenda")}
-                  </h2>
-                </div>
-                <div>
-                  <p className="text-lg md:text-xl leading-[1.8] font-light whitespace-pre-line" style={{ color: colorWithAlpha(darkText, 0.7) }}>
-                    {event.story_text}
-                  </p>
-                </div>
+      {/* Schedule Timeline */}
+      {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
+        <section className="py-20 relative overflow-hidden bg-background">
+          <div className="absolute inset-0 opacity-[0.01]" style={{ backgroundImage: `linear-gradient(${accent} 1px, transparent 1px), linear-gradient(90deg, ${accent} 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
+          <div className="relative max-w-3xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
+                <Clock className="w-6 h-6" style={{ color: accent }} />
               </div>
+              <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
+              <CorpDivider color={accent} />
             </div>
-          </section>
-        )}
+            <ScheduleTimeline schedule={event.schedule} accentColor={accent} />
+          </div>
+        </section>
+      )}
 
-        {/* ─── SCHEDULE ─── */}
-        {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
-          <section className="py-20 md:py-28 relative" style={{ backgroundColor: cardBg }}>
-            <div className="max-w-4xl mx-auto px-8 md:px-16">
-              <div className="flex items-center justify-between mb-12">
-                <h2 className="text-xs font-medium tracking-[0.25em] uppercase" style={{ color: colorWithAlpha(darkText, 0.4) }}>
-                  {el?.timeline || t("event.timeline")}
-                </h2>
-                <div className="flex-1 h-px mx-8" style={{ backgroundColor: colorWithAlpha(darkText, 0.08) }} />
+      {hasBlock("-agenda") && <AgendaSection agenda={blockCfg.agenda} accentColor={accent} lang={lang} />}
+      {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} lang={lang} />}
+
+      {/* Details */}
+      <section className="py-28 relative overflow-hidden bg-card">
+        <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `linear-gradient(${accent} 1px, transparent 1px), linear-gradient(90deg, ${accent} 1px, transparent 1px)`, backgroundSize: "50px 50px" }} />
+        <div className="relative max-w-5xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-2xl md:text-3xl text-foreground">{el?.details || t("event.details")}</h2>
+            <CorpDivider color={accent} />
+          </div>
+          <div className={`grid gap-12 max-w-2xl mx-auto ${event.dress_code ? "md:grid-cols-2" : "md:grid-cols-1 max-w-lg"}`}>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
+                <MapPin className="w-6 h-6" style={{ color: accent }} />
               </div>
-              <ScheduleTimeline schedule={event.schedule} accentColor={accent} />
-            </div>
-          </section>
-        )}
-
-        {hasBlock("-agenda") && <AgendaSection agenda={blockCfg.agenda} accentColor={accent} lang={lang} />}
-        {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} lang={lang} />}
-
-        {/* ─── DETAILS ─── Grid-based info cards */}
-        <section className="py-20 md:py-28 relative" style={{ backgroundColor: bg }}>
-          <div className="max-w-4xl mx-auto px-8 md:px-16">
-            <div className="flex items-center justify-between mb-12">
-              <h2 className="text-xs font-medium tracking-[0.25em] uppercase" style={{ color: colorWithAlpha(darkText, 0.4) }}>
-                {el?.details || t("event.details")}
-              </h2>
-              <div className="flex-1 h-px mx-8" style={{ backgroundColor: colorWithAlpha(darkText, 0.08) }} />
-            </div>
-            <div className={`grid gap-6 ${event.dress_code ? "md:grid-cols-2" : "md:grid-cols-1 max-w-lg"}`}>
-              {/* Location */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="p-8 relative"
-                style={{ backgroundColor: cardBg, border: `1px solid ${colorWithAlpha(darkText, 0.06)}` }}
-              >
-                <div className="absolute top-0 left-0 w-full h-[2px]" style={{ backgroundColor: accent }} />
-                <div className="flex items-start gap-5">
-                  <div className="w-10 h-10 flex items-center justify-center shrink-0" style={{ backgroundColor: colorWithAlpha(accent, 0.08) }}>
-                    <MapPin className="w-4 h-4" style={{ color: accent }} />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold uppercase tracking-wider mb-2" style={{ color: darkText }}>
-                      {el?.location || t("event.location")}
-                    </h3>
-                    <p className="text-sm font-light" style={{ color: colorWithAlpha(darkText, 0.6) }}>{event.location_name || "—"}</p>
-                    <p className="text-sm font-light mt-0.5" style={{ color: colorWithAlpha(darkText, 0.4) }}>{event.address || ""}</p>
-                  </div>
+              <h3 className="font-display text-xl text-foreground mb-3">{el?.location || t("event.location")}</h3>
+              <p className="font-body text-sm text-muted-foreground">{event.location_name || "—"}</p>
+              <p className="font-body text-sm text-muted-foreground">{event.address || ""}</p>
+            </motion.div>
+            {event.dress_code && (
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
+                  <Shirt className="w-6 h-6" style={{ color: accent }} />
                 </div>
+                <h3 className="font-display text-xl text-foreground mb-3">{el?.dressCode || t("event.dressCode")}</h3>
+                <p className="font-body text-sm text-muted-foreground">{event.dress_code}</p>
               </motion.div>
-
-              {/* Dress Code */}
-              {event.dress_code && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 }}
-                  className="p-8 relative"
-                  style={{ backgroundColor: cardBg, border: `1px solid ${colorWithAlpha(darkText, 0.06)}` }}
-                >
-                  <div className="absolute top-0 left-0 w-full h-[2px]" style={{ backgroundColor: accent }} />
-                  <div className="flex items-start gap-5">
-                    <div className="w-10 h-10 flex items-center justify-center shrink-0" style={{ backgroundColor: colorWithAlpha(accent, 0.08) }}>
-                      <Shirt className="w-4 h-4" style={{ color: accent }} />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-semibold uppercase tracking-wider mb-2" style={{ color: darkText }}>
-                        {el?.dressCode || t("event.dressCode")}
-                      </h3>
-                      <p className="text-sm font-light" style={{ color: colorWithAlpha(darkText, 0.6) }}>{event.dress_code}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </div>
-            {event.address && (
-              <div className="mt-10 max-w-xl" style={{ border: `1px solid ${colorWithAlpha(darkText, 0.06)}` }}>
-                <GoogleMapsEmbed address={event.address} />
-              </div>
             )}
           </div>
-        </section>
+          {event.address && (
+            <div className="mt-12 max-w-xl mx-auto"><GoogleMapsEmbed address={event.address} /></div>
+          )}
+        </div>
+      </section>
 
-        {event.hotel_recommendations && Array.isArray(event.hotel_recommendations) && event.hotel_recommendations.length > 0 && (
-          <HotelRecommendations hotels={event.hotel_recommendations} accentColor={accent} />
-        )}
+      {event.hotel_recommendations && Array.isArray(event.hotel_recommendations) && event.hotel_recommendations.length > 0 && (
+        <HotelRecommendations hotels={event.hotel_recommendations} accentColor={accent} />
+      )}
 
-        {hasBlock("-videomsg") && <VideoMessageSection accentColor={accent} lang={lang} blockConfig={blockCfg} variant="corporate" />}
-        {hasBlock("-products") && <ProductsSection products={blockCfg.products} accentColor={accent} lang={lang} />}
-        {hasBlock("-sponsors") && <SponsorsSection sponsors={blockCfg.sponsors} accentColor={accent} lang={lang} />}
+      {hasBlock("-videomsg") && <VideoMessageSection accentColor={accent} lang={lang} blockConfig={blockCfg} variant="corporate" />}
+      {hasBlock("-products") && <ProductsSection products={blockCfg.products} accentColor={accent} lang={lang} />}
+      {hasBlock("-sponsors") && <SponsorsSection sponsors={blockCfg.sponsors} accentColor={accent} lang={lang} />}
 
-        {event.rsvp_enabled && (
-          <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="corporate" lang={lang} maxCompanions={maxCompanions} />
-        )}
+      {event.rsvp_enabled && (
+        <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="corporate" lang={lang} maxCompanions={maxCompanions} />
+      )}
 
-        {/* ─── FOOTER ─── Minimal structured */}
-        <footer className="py-16 relative" style={{ backgroundColor: cardBg, borderTop: `1px solid ${colorWithAlpha(darkText, 0.06)}` }}>
-          <div className="max-w-4xl mx-auto px-8 md:px-16 flex flex-col md:flex-row items-center justify-between gap-4">
-            <h2 className="text-lg font-semibold" style={{ color: darkText }}>{event.title}</h2>
-            <p className="text-xs tracking-[0.2em] uppercase" style={{ color: colorWithAlpha(darkText, 0.35), fontFamily: "'JetBrains Mono', monospace" }}>
-              {formattedDate}
-            </p>
-          </div>
-        </footer>
+      {/* Footer */}
+      <footer className="py-20 text-center relative overflow-hidden bg-card">
+        <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `linear-gradient(${accent} 1px, transparent 1px), linear-gradient(90deg, ${accent} 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
+        <div className="relative">
+          <h2 className="font-display text-2xl text-foreground mb-2">{event.title}</h2>
+          <CorpDivider color={accent} />
+          <p className="font-body text-sm text-muted-foreground mt-3">{formattedDate}</p>
+        </div>
+      </footer>
       </motion.div>
       )}
     </div>

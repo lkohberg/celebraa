@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PartyPopper, MapPin, Clock, Sparkles } from "lucide-react";
+import { PartyPopper, MapPin, Clock, Music, Sparkles, Star } from "lucide-react";
 import { useTranslation } from "@/i18n";
 import GiftBoxIntro from "./GiftBoxIntro";
 import CountdownTimer from "./CountdownTimer";
@@ -24,16 +24,30 @@ import PotluckSection from "@/components/blocks/PotluckSection";
 import BackgroundMusicSection from "@/components/blocks/BackgroundMusicSection";
 import VideoMessageSection from "@/components/blocks/VideoMessageSection";
 
-/* Floating emoji particles in the background */
-const FloatingEmoji = ({ emoji, delay, x, size }: { emoji: string; delay: number; x: number; size: number }) => (
-  <motion.span
-    className="absolute pointer-events-none select-none"
-    style={{ left: `${x}%`, top: "-5%", fontSize: size }}
-    animate={{ y: "110vh", rotate: [0, 180, 360], opacity: [0, 1, 1, 0] }}
-    transition={{ duration: 8 + Math.random() * 4, delay, repeat: Infinity, ease: "linear" }}
-  >
-    {emoji}
-  </motion.span>
+const ConfettiParticle = ({ delay }: { delay: number }) => {
+  const colors = ["#FF6B9D", "#C44DFF", "#FFD93D", "#6BCB77", "#4D96FF", "#FF8A65"];
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  const left = Math.random() * 100;
+  const size = 5 + Math.random() * 7;
+  const shapes = ["rounded-sm", "rounded-full"];
+  const shape = shapes[Math.floor(Math.random() * shapes.length)];
+  return (
+    <motion.div
+      className={`absolute ${shape} pointer-events-none`}
+      style={{ left: `${left}%`, top: -20, width: size, height: size * (0.6 + Math.random() * 0.8), backgroundColor: color }}
+      initial={{ y: -20, opacity: 1, rotate: 0 }}
+      animate={{ y: "100vh", opacity: 0, rotate: 360 + Math.random() * 360 }}
+      transition={{ duration: 3 + Math.random() * 2.5, delay, ease: "easeIn" }}
+    />
+  );
+};
+
+const PartyDivider = ({ color }: { color: string }) => (
+  <div className="flex items-center justify-center gap-2 my-2">
+    <div className="w-8 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+    <Star className="w-3 h-3" style={{ color, opacity: 0.4 }} />
+    <div className="w-8 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
+  </div>
 );
 
 const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = false, onIntroComplete }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean; isDemo?: boolean; onIntroComplete?: () => void }) => {
@@ -47,158 +61,93 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
   const selectedBlocks = event.selectedBlocks || (event as any).selected_blocks || [];
   const blockCfg = (event as any).block_config || {};
   const hasBlock = (suffix: string) => selectedBlocks.some((id: string) => id.endsWith(suffix));
-  const accent = theme?.primary || "#E040FB";
-  const accentDark = theme?.accent || "#7B1FA2";
+  const accent = theme?.primary || "hsl(340, 65%, 50%)";
   const maxCompanions = blockCfg.max_companions ?? 5;
-
-  /* Pre-generated floating emojis */
-  const emojis = useMemo(() => {
-    const pool = ["🎉", "🎈", "🎂", "✨", "🥳", "🎁", "🎊", "💫", "⭐"];
-    return Array.from({ length: 12 }, (_, i) => ({
-      emoji: pool[i % pool.length],
-      delay: i * 1.5,
-      x: 5 + (i * 8) % 90,
-      size: 16 + Math.random() * 12,
-    }));
-  }, []);
-
-  /* Gradient mesh background */
-  const meshGradient = theme
-    ? `radial-gradient(ellipse at 20% 50%, ${colorWithAlpha(theme.primary, 0.15)} 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, ${colorWithAlpha(theme.accent || theme.primary, 0.1)} 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, ${colorWithAlpha(theme.primary, 0.08)} 0%, transparent 50%)`
-    : `radial-gradient(ellipse at 20% 50%, rgba(224,64,251,0.12) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(255,64,129,0.08) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(124,77,255,0.1) 0%, transparent 50%)`;
 
   return (
     <GuestNameProvider>
-    <div className="min-h-screen overflow-hidden" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'Space Grotesk', 'DM Sans', sans-serif", backgroundColor: "#0A0A0F", color: "#FAFAFA" }}>
-      <link href={`https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
+    <div className="min-h-screen overflow-hidden" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
+      <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
 
       {showIntro && !showContent && <GiftBoxIntro title={event.title} onOpen={() => { setShowContent(true); onIntroComplete?.(); }} accentColor={accent} />}
 
       <AnimatePresence>
         {showContent && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
-
-            {/* ─── HERO ─── Dark gradient with floating emojis */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-              {event.hero_image_url ? (
+            {/* Hero */}
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{
+              background: event.hero_image_url ? undefined
+                : theme ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.accent} 50%, ${theme.primary} 100%)`
+                : "linear-gradient(135deg, hsl(340 65% 50%) 0%, hsl(280 60% 55%) 50%, hsl(340 70% 60%) 100%)",
+            }}>
+              {event.hero_image_url && (
                 <>
                   <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,10,15,0.3) 0%, rgba(10,10,15,0.7) 100%)" }} />
-                </>
-              ) : (
-                <>
-                  <div className="absolute inset-0" style={{ background: `linear-gradient(160deg, #0F0F1A 0%, #1A0A2E 40%, #0A0A0F 100%)` }} />
-                  <div className="absolute inset-0" style={{ background: meshGradient }} />
-                  {/* Floating emojis */}
-                  {emojis.map((e, i) => <FloatingEmoji key={i} {...e} />)}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/60" />
                 </>
               )}
-
-              {/* Grain texture */}
-              <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")" }} />
-
-              <motion.div
-                className="relative z-10 text-center px-6"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <motion.div
-                  className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-8 backdrop-blur-xl"
-                  style={{ background: colorWithAlpha(accent, 0.15), border: `1px solid ${colorWithAlpha(accent, 0.2)}` }}
-                  animate={{ scale: [1, 1.03, 1] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  <Sparkles className="w-4 h-4" style={{ color: accent }} />
-                  <span className="text-xs font-medium tracking-widest uppercase" style={{ color: accent }}>
-                    {el?.letsCelebrate || t("event.letsCelebrate")}
-                  </span>
+              {!event.hero_image_url && (
+                <>
+                  <div className="absolute top-[10%] left-[5%] w-32 h-32 rounded-full bg-white/5 blur-2xl" />
+                  <div className="absolute bottom-[15%] right-[8%] w-48 h-48 rounded-full bg-white/5 blur-3xl" />
+                  <div className="absolute top-[40%] right-[15%] w-20 h-20 rounded-full bg-white/5 blur-xl" />
+                </>
+              )}
+              <motion.div className="relative z-10 text-center px-4" initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }}>
+                <motion.div animate={{ rotate: [0, -10, 10, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
+                  <PartyPopper className="w-16 h-16 mx-auto mb-6 text-white/80" />
                 </motion.div>
-
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-[1.05]" style={{ fontFamily: "'Space Grotesk', sans-serif", background: `linear-gradient(135deg, #fff 0%, ${accent} 50%, #fff 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundSize: "200% auto" }}>
-                  {event.title}
-                </h1>
-
-                <p className="text-xl md:text-2xl font-light tracking-wide" style={{ color: "rgba(255,255,255,0.6)" }}>
-                  {formattedDate}
-                </p>
-
-                {event.description && (
-                  <p className="mt-6 text-base md:text-lg max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.45)" }}>
-                    {event.description}
-                  </p>
-                )}
+                <p className="font-body text-sm tracking-[0.3em] uppercase mb-4 text-white/70">{el?.letsCelebrate || t("event.letsCelebrate")}</p>
+                <h1 className="font-display text-5xl md:text-7xl font-bold text-white mb-4">{event.title}</h1>
+                <PartyDivider color="rgba(255,255,255,0.5)" />
+                <p className="font-display text-2xl md:text-3xl text-white/90 italic mt-4">{formattedDate}</p>
+                {event.description && <p className="font-body text-white/70 mt-4 text-lg max-w-md mx-auto">{event.description}</p>}
               </motion.div>
-
-              {/* Scroll indicator */}
-              <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
-                <motion.div
-                  className="w-6 h-10 rounded-full border-2 flex items-start justify-center p-1.5"
-                  style={{ borderColor: "rgba(255,255,255,0.15)" }}
-                >
-                  <motion.div
-                    className="w-1.5 h-1.5 rounded-full"
-                    style={{ backgroundColor: accent }}
-                    animate={{ y: [0, 16, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                </motion.div>
-              </div>
             </section>
 
             {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} eventId={event.id} />}
 
-            {/* ─── COUNTDOWN ─── Glassmorphism card */}
-            <section className="py-24 md:py-32 relative overflow-hidden" style={{ backgroundColor: "#0A0A0F" }}>
-              <div className="absolute inset-0" style={{ background: meshGradient, opacity: 0.5 }} />
-              <div className="relative max-w-2xl mx-auto px-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="rounded-3xl p-10 md:p-14 text-center backdrop-blur-xl"
-                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
-                >
-                  <p className="text-xs tracking-[0.3em] uppercase mb-3" style={{ color: accent }}>
-                    {el?.countdown || t("event.countdown")}
-                  </p>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-8" style={{ color: "rgba(255,255,255,0.9)" }}>
-                    {el?.countdownSub || t("event.countdownSub")}
-                  </h2>
+            {/* Countdown */}
+            <section className="py-24 relative overflow-hidden bg-card">
+              <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(${accent} 1.5px, transparent 1.5px)`, backgroundSize: "28px 28px" }} />
+              <div className="relative max-w-3xl mx-auto px-4 text-center">
+                <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">{el?.countdown || t("event.countdown")}</p>
+                <h2 className="font-display text-2xl md:text-3xl text-foreground mb-4">{el?.countdownSub || t("event.countdownSub")}</h2>
+                <PartyDivider color={accent} />
+                <div className="mt-10">
                   <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} />
-                </motion.div>
+                </div>
               </div>
             </section>
 
-            {/* ─── STORY ─── Bold typography section */}
+            {/* Story / About */}
             {event.story_text && (
-              <section className="py-24 md:py-32 relative overflow-hidden" style={{ backgroundColor: "#0D0D14" }}>
-                <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at center, ${colorWithAlpha(accent, 0.06)} 0%, transparent 60%)` }} />
-                <div className="relative max-w-2xl mx-auto px-6 text-center">
-                  <PartyPopper className="w-8 h-8 mx-auto mb-6" style={{ color: accent }} />
-                  <h2 className="text-2xl md:text-3xl font-bold mb-8" style={{ color: "rgba(255,255,255,0.9)" }}>
-                    {el?.party || t("event.party")}
-                  </h2>
-                  <p className="text-lg md:text-xl leading-[1.8] whitespace-pre-line" style={{ color: "rgba(255,255,255,0.55)" }}>
-                    {event.story_text}
-                  </p>
+              <section className="py-28 relative overflow-hidden bg-background">
+                <div className="absolute top-10 right-10 w-64 h-64 rounded-full opacity-[0.04]" style={{ background: `radial-gradient(circle, ${accent}, transparent)` }} />
+                <div className="relative max-w-2xl mx-auto px-4 text-center">
+                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
+                    <Music className="w-6 h-6" style={{ color: accent }} />
+                  </div>
+                  <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{el?.party || t("event.party")}</h2>
+                  <PartyDivider color={accent} />
+                  <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line mt-8">{event.story_text}</p>
                 </div>
               </section>
             )}
 
-            {/* ─── SCHEDULE ─── */}
+            {/* Timeline */}
             {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
-              <section className="py-24 md:py-32 relative overflow-hidden" style={{ backgroundColor: "#0A0A0F" }}>
-                <div className="relative max-w-3xl mx-auto px-6">
-                  <div className="text-center mb-14">
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4" style={{ background: colorWithAlpha(accent, 0.1), border: `1px solid ${colorWithAlpha(accent, 0.15)}` }}>
+              <section className="py-20 relative overflow-hidden bg-background">
+                <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "24px 24px" }} />
+                <div className="relative max-w-3xl mx-auto px-4">
+                  <div className="text-center mb-12">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
                       <Clock className="w-6 h-6" style={{ color: accent }} />
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-bold" style={{ color: "rgba(255,255,255,0.9)" }}>
-                      {el?.timeline || t("event.timeline")}
-                    </h2>
+                    <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
+                    <PartyDivider color={accent} />
                   </div>
-                  <ScheduleTimeline schedule={event.schedule} accentColor={accent} />
+                  <ScheduleTimeline schedule={event.schedule} />
                 </div>
               </section>
             )}
@@ -208,33 +157,26 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
               <DressCodeMFSection dressCode={{ male: blockCfg.dresscode_male, female: blockCfg.dresscode_female }} accentColor={accent} lang={lang} />
             )}
 
-            {/* ─── DETAILS ─── Glass card with neon glow */}
-            <section className="py-24 md:py-32 relative overflow-hidden" style={{ backgroundColor: "#0D0D14" }}>
-              <div className="absolute inset-0" style={{ background: meshGradient, opacity: 0.3 }} />
-              <div className="relative max-w-4xl mx-auto px-6">
-                <div className="text-center mb-14">
-                  <h2 className="text-2xl md:text-3xl font-bold" style={{ color: "rgba(255,255,255,0.9)" }}>
-                    {el?.details || t("event.details")}
-                  </h2>
+            {/* Details */}
+            <section className="py-28 relative overflow-hidden bg-card">
+              <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
+              <div className="relative max-w-5xl mx-auto px-4">
+                <div className="text-center mb-16">
+                  <h2 className="font-display text-2xl md:text-3xl text-foreground">{el?.details || t("event.details")}</h2>
+                  <PartyDivider color={accent} />
                 </div>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="max-w-md mx-auto rounded-3xl p-10 text-center backdrop-blur-xl relative"
-                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", boxShadow: `0 0 80px ${colorWithAlpha(accent, 0.08)}` }}
-                >
-                  <div className="w-12 h-12 mx-auto mb-5 rounded-2xl flex items-center justify-center" style={{ background: colorWithAlpha(accent, 0.12) }}>
-                    <MapPin className="w-5 h-5" style={{ color: accent }} />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3" style={{ color: "rgba(255,255,255,0.9)" }}>
-                    {el?.venue || t("event.venue")}
-                  </h3>
-                  <p className="text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>{event.location_name || "—"}</p>
-                  <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>{event.address || ""}</p>
-                </motion.div>
+                <div className="grid md:grid-cols-1 gap-12 max-w-lg mx-auto">
+                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
+                      <MapPin className="w-6 h-6" style={{ color: accent }} />
+                    </div>
+                    <h3 className="font-display text-xl text-foreground mb-3">{el?.venue || t("event.venue")}</h3>
+                    <p className="font-body text-sm text-muted-foreground">{event.location_name || "—"}</p>
+                    <p className="font-body text-sm text-muted-foreground">{event.address || ""}</p>
+                  </motion.div>
+                </div>
                 {event.address && (
-                  <div className="mt-12 max-w-xl mx-auto rounded-2xl overflow-hidden"><GoogleMapsEmbed address={event.address} /></div>
+                  <div className="mt-12 max-w-xl mx-auto"><GoogleMapsEmbed address={event.address} /></div>
                 )}
               </div>
             </section>
@@ -254,13 +196,13 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
               <RsvpForm eventId={event.id} rsvpDeadline={event.rsvp_deadline} menuSelection={event.menu_selection || false} variant="birthday" lang={lang} maxCompanions={maxCompanions} />
             )}
 
-            {/* ─── FOOTER ─── */}
-            <footer className="py-20 text-center relative overflow-hidden" style={{ backgroundColor: "#0A0A0F" }}>
+            {/* Footer */}
+            <footer className="py-20 text-center relative overflow-hidden bg-card">
+              <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(${accent} 1px, transparent 1px)`, backgroundSize: "18px 18px" }} />
               <div className="relative">
-                <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ background: `linear-gradient(135deg, ${accent}, #fff)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                  {event.title}
-                </h2>
-                <p className="text-xs tracking-[0.2em] uppercase" style={{ color: "rgba(255,255,255,0.3)" }}>{formattedDate}</p>
+                <h2 className="font-display text-3xl mb-2" style={{ color: accent }}>{event.title}</h2>
+                <PartyDivider color={accent} />
+                <p className="font-body text-sm text-muted-foreground tracking-[0.15em] uppercase mt-3">{formattedDate}</p>
               </div>
             </footer>
           </motion.div>

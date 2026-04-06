@@ -4,7 +4,6 @@ import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
 import { type EventLang, getEventLabels } from "@/i18n/eventLabels";
 import { useGuestName } from "@/hooks/useGuestName";
-import { colorWithAlpha } from "@/lib/color-utils";
 
 interface RsvpFormProps {
   eventId: string;
@@ -15,39 +14,6 @@ interface RsvpFormProps {
   maxCompanions?: number;
 }
 
-const variantStyles = {
-  wedding: {
-    bg: "#FAF6F1",
-    cardBg: "#FDFBF8",
-    text: "#3D3228",
-    accent: "#8B7355",
-    inputBg: "#FDFBF8",
-    inputBorder: "#E8DFD4",
-    font: "'Cormorant Garamond', serif",
-    radius: "0px",
-  },
-  birthday: {
-    bg: "#0A0A0F",
-    cardBg: "rgba(255,255,255,0.03)",
-    text: "#FAFAFA",
-    accent: "#E040FB",
-    inputBg: "rgba(255,255,255,0.05)",
-    inputBorder: "rgba(255,255,255,0.08)",
-    font: "'Space Grotesk', sans-serif",
-    radius: "12px",
-  },
-  corporate: {
-    bg: "#FAFAFA",
-    cardBg: "#FFFFFF",
-    text: "#111111",
-    accent: "#2563EB",
-    inputBg: "#FFFFFF",
-    inputBorder: "rgba(17,17,17,0.1)",
-    font: "'Inter', sans-serif",
-    radius: "0px",
-  },
-};
-
 const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", lang, maxCompanions = 5 }: RsvpFormProps) => {
   const { t } = useTranslation();
   const labels = lang ? getEventLabels(lang) : null;
@@ -56,10 +22,12 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
   const [name, setName] = useState(sharedName || "");
   const [nameEditedLocally, setNameEditedLocally] = useState(false);
 
+  // Sync shared name into local state when it changes externally (e.g. from vote)
   useEffect(() => {
-    if (sharedName && !nameEditedLocally) setName(sharedName);
+    if (sharedName && !nameEditedLocally) {
+      setName(sharedName);
+    }
   }, [sharedName]);
-
   const [email, setEmail] = useState("");
   const [attendance, setAttendance] = useState<"accepted" | "declined" | null>(null);
   const [companionCount, setCompanionCount] = useState(0);
@@ -67,7 +35,11 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
   const [message, setMessage] = useState("");
   const [menuChoice, setMenuChoice] = useState("");
 
-  const s = variantStyles[variant];
+  const primaryColor = variant === "wedding"
+    ? "hsl(150, 18%, 38%)"
+    : variant === "birthday"
+    ? "hsl(340, 65%, 50%)"
+    : "hsl(220, 50%, 35%)";
 
   const handleCompanionCountChange = (value: number) => {
     const clamped = Math.max(0, Math.min(value, maxCompanions));
@@ -100,104 +72,130 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
         menu_choice: menuChoice || undefined,
       });
       toast.success(t("event.thankYou"));
-      setName(""); setEmail(""); setAttendance(null);
-      setCompanionCount(0); setCompanionNames([]); setMessage(""); setMenuChoice("");
+      setName("");
+      setEmail("");
+      setAttendance(null);
+      setCompanionCount(0);
+      setCompanionNames([]);
+      setMessage("");
+      setMenuChoice("");
     } catch {
       toast.error(t("event.rsvpError"));
     }
   };
 
-  const inputStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "14px 16px",
-    fontSize: "15px",
-    backgroundColor: s.inputBg,
-    border: `1px solid ${s.inputBorder}`,
-    borderRadius: s.radius,
-    color: s.text,
-    fontFamily: s.font,
-    outline: "none",
-    transition: "border-color 0.2s",
-  };
+  const inputClass =
+    "w-full px-4 py-3 font-body text-base bg-card border border-border rounded-md text-foreground focus:outline-none focus:border-primary transition-colors";
 
   const companionLabel = labels?.companions || t("event.companions") || "Begleitpersonen";
 
   return (
-    <section className="py-24 md:py-32" style={{ backgroundColor: s.bg }}>
-      <div className="max-w-lg mx-auto px-6">
+    <section className="py-24" style={{ backgroundColor: "hsl(30, 33%, 96%)" }}>
+      <div className="max-w-lg mx-auto px-4">
         <div className="text-center mb-12">
-          {variant === "corporate" && (
-            <div className="w-full h-[2px] mb-8" style={{ background: `linear-gradient(90deg, transparent 0%, ${s.accent} 50%, transparent 100%)` }} />
-          )}
-          <h2
-            className="text-2xl md:text-3xl mb-3"
-            style={{
-              fontFamily: s.font,
-              fontWeight: variant === "wedding" ? 300 : variant === "birthday" ? 700 : 600,
-              color: s.text,
-              letterSpacing: variant === "corporate" ? "-0.01em" : undefined,
-            }}
-          >
+          <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">
             {variant === "corporate" ? (labels?.register || t("event.register")) : (labels?.rsvp || t("event.rsvp"))}
           </h2>
-          {variant === "wedding" && (
-            <svg width="60" height="20" viewBox="0 0 60 20" fill="none" className="mx-auto my-4" style={{ opacity: 0.3 }}>
-              <path d="M0 10 Q10 2 20 10 Q30 18 40 10 Q50 2 60 10" stroke={s.accent} strokeWidth="0.8" fill="none" />
-            </svg>
-          )}
+          <div className="w-16 h-px mx-auto mb-4" style={{ backgroundColor: primaryColor }} />
           {rsvpDeadline && (
-            <p className="text-sm" style={{ color: colorWithAlpha(s.text, 0.5), fontFamily: s.font }}>
+            <p className="font-body text-muted-foreground">
               {labels?.rsvpDeadline || t("event.rsvpDeadline")} {new Date(rsvpDeadline).toLocaleDateString(lang === "en" ? "en-US" : "de-AT")}
             </p>
           )}
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <input type="text" placeholder={labels?.name || t("event.name")} value={name} onChange={(e) => { setName(e.target.value); setSharedName(e.target.value); setNameEditedLocally(true); }} required style={inputStyle} />
-          <input type="email" placeholder={labels?.email || t("event.email")} value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <input
+            type="text"
+            placeholder={labels?.name || t("event.name")}
+            value={name}
+            onChange={(e) => { setName(e.target.value); setSharedName(e.target.value); setNameEditedLocally(true); }}
+            required
+            className={inputClass}
+          />
+          <input
+            type="email"
+            placeholder={labels?.email || t("event.email")}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={inputClass}
+          />
 
           {/* Attendance buttons */}
-          <div className="flex gap-3">
-            {(["accepted", "declined"] as const).map((status) => (
-              <button
-                key={status}
-                type="button"
-                onClick={() => setAttendance(status)}
-                className="flex-1 py-3.5 px-4 text-sm font-medium transition-all"
-                style={{
-                  borderRadius: s.radius,
-                  fontFamily: s.font,
-                  ...(attendance === status
-                    ? { backgroundColor: s.accent, color: "#fff", border: `1px solid ${s.accent}` }
-                    : { backgroundColor: "transparent", color: colorWithAlpha(s.text, 0.6), border: `1px solid ${s.inputBorder}` }),
-                }}
-              >
-                {status === "accepted" ? (labels?.attending || t("event.attending")) : (labels?.notAttending || t("event.notAttending"))}
-              </button>
-            ))}
+          <div className="flex gap-4">
+            <button
+              type="button"
+              onClick={() => setAttendance("accepted")}
+              className="flex-1 py-3 px-4 font-body text-sm rounded-md border transition-all"
+              style={
+                attendance === "accepted"
+                  ? { backgroundColor: primaryColor, color: "white", borderColor: primaryColor }
+                  : { backgroundColor: "hsl(30, 30%, 98%)", borderColor: "hsl(30, 20%, 88%)" }
+              }
+            >
+              {labels?.attending || t("event.attending")}
+            </button>
+            <button
+              type="button"
+              onClick={() => setAttendance("declined")}
+              className="flex-1 py-3 px-4 font-body text-sm rounded-md border transition-all"
+              style={
+                attendance === "declined"
+                  ? { backgroundColor: primaryColor, color: "white", borderColor: primaryColor }
+                  : { backgroundColor: "hsl(30, 30%, 98%)", borderColor: "hsl(30, 20%, 88%)" }
+              }
+            >
+              {labels?.notAttending || t("event.notAttending")}
+            </button>
           </div>
 
           {attendance === "accepted" && (
             <>
+              {/* Companion count */}
               <div>
-                <label className="block text-sm mb-2" style={{ color: colorWithAlpha(s.text, 0.6), fontFamily: s.font }}>
-                  {companionLabel} {maxCompanions > 0 && <span style={{ opacity: 0.5 }}>(max. {maxCompanions})</span>}
+                <label className="block font-body text-sm text-foreground mb-2">
+                  {companionLabel} {maxCompanions > 0 && <span className="text-muted-foreground">(max. {maxCompanions})</span>}
                 </label>
-                <input type="number" min={0} max={maxCompanions} value={companionCount} onChange={(e) => handleCompanionCountChange(parseInt(e.target.value) || 0)} style={{ ...inputStyle, width: 100 }} />
+                <input
+                  type="number"
+                  min={0}
+                  max={maxCompanions}
+                  value={companionCount}
+                  onChange={(e) => handleCompanionCountChange(parseInt(e.target.value) || 0)}
+                  className={inputClass + " w-24"}
+                />
               </div>
+
+              {/* Companion name fields */}
               {companionCount > 0 && (
                 <div className="space-y-3">
                   {Array.from({ length: companionCount }).map((_, i) => (
-                    <input key={i} type="text" placeholder={`${labels?.companionName || t("event.companionName") || "Name Begleitperson"} ${i + 1}`} value={companionNames[i] || ""} onChange={(e) => { const u = [...companionNames]; u[i] = e.target.value; setCompanionNames(u); }} style={inputStyle} />
+                    <input
+                      key={i}
+                      type="text"
+                      placeholder={`${labels?.companionName || t("event.companionName") || "Name Begleitperson"} ${i + 1}`}
+                      value={companionNames[i] || ""}
+                      onChange={(e) => {
+                        const updated = [...companionNames];
+                        updated[i] = e.target.value;
+                        setCompanionNames(updated);
+                      }}
+                      className={inputClass}
+                    />
                   ))}
                 </div>
               )}
+
               {menuSelection && (
                 <div>
-                  <label className="block text-sm mb-2" style={{ color: colorWithAlpha(s.text, 0.6), fontFamily: s.font }}>
+                  <label className="block font-body text-sm text-foreground mb-2">
                     {labels?.menuChoice || t("event.menuChoice")}
                   </label>
-                  <select value={menuChoice} onChange={(e) => setMenuChoice(e.target.value)} style={inputStyle}>
+                  <select
+                    value={menuChoice}
+                    onChange={(e) => setMenuChoice(e.target.value)}
+                    className={inputClass}
+                  >
                     <option value="">{labels?.standard || t("event.dietary.standard")}</option>
                     <option value="vegetarian">{labels?.vegetarian || t("event.dietary.vegetarian")}</option>
                     <option value="vegan">{labels?.vegan || t("event.dietary.vegan")}</option>
@@ -209,19 +207,19 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
             </>
           )}
 
-          <textarea placeholder={labels?.message || t("event.message")} value={message} onChange={(e) => setMessage(e.target.value)} rows={3} style={{ ...inputStyle, resize: "vertical", minHeight: 80 }} />
+          <textarea
+            placeholder={labels?.message || t("event.message")}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            rows={3}
+            className={inputClass + " resize-y min-h-[80px]"}
+          />
 
           <button
             type="submit"
             disabled={submitRsvp.isPending}
-            className="w-full py-4 text-sm font-medium tracking-[0.1em] uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
-            style={{
-              backgroundColor: s.accent,
-              color: "#fff",
-              borderRadius: s.radius,
-              fontFamily: s.font,
-              border: "none",
-            }}
+            className="w-full py-4 font-body text-sm tracking-[0.15em] uppercase text-white rounded-md transition-opacity hover:opacity-90 disabled:opacity-50"
+            style={{ backgroundColor: primaryColor }}
           >
             {submitRsvp.isPending ? "..." : (labels?.submit || t("event.submit"))}
           </button>
