@@ -142,7 +142,7 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
 
           {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} eventId={event.id} />}
 
-          <FloralWave from={event.hero_image_url ? "hsl(0,0%,15%)" : "hsl(340,30%,90%)"} to={bgLight} accent={accent} />
+          <FloralWave from={bgWarm} to={bgLight} accent={accent} />
 
           {/* Countdown – centered with botanical card */}
           <section id="countdown" className="py-14 md:py-24 relative overflow-hidden" style={{ backgroundColor: bgLight }}>

@@ -117,7 +117,6 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
 
           {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} eventId={event.id} />}
 
-          <ClassicOrnament color={accent} />
 
           {/* Countdown – formal, centered */}
           <section id="countdown-classic" className="py-14 md:py-28 relative" style={{ backgroundColor: bgIvory }}>
