@@ -227,7 +227,7 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
                 <span className="text-lg tracking-widest" style={{ color: accent, fontFamily: "'Cormorant Garamond', serif" }}>{initials}</span>
               </div>
               <h2 className="text-3xl mb-2" style={{ fontFamily: "'Great Vibes', cursive", color: textDark }}>{names}</h2>
-              <p className="text-xs tracking-[0.2em] uppercase mt-2 mb-4" style={{ color: "hsl(30, 10%, 50%)", fontFamily: "'Lato', sans-serif" }}>{formattedDate.replace(/\s/g, " · ")}</p>
+              <p className="text-xs tracking-[0.2em] uppercase mt-2 mb-4" style={{ color: "hsl(30, 10%, 50%)", fontFamily: "'Lato', sans-serif" }}>{formattedDate.replace(/,\s*/g, " ").replace(/\s+/g, " · ")}</p>
               <ClassicOrnament color={accent} />
               <p className="text-sm italic mt-4 mb-8" style={{ color: "hsl(30, 10%, 50%)", fontFamily: "'Lato', sans-serif" }}>{el?.celebration || t("event.celebration")}</p>
               <div className="flex flex-wrap items-center justify-center gap-3">
