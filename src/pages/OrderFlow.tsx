@@ -1047,21 +1047,23 @@ const OrderFlow = () => {
                   </div>
 
                   <div className="lg:col-span-3 flex justify-center order-1 lg:order-2">
-                    {/* On small screens: render preview directly (no iframe needed) */}
-                    <div className="md:hidden w-full rounded-xl overflow-hidden shadow-card" style={{ maxHeight: "75vh", overflowY: "auto" }}>
-                      {(() => {
-                        const previewEvent = buildPreviewEvent();
-                        switch (category) {
-                          case "wedding":
-                            if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                            if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                            return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                          case "birthday":
-                            return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                          case "corporate":
-                            return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                        }
-                      })()}
+                    {/* On small screens: iframe at full width, no toggle needed */}
+                    <div className="md:hidden w-full rounded-xl overflow-hidden shadow-card">
+                      <IframePreview width={375} maxHeight="75vh" scaleToFit>
+                        {(() => {
+                          const previewEvent = buildPreviewEvent();
+                          switch (category) {
+                            case "wedding":
+                              if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                              if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                              return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                            case "birthday":
+                              return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                            case "corporate":
+                              return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                          }
+                        })()}
+                      </IframePreview>
                     </div>
 
                     {/* On md+ screens: iframe-based desktop/mobile toggle */}
