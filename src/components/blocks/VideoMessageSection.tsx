@@ -21,7 +21,7 @@ const duckBgMusic = (duck: boolean) => {
 const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "wedding" }: VideoMessageSectionProps) => {
   const color = accentColor || "hsl(38, 65%, 50%)";
   const mediaUrl = blockConfig?.video_message_url;
-  const mediaType = blockConfig?.video_message_type || "video"; // "video" or "audio"
+  const mediaType = blockConfig?.video_message_type || "video";
 
   const isCorporate = variant === "corporate";
   const label = lang
@@ -32,7 +32,7 @@ const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "weddin
     : (isCorporate ? "Ein Video oder eine Nachricht für Sie" : "Eine Nachricht an euch");
 
   return (
-    <section className="py-20 relative overflow-hidden bg-card">
+    <section className="py-12 md:py-20 relative overflow-hidden bg-card">
       <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: `radial-gradient(${color} 1px, transparent 1px)`, backgroundSize: "24px 24px" }} />
       <div className="relative max-w-2xl mx-auto px-4 text-center">
         <motion.div
@@ -40,19 +40,19 @@ const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "weddin
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(color, 0.15) }}>
+          <div className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full mb-3" style={{ backgroundColor: colorWithAlpha(color, 0.15) }}>
             {mediaType === "audio" ? (
-              <Mic className="w-6 h-6" style={{ color }} />
+              <Mic className="w-5 h-5 md:w-6 md:h-6" style={{ color }} />
             ) : (
-              <Video className="w-6 h-6" style={{ color }} />
+              <Video className="w-5 h-5 md:w-6 md:h-6" style={{ color }} />
             )}
           </div>
-          <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{label}</h2>
-          <p className="font-body text-sm text-muted-foreground mb-8">{subtitle}</p>
+          <h2 className="font-display text-xl md:text-3xl text-foreground mb-1">{label}</h2>
+          <p className="font-body text-sm text-muted-foreground mb-6 md:mb-8">{subtitle}</p>
 
           {mediaUrl ? (
             mediaType === "audio" ? (
-              <div className="bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30 p-6">
+              <div className="bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30 p-4 md:p-6">
                 <audio controls className="w-full" src={mediaUrl}
                   onPlay={() => duckBgMusic(true)}
                   onPause={() => duckBgMusic(false)}
@@ -78,16 +78,15 @@ const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "weddin
               </div>
             )
           ) : (
-            /* Placeholder when no media uploaded yet */
             <div className="rounded-2xl overflow-hidden border border-border/30 shadow-sm">
               <div className="aspect-video bg-gradient-to-br from-secondary via-card to-secondary flex items-center justify-center relative">
                 <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(${color} 1px, transparent 1px)`, backgroundSize: "16px 16px" }} />
                 <div className="text-center relative">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(color, 0.1) }}>
+                  <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-3 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(color, 0.1) }}>
                     {isCorporate ? (
-                      <Video className="w-8 h-8" style={{ color, opacity: 0.5 }} />
+                      <Video className="w-7 h-7 md:w-8 md:h-8" style={{ color, opacity: 0.5 }} />
                     ) : (
-                      <Heart className="w-8 h-8" style={{ color, opacity: 0.5 }} />
+                      <Heart className="w-7 h-7 md:w-8 md:h-8" style={{ color, opacity: 0.5 }} />
                     )}
                   </div>
                   <p className="font-body text-sm text-muted-foreground">

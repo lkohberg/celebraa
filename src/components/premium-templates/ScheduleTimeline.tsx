@@ -18,7 +18,7 @@ const ScheduleTimeline = ({ schedule, accentColor = "hsl(150, 18%, 38%)" }: Sche
       {/* Vertical line – left on mobile, centered on desktop */}
       <div className="absolute top-0 bottom-0 left-5 md:left-1/2 w-px md:-translate-x-px" style={{ backgroundColor: accentColor, opacity: 0.2 }} />
 
-      <div className="space-y-6 md:space-y-10">
+      <div className="space-y-4 md:space-y-10">
         {schedule.map((item, i) => {
           const isLeft = i % 2 === 0;
 

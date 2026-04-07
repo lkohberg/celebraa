@@ -37,9 +37,9 @@ const SlideshowSection = ({ accentColor = "hsl(150, 18%, 38%)", lang, blockConfi
 
   return (
     <>
-      <section className="py-24 relative overflow-hidden" style={{ backgroundColor: "hsl(30, 30%, 98%)" }}>
+      <section className="py-14 md:py-24 relative overflow-hidden" style={{ backgroundColor: "hsl(30, 30%, 98%)" }}>
         <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-10">
+          <div className="text-center mb-6 md:mb-10">
             <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">
               {el?.slideshow || "Unsere Momente"}
             </h2>

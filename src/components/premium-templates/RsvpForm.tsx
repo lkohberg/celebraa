@@ -83,7 +83,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
   const companionLabel = labels?.companions || t("event.companions") || "Begleitpersonen";
 
   return (
-    <section className="py-24 relative overflow-hidden" style={{ backgroundColor: "hsl(30, 33%, 96%)" }}>
+    <section className="py-14 md:py-24 relative overflow-hidden" style={{ backgroundColor: "hsl(30, 33%, 96%)" }}>
       <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: `radial-gradient(${primaryColor} 1px, transparent 1px)`, backgroundSize: "28px 28px" }} />
 
       <div className="relative max-w-lg mx-auto px-4">
@@ -93,9 +93,9 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="bg-card/70 backdrop-blur-sm rounded-2xl border border-border/30 shadow-lg p-8 sm:p-10"
+          className="bg-card/70 backdrop-blur-sm rounded-2xl border border-border/30 shadow-lg p-5 sm:p-8 md:p-10"
         >
-          <div className="text-center mb-10">
+          <div className="text-center mb-6 md:mb-10">
             <Heart className="w-6 h-6 mx-auto mb-3" style={{ color: primaryColor }} />
             <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">
               {variant === "corporate" ? (labels?.register || t("event.register")) : (labels?.rsvp || t("event.rsvp"))}
