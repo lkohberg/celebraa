@@ -297,7 +297,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
             <div className="relative">
               <h2 className="text-4xl mb-3" style={{ fontFamily: "'Great Vibes', cursive", color: accent }}>{names}</h2>
               <FloralDivider color={accent} />
-              <p className="font-body text-sm text-muted-foreground tracking-[0.15em] uppercase mt-3 mb-2">{formattedDate.replace(/\s/g, " · ")}</p>
+              <p className="font-body text-sm text-muted-foreground tracking-[0.15em] uppercase mt-3 mb-2">{formattedDate.replace(/,\s*/g, " ").replace(/\s+/g, " · ")}</p>
 
               {/* Emotional closing text */}
               <p className="font-body text-base text-muted-foreground mt-4 mb-8 italic">

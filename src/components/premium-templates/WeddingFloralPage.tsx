@@ -256,7 +256,7 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
             <div className="relative">
               <h2 className="text-4xl mb-3" style={{ fontFamily: "'Great Vibes', cursive", color: accent }}>{names}</h2>
               <FloralDivider color={accent} />
-              <p className="font-body text-sm text-muted-foreground tracking-[0.15em] uppercase mt-3 mb-2">{formattedDate.replace(/\s/g, " · ")}</p>
+              <p className="font-body text-sm text-muted-foreground tracking-[0.15em] uppercase mt-3 mb-2">{formattedDate.replace(/,\s*/g, " ").replace(/\s+/g, " · ")}</p>
               <p className="font-body text-base text-muted-foreground mt-4 mb-8 italic">{el?.celebration || t("event.celebration")} ♥</p>
               <div className="flex flex-wrap items-center justify-center gap-3">
                 <a href={buildGoogleCalUrl(names, event.event_date, event.event_time, location)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-border/40 bg-card/60 backdrop-blur-sm text-sm font-body text-foreground hover:bg-card transition-colors shadow-sm">
