@@ -168,7 +168,7 @@ const PremiumWeddingPage = ({ event, theme, lang, showIntro = true, isDemo = fal
           {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} eventId={event.id} />}
 
           {/* Section divider: hero → countdown */}
-          <WeddingSectionDivider fromColor={event.hero_image_url ? "hsl(0,0%,15%)" : "hsl(340,30%,90%)"} toColor={bgLight} style={wStyle} accentColor={accent} />
+          <WeddingSectionDivider fromColor={bgWarm} toColor={bgLight} style={wStyle} accentColor={accent} />
 
           {/* Countdown */}
           <section id="countdown" className="py-24 relative overflow-hidden" style={{ backgroundColor: bgLight }}>
