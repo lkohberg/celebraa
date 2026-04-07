@@ -993,8 +993,8 @@ const OrderFlow = () => {
                     <p className="font-body text-muted-foreground">{t("order.previewSubtitle")}</p>
                   </div>
                   <div className="flex items-center gap-4">
-                    {/* Mobile/Desktop toggle */}
-                    <div className="flex items-center gap-1 bg-secondary rounded-lg p-1">
+                    {/* Mobile/Desktop toggle - hidden on mobile since preview is always mobile there */}
+                    <div className="hidden md:flex items-center gap-1 bg-secondary rounded-lg p-1">
                       <button
                         onClick={() => setPreviewMode("desktop")}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-body text-xs transition-all ${

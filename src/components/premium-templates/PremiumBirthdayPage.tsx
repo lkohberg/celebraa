@@ -147,7 +147,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
                     <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
                     <PartyDivider color={accent} />
                   </div>
-                  <ScheduleTimeline schedule={event.schedule} />
+                  <ScheduleTimeline schedule={event.schedule} accentColor={accent} />
                 </div>
               </section>
             )}
