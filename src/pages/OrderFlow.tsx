@@ -1047,60 +1047,81 @@ const OrderFlow = () => {
                   </div>
 
                   <div className="lg:col-span-3 flex justify-center order-1 lg:order-2">
-                    <AnimatePresence mode="wait">
-                      {previewMode === "mobile" ? (
-                        <motion.div
-                          key="mobile-preview"
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                          className="border-[8px] border-foreground/10 rounded-[2rem] overflow-hidden shadow-card"
-                        >
-                          <IframePreview width={375} maxHeight="75vh">
-                            {(() => {
-                              const previewEvent = buildPreviewEvent();
-                              switch (category) {
-                                case "wedding":
-                                  if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                  if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                  return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                case "birthday":
-                                  return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                case "corporate":
-                                  return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                              }
-                            })()}
-                          </IframePreview>
-                        </motion.div>
-                      ) : (
-                      <motion.div
-                          key="desktop-preview"
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                          className="rounded-xl overflow-hidden shadow-card w-full"
-                          style={{ maxHeight: "75vh" }}
-                        >
-                          <IframePreview width={1200} maxHeight="75vh" scaleToFit>
-                            {(() => {
-                              const previewEvent = buildPreviewEvent();
-                              switch (category) {
-                                case "wedding":
-                                  if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                  if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                  return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                case "birthday":
-                                  return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                case "corporate":
-                                  return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                              }
-                            })()}
-                          </IframePreview>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    {/* On small screens: render preview directly (no iframe needed) */}
+                    <div className="md:hidden w-full rounded-xl overflow-hidden shadow-card" style={{ maxHeight: "75vh", overflowY: "auto" }}>
+                      {(() => {
+                        const previewEvent = buildPreviewEvent();
+                        switch (category) {
+                          case "wedding":
+                            if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                            if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                            return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                          case "birthday":
+                            return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                          case "corporate":
+                            return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                        }
+                      })()}
+                    </div>
+
+                    {/* On md+ screens: iframe-based desktop/mobile toggle */}
+                    <div className="hidden md:block w-full">
+                      <AnimatePresence mode="wait">
+                        {previewMode === "mobile" ? (
+                          <motion.div
+                            key="mobile-preview"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="border-[8px] border-foreground/10 rounded-[2rem] overflow-hidden shadow-card mx-auto"
+                            style={{ width: "fit-content" }}
+                          >
+                            <IframePreview width={375} maxHeight="75vh">
+                              {(() => {
+                                const previewEvent = buildPreviewEvent();
+                                switch (category) {
+                                  case "wedding":
+                                    if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                    if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                    return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                  case "birthday":
+                                    return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                  case "corporate":
+                                    return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                }
+                              })()}
+                            </IframePreview>
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            key="desktop-preview"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="rounded-xl overflow-hidden shadow-card w-full"
+                            style={{ maxHeight: "75vh" }}
+                          >
+                            <IframePreview width={1200} maxHeight="75vh" scaleToFit>
+                              {(() => {
+                                const previewEvent = buildPreviewEvent();
+                                switch (category) {
+                                  case "wedding":
+                                    if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                    if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                    return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                  case "birthday":
+                                    return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                  case "corporate":
+                                    return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                }
+                              })()}
+                            </IframePreview>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </div>
                 </div>
               </div>
