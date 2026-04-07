@@ -142,7 +142,7 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
                   <div className="text-center relative">
                     <h2 className="text-xl md:text-3xl mb-4 md:mb-6" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{el?.ourStory || t("event.ourStory")}</h2>
                     <ClassicOrnament color={accent} />
-                    <p className="text-sm md:text-base leading-[1.8] md:leading-[2] whitespace-pre-line mt-5 md:mt-8" style={{ color: "hsl(30, 10%, 40%)" }}>{event.story_text}</p>
+                    <p className="text-sm md:text-base leading-[1.8] md:leading-[2] whitespace-pre-line mt-5 md:mt-8" style={{ color: "hsl(30, 10%, 40%)", fontFamily: "'Lato', sans-serif" }}>{event.story_text}</p>
                   </div>
                 </motion.div>
               </div>
@@ -184,8 +184,8 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
                   <div className="absolute inset-2 pointer-events-none" style={{ border: `1px solid ${colorWithAlpha(accent, 0.1)}` }} />
                   <Church className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-3 md:mb-4" style={{ color: accent }} />
                   <h3 className="text-lg md:text-xl mb-2 md:mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{el?.ceremony || t("event.ceremony")}</h3>
-                  <p className="text-sm font-medium mb-1">{event.ceremony_location || event.location_name || "—"}</p>
-                  <p className="text-sm" style={{ color: "hsl(30, 10%, 50%)" }}>{event.ceremony_address || event.address || ""}</p>
+                  <p className="text-sm font-medium mb-1" style={{ fontFamily: "'Lato', sans-serif" }}>{event.ceremony_location || event.location_name || "—"}</p>
+                  <p className="text-sm" style={{ color: "hsl(30, 10%, 50%)", fontFamily: "'Lato', sans-serif" }}>{event.ceremony_address || event.address || ""}</p>
                 </motion.div>
                 <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
                   className="text-center p-5 md:p-8 relative"
@@ -193,8 +193,8 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
                   <div className="absolute inset-2 pointer-events-none" style={{ border: `1px solid ${colorWithAlpha(accent, 0.1)}` }} />
                   <Wine className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-3 md:mb-4" style={{ color: accent }} />
                   <h3 className="text-lg md:text-xl mb-2 md:mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{el?.reception || t("event.reception")}</h3>
-                  <p className="text-sm font-medium mb-1">{event.reception_location || event.location_name || "—"}</p>
-                  <p className="text-sm" style={{ color: "hsl(30, 10%, 50%)" }}>{event.reception_address || event.address || ""}</p>
+                  <p className="text-sm font-medium mb-1" style={{ fontFamily: "'Lato', sans-serif" }}>{event.reception_location || event.location_name || "—"}</p>
+                  <p className="text-sm" style={{ color: "hsl(30, 10%, 50%)", fontFamily: "'Lato', sans-serif" }}>{event.reception_address || event.address || ""}</p>
                 </motion.div>
               </div>
               {event.children_welcome !== null && event.children_welcome !== undefined && (
@@ -227,9 +227,9 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
                 <span className="text-lg tracking-widest" style={{ color: accent, fontFamily: "'Cormorant Garamond', serif" }}>{initials}</span>
               </div>
               <h2 className="text-3xl mb-2" style={{ fontFamily: "'Great Vibes', cursive", color: textDark }}>{names}</h2>
-              <p className="text-xs tracking-[0.2em] uppercase mt-2 mb-4" style={{ color: "hsl(30, 10%, 50%)" }}>{formattedDate}</p>
+              <p className="text-xs tracking-[0.2em] uppercase mt-2 mb-4" style={{ color: "hsl(30, 10%, 50%)", fontFamily: "'Lato', sans-serif" }}>{formattedDate.replace(/,\s*/g, " ").replace(/\s+/g, " · ")}</p>
               <ClassicOrnament color={accent} />
-              <p className="text-sm italic mt-4 mb-8" style={{ color: "hsl(30, 10%, 50%)" }}>{el?.celebration || t("event.celebration")}</p>
+              <p className="text-sm italic mt-4 mb-8" style={{ color: "hsl(30, 10%, 50%)", fontFamily: "'Lato', sans-serif" }}>{el?.celebration || t("event.celebration")}</p>
               <div className="flex flex-wrap items-center justify-center gap-3">
                 <a href={buildGoogleCalUrl(names, event.event_date, event.event_time, location)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 text-sm tracking-wider" style={{ border: `1px solid ${colorWithAlpha(accent, 0.3)}`, color: textDark }}>
                   <CalendarPlus className="w-4 h-4" style={{ color: accent }} /> Google Calendar
