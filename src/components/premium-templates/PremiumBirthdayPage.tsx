@@ -75,7 +75,7 @@ const PremiumBirthdayPage = ({ event, theme, lang, showIntro = true, isDemo = fa
         {showContent && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
             {/* Hero */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{
+            <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden" style={{
               background: event.hero_image_url ? undefined
                 : theme ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.accent} 50%, ${theme.primary} 100%)`
                 : "linear-gradient(135deg, hsl(340 65% 50%) 0%, hsl(280 60% 55%) 50%, hsl(340 70% 60%) 100%)",
