@@ -81,7 +81,7 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
       {showContent && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
           {/* Hero – Bold oversized typography with image behind */}
-          <section className="relative min-h-[100dvh] flex items-end overflow-hidden" style={{ backgroundColor: bgDark }}>
+          <section className="relative h-[100dvh] min-h-[100dvh] flex items-end overflow-hidden" style={{ backgroundColor: bgDark }}>
             {event.hero_image_url ? (
               <>
                 <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
