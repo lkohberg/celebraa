@@ -88,25 +88,25 @@ const CountdownTimer = ({ targetDate, targetTime, className, lang, variant = "fl
 
   return (
     <div className={className}>
-      <div className="flex justify-center items-center gap-2 sm:gap-3 md:gap-5">
+      <div className="flex justify-center items-center gap-1.5 sm:gap-3 md:gap-5">
         {items.map((item, i) => (
-          <div key={item.label} className="flex items-center gap-2 sm:gap-3 md:gap-5">
+          <div key={item.label} className="flex items-center gap-1.5 sm:gap-3 md:gap-5">
             {/* Card */}
-            <div className={`text-center px-3 py-4 sm:px-5 sm:py-6 md:px-7 md:py-8 min-w-[60px] sm:min-w-[80px] md:min-w-[100px] ${cardStyles[variant]}`}
+            <div className={`text-center px-2.5 py-3 sm:px-5 sm:py-6 md:px-7 md:py-8 min-w-[52px] sm:min-w-[80px] md:min-w-[100px] ${cardStyles[variant]}`}
               style={variant === "classic" ? { borderColor: accentColor + "66" } : undefined}>
-              <p className="font-display text-[1.6rem] sm:text-[2.2rem] md:text-[3.2rem] tabular-nums leading-none"
+              <p className="font-display text-[1.3rem] sm:text-[2.2rem] md:text-[3.2rem] tabular-nums leading-none"
                 style={{ color: accentColor }}>
                 {item.value.split("").map((char, ci) => (
                   <FlipDigit key={ci} value={char} prevValue={item.prev[ci] || char} />
                 ))}
               </p>
-              <p className="font-body text-[9px] sm:text-[10px] md:text-xs text-muted-foreground tracking-[0.12em] sm:tracking-[0.15em] uppercase mt-2">
+              <p className="font-body text-[8px] sm:text-[10px] md:text-xs text-muted-foreground tracking-[0.1em] sm:tracking-[0.15em] uppercase mt-1.5 sm:mt-2">
                 {item.label}
               </p>
             </div>
             {/* Separator */}
             {i < items.length - 1 && (
-              <span className="text-lg sm:text-2xl md:text-3xl font-light select-none" style={{ color: separatorColor, opacity: 0.4 }}>
+              <span className="text-base sm:text-2xl md:text-3xl font-light select-none" style={{ color: separatorColor, opacity: 0.4 }}>
                 {variant === "classic" ? "·" : ":"}
               </span>
             )}

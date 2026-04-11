@@ -16,9 +16,9 @@ const ScheduleTimeline = ({ schedule, accentColor = "hsl(150, 18%, 38%)" }: Sche
   return (
     <div className="relative">
       {/* Vertical line – left on mobile, centered on desktop */}
-      <div className="absolute top-0 bottom-0 left-5 md:left-1/2 w-px md:-translate-x-px" style={{ backgroundColor: accentColor, opacity: 0.2 }} />
+      <div className="absolute top-0 bottom-0 left-4 md:left-1/2 w-px md:-translate-x-px" style={{ backgroundColor: accentColor, opacity: 0.2 }} />
 
-      <div className="space-y-4 md:space-y-10">
+      <div className="space-y-3 md:space-y-10">
         {schedule.map((item, i) => {
           const isLeft = i % 2 === 0;
 
@@ -33,20 +33,20 @@ const ScheduleTimeline = ({ schedule, accentColor = "hsl(150, 18%, 38%)" }: Sche
             >
               {/* Dot */}
               <div
-                className="absolute left-5 md:left-1/2 top-3 w-3 h-3 rounded-full -translate-x-1.5 z-10 ring-4 ring-background"
+                className="absolute left-4 md:left-1/2 top-3 w-2.5 h-2.5 md:w-3 md:h-3 rounded-full -translate-x-1.5 z-10 ring-[3px] md:ring-4 ring-background"
                 style={{ backgroundColor: accentColor }}
               />
 
               {/* Mobile: always right of the line */}
-              <div className="md:hidden pl-14 pr-2">
-                <div className="bg-card/60 backdrop-blur-sm rounded-xl border border-border/30 p-4 shadow-sm">
+              <div className="md:hidden pl-11 pr-2">
+                <div className="bg-card/60 backdrop-blur-sm rounded-lg border border-border/30 p-3 shadow-sm">
                   <span
-                    className="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium mb-1.5 tracking-wide"
+                    className="inline-block px-2 py-0.5 rounded-full text-[10px] font-medium mb-1 tracking-wide"
                     style={{ backgroundColor: accentColor + "1a", color: accentColor }}
                   >
                     {item.time}
                   </span>
-                  <p className="font-display text-base text-foreground">{item.label}</p>
+                  <p className="font-display text-sm text-foreground">{item.label}</p>
                 </div>
               </div>
 
