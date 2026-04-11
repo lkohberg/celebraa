@@ -152,9 +152,9 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
                     onChange={(e) => { setName(e.target.value); setSharedName(e.target.value); setNameEditedLocally(true); }}
                     required
                     placeholder=" "
-                    className="peer w-full px-3.5 pt-4.5 pb-1.5 font-body text-sm bg-background/50 border border-border/50 rounded-lg text-foreground focus:outline-none focus:border-primary transition-colors"
+                    className="peer w-full px-3.5 pt-5 pb-2 font-body text-sm bg-background/50 border border-border/50 rounded-lg text-foreground focus:outline-none focus:border-primary transition-colors"
                   />
-                  <label htmlFor="rsvp-name" className="absolute left-3.5 top-1.5 text-[9px] font-body tracking-wider uppercase text-muted-foreground transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-placeholder-shown:tracking-normal peer-focus:top-1.5 peer-focus:text-[9px] peer-focus:tracking-wider pointer-events-none">
+                  <label htmlFor="rsvp-name" className="absolute left-3.5 top-1 text-[9px] font-body tracking-wider uppercase text-muted-foreground transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-placeholder-shown:tracking-normal peer-focus:top-1 peer-focus:text-[9px] peer-focus:tracking-wider pointer-events-none">
                     {labels?.name || t("event.name")}
                   </label>
                 </div>
@@ -167,9 +167,9 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder=" "
-                    className="peer w-full px-3.5 pt-4.5 pb-1.5 font-body text-sm bg-background/50 border border-border/50 rounded-lg text-foreground focus:outline-none focus:border-primary transition-colors"
+                    className="peer w-full px-3.5 pt-5 pb-2 font-body text-sm bg-background/50 border border-border/50 rounded-lg text-foreground focus:outline-none focus:border-primary transition-colors"
                   />
-                  <label htmlFor="rsvp-email" className="absolute left-3.5 top-1.5 text-[9px] font-body tracking-wider uppercase text-muted-foreground transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-placeholder-shown:tracking-normal peer-focus:top-1.5 peer-focus:text-[9px] peer-focus:tracking-wider pointer-events-none">
+                  <label htmlFor="rsvp-email" className="absolute left-3.5 top-1 text-[9px] font-body tracking-wider uppercase text-muted-foreground transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-placeholder-shown:tracking-normal peer-focus:top-1 peer-focus:text-[9px] peer-focus:tracking-wider pointer-events-none">
                     {labels?.email || t("event.email")}
                   </label>
                 </div>
@@ -228,7 +228,7 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
                           max={maxCompanions}
                           value={companionCount}
                           onChange={(e) => handleCompanionCountChange(parseInt(e.target.value) || 0)}
-                          className="w-20 px-3 pt-2.5 pb-1.5 font-body text-sm bg-background/50 border border-border/50 rounded-lg text-foreground focus:outline-none focus:border-primary transition-colors"
+                          className="w-20 px-3 pt-2.5 pb-2 font-body text-sm bg-background/50 border border-border/50 rounded-lg text-foreground focus:outline-none focus:border-primary transition-colors"
                         />
                       </div>
 
@@ -246,9 +246,9 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
                                   updated[i] = e.target.value;
                                   setCompanionNames(updated);
                                 }}
-                                className="peer w-full px-3.5 pt-4.5 pb-1.5 font-body text-sm bg-background/50 border border-border/50 rounded-lg text-foreground focus:outline-none focus:border-primary transition-colors"
+                                className="peer w-full px-3.5 pt-5 pb-2 font-body text-sm bg-background/50 border border-border/50 rounded-lg text-foreground focus:outline-none focus:border-primary transition-colors"
                               />
-                              <label htmlFor={`companion-${i}`} className="absolute left-3.5 top-1.5 text-[9px] font-body tracking-wider uppercase text-muted-foreground transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-placeholder-shown:tracking-normal peer-focus:top-1.5 peer-focus:text-[9px] peer-focus:tracking-wider pointer-events-none">
+                              <label htmlFor={`companion-${i}`} className="absolute left-3.5 top-1 text-[9px] font-body tracking-wider uppercase text-muted-foreground transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-placeholder-shown:tracking-normal peer-focus:top-1 peer-focus:text-[9px] peer-focus:tracking-wider pointer-events-none">
                                 {`${labels?.companionName || t("event.companionName") || "Begleitperson"} ${i + 1}`}
                               </label>
                             </div>
@@ -286,9 +286,9 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
                     onChange={(e) => setMessage(e.target.value)}
                     rows={2}
                     placeholder=" "
-                    className="peer w-full px-3.5 pt-4.5 pb-1.5 font-body text-sm bg-background/50 border border-border/50 rounded-lg text-foreground focus:outline-none focus:border-primary transition-colors resize-y min-h-[60px]"
+                    className="peer w-full px-3.5 pt-5 pb-2 font-body text-sm bg-background/50 border border-border/50 rounded-lg text-foreground focus:outline-none focus:border-primary transition-colors resize-y min-h-[60px]"
                   />
-                  <label htmlFor="rsvp-message" className="absolute left-3.5 top-1.5 text-[9px] font-body tracking-wider uppercase text-muted-foreground transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-placeholder-shown:tracking-normal peer-focus:top-1.5 peer-focus:text-[9px] peer-focus:tracking-wider pointer-events-none">
+                  <label htmlFor="rsvp-message" className="absolute left-3.5 top-1 text-[9px] font-body tracking-wider uppercase text-muted-foreground transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-placeholder-shown:tracking-normal peer-focus:top-1 peer-focus:text-[9px] peer-focus:tracking-wider pointer-events-none">
                     {labels?.message || t("event.message")}
                   </label>
                 </div>
