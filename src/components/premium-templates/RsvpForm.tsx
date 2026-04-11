@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, X, Check, Send } from "lucide-react";
+import { Heart, X, Check, Send, PartyPopper, CalendarCheck } from "lucide-react";
 import { useSubmitRsvp } from "@/hooks/useEvents";
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
@@ -96,7 +96,13 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
           className="bg-card/70 backdrop-blur-sm rounded-2xl border border-border/30 shadow-lg p-5 sm:p-8 md:p-10"
         >
           <div className="text-center mb-6 md:mb-10">
-            <Heart className="w-6 h-6 mx-auto mb-3" style={{ color: primaryColor }} />
+            {variant === "wedding" ? (
+              <Heart className="w-6 h-6 mx-auto mb-3" style={{ color: primaryColor }} />
+            ) : variant === "birthday" ? (
+              <PartyPopper className="w-6 h-6 mx-auto mb-3" style={{ color: primaryColor }} />
+            ) : (
+              <CalendarCheck className="w-6 h-6 mx-auto mb-3" style={{ color: primaryColor }} />
+            )}
             <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">
               {variant === "corporate" ? (labels?.register || t("event.register")) : (labels?.rsvp || t("event.rsvp"))}
             </h2>
@@ -180,7 +186,11 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
                         : { backgroundColor: "transparent", borderColor: "hsl(30, 20%, 88%)", color: "hsl(30, 10%, 45%)" }
                     }
                   >
-                    <Heart className="w-4 h-4" fill={attendance === "accepted" ? "white" : "none"} />
+                    {variant === "wedding" ? (
+                      <Heart className="w-4 h-4" fill={attendance === "accepted" ? "white" : "none"} />
+                    ) : (
+                      <Check className="w-4 h-4" />
+                    )}
                     {labels?.attending || t("event.attending")}
                   </button>
                   <button
