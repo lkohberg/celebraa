@@ -712,7 +712,7 @@ const OrderFlow = () => {
                   <Input placeholder={t(`configure.locationPlaceholder.${category}`)} value={form.locationName} onChange={(e) => setForm(prev => ({ ...prev, locationName: e.target.value }))} className="font-body mt-1" />
                 </div>
                 <div>
-                  <Label className="font-body">{t("order.address")}</Label>
+                  <Label className="font-body">{t("order.address")} <span className="text-muted-foreground font-normal text-xs">(für Google Maps Integration)</span></Label>
                   <div className="grid grid-cols-1 gap-2 mt-1">
                     <Input placeholder={t("configure.streetPlaceholder")} value={form.street} onChange={(e) => setForm(prev => ({ ...prev, street: e.target.value }))} className="font-body" />
                     <div className="grid grid-cols-3 gap-2">

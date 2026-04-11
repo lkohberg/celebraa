@@ -154,6 +154,9 @@ const BgMusicUploadSection = ({ blockConfig, updateField }: { blockConfig: any; 
           Bitte bestätige zuerst die Rechte, um eine Datei hochladen zu können.
         </p>
       )}
+      <p className="font-body text-xs text-muted-foreground mt-2 italic">
+        Wenn keine MP3 hochgeladen wird, wird die Standard-Musik für dieses Event verwendet.
+      </p>
     </Section>
   );
 };
