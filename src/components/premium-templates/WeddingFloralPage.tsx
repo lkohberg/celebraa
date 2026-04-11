@@ -117,7 +117,7 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
           <section className="relative h-[100dvh] min-h-[100dvh] flex items-center justify-center overflow-hidden">
             {event.hero_image_url ? (
               <>
-                <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
+                <div className="absolute inset-x-0 top-[-6vh] h-[106dvh] sm:inset-0 sm:h-full"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
                 <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/50" />
               </>
             ) : (
@@ -128,7 +128,7 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
               </>
             )}
             <BotanicalFrame color={event.hero_image_url ? "rgba(255,255,255,0.6)" : accent} />
-            <motion.div className="relative z-10 text-center px-4" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
+            <motion.div className="relative z-10 px-4 text-center sm:translate-y-0 -translate-y-[4vh]" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
               <p className="font-body text-xs md:text-sm tracking-[0.3em] uppercase mb-3 md:mb-4" style={{ color: event.hero_image_url ? "rgba(255,255,255,0.8)" : "hsl(30, 8%, 50%)" }}>{el?.weMarry || t("event.weMarry")}</p>
               <h1 className="text-4xl md:text-7xl lg:text-8xl mb-4 md:mb-6" style={{ fontFamily: "'Great Vibes', cursive", color: event.hero_image_url ? "white" : "hsl(30, 10%, 25%)", lineHeight: 1.2 }}>{names}</h1>
               <FloralDivider color={event.hero_image_url ? "rgba(255,255,255,0.5)" : "hsl(30, 20%, 70%)"} />

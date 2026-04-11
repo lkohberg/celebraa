@@ -93,13 +93,13 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
           <section className="relative h-[100dvh] min-h-[100dvh] flex items-center justify-center overflow-hidden">
             {event.hero_image_url ? (
               <>
-                <img src={event.hero_image_url} alt="" className="absolute inset-0 w-full h-full object-cover" loading="eager" fetchPriority="high" />
+                <img src={event.hero_image_url} alt="" className="absolute inset-x-0 top-[-6vh] h-[106dvh] w-full object-cover sm:inset-0 sm:h-full" loading="eager" fetchPriority="high" />
                 <div className="absolute inset-0 bg-black/40" />
               </>
             ) : (
               <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${bgCream} 0%, hsl(38 30% 85%) 100%)` }} />
             )}
-            <motion.div className="relative text-center px-8 max-w-lg z-10" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
+            <motion.div className="relative z-10 max-w-lg px-8 text-center sm:translate-y-0 -translate-y-[4vh]" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
               {/* Monogram */}
               <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-5 md:mb-8 rounded-full flex items-center justify-center" style={{ border: `2px solid ${event.hero_image_url ? 'rgba(255,255,255,0.7)' : accent}` }}>
                 <span className="text-xl md:text-2xl font-light tracking-widest" style={{ color: event.hero_image_url ? 'rgba(255,255,255,0.9)' : accent, fontFamily: "'Cormorant Garamond', serif" }}>{initials}</span>

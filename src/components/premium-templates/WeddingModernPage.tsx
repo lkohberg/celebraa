@@ -84,13 +84,13 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
           <section className="relative h-[100dvh] min-h-[100dvh] flex items-end overflow-hidden" style={{ backgroundColor: bgDark }}>
             {event.hero_image_url ? (
               <>
-                <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
+                <div className="absolute inset-x-0 top-[-6vh] h-[106dvh] sm:inset-0 sm:h-full"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
               </>
             ) : (
               <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, hsl(0 0% 15%) 0%, hsl(0 0% 5%) 100%)` }} />
             )}
-            <motion.div className="relative z-10 w-full px-5 md:px-16 pb-12 md:pb-24" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
+            <motion.div className="relative z-10 w-full px-5 md:px-16 pb-12 md:pb-24 sm:translate-y-0 -translate-y-[3vh]" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
               <p className="text-[10px] md:text-xs tracking-[0.5em] uppercase mb-4 md:mb-6 text-white/50">{el?.weMarry || t("event.weMarry")}</p>
               {/* Oversized names – stacked, left-aligned */}
               <h1 className="text-[2.75rem] md:text-8xl lg:text-[10rem] font-bold leading-[0.85] tracking-tight text-white uppercase">
