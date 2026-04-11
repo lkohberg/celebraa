@@ -25,11 +25,6 @@ const DressCodeMFSection = ({ dressCode, accentColor, lang }: { dressCode?: Dres
             <Shirt className="w-4 h-4 md:w-6 md:h-6" style={{ color }} />
           </div>
           <h2 className="font-display text-lg md:text-3xl text-foreground">{l("dressCode")}</h2>
-          <div className="flex items-center justify-center gap-3 mt-1.5">
-            <div className="w-10 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
-            <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" style={{ color, opacity: 0.4 }} />
-            <div className="w-10 h-px" style={{ backgroundColor: color, opacity: 0.3 }} />
-          </div>
         </motion.div>
 
         <div className="grid grid-cols-2 gap-2.5 md:gap-6">
