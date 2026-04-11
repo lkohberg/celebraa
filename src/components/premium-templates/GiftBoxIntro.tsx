@@ -7,9 +7,10 @@ interface GiftBoxIntroProps {
   onOpen: () => void;
   tapLabel?: string;
   accentColor?: string;
+  contained?: boolean;
 }
 
-const GiftBoxIntro = ({ title, onOpen, tapLabel, accentColor }: GiftBoxIntroProps) => {
+const GiftBoxIntro = ({ title, onOpen, tapLabel, accentColor, contained = false }: GiftBoxIntroProps) => {
   const { t } = useTranslation();
   const [phase, setPhase] = useState<"closed" | "shaking" | "opening" | "done">("closed");
   const accent = accentColor || "hsl(340, 65%, 50%)";
@@ -56,7 +57,7 @@ const GiftBoxIntro = ({ title, onOpen, tapLabel, accentColor }: GiftBoxIntroProp
       {phase !== "done" && (
         <motion.div
           key="giftbox-intro"
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer overflow-hidden"
+          className={`${contained ? "absolute" : "fixed"} inset-0 z-50 flex items-center justify-center cursor-pointer overflow-hidden px-4`}
           style={{
             background: "linear-gradient(160deg, hsl(340 30% 96%) 0%, hsl(280 25% 95%) 50%, hsl(340 35% 94%) 100%)",
           }}
@@ -79,7 +80,7 @@ const GiftBoxIntro = ({ title, onOpen, tapLabel, accentColor }: GiftBoxIntroProp
 
           {/* Tap hint */}
           <motion.p
-            className="font-body text-[10px] tracking-[0.4em] uppercase mb-10 relative z-10"
+            className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-center font-body text-[10px] tracking-[0.4em] uppercase sm:bottom-8"
             style={{ color: accent }}
             animate={{ opacity: [0.4, 0.8, 0.4] }}
             transition={{ duration: 2.5, repeat: Infinity }}

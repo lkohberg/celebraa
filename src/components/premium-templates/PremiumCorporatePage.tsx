@@ -29,7 +29,7 @@ const CorpDivider = ({ color }: { color: string }) => (
   </div>
 );
 
-const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = false, onIntroComplete }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean; isDemo?: boolean; onIntroComplete?: () => void }) => {
+const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = false, onIntroComplete, introContained = false }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean; isDemo?: boolean; onIntroComplete?: () => void; introContained?: boolean }) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
   const [showContent, setShowContent] = useState(!showIntro);
@@ -46,10 +46,10 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
 
   return (
     <GuestNameProvider>
-    <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
+    <div className="relative min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'DM Sans', sans-serif" }}>
       <link href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme?.font || 'DM Sans')}:wght@300;400;500;600;700&display=swap`} rel="stylesheet" />
 
-      {showIntro && !showContent && <BadgeScanIntro title={event.title} onOpen={() => { setShowContent(true); onIntroComplete?.(); }} accentColor={accent} />}
+      {showIntro && !showContent && <BadgeScanIntro title={event.title} onOpen={() => { setShowContent(true); onIntroComplete?.(); }} accentColor={accent} contained={introContained} />}
 
       {showContent && (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>

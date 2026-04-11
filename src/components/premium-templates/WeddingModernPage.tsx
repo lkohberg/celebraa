@@ -45,7 +45,7 @@ const DiagonalCut = ({ from, to }: { from: string; to: string }) => (
   </div>
 );
 
-const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = false, onIntroComplete }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean; isDemo?: boolean; onIntroComplete?: () => void }) => {
+const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = false, onIntroComplete, introContained = false }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean; isDemo?: boolean; onIntroComplete?: () => void; introContained?: boolean }) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
   const [showContent, setShowContent] = useState(!showIntro);
@@ -73,10 +73,10 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
 
   return (
     <GuestNameProvider>
-    <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'Montserrat', 'DM Sans', sans-serif", backgroundColor: bgWhite, color: textDark }}>
+    <div className="relative min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', sans-serif` : "'Montserrat', 'DM Sans', sans-serif", backgroundColor: bgWhite, color: textDark }}>
       <link href={`https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&family=${encodeURIComponent(theme?.font || 'Montserrat')}:wght@200;300;400;500;600;700;800;900&family=Lato:wght@300;400;500&display=swap`} rel="stylesheet" />
 
-      {showIntro && !showContent && <EnvelopeIntro names={names} onOpen={() => { setShowContent(true); onIntroComplete?.(); }} tapLabel={el?.tapToOpen} />}
+      {showIntro && !showContent && <EnvelopeIntro names={names} onOpen={() => { setShowContent(true); onIntroComplete?.(); }} tapLabel={el?.tapToOpen} contained={introContained} />}
 
       {showContent && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
