@@ -41,7 +41,7 @@ const QuizSection = ({ questions, accentColor, isPreview = false, lang, eventId 
   };
 
   return (
-    <section className="py-12 md:py-20 relative overflow-hidden">
+    <section className="py-12 pb-16 md:py-20 md:pb-28 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background to-card/50" />
       <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(${color} 1.5px, transparent 1.5px)`, backgroundSize: "32px 32px" }} />
 

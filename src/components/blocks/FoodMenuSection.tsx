@@ -17,7 +17,7 @@ const FoodMenuSection = ({ menu, accentColor, lang }: { menu?: MenuItem[]; accen
   if (displayMenu.length === 0) return null;
 
   return (
-    <section className="py-10 md:py-24 relative overflow-hidden">
+    <section className="py-10 pb-14 md:py-24 md:pb-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-card via-card/80 to-card" />
       <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: `radial-gradient(${color} 1px, transparent 1px)`, backgroundSize: "24px 24px" }} />
 

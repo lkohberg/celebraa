@@ -17,7 +17,7 @@ const SponsorsSection = ({ sponsors, accentColor, isPreview = false, lang }: { s
   if (displaySponsors.length === 0) return null;
 
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-20 pb-28 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-card to-card/80" />
       <div className="relative max-w-4xl mx-auto px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
