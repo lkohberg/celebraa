@@ -89,9 +89,8 @@ const IframePreview = ({ children, width, maxHeight = "75vh", className, scaleTo
   }, []);
 
   if (scaleToFit) {
-    const scaledHeight = `calc(${maxHeight} * 1)`;
     return (
-      <div ref={containerRef} className={className} style={{ width: "100%", maxHeight, overflow: "hidden", borderRadius: "inherit", position: "relative" }}>
+      <div ref={containerRef} className={className} style={{ width: "100%", height: maxHeight, overflow: "hidden", borderRadius: "inherit", position: "relative" }}>
         <div style={{
           width: `${width}px`,
           height: maxHeight,
