@@ -59,7 +59,7 @@ const getInitials = (title: string) => {
   return title.substring(0, 2).toUpperCase();
 };
 
-const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = false, onIntroComplete }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean; isDemo?: boolean; onIntroComplete?: () => void }) => {
+const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = false, onIntroComplete, introContained = false }: { event: PremiumEventData; theme?: PremiumTheme; lang?: EventLang; showIntro?: boolean; isDemo?: boolean; onIntroComplete?: () => void; introContained?: boolean }) => {
   const { t } = useTranslation();
   const el = lang ? getEventLabels(lang) : null;
   const [showContent, setShowContent] = useState(!showIntro);
@@ -82,10 +82,10 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
 
   return (
     <GuestNameProvider>
-    <div className="min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', serif` : "'Cormorant Garamond', 'Playfair Display', serif", backgroundColor: bgIvory, color: textDark }}>
+    <div className="relative min-h-screen" style={{ fontFamily: theme?.font ? `'${theme.font}', serif` : "'Cormorant Garamond', 'Playfair Display', serif", backgroundColor: bgIvory, color: textDark }}>
       <link href={`https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Great+Vibes&family=${encodeURIComponent(theme?.font || 'Cormorant Garamond')}:wght@300;400;500;600;700&family=Lato:wght@300;400;500&display=swap`} rel="stylesheet" />
 
-      {showIntro && !showContent && <EnvelopeIntro names={names} onOpen={() => { setShowContent(true); onIntroComplete?.(); }} tapLabel={el?.tapToOpen} />}
+      {showIntro && !showContent && <EnvelopeIntro names={names} onOpen={() => { setShowContent(true); onIntroComplete?.(); }} tapLabel={el?.tapToOpen} contained={introContained} />}
 
       {showContent && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>

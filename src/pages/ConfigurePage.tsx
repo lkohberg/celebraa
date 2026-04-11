@@ -298,13 +298,13 @@ const ConfigurePage = () => {
                     };
                     switch (template.eventType) {
                       case "wedding":
-                        if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
-                        if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
-                        return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
+                        if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} introContained />;
+                        if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} introContained />;
+                        return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} introContained />;
                       case "birthday":
-                        return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
+                        return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} introContained />;
                       case "corporate":
-                        return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} />;
+                        return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={form.showIntro} introContained />;
                     }
                   })()}
                 </div>

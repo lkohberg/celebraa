@@ -8,9 +8,10 @@ interface BadgeScanIntroProps {
   onOpen: () => void;
   tapLabel?: string;
   accentColor?: string;
+  contained?: boolean;
 }
 
-const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntroProps) => {
+const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor, contained = false }: BadgeScanIntroProps) => {
   const { t } = useTranslation();
   // phases: entering → idle → scanning → verified → done
   const [phase, setPhase] = useState<"entering" | "idle" | "scanning" | "verified" | "done">("entering");
@@ -60,7 +61,7 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
       {phase !== "done" && (
         <motion.div
           key="badge-intro"
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer overflow-hidden"
+          className={`${contained ? "absolute" : "fixed"} inset-0 z-50 flex items-center justify-center cursor-pointer overflow-hidden px-4`}
           style={{
             background: "linear-gradient(160deg, hsl(220 20% 10%) 0%, hsl(220 25% 15%) 50%, hsl(220 20% 12%) 100%)",
           }}
@@ -79,7 +80,7 @@ const BadgeScanIntro = ({ title, onOpen, tapLabel, accentColor }: BadgeScanIntro
 
           {/* Tap hint – always takes space, invisible when not idle */}
           <p
-            className={`font-body text-[12px] tracking-[0.5em] uppercase mb-10 relative z-10 transition-opacity duration-300 ${phase === "idle" ? "opacity-100" : "opacity-0"}`}
+            className={`absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-center font-body text-[12px] tracking-[0.5em] uppercase transition-opacity duration-300 sm:bottom-8 ${phase === "idle" ? "opacity-100" : "opacity-0"}`}
             style={{ color: "hsl(0, 0%, 100%)", textShadow: "0 0 20px rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.6)" }}
           >
             {tapLabel || t("event.tapToOpen")}

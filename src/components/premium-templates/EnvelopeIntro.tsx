@@ -6,6 +6,7 @@ interface EnvelopeIntroProps {
   names: string;
   onOpen: () => void;
   tapLabel?: string;
+  contained?: boolean;
 }
 
 /* Celebraa logo as SVG seal motif – 4-point star with radiating accents */
@@ -38,7 +39,7 @@ const SealLogo = () => (
   </svg>
 );
 
-const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
+const EnvelopeIntro = ({ names, onOpen, tapLabel, contained = false }: EnvelopeIntroProps) => {
   const { t } = useTranslation();
   const [phase, setPhase] = useState<"sealed" | "breaking" | "opening" | "done">("sealed");
 
@@ -72,7 +73,7 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
       {phase !== "done" && (
         <motion.div
           key="envelope-intro"
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer overflow-hidden"
+          className={`${contained ? "absolute" : "fixed"} inset-0 z-50 flex items-center justify-center cursor-pointer overflow-hidden px-4`}
           style={{
             background: "linear-gradient(160deg, hsl(30 25% 95%) 0%, hsl(340 20% 95%) 50%, hsl(30 30% 93%) 100%)",
           }}
@@ -90,7 +91,7 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
 
           {/* Tap hint */}
           <motion.p
-            className="font-body text-[10px] tracking-[0.4em] uppercase mb-10 relative z-10"
+            className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-center font-body text-[10px] tracking-[0.4em] uppercase sm:bottom-8"
             style={{ color: "hsl(340 20% 55%)" }}
             animate={{ opacity: [0.4, 0.8, 0.4] }}
             transition={{ duration: 2.5, repeat: Infinity }}
@@ -99,7 +100,7 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel }: EnvelopeIntroProps) => {
           </motion.p>
 
           {/* Envelope container */}
-          <div className="relative w-[300px] h-[210px] sm:w-[360px] sm:h-[250px] md:w-[420px] md:h-[290px]">
+          <div className="relative z-10 w-[280px] max-w-full h-[196px] sm:w-[360px] sm:h-[250px] md:w-[420px] md:h-[290px]">
             {/* Envelope body */}
             <motion.div
               className="absolute inset-0 rounded-sm overflow-hidden"

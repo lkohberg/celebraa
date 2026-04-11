@@ -1054,13 +1054,13 @@ const OrderFlow = () => {
                           const previewEvent = buildPreviewEvent();
                           switch (category) {
                             case "wedding":
-                              if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                              if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                              return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                              if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
+                              if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
+                              return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
                             case "birthday":
-                              return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                              return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
                             case "corporate":
-                              return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                              return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
                           }
                         })()}
                       </IframePreview>
@@ -1084,13 +1084,13 @@ const OrderFlow = () => {
                                 const previewEvent = buildPreviewEvent();
                                 switch (category) {
                                   case "wedding":
-                                    if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                    if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                    return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                    if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
+                                    if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
+                                    return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
                                   case "birthday":
-                                    return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                    return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
                                   case "corporate":
-                                    return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                    return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
                                 }
                               })()}
                             </IframePreview>
@@ -1110,13 +1110,13 @@ const OrderFlow = () => {
                                 const previewEvent = buildPreviewEvent();
                                 switch (category) {
                                   case "wedding":
-                                    if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                    if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
-                                    return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                    if (template.id.includes("classic")) return <WeddingClassicPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
+                                    if (template.id.includes("modern")) return <WeddingModernPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
+                                    return <WeddingFloralPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
                                   case "birthday":
-                                    return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                    return <PremiumBirthdayPage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
                                   case "corporate":
-                                    return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} />;
+                                    return <PremiumCorporatePage event={previewEvent} theme={previewTheme} showIntro={!blockConfig.disable_intro} introContained />;
                                 }
                               })()}
                             </IframePreview>

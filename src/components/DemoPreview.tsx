@@ -248,14 +248,14 @@ const DemoPreview = ({ template, open, onOpenChange }: DemoPreviewProps) => {
     switch (template.eventType) {
       case "wedding": {
         const tid = template.id || "";
-        if (tid.includes("classic")) return <WeddingClassicPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
-        if (tid.includes("modern")) return <WeddingModernPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
-        return <WeddingFloralPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
+        if (tid.includes("classic")) return <WeddingClassicPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} introContained />;
+        if (tid.includes("modern")) return <WeddingModernPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} introContained />;
+        return <WeddingFloralPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} introContained />;
       }
       case "birthday":
-        return <PremiumBirthdayPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
+        return <PremiumBirthdayPage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} introContained />;
       case "corporate":
-        return <PremiumCorporatePage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} />;
+        return <PremiumCorporatePage event={demoEvent} theme={theme} lang={demoLang} isDemo onIntroComplete={handleIntroComplete} introContained />;
     }
   };
 
