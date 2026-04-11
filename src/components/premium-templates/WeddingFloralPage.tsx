@@ -114,7 +114,7 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
       {showContent && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
           {/* Hero – full-screen with botanical frame */}
-          <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
+          <section className="relative h-[100dvh] min-h-[100dvh] flex items-center justify-center overflow-hidden">
             {event.hero_image_url ? (
               <>
                 <div className="absolute inset-0"><img src={event.hero_image_url} alt="" className="w-full h-full object-cover" loading="eager" fetchPriority="high" /></div>
