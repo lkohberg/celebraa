@@ -155,7 +155,7 @@ const BgMusicUploadSection = ({ blockConfig, updateField }: { blockConfig: any; 
         </p>
       )}
       <p className="font-body text-xs text-muted-foreground mt-2 italic">
-        Wenn keine MP3 hochgeladen wird, wird die Standard-Musik für dieses Event verwendet.
+        {t("blockConfig.bgMusicFallbackHint")}
       </p>
     </Section>
   );

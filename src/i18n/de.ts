@@ -527,6 +527,8 @@ const de = {
   "blockConfig.slideshow": "Slideshow",
   "blockConfig.slideshowHint": "Lade deine eigenen Fotos für die Slideshow hoch.",
   "blockConfig.bgMusic": "Hintergrundmusik",
+  "blockConfig.bgMusicFallbackHint": "Wenn keine MP3 hochgeladen wird, wird die Standard-Musik für dieses Event verwendet.",
+  "order.addressGoogleMapsHint": "(für Google Maps Integration)",
 
   // Template Card
   "templateCard.demoView": "Demo ansehen",
