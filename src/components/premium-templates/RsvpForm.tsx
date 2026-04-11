@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, X, Check, Send } from "lucide-react";
+import { Heart, X, Check, Send, PartyPopper, CalendarCheck } from "lucide-react";
 import { useSubmitRsvp } from "@/hooks/useEvents";
 import { useTranslation } from "@/i18n";
 import { toast } from "sonner";
