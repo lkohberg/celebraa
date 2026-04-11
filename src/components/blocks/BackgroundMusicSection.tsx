@@ -102,28 +102,28 @@ const BackgroundMusicSection = ({ accentColor, lang, isDemo = false, musicUrl, b
   if (isMusicDisabled || (!src && !isDemo)) return null;
 
   return (
-    <section className="py-8 relative overflow-hidden">
+    <section className="py-5 md:py-8 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-card/50 via-card to-card/50" />
-      <div className="relative max-w-md mx-auto px-4 text-center space-y-2">
+      <div className="relative max-w-md mx-auto px-4 text-center space-y-1.5">
         <motion.button
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           onClick={() => playing ? stopMusic() : startMusic()}
-          className="inline-flex items-center gap-3 bg-background/80 backdrop-blur-sm rounded-full px-6 py-3.5 border border-border/50 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+          className="inline-flex items-center gap-2.5 bg-background/80 backdrop-blur-sm rounded-full px-5 py-2.5 border border-border/50 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
         >
           {playing ? (
-            <Volume2 className="w-5 h-5" style={{ color }} />
+            <Volume2 className="w-4 h-4" style={{ color }} />
           ) : (
-            <VolumeX className="w-5 h-5" style={{ color }} />
+            <VolumeX className="w-4 h-4" style={{ color }} />
           )}
-          <span className="font-body text-sm text-foreground">{label}</span>
-          <div className="flex gap-0.5 items-end h-4">
+          <span className="font-body text-xs text-foreground">{label}</span>
+          <div className="flex gap-0.5 items-end h-3.5">
             {[1, 2, 3, 4, 5].map(i => (
               <motion.div
                 key={i}
-                className="w-1 rounded-full"
+                className="w-0.5 rounded-full"
                 style={{ backgroundColor: color }}
-                animate={playing ? { height: [4, 8 + Math.random() * 8, 4] } : { height: 4 }}
+                animate={playing ? { height: [3, 6 + Math.random() * 6, 3] } : { height: 3 }}
                 transition={{ duration: 0.8, repeat: playing ? Infinity : 0, delay: i * 0.12 }}
               />
             ))}
