@@ -125,7 +125,7 @@ const WeddingModernPage = ({ event, theme, lang, showIntro = true, isDemo = fals
                   <p className="text-xs tracking-[0.3em] uppercase mb-2" style={{ color: accent }}>{el?.countdown || t("event.countdown")}</p>
                   <h2 className="text-2xl md:text-4xl font-bold tracking-tight">{el?.countdownSub || t("event.countdownSub")}</h2>
                 </div>
-                <div className="h-px flex-1 max-w-[200px] hidden md:block" style={{ backgroundColor: "hsl(0,0%,85%)" }} />
+                <div className="hidden" />
               </div>
               <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} variant="modern" accentColor={accent} />
             </div>

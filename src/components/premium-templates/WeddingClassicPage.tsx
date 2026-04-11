@@ -123,7 +123,6 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
             <div className="max-w-3xl mx-auto px-4 text-center">
               <p className="text-xs tracking-[0.3em] uppercase mb-3 md:mb-4" style={{ color: accent }}>{el?.countdown || t("event.countdown")}</p>
               <h2 className="text-xl md:text-3xl mb-2" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{el?.countdownSub || t("event.countdownSub")}</h2>
-              <ClassicOrnament color={accent} />
               <div className="mt-6 md:mt-10">
                 <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} variant="classic" accentColor={accent} />
               </div>

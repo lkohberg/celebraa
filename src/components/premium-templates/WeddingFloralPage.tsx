@@ -150,7 +150,6 @@ const WeddingFloralPage = ({ event, theme, lang, showIntro = true, isDemo = fals
             <div className="relative max-w-3xl mx-auto px-4 text-center">
               <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 md:mb-3">{el?.countdown || t("event.countdown")}</p>
               <h2 className="font-display text-xl md:text-3xl text-foreground mb-3 md:mb-4">{el?.countdownSub || t("event.countdownSub")}</h2>
-              <FloralDivider color={accent} />
               <div className="mt-6 md:mt-10">
                 <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} variant="floral" accentColor={accent} />
               </div>
