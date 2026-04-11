@@ -73,29 +73,29 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
           </>
         )}
         <motion.div className="relative z-10 text-center px-4 max-w-3xl" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <div className="w-16 h-16 mx-auto mb-6 rounded-lg flex items-center justify-center bg-white/10 backdrop-blur-sm border border-white/10">
-            <Building2 className="w-8 h-8 text-white/70" />
+          <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-4 rounded-lg flex items-center justify-center bg-white/10 backdrop-blur-sm border border-white/10">
+            <Building2 className="w-6 h-6 md:w-8 md:h-8 text-white/70" />
           </div>
-          <p className="font-body text-sm tracking-[0.3em] uppercase mb-4 text-white/60">{el?.youreInvited || t("event.youreInvited")}</p>
-          <h1 className="font-display text-4xl md:text-6xl font-bold text-white mb-4">{event.title}</h1>
+          <p className="font-body text-xs md:text-sm tracking-[0.3em] uppercase mb-3 text-white/60">{el?.youreInvited || t("event.youreInvited")}</p>
+          <h1 className="font-display text-3xl md:text-6xl font-bold text-white mb-3">{event.title}</h1>
           <CorpDivider color="rgba(255,255,255,0.4)" />
-          <div className="flex items-center justify-center gap-6 text-white/70 font-body text-sm mt-4">
-            <span className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full"><Calendar className="w-4 h-4" /> {formattedDate}</span>
-            <span className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full"><Clock className="w-4 h-4" /> {event.event_time}{lang === "en" ? "" : " Uhr"}</span>
+          <div className="flex items-center justify-center gap-3 md:gap-6 text-white/70 font-body text-xs md:text-sm mt-3">
+            <span className="flex items-center gap-1.5 bg-white/5 backdrop-blur-sm px-3 py-1.5 rounded-full"><Calendar className="w-3.5 h-3.5" /> {formattedDate}</span>
+            <span className="flex items-center gap-1.5 bg-white/5 backdrop-blur-sm px-3 py-1.5 rounded-full"><Clock className="w-3.5 h-3.5" /> {event.event_time}{lang === "en" ? "" : " Uhr"}</span>
           </div>
-          {event.description && <p className="font-body text-white/60 mt-6 text-lg max-w-xl mx-auto">{event.description}</p>}
+          {event.description && <p className="font-body text-white/60 mt-4 text-sm md:text-lg max-w-xl mx-auto">{event.description}</p>}
         </motion.div>
       </section>
 
       {hasBlock("-bgmusic") && <BackgroundMusicSection accentColor={accent} lang={lang} isDemo={isDemo} blockConfig={blockCfg} eventId={event.id} />}
 
       {/* Countdown */}
-      <section className="py-24 relative overflow-hidden bg-card">
+      <section className="py-10 md:py-24 relative overflow-hidden bg-card">
         <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `linear-gradient(${accent} 1px, transparent 1px), linear-gradient(90deg, ${accent} 1px, transparent 1px)`, backgroundSize: "50px 50px" }} />
         <div className="relative max-w-3xl mx-auto px-4 text-center">
-          <h2 className="font-display text-2xl text-foreground mb-4">{el?.countdown || t("event.countdown")}</h2>
+          <h2 className="font-display text-lg md:text-2xl text-foreground mb-3">{el?.countdown || t("event.countdown")}</h2>
           <CorpDivider color={accent} />
-          <div className="mt-10">
+          <div className="mt-6 md:mt-10">
             <CountdownTimer targetDate={event.event_date} targetTime={event.event_time} lang={lang} />
           </div>
         </div>
@@ -103,26 +103,26 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
 
       {/* About */}
       {event.story_text && (
-        <section className="py-28 relative overflow-hidden bg-background">
+        <section className="py-10 md:py-28 relative overflow-hidden bg-background">
           <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-[0.03]" style={{ background: `radial-gradient(circle, ${accent}, transparent)` }} />
           <div className="relative max-w-2xl mx-auto px-4 text-center">
-            <h2 className="font-display text-2xl md:text-3xl text-foreground mb-2">{el?.agenda || t("event.agenda")}</h2>
+            <h2 className="font-display text-lg md:text-3xl text-foreground mb-1.5">{el?.agenda || t("event.agenda")}</h2>
             <CorpDivider color={accent} />
-            <p className="font-body text-lg text-muted-foreground leading-relaxed whitespace-pre-line mt-8">{event.story_text}</p>
+            <p className="font-body text-sm md:text-lg text-muted-foreground leading-relaxed whitespace-pre-line mt-5 md:mt-8">{event.story_text}</p>
           </div>
         </section>
       )}
 
       {/* Schedule Timeline */}
       {event.schedule && Array.isArray(event.schedule) && event.schedule.length > 0 && (
-        <section className="py-20 relative overflow-hidden bg-background">
+        <section className="py-8 md:py-20 relative overflow-hidden bg-background">
           <div className="absolute inset-0 opacity-[0.01]" style={{ backgroundImage: `linear-gradient(${accent} 1px, transparent 1px), linear-gradient(90deg, ${accent} 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
           <div className="relative max-w-3xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
-                <Clock className="w-6 h-6" style={{ color: accent }} />
+            <div className="text-center mb-5 md:mb-12">
+              <div className="inline-flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full mb-3" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
+                <Clock className="w-4 h-4 md:w-6 md:h-6" style={{ color: accent }} />
               </div>
-              <h2 className="font-display text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
+              <h2 className="font-display text-lg md:text-2xl text-foreground">{el?.timeline || t("event.timeline")}</h2>
               <CorpDivider color={accent} />
             </div>
             <ScheduleTimeline schedule={event.schedule} accentColor={accent} />
@@ -134,34 +134,34 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
       {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} lang={lang} />}
 
       {/* Details */}
-      <section className="py-28 relative overflow-hidden bg-card">
+      <section className="py-10 md:py-28 relative overflow-hidden bg-card">
         <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `linear-gradient(${accent} 1px, transparent 1px), linear-gradient(90deg, ${accent} 1px, transparent 1px)`, backgroundSize: "50px 50px" }} />
         <div className="relative max-w-5xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-2xl md:text-3xl text-foreground">{el?.details || t("event.details")}</h2>
+          <div className="text-center mb-6 md:mb-16">
+            <h2 className="font-display text-lg md:text-3xl text-foreground">{el?.details || t("event.details")}</h2>
             <CorpDivider color={accent} />
           </div>
-          <div className={`grid gap-12 max-w-2xl mx-auto ${event.dress_code ? "md:grid-cols-2" : "md:grid-cols-1 max-w-lg"}`}>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
-                <MapPin className="w-6 h-6" style={{ color: accent }} />
+          <div className={`grid gap-3 md:gap-12 max-w-2xl mx-auto ${event.dress_code ? "grid-cols-2" : "grid-cols-1 max-w-lg"}`}>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center p-4 md:p-8 bg-background/60 backdrop-blur-sm rounded-xl md:rounded-2xl border border-border/30">
+              <div className="w-10 h-10 md:w-14 md:h-14 mx-auto mb-2.5 md:mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
+                <MapPin className="w-4 h-4 md:w-6 md:h-6" style={{ color: accent }} />
               </div>
-              <h3 className="font-display text-xl text-foreground mb-3">{el?.location || t("event.location")}</h3>
-              <p className="font-body text-sm text-muted-foreground">{event.location_name || "—"}</p>
-              <p className="font-body text-sm text-muted-foreground">{event.address || ""}</p>
+              <h3 className="font-display text-sm md:text-xl text-foreground mb-1.5 md:mb-3">{el?.location || t("event.location")}</h3>
+              <p className="font-body text-xs text-muted-foreground">{event.location_name || "—"}</p>
+              <p className="font-body text-xs text-muted-foreground">{event.address || ""}</p>
             </motion.div>
             {event.dress_code && (
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-center p-8 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/30">
-                <div className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
-                  <Shirt className="w-6 h-6" style={{ color: accent }} />
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-center p-4 md:p-8 bg-background/60 backdrop-blur-sm rounded-xl md:rounded-2xl border border-border/30">
+                <div className="w-10 h-10 md:w-14 md:h-14 mx-auto mb-2.5 md:mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colorWithAlpha(accent, 0.15) }}>
+                  <Shirt className="w-4 h-4 md:w-6 md:h-6" style={{ color: accent }} />
                 </div>
-                <h3 className="font-display text-xl text-foreground mb-3">{el?.dressCode || t("event.dressCode")}</h3>
-                <p className="font-body text-sm text-muted-foreground">{event.dress_code}</p>
+                <h3 className="font-display text-sm md:text-xl text-foreground mb-1.5 md:mb-3">{el?.dressCode || t("event.dressCode")}</h3>
+                <p className="font-body text-xs text-muted-foreground">{event.dress_code}</p>
               </motion.div>
             )}
           </div>
           {event.address && (
-            <div className="mt-12 max-w-xl mx-auto"><GoogleMapsEmbed address={event.address} /></div>
+            <div className="mt-8 md:mt-12 max-w-xl mx-auto"><GoogleMapsEmbed address={event.address} /></div>
           )}
         </div>
       </section>
@@ -179,12 +179,12 @@ const PremiumCorporatePage = ({ event, theme, lang, showIntro = true, isDemo = f
       )}
 
       {/* Footer */}
-      <footer className="py-20 text-center relative overflow-hidden bg-card">
+      <footer className="py-10 md:py-20 text-center relative overflow-hidden bg-card">
         <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `linear-gradient(${accent} 1px, transparent 1px), linear-gradient(90deg, ${accent} 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
         <div className="relative">
-          <h2 className="font-display text-2xl text-foreground mb-2">{event.title}</h2>
+          <h2 className="font-display text-xl md:text-2xl text-foreground mb-1.5">{event.title}</h2>
           <CorpDivider color={accent} />
-          <p className="font-body text-sm text-muted-foreground mt-3">{formattedDate}</p>
+          <p className="font-body text-xs md:text-sm text-muted-foreground mt-2">{formattedDate}</p>
         </div>
       </footer>
       </motion.div>
