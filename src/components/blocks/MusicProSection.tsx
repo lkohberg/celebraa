@@ -42,7 +42,7 @@ const MusicProSection = ({ accentColor, eventId, isPreview = false, lang }: { ac
   };
 
   return (
-    <section className="py-20 pb-28 relative overflow-hidden">
+    <section className="py-20 pb-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background to-card/30" />
       <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-[0.03]" style={{ background: `radial-gradient(circle, ${color}, transparent)` }} />
 

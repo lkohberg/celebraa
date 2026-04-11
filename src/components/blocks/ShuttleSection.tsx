@@ -18,7 +18,7 @@ const ShuttleSection = ({ routes, accentColor, lang }: { routes?: ShuttleRoute[]
   if (displayRoutes.length === 0) return null;
 
   return (
-    <section className="py-8 pb-14 md:py-20 md:pb-28 relative overflow-hidden">
+    <section className="py-8 pb-20 md:py-20 md:pb-36 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-card to-card/80" />
       <div className="relative max-w-2xl mx-auto px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-4 md:mb-12">

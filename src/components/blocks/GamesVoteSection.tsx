@@ -65,7 +65,7 @@ const GamesVoteSection = ({ games, accentColor, isPreview = false, lang, eventId
   };
 
   return (
-    <section className="py-12 pb-16 md:py-20 md:pb-28 relative overflow-hidden">
+    <section className="py-12 pb-20 md:py-20 md:pb-36 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-card to-card/80" />
       <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: `radial-gradient(${color} 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
 

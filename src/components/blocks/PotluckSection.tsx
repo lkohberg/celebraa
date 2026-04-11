@@ -62,7 +62,7 @@ const PotluckSection = ({ items, accentColor, isPreview = false, lang, eventId }
   };
 
   return (
-    <section className="py-12 pb-16 md:py-20 md:pb-28 relative overflow-hidden">
+    <section className="py-12 pb-20 md:py-20 md:pb-36 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-card via-card/80 to-card" />
       <div className="relative max-w-xl mx-auto px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-6 md:mb-10">
