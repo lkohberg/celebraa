@@ -186,7 +186,11 @@ const RsvpForm = ({ eventId, rsvpDeadline, menuSelection, variant = "wedding", l
                         : { backgroundColor: "transparent", borderColor: "hsl(30, 20%, 88%)", color: "hsl(30, 10%, 45%)" }
                     }
                   >
-                    <Heart className="w-4 h-4" fill={attendance === "accepted" ? "white" : "none"} />
+                    {variant === "wedding" ? (
+                      <Heart className="w-4 h-4" fill={attendance === "accepted" ? "white" : "none"} />
+                    ) : (
+                      <Check className="w-4 h-4" />
+                    )}
                     {labels?.attending || t("event.attending")}
                   </button>
                   <button
