@@ -18,7 +18,7 @@ const WishlistSection = ({ items, accentColor, isPreview = false, lang }: { item
   if (displayItems.length === 0) return null;
 
   return (
-    <section className="py-8 md:py-20 relative overflow-hidden">
+    <section className="py-8 pb-14 md:py-20 md:pb-28 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-card/50 to-background" />
       <div className="absolute top-0 left-0 w-72 h-72 rounded-full opacity-[0.03]" style={{ background: `radial-gradient(circle, ${color}, transparent)` }} />
       <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full opacity-[0.03]" style={{ background: `radial-gradient(circle, ${color}, transparent)` }} />

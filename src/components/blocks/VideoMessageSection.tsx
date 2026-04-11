@@ -32,7 +32,7 @@ const VideoMessageSection = ({ accentColor, lang, blockConfig, variant = "weddin
     : (isCorporate ? "Ein Video oder eine Nachricht für Sie" : "Eine Nachricht an euch");
 
   return (
-    <section className="py-8 md:py-20 relative overflow-hidden bg-card">
+    <section className="py-8 pb-14 md:py-20 md:pb-28 relative overflow-hidden bg-card">
       <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: `radial-gradient(${color} 1px, transparent 1px)`, backgroundSize: "24px 24px" }} />
       <div className="relative max-w-2xl mx-auto px-4 text-center">
         <motion.div

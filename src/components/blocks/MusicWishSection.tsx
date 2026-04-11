@@ -29,7 +29,7 @@ const MusicWishSection = ({ accentColor, eventId, isPreview = false, lang }: { a
   };
 
   return (
-    <section className="py-12 md:py-20 relative overflow-hidden">
+    <section className="py-12 pb-16 md:py-20 md:pb-28 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background to-card/30" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-[0.03]" style={{ background: `radial-gradient(circle, ${color}, transparent)` }} />
 

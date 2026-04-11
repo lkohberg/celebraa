@@ -17,7 +17,7 @@ const DressCodeMFSection = ({ dressCode, accentColor, lang }: { dressCode?: Dres
   if (!male && !female) return null;
 
   return (
-    <section className="py-8 md:py-20 relative overflow-hidden">
+    <section className="py-8 pb-14 md:py-20 md:pb-28 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-background via-card/30 to-background" />
       <div className="relative max-w-2xl mx-auto px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-4 md:mb-12">

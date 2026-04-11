@@ -18,7 +18,7 @@ const AgendaSection = ({ agenda, accentColor, lang }: { agenda?: AgendaItem[]; a
   if (displayAgenda.length === 0) return null;
 
   return (
-    <section className="py-12 md:py-20 relative overflow-hidden">
+    <section className="py-12 pb-16 md:py-20 md:pb-28 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background to-card/30" />
       <div className="absolute inset-0 opacity-[0.012]" style={{ backgroundImage: `linear-gradient(${color} 1px, transparent 1px), linear-gradient(90deg, ${color} 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
 
