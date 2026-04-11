@@ -90,7 +90,7 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
       {showContent && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
           {/* Hero – Full-screen centered, formal elegance */}
-          <section className="relative h-[100dvh] min-h-[100dvh] flex items-center justify-center overflow-hidden -mt-0" style={{ marginTop: 0 }}>
+          <section className="relative h-[100dvh] min-h-[100dvh] flex items-center justify-center overflow-hidden">
             {event.hero_image_url ? (
               <>
                 <img src={event.hero_image_url} alt="" className="absolute inset-0 w-full h-full object-cover" loading="eager" fetchPriority="high" />
