@@ -33,7 +33,7 @@ const BackgroundMusicSection = ({ accentColor, lang, isDemo = false, musicUrl, b
   const isMusicDisabled = blockConfig?.music_disabled === true;
 
   // Use admin-uploaded music if available, then user-uploaded
-  const src = isMusicDisabled ? null : (blockConfig?.music_url || musicUrl || (isDemo ? "/demo.mp3" : null));
+  const src = isMusicDisabled ? null : (blockConfig?.music_url || musicUrl || "/demo.mp3");
 
   const startMusic = useCallback(() => {
     if (!src) return;
