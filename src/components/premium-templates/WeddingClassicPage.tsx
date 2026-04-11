@@ -167,7 +167,6 @@ const WeddingClassicPage = ({ event, theme, lang, showIntro = true, isDemo = fal
           {hasBlock("-menu") && <FoodMenuSection menu={blockCfg.menu} accentColor={accent} lang={lang} />}
           {hasBlock("-dresscode") && <DressCodeMFSection dressCode={{ male: blockCfg.dresscode_male, female: blockCfg.dresscode_female }} accentColor={accent} lang={lang} />}
 
-          <ClassicOrnament color={accent} />
 
           {/* Details – symmetrical card grid with borders */}
           <section className="py-16 md:py-28 relative" style={{ backgroundColor: bgCream }}>
