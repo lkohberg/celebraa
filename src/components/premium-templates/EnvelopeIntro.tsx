@@ -73,7 +73,7 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel, contained = false }: EnvelopeI
       {phase !== "done" && (
         <motion.div
           key="envelope-intro"
-          className={`${contained ? "absolute" : "fixed"} inset-0 z-50 flex items-center justify-center cursor-pointer overflow-hidden px-4`}
+          className={`${contained ? "absolute" : "fixed"} inset-0 z-50 flex flex-col items-center justify-center cursor-pointer overflow-hidden px-4`}
           style={{
             background: "linear-gradient(160deg, hsl(30 25% 95%) 0%, hsl(340 20% 95%) 50%, hsl(30 30% 93%) 100%)",
           }}
@@ -89,9 +89,9 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel, contained = false }: EnvelopeI
             }}
           />
 
-          {/* Tap hint */}
+          {/* Tap hint - right above envelope */}
           <motion.p
-            className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-center font-body text-[10px] tracking-[0.4em] uppercase sm:bottom-8"
+            className="relative z-10 mb-5 sm:mb-6 text-center font-body text-[10px] tracking-[0.4em] uppercase"
             style={{ color: "hsl(340 20% 55%)" }}
             animate={{ opacity: [0.4, 0.8, 0.4] }}
             transition={{ duration: 2.5, repeat: Infinity }}
@@ -101,6 +101,7 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel, contained = false }: EnvelopeI
 
           {/* Envelope container */}
           <div className="relative z-10 w-[280px] max-w-full h-[196px] sm:w-[360px] sm:h-[250px] md:w-[420px] md:h-[290px]">
+
             {/* Envelope body */}
             <motion.div
               className="absolute inset-0 rounded-sm overflow-hidden"
