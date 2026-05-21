@@ -93,11 +93,20 @@ const EnvelopeIntro = ({ names, onOpen, tapLabel, contained = false }: EnvelopeI
           <motion.p
             className="relative z-10 mb-5 sm:mb-6 text-center font-body text-[10px] tracking-[0.4em] uppercase"
             style={{ color: "hsl(340 20% 55%)" }}
-            animate={{ opacity: [0.4, 0.8, 0.4] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
+            animate={
+              phase === "sealed"
+                ? { opacity: [0.4, 0.8, 0.4] }
+                : { opacity: 0 }
+            }
+            transition={
+              phase === "sealed"
+                ? { duration: 2.5, repeat: Infinity }
+                : { duration: 0.4, ease: "easeOut" }
+            }
           >
             {tapLabel || t("event.tapToOpen")}
           </motion.p>
+
 
           {/* Envelope container */}
           <div className="relative z-10 w-[280px] max-w-full h-[196px] sm:w-[360px] sm:h-[250px] md:w-[420px] md:h-[290px]">
