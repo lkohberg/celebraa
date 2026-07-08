@@ -29,10 +29,10 @@ interface DemoPreviewProps {
 const getDemoEvent = (template: Template, t: (key: string) => string) => {
   const base = {
     id: "demo-preview",
-    event_date: "2026-06-20",
+    event_date: "2027-06-20",
     event_time: "18:00",
     rsvp_enabled: true,
-    rsvp_deadline: "2026-05-01",
+    rsvp_deadline: "2027-05-01",
     menu_selection: true,
     hero_image_url: template.defaultHeroImage || null,
   };
